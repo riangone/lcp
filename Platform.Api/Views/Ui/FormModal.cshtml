@@ -5,10 +5,28 @@
     var row = ViewData["Row"] as Dictionary<string, object>;
     var isEdit = row != null;
 
-    // 获取当前语言，默认为英文
-    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
-    var uiLabels = def.Ui?.Labels?.Languages;
-    var localizedLabels = uiLabels != null && uiLabels.ContainsKey(currentLang) ? uiLabels[currentLang] : new Dictionary<string, string>();
+    // 获取当前语言，优先使用URL参数，否则使用ViewData中的值，默认为英文
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var uiLabels = def.Ui?.Labels;
+    Dictionary<string, string>? localizedLabels = null;
+    
+    if (uiLabels != null)
+    {
+        if (currentLang == "zh" && uiLabels.Zh != null)
+        {
+            localizedLabels = uiLabels.Zh;
+        }
+        else if (currentLang == "en" && uiLabels.En != null)
+        {
+            localizedLabels = uiLabels.En;
+        }
+    }
+    
+    if (localizedLabels == null)
+    {
+        localizedLabels = new Dictionary<string, string>();
+    }
+    
     var createLabel = localizedLabels.ContainsKey("create_form_title") ? localizedLabels["create_form_title"] : "Create";
     var editLabel = localizedLabels.ContainsKey("edit_form_title") ? localizedLabels["edit_form_title"] : "Edit";
     var saveLabel = localizedLabels.ContainsKey("save_button") ? localizedLabels["save_button"] : "Save";
@@ -42,9 +60,9 @@
             
             // 获取本地化字段标签
             var fieldLabel = f.Value.Label;
-            if(uiLabels != null && uiLabels.ContainsKey(currentLang) && uiLabels[currentLang].ContainsKey(f.Key))
+            if(localizedLabels != null && localizedLabels.ContainsKey(f.Key))
             {
-                fieldLabel = uiLabels[currentLang][f.Key];
+                fieldLabel = localizedLabels[f.Key];
             }
 
             <label>
@@ -86,8 +104,26 @@
         }
 
       <footer>
-        <button type="submit" class="@buttonClass">@saveLabel</button>
-        <button type="button" class="@buttonClass" onclick="document.getElementById('modal-form').close(); return false;">@cancelLabel</button>
+        <button type="submit" class="@buttonClass">
+        @if (localizedLabels != null && localizedLabels.ContainsKey("save_button"))
+        {
+            @localizedLabels["save_button"]
+        }
+        else
+        {
+            @:Save
+        }
+        </button>
+        <button type="button" class="@buttonClass" onclick="document.getElementById('modal-form').close(); return false;">
+        @if (localizedLabels != null && localizedLabels.ContainsKey("cancel_button"))
+        {
+            @localizedLabels["cancel_button"]
+        }
+        else
+        {
+            @:Cancel
+        }
+        </button>
       </footer>
     </form>
   </article>

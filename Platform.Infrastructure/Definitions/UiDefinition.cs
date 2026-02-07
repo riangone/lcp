@@ -17,7 +17,9 @@ namespace Platform.Infrastructure.Definitions
 
     public class LabelsDefinition
     {
-        public Dictionary<string, Dictionary<string, string>>? Languages { get; set; }
+        // 直接映射YAML中的en和zh字典
+        public Dictionary<string, string>? En { get; set; }
+        public Dictionary<string, string>? Zh { get; set; }
     }
 
     public class StylesDefinition

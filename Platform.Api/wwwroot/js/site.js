@@ -61,4 +61,15 @@ document.body.addEventListener('htmx:configRequest', (event) => {
     if (token) {
         event.detail.headers['X-CSRF-TOKEN'] = token;
     }
+    
+    // 获取当前URL中的语言参数并添加到HTMX请求中
+    const urlParams = new URLSearchParams(window.location.search);
+    const lang = urlParams.get('lang');
+    if (lang) {
+        // 添加语言参数到请求参数中
+        if (!event.detail.parameters) {
+            event.detail.parameters = {};
+        }
+        event.detail.parameters['lang'] = lang;
+    }
 });

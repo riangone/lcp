@@ -35,8 +35,26 @@
                         var modelKey = model.Key; // 避免Razor解析错误
                         
                         // 获取UI配置
-                        var uiLabels = model.Value.Ui?.Labels?.Languages;
-                        var localizedLabels = uiLabels != null && uiLabels.ContainsKey(currentLang) ? uiLabels[currentLang] : new Dictionary<string, string>();
+                        var uiLabels = model.Value.Ui?.Labels;
+                        Dictionary<string, string>? localizedLabels = null;
+                        
+                        if (uiLabels != null)
+                        {
+                            if (currentLang == "zh" && uiLabels.Zh != null)
+                            {
+                                localizedLabels = uiLabels.Zh;
+                            }
+                            else if (currentLang == "en" && uiLabels.En != null)
+                            {
+                                localizedLabels = uiLabels.En;
+                            }
+                        }
+                        
+                        if (localizedLabels == null)
+                        {
+                            localizedLabels = new Dictionary<string, string>();
+                        }
+                        
                         var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelKey;
                         var description = localizedLabels.ContainsKey("description") ? localizedLabels["description"] : $"Manage {modelKey} records";
                         
