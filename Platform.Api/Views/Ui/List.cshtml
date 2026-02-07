@@ -39,18 +39,22 @@
               {
                 @foreach (var o in f.Value.Options)
                 {
-                  <option value="@o.Key">@o.Value</option>
+                  <option value="@o.Key" 
+                          selected="@(Context.Request.Query[f.Key].FirstOrDefault() == o.Key ? "selected" : null)">
+                    @o.Value
+                  </option>
                 }
               }
             </select>
           }
           else
           {
-            <input name="@f.Key" />
+            <input name="@f.Key" value="@(Context.Request.Query[f.Key].FirstOrDefault() ?? "")" />
           }
         </label>
       }
       <button type="submit">Filter</button>
+      <button type="submit" name="clear" value="true">Clear</button>
     </form>
   }
 

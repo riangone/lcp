@@ -17,12 +17,18 @@ public class UiController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(string model, int page = 1, int size = 10)
+    public async Task<IActionResult> Index(string model, int page = 1, int size = 10, bool clear = false)
     {
         var def = GetModel(model);
 
         var filters = Request.Query
             .ToDictionary(k => k.Key, v => v.Value.ToString());
+
+        // 如果请求清除过滤器，则重定向到没有过滤参数的URL
+        if (clear)
+        {
+            return RedirectToAction("Index", new { model = model, page = 1, size = size });
+        }
 
         var (rows, total) = await _repo.GetPagedAsync(def, page, size, filters);
 
