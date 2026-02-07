@@ -1,0 +1,111 @@
+@using Platform.Infrastructure.Definitions
+@model IEnumerable<Dictionary<string, object>>
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var pageNum =  (int)ViewData["Page"]!;
+    var size = (int)ViewData["Size"]!;
+    var total = (int)ViewData["Total"]!;
+    var totalPages = (int)Math.Ceiling((double)total / size);
+    
+    string RenderValue(ModelDefinition def, string col, object val)
+    {
+        if (def.Form != null
+            && def.Form.Fields.TryGetValue(col, out var f)
+            && f.Type == "select"
+            && f.Options != null
+            && f.Options.TryGetValue(val.ToString()!, out var label))
+        {
+            return label;
+        }
+        return val?.ToString() ?? "";
+    }
+}
+
+<div id="list">
+  <h1>@modelName</h1>
+
+  @if (def.List?.Filters != null && def.List.Filters.Any())
+  {
+    <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML">
+      @foreach (var f in def.List.Filters)
+      {
+        <label>@f.Value.Label
+          @if (f.Value.Type == "select")
+          {
+            <select name="@f.Key">
+              <option value="">--</option>
+              @if (f.Value.Options != null)
+              {
+                @foreach (var o in f.Value.Options)
+                {
+                  <option value="@o.Key">@o.Value</option>
+                }
+              }
+            </select>
+          }
+          else
+          {
+            <input name="@f.Key" />
+          }
+        </label>
+      }
+      <button type="submit">Filter</button>
+    </form>
+  }
+
+  <button hx-get="/ui/@modelName/create" hx-target="#modal" hx-swap="innerHTML">
+    ➕ New
+  </button>
+
+  <div id="modal"></div>
+
+  @if (def.List?.Columns != null && def.List.Columns.Any())
+  {
+    <table>
+      <thead>
+        <tr>
+          @foreach (var col in def.List.Columns)
+          {
+            <th>@col</th>
+          }
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="list-body">
+        @foreach (var row in Model)
+        {
+          <tr data-id="@row[def.PrimaryKey]">
+            @foreach (var col in def.List.Columns)
+            {
+              <td>@RenderValue(def, col, row[col])</td>
+            }
+            <td>
+              <button class="secondary" hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]" hx-target="#modal" hx-swap="innerHTML">Edit</button>
+              <button class="danger" onclick="openDeleteDialog('@modelName', '@row[def.PrimaryKey]')">🗑</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+
+  <nav class="pagination">
+    @if(pageNum > 1)
+    {
+      <a class="button" style="cursor:pointer;" hx-get="/ui/@modelName?page=@(pageNum-1)&size=@size" hx-target="#list" hx-swap="innerHTML">← Prev</a>
+    }
+    
+    @for (int i = 1; i <= totalPages; i++)
+    {
+      <a class="button" style="cursor:pointer; @(i == pageNum ? "opacity: 0.5;" : "")" hx-get="/ui/@modelName?page=@i&size=@size" hx-target="#list" hx-swap="innerHTML">@i</a>
+    }
+
+    @if(pageNum < totalPages)
+    {
+      <a class="button" style="cursor:pointer;" hx-get="/ui/@modelName?page=@(pageNum+1)&size=@size" hx-target="#list" hx-swap="innerHTML">Next →</a>
+    }
+
+    <span>Page @pageNum of @totalPages (@total records)</span>  
+  </nav>
+</div>

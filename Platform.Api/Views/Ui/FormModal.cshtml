@@ -1,0 +1,75 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var isEdit = row != null;
+
+    var action = isEdit
+        ? $"/api/{modelName}/{row![def.PrimaryKey]}"
+        : $"/api/{modelName}";
+
+    var method = isEdit ? "put" : "post";
+}
+
+<dialog open id="modal-form">
+  <article>
+    <header>
+      <button aria-label="Close" rel="prev" onclick="document.getElementById('modal-form').close(); return false;"></button>
+      <h3>@(isEdit ? "Edit" : "Create") @modelName</h3>
+    </header>
+
+    <form method="post"
+          @($"hx-{method}")="@action"
+          hx-target="#list"
+          hx-swap="innerHTML"
+          hx-on="htmx:afterRequest: closeModalOnSuccess(event)">
+
+        @foreach (var f in def.Form!.Fields)
+        {
+            var value = isEdit && row != null && row.ContainsKey(f.Key) ? row[f.Key]?.ToString() : "";
+
+            <label>
+              @f.Value.Label
+
+              @if (f.Value.Type == "select")
+              {
+                  <select name="@f.Key" @(f.Value.Required ? "required" : "")>
+                    <option value="">--</option>
+                    @if (f.Value.Options != null)
+                    {
+                        @foreach (var opt in f.Value.Options)
+                        {
+                            <option value="@opt.Key"
+                                    @(value == opt.Key ? "selected" : "")>
+                                @opt.Value
+                            </option>
+                        }
+                    }
+                  </select>
+              }
+              else
+              {
+                  var inputType = f.Value.Type == "decimal" ? "number" : f.Value.Type;
+                  var step = f.Value.Type == "decimal" ? "step=\"0.01\"" : "";
+
+                  <input
+                    name="@f.Key"
+                    type="@inputType"
+                    @Html.Raw(step)
+                    value="@value"
+                    @(f.Value.Required ? "required" : "")
+                    @(f.Value.MinLength.HasValue ? $"minlength=\"{f.Value.MinLength}\"" : "")
+                    @(f.Value.MaxLength.HasValue ? $"maxlength=\"{f.Value.MaxLength}\"" : "")
+                    @(f.Value.Min.HasValue ? $"min=\"{f.Value.Min}\"" : "")
+                    @(f.Value.Max.HasValue ? $"max=\"{f.Value.Max}\"" : "") />
+              }
+            </label>
+        }
+      
+      <footer>
+        <button type="submit">Save</button>
+      </footer>
+    </form>
+  </article>
+</dialog>

@@ -1,0 +1,12 @@
+name: Product
+table: Product
+primaryKey: Id
+
+fields:
+  Id:
+    type: int
+  Name:
+    type: text
+    required: true
+  Price:
+    type: decimal

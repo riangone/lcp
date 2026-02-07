@@ -1,0 +1,42 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+
+@{
+    var tokens = Antiforgery.GetAndStoreTokens(Context);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LowCode Platform</title>
+    <!-- Pico CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@@2/css/pico.min.css">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        main { max-width: 1200px; margin: 0 auto; padding: 1rem; }
+        dialog { max-width: 600px; }
+        .pagination { display: flex; gap: 0.5rem; margin: 1rem 0; flex-wrap: wrap; }
+        .pagination a.button { padding: 0.25rem 0.75rem; font-size: 0.9rem; }
+        table { width: 100%; }
+        th, td { padding: 0.5rem; }
+        form { gap: 1rem; }
+    </style>
+</head>
+
+<body>
+    <main id="content">
+        @RenderBody()
+    </main>
+
+    @await Html.PartialAsync("_DeleteDialog")
+    @await Html.PartialAsync("_ErrorDialog")
+
+    <!-- HTMX -->
+    <script src="https://unpkg.com/htmx.org@@1.9.10"></script>
+    <script src="/js/site.js"></script>
+
+    <input type="hidden"
+        id="csrf-token"
+        value="@tokens.RequestToken" />
+</body>
+</html>

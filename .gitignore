@@ -1,0 +1,95 @@
+# Build Results of dotnet watch
+**/Platform.Api/bin/Debug/**
+**/Platform.Api/bin/Release/**
+**/Platform.Application/bin/Debug/**
+**/Platform.Application/bin/Release/**
+**/Platform.Domain/bin/Debug/**
+**/Platform.Domain/bin/Release/**
+**/Platform.Infrastructure/bin/Debug/**
+**/Platform.Infrastructure/bin/Release/**
+
+# Build Results of msbuild
+**/Platform.Api/obj/**
+**/Platform.Application/obj/**
+**/Platform.Domain/obj/**
+**/Platform.Infrastructure/obj/**
+
+# User-specific files
+*.rs.user
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# User-specific folders
+.vs/
+.vscode/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 2015/2017/2019 cache/options
+*.VC.db
+*.VC.VC.opendb
+**/[Cc]overage/
+*.natvis
+*.pidb
+*.svclog
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NUnit
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+
+# Build Results of Backup & Restore
+*.tmp
+*.cache
+*.bak
+*.doc
+*.dot
+*.cache
+*.ilk
+*.meta
+*.pdb
+*.dll
+*.exe
+*.zip
+*.rar
+*.ds_store
+*.tar
+*.tar.gz
+*.gz
+
+# Others
+*.fresh
+*.log
+**/logs/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Environment specific files
+.env
+app.db
+app.db-journal

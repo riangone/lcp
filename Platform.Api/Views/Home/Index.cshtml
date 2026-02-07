@@ -1,0 +1,48 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var models = ViewData["Models"] as Dictionary<string, ModelDefinition>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Low Code Platform</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@@picocss/pico@2/css/pico.min.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+</head>
+<body>
+    <main class="container">
+        <header>
+            <h1>Low Code Platform</h1>
+            <p>Select a model to manage:</p>
+        </header>
+
+        <section>
+            @if (models != null && models.Any())
+            {
+                <div class="grid" style="gap: 1rem;">
+                    @foreach (var model in models)
+                    {
+                        var modelKey = model.Key; // 避免Razor解析错误
+                        var table = model.Value.Table;
+                        <a class="card" href="/ui/@modelKey" style="text-decoration: none; padding: 1.5rem;">
+                            <h3>@modelKey</h3>
+                            <p>Manage @modelKey records</p>
+                            <small>Table: @table</small>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <p>No models defined.</p>
+            }
+        </section>
+
+        <footer>
+            <p><a href="/docs">API Documentation</a></p>
+        </footer>
+    </main>
+</body>
+</html>

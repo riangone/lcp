@@ -1,0 +1,113 @@
+models:
+  Product:
+    table: Product
+    primary_key: Id
+
+    list:
+      columns:
+        - Id
+        - Name
+        - Price
+        - Category
+
+      filters:
+        Name:
+          label: Product Name
+          type: like
+
+        Category:
+          label: Category
+          type: select
+          options:
+            food: Food
+            book: Book
+            electronics: Electronics
+            other: Other
+
+    form:
+      title: Product
+      fields:
+        Name:
+          label: Product Name
+          type: text
+          required: true
+          min_length: 3
+          max_length: 100
+
+        Price:
+          label: Price
+          type: number
+          required: true
+          min: 0
+          max: 1000000
+
+        Category:
+          label: Category
+          type: select
+          required: true
+          options:
+            food: Food
+            book: Book
+            electronics: Electronics
+            other: Other
+
+    properties:
+      Id:
+        type: int
+      Name:
+        type: string
+        required: true
+      Price:
+        type: decimal
+        required: true
+      Category:
+        type: string
+
+  Customer:
+    table: Customer
+    primary_key: Id
+
+    list:
+      columns:
+        - Id
+        - Name
+        - Email
+        - Phone
+
+      filters:
+        Name:
+          label: Customer Name
+          type: like
+        Email:
+          label: Email
+          type: like
+
+    form:
+      title: Customer
+      fields:
+        Name:
+          label: Customer Name
+          type: text
+          required: true
+          max_length: 150
+
+        Email:
+          label: Email
+          type: email
+          required: true
+
+        Phone:
+          label: Phone Number
+          type: text
+
+    properties:
+      Id:
+        type: int
+      Name:
+        type: string
+        required: true
+      Email:
+        type: string
+        required: true
+      Phone:
+        type: string
