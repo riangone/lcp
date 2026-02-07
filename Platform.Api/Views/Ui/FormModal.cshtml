@@ -41,8 +41,8 @@
     var method = isEdit ? "put" : "post";
 }
 
-<div id="modal-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md glass-card">
+<div id="modal-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-auto">
+  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md glass-card mx-auto my-4 max-h-[90vh] overflow-hidden">
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-semibold text-gray-800">
@@ -147,4 +147,21 @@
       closeFormModal();
     }
   }
+  
+  // ESC键关闭模态框
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+      var modal = document.getElementById('modal-form');
+      if(modal) {
+        modal.remove();
+      }
+    }
+  });
+  
+  // 点击模态框外部关闭
+  document.getElementById('modal-form').addEventListener('click', function(event) {
+    if (event.target === this) {
+      this.remove();
+    }
+  });
 </script>
