@@ -22,15 +22,35 @@
     }
 }
 
+@{
+    // 获取当前语言，默认为英文
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var uiLabels = def.Ui?.Labels?.Languages;
+    var localizedLabels = uiLabels != null && uiLabels.ContainsKey(currentLang) ? uiLabels[currentLang] : new Dictionary<string, string>();
+    var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+    var createButtonLabel = localizedLabels.ContainsKey("create_button") ? localizedLabels["create_button"] : "Add " + modelName;
+    var filterButtonLabel = localizedLabels.ContainsKey("filter_button") ? localizedLabels["filter_button"] : "Filter";
+    var clearButtonLabel = localizedLabels.ContainsKey("clear_button") ? localizedLabels["clear_button"] : "Clear";
+    var searchPlaceholder = localizedLabels.ContainsKey("search_placeholder") ? localizedLabels["search_placeholder"] : "Search...";
+    var cardClass = def.Ui?.Styles?.CardClass ?? "card";
+    var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
+}
+
 <div id="list">
-  <h1>@modelName</h1>
+  <h1>@title</h1>
 
   @if (def.List?.Filters != null && def.List.Filters.Any())
   {
     <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML">
       @foreach (var f in def.List.Filters)
       {
-        <label>@f.Value.Label
+        var label = f.Value.Label;
+        // 尝试获取本地化标签
+        if(uiLabels != null && uiLabels.ContainsKey(currentLang) && uiLabels[currentLang].ContainsKey(f.Key))
+        {
+            label = uiLabels[currentLang][f.Key];
+        }
+        <label>@label
           @if (f.Value.Type == "select")
           {
             <select name="@f.Key">
@@ -49,12 +69,18 @@
           }
           else
           {
-            <input name="@f.Key" value="@(Context.Request.Query[f.Key].FirstOrDefault() ?? "")" />
+            <input name="@f.Key" value="@(Context.Request.Query[f.Key].FirstOrDefault() ?? "")" placeholder="@searchPlaceholder" />
           }
         </label>
       }
-      <button type="submit">Filter</button>
-      <button type="submit" name="clear" value="true">Clear</button>
+      <button type="submit" class="@buttonClass">@filterButtonLabel</button>
+      <button type="submit" name="clear" value="true" class="@buttonClass"> @clearButtonLabel</button>
+      
+      <!-- 语言切换 -->
+      <select onchange="changeLanguage(this.value)" style="margin-left: 10px;">
+        <option value="en" @(currentLang == "en" ? "selected" : "")>English</option>
+        <option value="zh" @(currentLang == "zh" ? "selected" : "")>中文</option>
+      </select>
     </form>
   }
 

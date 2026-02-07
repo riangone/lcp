@@ -3,6 +3,27 @@ models:
     table: Product
     primary_key: Id
 
+    ui:
+      layout:
+        theme: default
+        grid_columns: 3
+      labels:
+        en:
+          title: Products
+          create_button: Add Product
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search products...
+        zh:
+          title: 产品
+          create_button: 添加产品
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索产品...
+      styles:
+        card_class: "card-product"
+        button_class: "btn btn-primary"
+        
     list:
       columns:
         - Id
@@ -66,6 +87,27 @@ models:
   Customer:
     table: Customer
     primary_key: Id
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Customers
+          create_button: Add Customer
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search customers...
+        zh:
+          title: 客户
+          create_button: 添加客户
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索客户...
+      styles:
+        card_class: "card-customer"
+        button_class: "btn btn-secondary"
 
     list:
       columns:

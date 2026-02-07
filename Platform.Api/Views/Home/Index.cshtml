@@ -1,6 +1,8 @@
 @using Platform.Infrastructure.Definitions
 @{
     var models = ViewData["Models"] as Dictionary<string, ModelDefinition>;
+    // 获取当前语言，默认为英文
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
 }
 
 <!DOCTYPE html>
@@ -16,6 +18,12 @@
         <header>
             <h1>Low Code Platform</h1>
             <p>Select a model to manage:</p>
+            
+            <!-- 语言切换 -->
+            <select onchange="changeLanguage(this.value)" style="margin-top: 10px;">
+                <option value="en" @(currentLang == "en" ? "selected" : "")>English</option>
+                <option value="zh" @(currentLang == "zh" ? "selected" : "")>中文</option>
+            </select>
         </header>
 
         <section>
@@ -25,10 +33,19 @@
                     @foreach (var model in models)
                     {
                         var modelKey = model.Key; // 避免Razor解析错误
+                        
+                        // 获取UI配置
+                        var uiLabels = model.Value.Ui?.Labels?.Languages;
+                        var localizedLabels = uiLabels != null && uiLabels.ContainsKey(currentLang) ? uiLabels[currentLang] : new Dictionary<string, string>();
+                        var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelKey;
+                        var description = localizedLabels.ContainsKey("description") ? localizedLabels["description"] : $"Manage {modelKey} records";
+                        
+                        var cardClass = model.Value.Ui?.Styles?.CardClass ?? "card";
                         var table = model.Value.Table;
-                        <a class="card" href="/ui/@modelKey" style="text-decoration: none; padding: 1.5rem;">
-                            <h3>@modelKey</h3>
-                            <p>Manage @modelKey records</p>
+                        
+                        <a class="@cardClass" href="/ui/@modelKey?lang=@currentLang" style="text-decoration: none; padding: 1.5rem;">
+                            <h3>@title</h3>
+                            <p>@description</p>
                             <small>Table: @table</small>
                         </a>
                     }
@@ -44,5 +61,13 @@
             <p><a href="/docs">API Documentation</a></p>
         </footer>
     </main>
+    
+    <script>
+        function changeLanguage(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.location = url.toString();
+        }
+    </script>
 </body>
 </html>

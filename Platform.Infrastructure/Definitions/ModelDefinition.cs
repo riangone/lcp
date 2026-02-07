@@ -5,6 +5,7 @@ namespace Platform.Infrastructure.Definitions
         public string Table { get; set; } = "";
         public string PrimaryKey { get; set; } = "";
 
+        public UiDefinition? Ui { get; set; }
         public ListDefinition? List { get; set; }
         public FormDefinition? Form { get; set; }
 

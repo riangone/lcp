@@ -5,6 +5,17 @@
     var row = ViewData["Row"] as Dictionary<string, object>;
     var isEdit = row != null;
 
+    // 获取当前语言，默认为英文
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var uiLabels = def.Ui?.Labels?.Languages;
+    var localizedLabels = uiLabels != null && uiLabels.ContainsKey(currentLang) ? uiLabels[currentLang] : new Dictionary<string, string>();
+    var createLabel = localizedLabels.ContainsKey("create_form_title") ? localizedLabels["create_form_title"] : "Create";
+    var editLabel = localizedLabels.ContainsKey("edit_form_title") ? localizedLabels["edit_form_title"] : "Edit";
+    var saveLabel = localizedLabels.ContainsKey("save_button") ? localizedLabels["save_button"] : "Save";
+    var cancelLabel = localizedLabels.ContainsKey("cancel_button") ? localizedLabels["cancel_button"] : "Cancel";
+    var cardClass = def.Ui?.Styles?.CardClass ?? "card";
+    var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
+
     var action = isEdit
         ? $"/api/{modelName}/{row![def.PrimaryKey]}"
         : $"/api/{modelName}";
@@ -13,10 +24,10 @@
 }
 
 <dialog open id="modal-form">
-  <article>
+  <article class="@cardClass">
     <header>
       <button aria-label="Close" rel="prev" onclick="document.getElementById('modal-form').close(); return false;"></button>
-      <h3>@(isEdit ? "Edit" : "Create") @modelName</h3>
+      <h3>@(isEdit ? editLabel : createLabel) @modelName</h3>
     </header>
 
     <form method="post"
@@ -28,9 +39,16 @@
         @foreach (var f in def.Form!.Fields)
         {
             var value = isEdit && row != null && row.ContainsKey(f.Key) ? row[f.Key]?.ToString() : "";
+            
+            // 获取本地化字段标签
+            var fieldLabel = f.Value.Label;
+            if(uiLabels != null && uiLabels.ContainsKey(currentLang) && uiLabels[currentLang].ContainsKey(f.Key))
+            {
+                fieldLabel = uiLabels[currentLang][f.Key];
+            }
 
             <label>
-              @f.Value.Label
+              @fieldLabel
 
               @if (f.Value.Type == "select")
               {
@@ -66,9 +84,10 @@
               }
             </label>
         }
-      
+
       <footer>
-        <button type="submit">Save</button>
+        <button type="submit" class="@buttonClass">@saveLabel</button>
+        <button type="button" class="@buttonClass" onclick="document.getElementById('modal-form').close(); return false;">@cancelLabel</button>
       </footer>
     </form>
   </article>
