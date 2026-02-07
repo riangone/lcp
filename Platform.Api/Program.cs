@@ -33,7 +33,7 @@ builder.Services.AddSingleton<AppDefinitions>(_ =>
 });
 
 // 数据库和服务
-builder.Services.AddScoped<DbConnectionFactory>();
+builder.Services.AddScoped<DbConnectionFactory>(sp => new DbConnectionFactory(builder.Configuration));
 builder.Services.AddScoped<DynamicRepository>();
 builder.Services.AddScoped<ModelService>();
 builder.Services.AddScoped<AuthService>();

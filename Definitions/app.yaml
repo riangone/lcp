@@ -185,3 +185,720 @@ models:
         required: true
       Phone:
         type: string
+
+  Artist:
+    table: Artist
+    primary_key: ArtistId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Artists
+          create_button: Add Artist
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search artists...
+          Name: Name
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 艺术家
+          create_button: 添加艺术家
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索艺术家...
+          Name: 姓名
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-artist"
+        button_class: "btn btn-warning"
+
+    list:
+      columns:
+        - ArtistId
+        - Name
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Artist
+      fields:
+        Name:
+          label: Name
+          type: text
+          max_length: 120
+
+    properties:
+      ArtistId:
+        type: int
+      Name:
+        type: string
+
+  Album:
+    table: Album
+    primary_key: AlbumId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Albums
+          create_button: Add Album
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search albums...
+          Title: Title
+          ArtistId: Artist ID
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 专辑
+          create_button: 添加专辑
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索专辑...
+          Title: 标题
+          ArtistId: 艺术家ID
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-album"
+        button_class: "btn btn-success"
+
+    list:
+      columns:
+        - AlbumId
+        - Title
+        - ArtistId
+
+      filters:
+        Title:
+          label: Title
+          type: like
+
+    form:
+      title: Album
+      fields:
+        Title:
+          label: Title
+          type: text
+          required: true
+          max_length: 160
+
+        ArtistId:
+          label: Artist ID
+          type: number
+          required: true
+
+    properties:
+      AlbumId:
+        type: int
+      Title:
+        type: string
+        required: true
+      ArtistId:
+        type: int
+        required: true
+
+  Track:
+    table: Track
+    primary_key: TrackId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        en:
+          title: Tracks
+          create_button: Add Track
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search tracks...
+          Name: Name
+          AlbumId: Album ID
+          MediaTypeId: Media Type ID
+          GenreId: Genre ID
+          Composer: Composer
+          Milliseconds: Milliseconds
+          Bytes: Bytes
+          UnitPrice: Unit Price
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 音轨
+          create_button: 添加音轨
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索音轨...
+          Name: 名称
+          AlbumId: 专辑ID
+          MediaTypeId: 媒体类型ID
+          GenreId: 流派ID
+          Composer: 作曲家
+          Milliseconds: 毫秒
+          Bytes: 字节
+          UnitPrice: 单价
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-track"
+        button_class: "btn btn-light"
+
+    list:
+      columns:
+        - TrackId
+        - Name
+        - AlbumId
+        - GenreId
+        - UnitPrice
+
+      filters:
+        Name:
+          label: Name
+          type: like
+        AlbumId:
+          label: Album ID
+          type: like
+        GenreId:
+          label: Genre ID
+          type: like
+
+    form:
+      title: Track
+      fields:
+        Name:
+          label: Name
+          type: text
+          required: true
+          max_length: 200
+
+        AlbumId:
+          label: Album ID
+          type: number
+
+        MediaTypeId:
+          label: Media Type ID
+          type: number
+          required: true
+
+        GenreId:
+          label: Genre ID
+          type: number
+
+        Composer:
+          label: Composer
+          type: text
+          max_length: 220
+
+        Milliseconds:
+          label: Milliseconds
+          type: number
+          required: true
+
+        Bytes:
+          label: Bytes
+          type: number
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+
+    properties:
+      TrackId:
+        type: int
+      Name:
+        type: string
+        required: true
+      AlbumId:
+        type: int
+      MediaTypeId:
+        type: int
+        required: true
+      GenreId:
+        type: int
+      Composer:
+        type: string
+      Milliseconds:
+        type: int
+        required: true
+      Bytes:
+        type: int
+      UnitPrice:
+        type: decimal
+        required: true
+
+  Employee:
+    table: Employee
+    primary_key: EmployeeId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Employees
+          create_button: Add Employee
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search employees...
+          LastName: Last Name
+          FirstName: First Name
+          Title: Title
+          ReportsTo: Reports To
+          BirthDate: Birth Date
+          HireDate: Hire Date
+          Address: Address
+          City: City
+          State: State
+          Country: Country
+          PostalCode: Postal Code
+          Phone: Phone
+          Fax: Fax
+          Email: Email
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 员工
+          create_button: 添加员工
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索员工...
+          LastName: 姓
+          FirstName: 名
+          Title: 职位
+          ReportsTo: 上级
+          BirthDate: 出生日期
+          HireDate: 雇佣日期
+          Address: 地址
+          City: 城市
+          State: 州
+          Country: 国家
+          PostalCode: 邮政编码
+          Phone: 电话
+          Fax: 传真
+          Email: 邮箱
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-employee"
+        button_class: "btn btn-dark"
+
+    list:
+      columns:
+        - EmployeeId
+        - LastName
+        - FirstName
+        - Title
+        - City
+        - Country
+
+      filters:
+        LastName:
+          label: Last Name
+          type: like
+        FirstName:
+          label: First Name
+          type: like
+        Title:
+          label: Title
+          type: like
+        City:
+          label: City
+          type: like
+
+    form:
+      title: Employee
+      fields:
+        LastName:
+          label: Last Name
+          type: text
+          required: true
+          max_length: 20
+
+        FirstName:
+          label: First Name
+          type: text
+          required: true
+          max_length: 20
+
+        Title:
+          label: Title
+          type: text
+          max_length: 30
+
+        ReportsTo:
+          label: Reports To
+          type: number
+
+        BirthDate:
+          label: Birth Date
+          type: text
+
+        HireDate:
+          label: Hire Date
+          type: text
+
+        Address:
+          label: Address
+          type: text
+          max_length: 70
+
+        City:
+          label: City
+          type: text
+          max_length: 40
+
+        State:
+          label: State
+          type: text
+          max_length: 40
+
+        Country:
+          label: Country
+          type: text
+          max_length: 40
+
+        PostalCode:
+          label: Postal Code
+          type: text
+          max_length: 10
+
+        Phone:
+          label: Phone
+          type: text
+          max_length: 24
+
+        Fax:
+          label: Fax
+          type: text
+          max_length: 24
+
+        Email:
+          label: Email
+          type: text
+          max_length: 60
+
+    properties:
+      EmployeeId:
+        type: int
+      LastName:
+        type: string
+        required: true
+      FirstName:
+        type: string
+        required: true
+      Title:
+        type: string
+      ReportsTo:
+        type: int
+      BirthDate:
+        type: string
+      HireDate:
+        type: string
+      Address:
+        type: string
+      City:
+        type: string
+      State:
+        type: string
+      Country:
+        type: string
+      PostalCode:
+        type: string
+      Phone:
+        type: string
+      Fax:
+        type: string
+      Email:
+        type: string
+
+  Genre:
+    table: Genre
+    primary_key: GenreId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Genres
+          create_button: Add Genre
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search genres...
+          Name: Name
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 流派
+          create_button: 添加流派
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索流派...
+          Name: 名称
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-genre"
+        button_class: "btn btn-secondary"
+
+    list:
+      columns:
+        - GenreId
+        - Name
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Genre
+      fields:
+        Name:
+          label: Name
+          type: text
+          max_length: 120
+
+    properties:
+      GenreId:
+        type: int
+      Name:
+        type: string
+
+  MediaType:
+    table: MediaType
+    primary_key: MediaTypeId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Media Types
+          create_button: Add Media Type
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search media types...
+          Name: Name
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 媒体类型
+          create_button: 添加媒体类型
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索媒体类型...
+          Name: 名称
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-media-type"
+        button_class: "btn btn-info"
+
+    list:
+      columns:
+        - MediaTypeId
+        - Name
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Media Type
+      fields:
+        Name:
+          label: Name
+          type: text
+          max_length: 120
+
+    properties:
+      MediaTypeId:
+        type: int
+      Name:
+        type: string
+
+  Invoice:
+    table: Invoice
+    primary_key: InvoiceId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        en:
+          title: Invoices
+          create_button: Add Invoice
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search invoices...
+          CustomerId: Customer ID
+          InvoiceDate: Invoice Date
+          BillingAddress: Billing Address
+          BillingCity: Billing City
+          BillingState: Billing State
+          BillingCountry: Billing Country
+          BillingPostalCode: Billing Postal Code
+          Total: Total
+          Id: ID
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 发票
+          create_button: 添加发票
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索发票...
+          CustomerId: 客户ID
+          InvoiceDate: 发票日期
+          BillingAddress: 账单地址
+          BillingCity: 账单城市
+          BillingState: 账单州
+          BillingCountry: 账单国家
+          BillingPostalCode: 账单邮政编码
+          Total: 总计
+          Id: 编号
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-invoice"
+        button_class: "btn btn-light"
+
+    list:
+      columns:
+        - InvoiceId
+        - CustomerId
+        - InvoiceDate
+        - BillingCity
+        - Total
+
+      filters:
+        CustomerId:
+          label: Customer ID
+          type: like
+        BillingCity:
+          label: Billing City
+          type: like
+
+    form:
+      title: Invoice
+      fields:
+        CustomerId:
+          label: Customer ID
+          type: number
+          required: true
+
+        InvoiceDate:
+          label: Invoice Date
+          type: text
+          required: true
+
+        BillingAddress:
+          label: Billing Address
+          type: text
+          max_length: 70
+
+        BillingCity:
+          label: Billing City
+          type: text
+          max_length: 40
+
+        BillingState:
+          label: Billing State
+          type: text
+          max_length: 40
+
+        BillingCountry:
+          label: Billing Country
+          type: text
+          max_length: 40
+
+        BillingPostalCode:
+          label: Billing Postal Code
+          type: text
+          max_length: 10
+
+        Total:
+          label: Total
+          type: number
+          required: true
+
+    properties:
+      InvoiceId:
+        type: int
+      CustomerId:
+        type: int
+        required: true
+      InvoiceDate:
+        type: string
+        required: true
+      BillingAddress:
+        type: string
+      BillingCity:
+        type: string
+      BillingState:
+        type: string
+      BillingCountry:
+        type: string
+      BillingPostalCode:
+        type: string
+      Total:
+        type: decimal
+        required: true
