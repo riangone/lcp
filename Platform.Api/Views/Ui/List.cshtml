@@ -50,11 +50,16 @@
     var filterButtonLabel = localizedLabels.ContainsKey("filter_button") ? localizedLabels["filter_button"] : "Filter";
     var clearButtonLabel = localizedLabels.ContainsKey("clear_button") ? localizedLabels["clear_button"] : "Clear";
     var searchPlaceholder = localizedLabels.ContainsKey("search_placeholder") ? localizedLabels["search_placeholder"] : "Search...";
-    var cardClass = def.Ui?.Styles?.CardClass ?? "glass-card";
+    var cardClass = def.Ui?.Styles?.CardClass ?? "card";
     var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
 }
 
-<div id="list" class="container mx-auto" style="width:100%; min-width:100%; max-width:100%; padding-left: 1rem; padding-right: 1rem; padding-top: 2rem; padding-bottom: 2rem;">
+@{
+    ViewData["Title"] = $"{title} - Low Code Platform";
+    ViewData["ActivePage"] = "Data";
+}
+
+<div class="container mx-auto px-4 py-8">
   <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
     <p class="text-gray-600">Manage your @modelName records</p>
@@ -62,7 +67,7 @@
 
   @if (def.List?.Filters != null && def.List.Filters.Any())
   {
-    <div class="bg-white rounded-xl shadow-md p-6 mb-6 glass-card">
+    <div class="card mb-6">
       <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" hx-push-url="true" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           @foreach (var f in def.List.Filters)
@@ -104,10 +109,10 @@
         <input type="hidden" name="lang" value="@currentLang" />
 
         <div class="flex flex-wrap gap-3 mt-4">
-          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button type="submit" class="btn btn-primary">
             <i class="fas fa-search mr-2"></i>@filterButtonLabel
           </button>
-          <button type="submit" name="clear" value="true" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition-colors">
+          <button type="submit" name="clear" value="true" class="btn btn-outline">
             <i class="fas fa-times mr-2"></i>@clearButtonLabel
           </button>
 
@@ -124,9 +129,9 @@
     </div>
   }
 
-  <div class="flex justify-between items-center mb-6">
+  <div class="flex flex-wrap justify-between items-center mb-6">
     <button hx-get="/ui/@modelName/create?lang=@currentLang" hx-target="#modal" hx-swap="innerHTML"
-            class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors shadow-md flex items-center">
+            class="btn btn-success flex items-center">
       <i class="fas fa-plus mr-2"></i>
       @if (localizedLabels != null && localizedLabels.ContainsKey("new_button"))
       {
@@ -138,7 +143,7 @@
       }
     </button>
 
-    <div class="text-gray-600">
+    <div class="text-gray-600 mt-2 sm:mt-0">
       Showing @((pageNum-1)*size + 1)-@(Math.Min(pageNum*size, total)) of @total records
     </div>
   </div>
@@ -147,77 +152,75 @@
 
   @if (def.List?.Columns != null && def.List.Columns.Any())
   {
-    <div class="bg-white rounded-xl shadow-lg overflow-hidden glass-card">
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200">
-          <thead class="bg-gray-50">
-            <tr>
-              @foreach (var col in def.List.Columns)
+    <div class="card overflow-x-auto">
+      <table class="table w-full">
+        <thead>
+          <tr class="bg-gray-50">
+            @foreach (var col in def.List.Columns)
+            {
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              @if (localizedLabels != null && localizedLabels.ContainsKey(col))
               {
-                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                @if (localizedLabels != null && localizedLabels.ContainsKey(col))
-                {
-                    @localizedLabels[col]
-                }
-                else
-                {
-                    @col
-                }
-                </th>
-              }
-              <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-              @if (localizedLabels != null && localizedLabels.ContainsKey("Actions"))
-              {
-                  @localizedLabels["Actions"]
+                  @localizedLabels[col]
               }
               else
               {
-                  @:Actions
+                  @col
               }
               </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            @foreach (var row in Model)
-            {
-              <tr class="hover:bg-gray-50 transition-colors" data-id="@row[def.PrimaryKey]">
-                @foreach (var col in def.List.Columns)
-                {
-                  <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    @RenderValue(def, col, row[col])
-                  </td>
-                }
-                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <button class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
-                          hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang" hx-target="#modal" hx-swap="innerHTML">
-                    <i class="fas fa-edit"></i>
-                    @if (localizedLabels != null && localizedLabels.ContainsKey("edit_button"))
-                    {
-                        @localizedLabels["edit_button"]
-                    }
-                    else
-                    {
-                        @:Edit
-                    }
-                  </button>
-                  <button class="text-red-600 hover:text-red-900 transition-colors"
-                          onclick="openDeleteDialog('@modelName', '@row[def.PrimaryKey]')">
-                    <i class="fas fa-trash"></i>
-                    @if (localizedLabels != null && localizedLabels.ContainsKey("delete_button"))
-                    {
-                        @localizedLabels["delete_button"]
-                    }
-                    else
-                    {
-                        @:Delete
-                    }
-                  </button>
-                </td>
-              </tr>
             }
-          </tbody>
-        </table>
-      </div>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+            @if (localizedLabels != null && localizedLabels.ContainsKey("Actions"))
+            {
+                @localizedLabels["Actions"]
+            }
+            else
+            {
+                @:Actions
+            }
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          @foreach (var row in Model)
+          {
+            <tr class="hover:bg-gray-50 transition-colors" data-id="@row[def.PrimaryKey]">
+              @foreach (var col in def.List.Columns)
+              {
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                  @RenderValue(def, col, row[col])
+                </td>
+              }
+              <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                <button class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
+                        hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang" hx-target="#modal" hx-swap="innerHTML">
+                  <i class="fas fa-edit mr-1"></i>
+                  @if (localizedLabels != null && localizedLabels.ContainsKey("edit_button"))
+                  {
+                      @localizedLabels["edit_button"]
+                  }
+                  else
+                  {
+                      @:Edit
+                  }
+                </button>
+                <button class="text-red-600 hover:text-red-900 transition-colors"
+                        onclick="openDeleteDialog('@modelName', '@row[def.PrimaryKey]')">
+                  <i class="fas fa-trash mr-1"></i>
+                  @if (localizedLabels != null && localizedLabels.ContainsKey("delete_button"))
+                  {
+                      @localizedLabels["delete_button"]
+                  }
+                  else
+                  {
+                      @:Delete
+                  }
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
   }
 

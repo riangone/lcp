@@ -1,0 +1,240 @@
+:root {
+    --primary: #3b82f6; 
+    --success: #10b981; 
+    --warning: #f59e0b; 
+    --danger: #ef4444;
+    --bg: #f8fafc; 
+    --card-bg: #ffffff; 
+    --text: #1e293b; 
+    --text-light: #64748b;
+}
+
+* { 
+    box-sizing: border-box; 
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    max-width: 1200px; 
+    margin: 0 auto; 
+    line-height: 1.6; 
+    background: var(--bg);
+    color: var(--text); 
+    padding: 1rem;
+}
+
+.header { 
+    background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%); 
+    color: white; 
+    padding: 2rem; 
+    border-radius: 1rem; 
+    margin-bottom: 2rem; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); 
+}
+
+.header h1 { 
+    margin: 0; 
+    font-size: 2rem; 
+}
+
+.header p { 
+    margin: 0.5rem 0 0 0; 
+    opacity: 0.9; 
+}
+
+.grid { 
+    display: grid; 
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+    gap: 1.5rem; 
+    margin-bottom: 2rem; 
+}
+
+.card { 
+    background: var(--card-bg); 
+    border-radius: 0.75rem; 
+    padding: 1.5rem; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08); 
+    border: 1px solid #e2e8f0; 
+}
+
+.card.highlight { 
+    border-left: 4px solid var(--primary); 
+}
+
+.stat-box { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 1rem 0; 
+    border-bottom: 1px solid #e2e8f0; 
+}
+
+.stat-box:last-child { 
+    border-bottom: none; 
+}
+
+.stat-label { 
+    color: var(--text-light); 
+    font-size: 0.9rem; 
+}
+
+.stat-value { 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    color: var(--primary); 
+}
+
+.btn { 
+    padding: 0.75rem 1.5rem; 
+    border: none; 
+    border-radius: 0.5rem; 
+    cursor: pointer; 
+    font-weight: 600; 
+    font-size: 1rem; 
+    display: inline-block; 
+    margin: 0.5rem 0.5rem 0.5rem 0; 
+    transition: all 0.2s; 
+}
+
+.btn:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+}
+
+.btn-primary { 
+    background: var(--primary); 
+    color: white; 
+}
+
+.btn-success { 
+    background: var(--success); 
+    color: white; 
+}
+
+.btn-warning { 
+    background: var(--warning); 
+    color: #000; 
+}
+
+.btn-danger { 
+    background: var(--danger); 
+    color: white; 
+}
+
+.badge { 
+    display: inline-block; 
+    padding: 0.4rem 0.8rem; 
+    border-radius: 999px; 
+    font-size: 0.8rem; 
+    font-weight: 600; 
+}
+
+.badge-success { 
+    background: #dcfce7; 
+    color: #15803d; 
+}
+
+.badge-warning { 
+    background: #fef3c7; 
+    color: #b45309; 
+}
+
+.badge-danger { 
+    background: #fee2e2; 
+    color: #b91c1c; 
+}
+
+.info { 
+    background: #dbeafe; 
+    color: #1e40af; 
+    padding: 1rem; 
+    border-radius: 0.5rem; 
+    margin: 1rem 0; 
+    border-left: 4px solid var(--primary); 
+}
+
+.error { 
+    background: #fee2e2; 
+    color: #991b1b; 
+    padding: 1rem; 
+    border-radius: 0.5rem; 
+    margin: 1rem 0; 
+    border-left: 4px solid var(--danger); 
+}
+
+.success { 
+    background: #dcfce7; 
+    color: #15803d; 
+    padding: 1rem; 
+    border-radius: 0.5rem; 
+    margin: 1rem 0; 
+    border-left: 4px solid var(--success); 
+}
+
+.chart-container { 
+    position: relative; 
+    height: 300px; 
+    margin: 1rem 0; 
+}
+
+.confidence-bars { 
+    display: flex; 
+    gap: 0.5rem; 
+    align-items: flex-end; 
+    height: 60px; 
+}
+
+.confidence-bar { 
+    flex: 1; 
+    background: linear-gradient(to top, var(--primary), #60a5fa); 
+    border-radius: 4px 4px 0 0; 
+}
+
+h1 { 
+    color: var(--text); 
+    margin-bottom: 0.5rem; 
+}
+
+h2 { 
+    color: var(--text); 
+    font-size: 1.25rem; 
+    margin-bottom: 1rem; 
+}
+
+h3 { 
+    color: var(--text); 
+    font-size: 1.1rem; 
+    margin: 1.5rem 0 1rem; 
+}
+
+h4 { 
+    margin: 1rem 0 0.5rem; 
+}
+
+small { 
+    color: var(--text-light); 
+}
+
+code { 
+    background: #f1f5f9; 
+    padding: 0.2rem 0.4rem; 
+    border-radius: 0.25rem; 
+    font-family: monospace; 
+}
+
+.comparison-grid { 
+    display: grid; 
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 1rem; 
+    margin: 1rem 0; 
+}
+
+@media (max-width: 768px) {
+    .comparison-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

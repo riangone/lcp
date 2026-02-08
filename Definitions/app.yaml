@@ -1,190 +1,190 @@
 models:
-  Product:
-    table: Product
-    primary_key: Id
+  # Product:
+  #   table: Product
+  #   primary_key: Id
 
-    ui:
-      layout:
-        theme: default
-        grid_columns: 3
-      labels:
-        en:
-          title: Products
-          create_button: Add Product
-          edit_button: Edit
-          delete_button: Delete
-          search_placeholder: Search products...
-          Name: Product Name
-          Category: Category
-          Id: ID
-          Price: Price
-          Actions: Actions
-          new_button: New
-          save_button: Save
-          cancel_button: Cancel
-        zh:
-          title: 产品
-          create_button: 添加产品
-          edit_button: 编辑
-          delete_button: 删除
-          search_placeholder: 搜索产品...
-          Name: 产品名称
-          Category: 类别
-          Id: 编号
-          Price: 价格
-          Actions: 操作
-          new_button: 新增
-          save_button: 保存
-          cancel_button: 取消
-      styles:
-        card_class: "card-product"
-        button_class: "btn btn-primary"
+  #   ui:
+  #     layout:
+  #       theme: default
+  #       grid_columns: 3
+  #     labels:
+  #       en:
+  #         title: Products
+  #         create_button: Add Product
+  #         edit_button: Edit
+  #         delete_button: Delete
+  #         search_placeholder: Search products...
+  #         Name: Product Name
+  #         Category: Category
+  #         Id: ID
+  #         Price: Price
+  #         Actions: Actions
+  #         new_button: New
+  #         save_button: Save
+  #         cancel_button: Cancel
+  #       zh:
+  #         title: 产品
+  #         create_button: 添加产品
+  #         edit_button: 编辑
+  #         delete_button: 删除
+  #         search_placeholder: 搜索产品...
+  #         Name: 产品名称
+  #         Category: 类别
+  #         Id: 编号
+  #         Price: 价格
+  #         Actions: 操作
+  #         new_button: 新增
+  #         save_button: 保存
+  #         cancel_button: 取消
+  #     styles:
+  #       card_class: "card-product"
+  #       button_class: "btn btn-primary"
         
-    list:
-      columns:
-        - Id
-        - Name
-        - Price
-        - Category
+  #   list:
+  #     columns:
+  #       - Id
+  #       - Name
+  #       - Price
+  #       - Category
 
-      filters:
-        Name:
-          label: Product Name
-          type: like
+  #     filters:
+  #       Name:
+  #         label: Product Name
+  #         type: like
 
-        Category:
-          label: Category
-          type: select
-          options:
-            food: Food
-            book: Book
-            electronics: Electronics
-            other: Other
+  #       Category:
+  #         label: Category
+  #         type: select
+  #         options:
+  #           food: Food
+  #           book: Book
+  #           electronics: Electronics
+  #           other: Other
 
-    form:
-      title: Product
-      fields:
-        Name:
-          label: Product Name
-          type: text
-          required: true
-          min_length: 3
-          max_length: 100
+  #   form:
+  #     title: Product
+  #     fields:
+  #       Name:
+  #         label: Product Name
+  #         type: text
+  #         required: true
+  #         min_length: 3
+  #         max_length: 100
 
-        Price:
-          label: Price
-          type: number
-          required: true
-          min: 0
-          max: 1000000
+  #       Price:
+  #         label: Price
+  #         type: number
+  #         required: true
+  #         min: 0
+  #         max: 1000000
 
-        Category:
-          label: Category
-          type: select
-          required: true
-          options:
-            food: Food
-            book: Book
-            electronics: Electronics
-            other: Other
+  #       Category:
+  #         label: Category
+  #         type: select
+  #         required: true
+  #         options:
+  #           food: Food
+  #           book: Book
+  #           electronics: Electronics
+  #           other: Other
 
-    properties:
-      Id:
-        type: int
-      Name:
-        type: string
-        required: true
-      Price:
-        type: decimal
-        required: true
-      Category:
-        type: string
+  #   properties:
+  #     Id:
+  #       type: int
+  #     Name:
+  #       type: string
+  #       required: true
+  #     Price:
+  #       type: decimal
+  #       required: true
+  #     Category:
+  #       type: string
 
-  Customer:
-    table: Customer
-    primary_key: Id
+  # Customer:
+  #   table: Customer
+  #   primary_key: Id
 
-    ui:
-      layout:
-        theme: default
-        grid_columns: 2
-      labels:
-        en:
-          title: Customers
-          create_button: Add Customer
-          edit_button: Edit
-          delete_button: Delete
-          search_placeholder: Search customers...
-          Name: Customer Name
-          Email: Email
-          Id: ID
-          Phone: Phone
-          Actions: Actions
-          new_button: New
-          save_button: Save
-          cancel_button: Cancel
-        zh:
-          title: 客户
-          create_button: 添加客户
-          edit_button: 编辑
-          delete_button: 删除
-          search_placeholder: 搜索客户...
-          Name: 客户姓名
-          Email: 邮箱
-          Id: 编号
-          Phone: 电话
-          Actions: 操作
-          new_button: 新增
-          save_button: 保存
-          cancel_button: 取消
-      styles:
-        card_class: "card-customer"
-        button_class: "btn btn-secondary"
+  #   ui:
+  #     layout:
+  #       theme: default
+  #       grid_columns: 2
+  #     labels:
+  #       en:
+  #         title: Customers
+  #         create_button: Add Customer
+  #         edit_button: Edit
+  #         delete_button: Delete
+  #         search_placeholder: Search customers...
+  #         Name: Customer Name
+  #         Email: Email
+  #         Id: ID
+  #         Phone: Phone
+  #         Actions: Actions
+  #         new_button: New
+  #         save_button: Save
+  #         cancel_button: Cancel
+  #       zh:
+  #         title: 客户
+  #         create_button: 添加客户
+  #         edit_button: 编辑
+  #         delete_button: 删除
+  #         search_placeholder: 搜索客户...
+  #         Name: 客户姓名
+  #         Email: 邮箱
+  #         Id: 编号
+  #         Phone: 电话
+  #         Actions: 操作
+  #         new_button: 新增
+  #         save_button: 保存
+  #         cancel_button: 取消
+  #     styles:
+  #       card_class: "card-customer"
+  #       button_class: "btn btn-secondary"
 
-    list:
-      columns:
-        - Id
-        - Name
-        - Email
-        - Phone
+  #   list:
+  #     columns:
+  #       - Id
+  #       - Name
+  #       - Email
+  #       - Phone
 
-      filters:
-        Name:
-          label: Customer Name
-          type: like
-        Email:
-          label: Email
-          type: like
+  #     filters:
+  #       Name:
+  #         label: Customer Name
+  #         type: like
+  #       Email:
+  #         label: Email
+  #         type: like
 
-    form:
-      title: Customer
-      fields:
-        Name:
-          label: Customer Name
-          type: text
-          required: true
-          max_length: 150
+  #   form:
+  #     title: Customer
+  #     fields:
+  #       Name:
+  #         label: Customer Name
+  #         type: text
+  #         required: true
+  #         max_length: 150
 
-        Email:
-          label: Email
-          type: email
-          required: true
+  #       Email:
+  #         label: Email
+  #         type: email
+  #         required: true
 
-        Phone:
-          label: Phone Number
-          type: text
+  #       Phone:
+  #         label: Phone Number
+  #         type: text
 
-    properties:
-      Id:
-        type: int
-      Name:
-        type: string
-        required: true
-      Email:
-        type: string
-        required: true
-      Phone:
-        type: string
+  #   properties:
+  #     Id:
+  #       type: int
+  #     Name:
+  #       type: string
+  #       required: true
+  #     Email:
+  #       type: string
+  #       required: true
+  #     Phone:
+  #       type: string
 
   Artist:
     table: Artist

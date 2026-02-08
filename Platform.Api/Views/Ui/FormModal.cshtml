@@ -31,7 +31,7 @@
     var editLabel = localizedLabels.ContainsKey("edit_form_title") ? localizedLabels["edit_form_title"] : "Edit";
     var saveLabel = localizedLabels.ContainsKey("save_button") ? localizedLabels["save_button"] : "Save";
     var cancelLabel = localizedLabels.ContainsKey("cancel_button") ? localizedLabels["cancel_button"] : "Cancel";
-    var cardClass = def.Ui?.Styles?.CardClass ?? "glass-card";
+    var cardClass = def.Ui?.Styles?.CardClass ?? "card";
     var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
 
     var action = isEdit
@@ -42,13 +42,13 @@
 }
 
 <div id="modal-form" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 overflow-auto">
-  <div class="bg-white rounded-xl shadow-2xl w-full max-w-md glass-card mx-auto my-4 max-h-[90vh] overflow-hidden">
+  <div class="bg-white rounded-xl shadow-lg w-full max-w-md mx-auto my-4 max-h-[90vh] overflow-hidden">
     <div class="p-6">
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-xl font-semibold text-gray-800">
           @(isEdit ? editLabel : createLabel) @modelName
         </h3>
-        <button class="text-gray-500 hover:text-gray-700" 
+        <button class="text-gray-500 hover:text-gray-700"
                 onclick="document.getElementById('modal-form').remove(); return false;">
           <i class="fas fa-times text-xl"></i>
         </button>
@@ -64,7 +64,7 @@
           @foreach (var f in def.Form!.Fields)
           {
               var value = isEdit && row != null && row.ContainsKey(f.Key) ? row[f.Key]?.ToString() : "";
-              
+
               // 获取本地化字段标签
               var fieldLabel = f.Value.Label;
               if(localizedLabels != null && localizedLabels.ContainsKey(f.Key))
@@ -79,7 +79,7 @@
 
                 @if (f.Value.Type == "select")
                 {
-                    <select name="@f.Key" 
+                    <select name="@f.Key"
                             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             @(f.Value.Required ? "required" : "")>
                       <option value="">Select...</option>
@@ -116,13 +116,13 @@
           }
 
         <div class="flex justify-end space-x-3 pt-4">
-          <button type="button" 
-                  class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+          <button type="button"
+                  class="btn btn-outline"
                   onclick="document.getElementById('modal-form').remove(); return false;">
             <i class="fas fa-times mr-2"></i>@cancelLabel
           </button>
-          <button type="submit" 
-                  class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+          <button type="submit"
+                  class="btn btn-primary">
             <i class="fas fa-save mr-2"></i>@saveLabel
           </button>
         </div>
@@ -139,7 +139,7 @@
       modal.remove();
     }
   }
-  
+
   // 更新closeModalOnSuccess函数
   function closeModalOnSuccess(event) {
     // Close modal only if the request was successful (status 200-299)
@@ -147,7 +147,7 @@
       closeFormModal();
     }
   }
-  
+
   // ESC键关闭模态框
   document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
@@ -157,7 +157,7 @@
       }
     }
   });
-  
+
   // 点击模态框外部关闭
   document.getElementById('modal-form').addEventListener('click', function(event) {
     if (event.target === this) {

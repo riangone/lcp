@@ -1,0 +1,151 @@
+@{
+    ViewData["Title"] = "AI三层架构验证总结";
+}
+
+<div class="container">
+    <div class="jumbotron bg-primary text-white p-5 rounded">
+        <h1 class="display-4">AI三层架构验证总结</h1>
+        <p class="lead">成功验证了AI三层架构（函数式核心、确定性外壳、非确定性边缘）的完整实现</p>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card border-success mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">✅ Functional Core (函数式核心)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">位于 <code>Platform.Domain</code>，包含纯业务逻辑，无副作用。</p>
+                    <ul>
+                        <li>业务规则验证器</li>
+                        <li>实体状态转换器</li>
+                        <li>纯函数实现</li>
+                        <li>数据一致性保证</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-info mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">✅ Deterministic Shell (确定性外壳)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">位于 <code>Platform.Infrastructure</code>，管理副作用和流程控制。</p>
+                    <ul>
+                        <li>快照存储机制</li>
+                        <li>审批工作流</li>
+                        <li>证迹追踪系统</li>
+                        <li>数据稳定性保证</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card border-warning mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">✅ Non-deterministic Edge (非确定性边缘)</h5>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">位于 <code>Platform.Application</code>，与AI模型交互。</p>
+                    <ul>
+                        <li>AI建议生成</li>
+                        <li>预测功能</li>
+                        <li>模型集成</li>
+                        <li>不确定性数据处理</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>架构验证结果</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>✅ 验证通过的功能</h5>
+                    <ul>
+                        <li>AI建议生成与快照创建</li>
+                        <li>证迹追踪系统</li>
+                        <li>审批工作流程</li>
+                        <li>业务规则验证</li>
+                        <li>YAML定义AI功能配置</li>
+                        <li>端到端业务场景测试</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h5>🎯 关键特性</h5>
+                    <ul>
+                        <li>分离不确定性与确定性逻辑</li>
+                        <li>完整的证迹追踪</li>
+                        <li>人工审批保障数据质量</li>
+                        <li>可配置的AI功能</li>
+                        <li>模块化架构设计</li>
+                        <li>合规性与可解释性</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>业务场景演示</h4>
+        </div>
+        <div class="card-body">
+            <p>以下业务场景已成功验证AI三层架构的有效性：</p>
+            <div class="row">
+                <div class="col-md-6">
+                    <h6>🎵 艺术家名称优化场景</h6>
+                    <ul>
+                        <li>AI分析现有艺术家名称</li>
+                        <li>提出优化建议（如格式标准化）</li>
+                        <li>创建建议快照</li>
+                        <li>人工审批后应用更改</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h6>💰 发票金额预测场景</h6>
+                    <ul>
+                        <li>AI分析历史发票数据</li>
+                        <li>预测未来发票金额趋势</li>
+                        <li>生成预测结果</li>
+                        <li>评估置信度</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h4>架构优势</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <h6>🛡️ 数据安全性</h6>
+                    <p>通过快照和审批机制，确保AI生成的不确定性数据不会直接影响主数据。</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>🔍 可追溯性</h6>
+                    <p>每个AI决策都有完整的证迹信息，包括模型ID、输入哈希、时间戳等。</p>
+                </div>
+                <div class="col-md-4">
+                    <h6>⚙️ 可配置性</h6>
+                    <p>通过YAML定义灵活配置AI功能，无需修改代码即可调整行为。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-5 text-center">
+        <a href="@Url.Action("Index", "AiValidation")" class="btn btn-lg btn-primary mr-3">返回AI验证中心</a>
+        <a href="/ui/Artist" class="btn btn-lg btn-success">查看艺术家数据</a>
+    </div>
+</div>

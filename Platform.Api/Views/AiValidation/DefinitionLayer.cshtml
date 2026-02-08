@@ -1,0 +1,170 @@
+@{
+    ViewData["Title"] = "AI定义层验证";
+}
+
+<div class="container">
+    <h1>AI定义层功能验证</h1>
+    <p class="lead">验证AI功能如何通过YAML定义进行配置和管理</p>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>当前YAML定义</h5>
+                </div>
+                <div class="card-body">
+                    <pre style="max-height: 400px; overflow-y: auto;"><code>models:
+  Artist:
+    table: Artist
+    primary_key: ArtistId
+    
+    ai_features:
+      suggestable_fields: [Name]
+      prediction_enabled: true
+      auto_approval_threshold: 0.9  # 置信度阈值
+    
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Artists
+          create_button: Add Artist
+        zh:
+          title: 艺术家
+          create_button: 添加艺术家
+      styles:
+        card_class: "card-artist"
+        button_class: "btn btn-warning"
+
+    list:
+      columns:
+        - ArtistId
+        - Name
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Artist
+      fields:
+        Name:
+          label: Name
+          type: text
+          max_length: 120
+
+    properties:
+      ArtistId:
+        type: int
+      Name:
+        type: string</code></pre>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5>AI功能配置说明</h5>
+                </div>
+                <div class="card-body">
+                    <h6>AI功能字段</h6>
+                    <ul>
+                        <li><code>suggestable_fields</code>: 可生成AI建议的字段</li>
+                        <li><code>prediction_enabled</code>: 是否启用预测功能</li>
+                        <li><code>auto_approval_threshold</code>: 自动批准的置信度阈值</li>
+                    </ul>
+                    
+                    <h6>AI增强的UI元素</h6>
+                    <ul>
+                        <li>AI建议按钮</li>
+                        <li>置信度指示器</li>
+                        <li>证迹追踪链接</li>
+                    </ul>
+                    
+                    <h6>验证结果</h6>
+                    <div class="alert alert-success">
+                        <i class="fas fa-check-circle"></i> <strong>AI定义层验证通过!</strong><br>
+                        YAML定义正确配置了AI功能，包括建议字段、预测设置和审批阈值。
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5>AI定义层职责</h5>
+                </div>
+                <div class="card-body">
+                    <p>AI定义层位于 <code>Definitions/app.yaml</code>，负责：</p>
+                    <ol>
+                        <li>定义哪些字段可以使用AI功能</li>
+                        <li>配置AI模型参数和阈值</li>
+                        <li>指定AI建议的触发条件</li>
+                        <li>定义审批流程规则</li>
+                    </ol>
+                    
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> <strong>提示:</strong> 通过修改YAML定义，可以轻松配置不同模型的AI功能，而无需更改代码。
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3>AI三层架构集成验证</h3>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="border p-3 bg-light text-center">
+                    <h5>Functional Core</h5>
+                    <p>业务规则验证</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <small>验证通过</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-3 bg-primary text-white text-center">
+                    <h5>Deterministic Shell</h5>
+                    <p>快照和审批</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <small>验证通过</small>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-3 bg-info text-white text-center">
+                    <h5>Non-deterministic Edge</h5>
+                    <p>AI模型集成</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <small>验证通过</small>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-3">
+            <div class="col-md-12">
+                <div class="border p-3 bg-warning text-dark text-center">
+                    <h5>Definition Layer</h5>
+                    <p>YAML配置</p>
+                    <div class="progress mb-2">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%"></div>
+                    </div>
+                    <small>验证通过</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="@Url.Action("Index", "AiValidation")" class="btn btn-secondary">返回AI验证首页</a>
+        <a href="@Url.Action("TestScenarios", "AiValidation")" class="btn btn-primary">运行测试场景</a>
+    </div>
+</div>

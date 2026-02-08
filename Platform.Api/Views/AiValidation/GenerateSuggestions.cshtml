@@ -1,0 +1,58 @@
+@{
+    ViewData["Title"] = "生成AI建议";
+}
+
+<div class="container">
+    <h1>生成AI建议</h1>
+    <p class="lead">为模型 @ViewBag.Model (ID: @ViewBag.Id) 生成AI建议</p>
+
+    <div class="alert alert-info">
+        <strong>注意：</strong>此功能模拟AI模型生成建议的过程。在实际实现中，这里会调用真实的AI模型。
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5>AI建议生成过程</h5>
+        </div>
+        <div class="card-body">
+            <ol>
+                <li><strong>非确定性边缘</strong>: AI模型接收输入数据并生成建议</li>
+                <li><strong>证迹记录</strong>: 记录AI模型ID、输入哈希、时间戳等信息</li>
+                <li><strong>快照创建</strong>: 将建议和证迹信息存储为快照</li>
+                <li><strong>审批流程</strong>: 等待人工审批以确保数据质量</li>
+            </ol>
+            
+            <form method="post" action="@Url.Action("GenerateSuggestions", "AiValidation", new { model = ViewBag.Model, id = ViewBag.Id })">
+                <button type="submit" class="btn btn-success">执行AI建议生成流程</button>
+                <a href="@Url.Action("Index", "AiValidation")" class="btn btn-secondary">返回首页</a>
+            </form>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h4>架构组件交互</h4>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="border p-3 bg-light">
+                    <h6>Non-deterministic Edge</h6>
+                    <p><small>Platform.Application.Services.AiIntegrationService</small></p>
+                    <p>调用AI模型，生成建议，创建证迹信息</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-3 bg-primary text-white">
+                    <h6>Deterministic Shell</h6>
+                    <p><small>Platform.Infrastructure.Shell.SnapshotRepository</small></p>
+                    <p>存储快照，管理审批流程</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="border p-3 bg-info text-white">
+                    <h6>Functional Core</h6>
+                    <p><small>Platform.Domain.Core.BusinessRuleValidator</small></p>
+                    <p>验证业务规则，确保数据一致性</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

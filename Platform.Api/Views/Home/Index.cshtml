@@ -1,194 +1,198 @@
-@using Platform.Infrastructure.Definitions
 @{
-    var models = ViewData["Models"] as Dictionary<string, ModelDefinition>;
-    // 获取当前语言，默认为英文
+    ViewData["Title"] = "Home - Low Code Platform";
+    ViewData["ActivePage"] = "Home";
+    var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
 }
 
-<style>
-    body {
-        background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%) !important;
-        min-height: 100vh;
-    }
-    .glass-card {
-        backdrop-filter: blur(10px);
-        background: rgba(255, 255, 255, 0.85);
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-    }
-    .hover-lift {
-        transition: all 0.3s ease;
-    }
-    .hover-lift:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-    .gradient-text {
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-    }
-    .icon-bg {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 1rem;
-    }
-</style>
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
+            Welcome to Low Code Platform
+        </h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+            A modern platform for building data-driven applications with AI-powered features
+        </p>
+    </div>
 
-<div class="min-h-screen flex flex-col home-page">
-    <!-- Header -->
-    <header class="py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold gradient-text mb-4">
-                Low Code Platform
-            </h1>
-            <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-6">
-                Select a model to manage your data
-            </p>
-            
-            <!-- 语言切换 -->
-            <div class="inline-flex items-center bg-white rounded-full p-1 shadow-md">
-                <select onchange="changeLanguage(this.value)" class="bg-transparent border-none focus:ring-0 text-sm">
-                    <option value="en" @(currentLang == "en" ? "selected" : "")>🇺🇸 English</option>
-                    <option value="zh" @(currentLang == "zh" ? "selected" : "")>🇨🇳 中文</option>
-                </select>
+    <!-- Feature Cards Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div class="card dashboard-card text-white">
+            <div class="flex items-start">
+                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
+                    <i class="fas fa-database text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">Data Management</h3>
+                    <p class="text-blue-100">Create, read, update, and delete data with our intuitive CRUD interface.</p>
+                </div>
             </div>
         </div>
-    </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow py-8 px-4 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            @if (models != null && models.Any())
-            {
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    @foreach (var model in models)
+        <div class="card dashboard-card text-white">
+            <div class="flex items-start">
+                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
+                    <i class="fas fa-robot text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">AI-Powered Insights</h3>
+                    <p class="text-blue-100">Leverage artificial intelligence for smarter decision-making.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="card dashboard-card text-white">
+            <div class="flex items-start">
+                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
+                    <i class="fas fa-shield-alt text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-2">Secure Validation</h3>
+                    <p class="text-blue-100">Ensure data integrity with our three-layer architecture approach.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Models Section -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Data Models</h2>
+        @if (models != null && models.Any())
+        {
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                @foreach (var model in models)
+                {
+                    var modelKey = model.Key; // 避免Razor解析错误
+
+                    // 获取UI配置
+                    var uiLabels = model.Value.Ui?.Labels;
+                    Dictionary<string, string>? localizedLabels = null;
+
+                    if (uiLabels != null)
                     {
-                        var modelKey = model.Key; // 避免Razor解析错误
-                        
-                        // 获取UI配置
-                        var uiLabels = model.Value.Ui?.Labels;
-                        Dictionary<string, string>? localizedLabels = null;
-                        
-                        if (uiLabels != null)
+                        if (currentLang == "zh" && uiLabels.Zh != null)
                         {
-                            if (currentLang == "zh" && uiLabels.Zh != null)
-                            {
-                                localizedLabels = uiLabels.Zh;
-                            }
-                            else if (currentLang == "en" && uiLabels.En != null)
-                            {
-                                localizedLabels = uiLabels.En;
-                            }
+                            localizedLabels = uiLabels.Zh;
                         }
-                        
-                        if (localizedLabels == null)
+                        else if (currentLang == "en" && uiLabels.En != null)
                         {
-                            localizedLabels = new Dictionary<string, string>();
+                            localizedLabels = uiLabels.En;
                         }
-                        
-                        var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelKey;
-                        var description = localizedLabels.ContainsKey("description") ? localizedLabels["description"] : $"Manage {modelKey} records";
-                        
-                        var cardClass = model.Value.Ui?.Styles?.CardClass ?? "glass-card";
-                        var table = model.Value.Table;
-                        
-                        // 根据模型名称选择图标
-                        string iconClass = "fas fa-database";
-                        if (modelKey.ToLower().Contains("customer") || modelKey.ToLower().Contains("user"))
-                        {
-                            iconClass = "fas fa-user-friends";
-                        }
-                        else if (modelKey.ToLower().Contains("product"))
-                        {
-                            iconClass = "fas fa-box-open";
-                        }
-                        else if (modelKey.ToLower().Contains("order") || modelKey.ToLower().Contains("invoice"))
-                        {
-                            iconClass = "fas fa-file-invoice-dollar";
-                        }
-                        else if (modelKey.ToLower().Contains("artist"))
-                        {
-                            iconClass = "fas fa-music";
-                        }
-                        else if (modelKey.ToLower().Contains("album"))
-                        {
-                            iconClass = "fas fa-compact-disc";
-                        }
-                        else if (modelKey.ToLower().Contains("track"))
-                        {
-                            iconClass = "fas fa-music";
-                        }
-                        else if (modelKey.ToLower().Contains("employee"))
-                        {
-                            iconClass = "fas fa-user-tie";
-                        }
-                        else if (modelKey.ToLower().Contains("genre"))
-                        {
-                            iconClass = "fas fa-tags";
-                        }
-                        
-                        <a href="/ui/@modelKey?lang=@currentLang" class="group @(cardClass) hover-lift rounded-xl p-6 text-center transition-all duration-300 border border-gray-200 hover:border-blue-300">
-                            <div class="icon-bg group-hover:scale-110 transition-transform duration-300">
-                                <i class="@iconClass text-white text-xl"></i>
-                            </div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
-                                @title
-                            </h3>
-                            <p class="text-gray-600 text-sm mb-3">
-                                @description
-                            </p>
-                            <div class="text-xs text-gray-500">
-                                Table: @table
-                            </div>
-                            <div class="mt-4">
-                                <span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium">
-                                    Manage
-                                </span>
-                            </div>
-                        </a>
                     }
+
+                    if (localizedLabels == null)
+                    {
+                        localizedLabels = new Dictionary<string, string>();
+                    }
+
+                    var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelKey;
+                    var description = localizedLabels.ContainsKey("description") ? localizedLabels["description"] : $"Manage {modelKey} records";
+
+                    var cardClass = model.Value.Ui?.Styles?.CardClass ?? "card";
+                    var table = model.Value.Table;
+
+                    // 根据模型名称选择图标
+                    string iconClass = "fas fa-database";
+                    if (modelKey.ToLower().Contains("customer") || modelKey.ToLower().Contains("user"))
+                    {
+                        iconClass = "fas fa-user-friends";
+                    }
+                    else if (modelKey.ToLower().Contains("product"))
+                    {
+                        iconClass = "fas fa-box-open";
+                    }
+                    else if (modelKey.ToLower().Contains("order") || modelKey.ToLower().Contains("invoice"))
+                    {
+                        iconClass = "fas fa-file-invoice-dollar";
+                    }
+                    else if (modelKey.ToLower().Contains("artist"))
+                    {
+                        iconClass = "fas fa-music";
+                    }
+                    else if (modelKey.ToLower().Contains("album"))
+                    {
+                        iconClass = "fas fa-compact-disc";
+                    }
+                    else if (modelKey.ToLower().Contains("track"))
+                    {
+                        iconClass = "fas fa-music";
+                    }
+                    else if (modelKey.ToLower().Contains("employee"))
+                    {
+                        iconClass = "fas fa-user-tie";
+                    }
+                    else if (modelKey.ToLower().Contains("genre"))
+                    {
+                        iconClass = "fas fa-tags";
+                    }
+
+                    <a href="/ui/@modelKey?lang=@currentLang" class="@(cardClass) rounded-xl p-6 text-center transition-all duration-300 border border-gray-200 hover:border-blue-300 hover:shadow-md">
+                        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="@iconClass text-blue-600 text-xl"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
+                        <p class="text-gray-600 text-sm mb-3">@description</p>
+                        <div class="text-xs text-gray-500 mb-3">Table: @table</div>
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium">
+                                Manage Data
+                            </span>
+                        </div>
+                    </a>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-12">
+                <div class="text-gray-400 mb-4">
+                    <i class="fas fa-database text-6xl"></i>
                 </div>
-            }
-            else
-            {
-                <div class="text-center py-12">
-                    <div class="text-gray-400 mb-4">
-                        <i class="fas fa-database text-6xl"></i>
+                <h3 class="text-xl font-medium text-gray-900 mb-2">No Models Defined</h3>
+                <p class="text-gray-500">Configure your models in the app.yaml file</p>
+            </div>
+        }
+    </div>
+
+    <!-- AI Features Section -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">AI Features</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="/InventoryAiPage" class="card ai-card hover:shadow-md transition-shadow">
+                <div class="flex items-start">
+                    <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
                     </div>
-                    <h3 class="text-xl font-medium text-gray-900 mb-2">No Models Defined</h3>
-                    <p class="text-gray-500">Configure your models in the app.yaml file</p>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Inventory AI</h3>
+                        <p class="text-gray-600 text-sm">AI-powered inventory management with three-layer architecture</p>
+                    </div>
                 </div>
-            }
-        </div>
-    </main>
+            </a>
 
-    <!-- Footer -->
-    <footer class="py-6 px-4 sm:px-6 lg:px-8 border-t border-gray-200 bg-white/50 backdrop-blur-sm">
-        <div class="max-w-7xl mx-auto text-center">
-            <p class="text-gray-600">
-                <a href="/docs" class="text-blue-600 hover:text-blue-800 font-medium inline-flex items-center">
-                    <i class="fas fa-book mr-2"></i>
-                    API Documentation
-                </a>
-            </p>
-            <p class="text-xs text-gray-500 mt-2">
-                Powered by Low Code Platform &copy; 2026
-            </p>
+            <a href="/ai-validation" class="card ai-card hover:shadow-md transition-shadow">
+                <div class="flex items-start">
+                    <div class="bg-green-100 p-3 rounded-lg mr-4">
+                        <i class="fas fa-shield-alt text-green-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">AI Validation</h3>
+                        <p class="text-gray-600 text-sm">Validate and approve AI-generated suggestions</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/ai-validation/snapshots" class="card ai-card hover:shadow-md transition-shadow">
+                <div class="flex items-start">
+                    <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                        <i class="fas fa-cogs text-yellow-600 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Snapshots</h3>
+                        <p class="text-gray-600 text-sm">Review and manage AI decision snapshots</p>
+                    </div>
+                </div>
+            </a>
         </div>
-    </footer>
+    </div>
 </div>
-
-<script>
-    function changeLanguage(lang) {
-        const url = new URL(window.location);
-        url.searchParams.set('lang', lang);
-        window.location = url.toString();
-    }
-</script>

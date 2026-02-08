@@ -1,0 +1,553 @@
+@{
+    ViewData["Title"] = "Inventory AI Management System - Low Code Platform";
+    ViewData["ActivePage"] = "AI";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">🧪 AI Inventory Management System v2.0</h1>
+        <p class="text-gray-600">Smart ordering decision support powered by the three-layer architecture: Functional Core / Deterministic Shell / Non-deterministic Edge</p>
+    </div>
+
+    <!-- ===== Dashboard ===== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <div class="card highlight">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">📊 Inventory Statistics</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Current Stock</span>
+                    <span class="font-medium" id="current-stock">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Safety Stock</span>
+                    <span class="font-medium" id="safety-stock">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Max Capacity</span>
+                    <span class="font-medium" id="max-capacity">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Capacity Rate</span>
+                    <span class="font-medium" id="capacity-rate">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Safety Level</span>
+                    <span class="font-medium" id="safety-status">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">📈 Order History</h3>
+            <div class="space-y-3">
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Total Orders</span>
+                    <span class="font-medium" id="total-orders">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Auto Approved</span>
+                    <span class="font-medium" id="auto-approved">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Manual Approved</span>
+                    <span class="font-medium" id="manual-approved">--</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Total Quantity</span>
+                    <span class="font-medium" id="total-quantity">--</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">🎯 Recommended Actions</h3>
+            <div id="recommendation-area">
+                <p class="text-gray-500">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== AI System ===== -->
+    <div class="card mb-8">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">🤖 AI Smart Suggestion System (Non-deterministic Edge)</h2>
+        <p class="text-gray-600 mb-6">Adjust the AI "temperature" to compare different strategies</p>
+
+        <form id="ai-propose-form" class="space-y-6">
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    <strong>AI "Temperature" Setting</strong>
+                </label>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-600 min-w-[60px]">Conservative ←</span>
+                    <input type="range" name="temperature" id="range-temp" min="0" max="1" step="0.1" value="0.7"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <span class="text-sm text-gray-600 min-w-[60px]">→ Aggressive</span>
+                    <span id="temp-value" class="w-12 text-center font-bold bg-gray-100 py-2 px-3 rounded">
+                        0.7
+                    </span>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary px-6 py-3 text-lg">
+                <i class="fas fa-rocket mr-2"></i>Get AI Suggestions
+            </button>
+        </form>
+    </div>
+
+    <!-- AI Proposals Display Area -->
+    <div id="proposal-container" class="mb-8"></div>
+
+    <!-- ===== Execution History ===== -->
+    <div class="card">
+        <h2 class="text-xl font-semibold text-gray-800 mb-4">✅ Execution History & Transaction Log (Deterministic Shell)</h2>
+        <div id="execution-history">
+            <p class="text-gray-500 text-center py-8">💡 No orders yet. Get AI suggestions and approve them to begin.</p>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/htmx.org@1.9.6"></script>
+<script>
+    // Initial data loading
+    loadInventoryData();
+    
+    // Temperature slider sync display
+    document.getElementById('range-temp').addEventListener('input', function(e) {
+        document.getElementById('temp-value').textContent = e.target.value;
+    });
+    
+    // AI suggestion form submission
+    document.getElementById('ai-propose-form').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const temperature = document.getElementById('range-temp').value;
+        
+        try {
+            const response = await fetch('/api/inventoryai/ai-propose', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `temperature=${temperature}`
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                displayProposals(data.snapshots);
+            } else {
+                alert('Error: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            alert('Communication error: ' + error.message);
+        }
+    });
+    
+    // Load inventory data
+    async function loadInventoryData() {
+        try {
+            const response = await fetch('/api/inventoryai');
+            const data = await response.json();
+            
+            if (response.ok) {
+                updateInventoryDisplay(data);
+                loadExecutionHistory();
+            }
+        } catch (error) {
+            console.error('Inventory data loading error:', error);
+        }
+    }
+    
+    // Update inventory display
+    function updateInventoryDisplay(inventory) {
+        document.getElementById('current-stock').textContent = `${inventory.currentStock} units`;
+        document.getElementById('safety-stock').textContent = `${inventory.safetyStock} units`;
+        document.getElementById('max-capacity').textContent = `${inventory.maxCapacity} units`;
+        
+        const capacityRate = (inventory.currentStock / inventory.maxCapacity * 100).toFixed(1);
+        document.getElementById('capacity-rate').textContent = `${capacityRate}%`;
+        
+        const safetyStatus = inventory.currentStock >= inventory.safetyStock ? '✅' : '⚠️';
+        document.getElementById('safety-status').textContent = safetyStatus;
+        
+        // Update recommendations
+        updateRecommendation(inventory);
+    }
+    
+    // Update recommendation display
+    function updateRecommendation(inventory) {
+        const area = document.getElementById('recommendation-area');
+        
+        if (inventory.currentStock < inventory.safetyStock) {
+            area.innerHTML = `
+                <div class="error bg-red-50 border-l-4 border-red-500 p-4 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-triangle text-red-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-red-700">
+                                <strong>⚠️ Inventory below safety level!</strong><br>
+                                Immediate ordering required
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (inventory.currentStock < inventory.safetyStock * 1.2) {
+            area.innerHTML = `
+                <div class="info bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-blue-700">
+                                <strong>📉 Inventory decreasing trend</strong><br>
+                                <strong>Request AI suggestions</strong>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else {
+            area.innerHTML = `
+                <div class="success bg-green-50 border-l-4 border-green-500 p-4 rounded">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500"></i>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm text-green-700">
+                                <strong>✅ Inventory level is good</strong><br>
+                                Monitor regularly
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+    }
+    
+    // Display proposals
+    function displayProposals(snapshots) {
+        const container = document.getElementById('proposal-container');
+        
+        if (!snapshots || snapshots.length === 0) {
+            container.innerHTML = '<p class="text-gray-500">No proposals available</p>';
+            return;
+        }
+        
+        const colors = ['border-red-500', 'border-yellow-500', 'border-green-500'];
+        const labels = ['⚠️ Conservative', '⚖️ Balanced', '🚀 Aggressive'];
+        
+        let html = `
+            <div id="proposal-container" class="mb-8">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">💡 AI Proposals (${snapshots.length} options)</h2>
+                <p class="text-gray-600 mb-6">Compare 3 strategies generated with temperature=0.7. Click for details and validation.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        `;
+        
+        snapshots.forEach((snapshot, index) => {
+            const confidenceColor = snapshot.proposal.confidence >= 0.8 ? 'bg-green-100 text-green-800' : 
+                                  snapshot.proposal.confidence >= 0.6 ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800';
+            
+            html += `
+                <div class="card border-t-4 ${colors[index % colors.length]} cursor-pointer transition-all duration-200 relative">
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-800">
+                                ${labels[index % labels.length]}
+                            </h4>
+                        </div>
+                        <span class="${confidenceColor} text-xs font-medium px-2.5 py-0.5 rounded-full">
+                            Confidence ${Math.round(snapshot.proposal.confidence * 100)}%
+                        </span>
+                    </div>
+
+                    <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                        <div class="text-2xl font-bold text-blue-600 text-center">
+                            ${snapshot.proposal.suggestedQuantity} units
+                        </div>
+                        <div class="text-center text-sm text-gray-600 mt-1">
+                            Suggested Order Quantity
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <small class="text-gray-600"><strong>Reasoning:</strong></small>
+                        <p class="text-sm text-gray-700 mt-1">${snapshot.proposal.reasoning}</p>
+                    </div>
+
+                    <div class="bg-gray-50 p-3 rounded-lg border-l-4 border-blue-500 mb-4">
+                        <small>
+                            <div class="text-sm"><strong>📝 AI Model:</strong> ${snapshot.aiModel}</div>
+                            <div class="text-sm"><strong>🔒 ID:</strong> <code class="text-xs">${snapshot.id.substring(0, 8)}</code></div>
+                        </small>
+                    </div>
+
+                    <button class="btn btn-primary w-full mt-2"
+                            onclick="validateProposal('${snapshot.id}')">
+                        <i class="fas fa-search mr-2"></i>View Details & Validate
+                    </button>
+
+                    <div id="validation-${snapshot.id}"></div>
+                </div>
+            `;
+        });
+        
+        html += `
+                </div>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+    }
+    
+    // Validate proposal
+    async function validateProposal(snapshotId) {
+        try {
+            const response = await fetch(`/api/inventoryai/validate/${snapshotId}`);
+            const data = await response.json();
+            
+            if (response.ok) {
+                displayValidationResult(snapshotId, data);
+            } else {
+                alert('Validation error: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            alert('Communication error: ' + error.message);
+        }
+    }
+    
+    // Display validation result
+    function displayValidationResult(snapshotId, data) {
+        const validationDiv = document.getElementById(`validation-${snapshotId}`);
+        
+        const isValid = data.isValid;
+        const bgColor = isValid ? 'bg-green-50' : 'bg-red-50';
+        const borderColor = isValid ? 'border-green-500' : 'border-red-500';
+        const textColor = isValid ? 'text-green-800' : 'text-red-800';
+        const icon = isValid ? 'fa-check-circle' : 'fa-times-circle';
+        
+        let html = `
+            <div class="mt-4 p-4 rounded-lg ${bgColor} ${borderColor} border-l-4">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <h4 class="text-lg font-semibold ${textColor}">
+                            <i class="fas ${icon} mr-2"></i>
+                            ${isValid ? '✅ Validation OK - Approval Possible' : '❌ Validation Failed - Issues Found'}
+                        </h4>
+                        <p class="${textColor} mt-1">
+                            ${data.validationMessage}
+                        </p>
+                    </div>
+                </div>
+        `;
+        
+        if (isValid) {
+            html += `
+                <div class="bg-white p-4 rounded-lg border-l-4 border-green-500 mb-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <div class="text-sm text-gray-600">📦 Order Quantity</div>
+                            <div class="text-xl font-bold text-blue-600">${data.snapshot.proposal.suggestedQuantity} units</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-600">🤖 Confidence</div>
+                            <div class="text-xl font-bold ${
+                                data.snapshot.proposal.confidence >= 0.8 ? 'text-green-600' : 
+                                data.snapshot.proposal.confidence >= 0.6 ? 'text-yellow-600' : 'text-red-600'
+                            }">
+                                ${Math.round(data.snapshot.proposal.confidence * 100)}%
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg mb-4">
+                    <small class="text-gray-600">
+                        <div><strong>🤖 Auto Approval Decision:</strong> ${
+                            data.canAutoApprove ? 
+                            `Possible (Confidence ${Math.round(data.snapshot.proposal.confidence * 100)}% >= 80%)` : 
+                            'Not possible (Confidence below 80%)'
+                        }</div>
+                    </small>
+                </div>
+
+                <div class="flex flex-wrap gap-3 mt-4">
+            `;
+            
+            if (data.canAutoApprove) {
+                html += `
+                    <button class="btn btn-success flex-1 min-w-[200px]"
+                            onclick="approveProposal('${data.snapshot.id}', 'auto')">
+                        <i class="fas fa-robot mr-2"></i>Auto Approve & Execute
+                    </button>
+                `;
+            } else {
+                html += `
+                    <button class="btn btn-primary flex-1 min-w-[200px]"
+                            onclick="approveProposal('${data.snapshot.id}', 'human')">
+                        <i class="fas fa-user mr-2"></i>Manual Approval & Execute
+                    </button>
+                `;
+            }
+            
+            html += `
+                    <button class="btn btn-danger flex-1 min-w-[200px]"
+                            onclick="rejectProposal('${data.snapshot.id}')">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                </div>
+            `;
+        } else {
+            html += `
+                <div class="flex flex-wrap gap-3 mt-4">
+                    <button class="btn btn-danger flex-1 min-w-[200px]"
+                            onclick="rejectProposal('${data.snapshot.id}')">
+                        <i class="fas fa-times mr-2"></i>Cancel
+                    </button>
+                </div>
+            `;
+        }
+        
+        html += `
+            </div>
+        `;
+        
+        validationDiv.innerHTML = html;
+    }
+    
+    // Approve proposal
+    async function approveProposal(snapshotId, approvedBy) {
+        try {
+            const response = await fetch(`/api/inventoryai/approve/${snapshotId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `approvedBy=${approvedBy}`
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+                alert(data.message);
+                document.getElementById('proposal-container').innerHTML = '';
+                loadInventoryData(); // Update inventory status
+            } else {
+                alert('Approval error: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            alert('Communication error: ' + error.message);
+        }
+    }
+    
+    // Reject proposal
+    async function rejectProposal(snapshotId) {
+        try {
+            const response = await fetch(`/api/inventoryai/reject/${snapshotId}`, {
+                method: 'POST'
+            });
+            
+            if (response.ok) {
+                const validationDiv = document.getElementById(`validation-${snapshotId}`);
+                validationDiv.innerHTML = '<div class="info bg-blue-50 p-4 rounded">Proposal cancelled</div>';
+                
+                // Remove parent element after delay
+                setTimeout(() => {
+                    const proposalCard = validationDiv.closest('.card');
+                    if (proposalCard) {
+                        proposalCard.remove();
+                    }
+                }, 500);
+            } else {
+                const data = await response.json();
+                alert('Rejection error: ' + (data.error || 'Unknown error'));
+            }
+        } catch (error) {
+            alert('Communication error: ' + error.message);
+        }
+    }
+    
+    // Load execution history
+    async function loadExecutionHistory() {
+        try {
+            const response = await fetch('/api/inventoryai/execution-history');
+            const data = await response.json();
+            
+            if (response.ok) {
+                displayExecutionHistory(data);
+            }
+        } catch (error) {
+            console.error('Execution history loading error:', error);
+        }
+    }
+    
+    // Display execution history
+    function displayExecutionHistory(history) {
+        const container = document.getElementById('execution-history');
+        
+        if (!history || history.length === 0) {
+            container.innerHTML = `
+                <p class="text-gray-500 text-center py-8">
+                    💡 No orders yet. Get AI suggestions and approve them to begin.
+                </p>
+            `;
+            return;
+        }
+        
+        // Aggregate info
+        const totalOrders = history.length;
+        const autoApproved = history.filter(h => h.approvedBy === 'auto').length;
+        const manualApproved = history.filter(h => h.approvedBy === 'human').length;
+        const totalQuantity = history.reduce((sum, h) => sum + h.approvedQuantity, 0);
+        
+        // Update DOM
+        document.getElementById('total-orders').textContent = totalOrders;
+        document.getElementById('auto-approved').textContent = autoApproved;
+        document.getElementById('manual-approved').textContent = manualApproved;
+        document.getElementById('total-quantity').textContent = `${totalQuantity} units`;
+        
+        // Create history table
+        let html = `
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">⏰ Time</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">📦 Quantity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">👤 Approver</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">📊 Stock Level</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">🔒 Snapshot</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+        `;
+        
+        history.forEach(exec => {
+            const approvedByBadge = exec.approvedBy === 'auto' 
+                ? '<span class="badge bg-green-100 text-green-800 text-xs px-2 py-1 rounded">🤖 Auto</span>' 
+                : '<span class="badge bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">👤 Manual</span>';
+                
+            html += `
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${new Date(exec.executedAt).toLocaleTimeString()}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><strong>${exec.approvedQuantity} units</strong></td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${approvedByBadge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><strong>${exec.newStockLevel} units</strong></td>
+                    <td class="px-6 py-4 text-sm text-gray-500 font-mono">${exec.snapshotId.substring(0, 12)}...</td>
+                </tr>
+            `;
+        });
+        
+        html += `
+                    </tbody>
+                </table>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+    }
+</script>

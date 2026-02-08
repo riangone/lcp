@@ -1,0 +1,196 @@
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "AI架构验证";
+}
+
+<style>
+    .scenario-card {
+        border: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+    }
+    
+    .scenario-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    }
+    
+    .scenario-btn {
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        border: none;
+    }
+    
+    .scenario-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+    
+    .log-container {
+        background: #1e1e1e;
+        color: #d4d4d4;
+        border-radius: 8px;
+        padding: 1.5rem;
+        font-family: 'Courier New', monospace;
+        min-height: 400px;
+        max-height: 500px;
+        overflow-y: auto;
+        border: 1px solid #3c3c3c;
+    }
+    
+    .log-entry {
+        margin: 0.5rem 0;
+        padding: 0.25rem 0;
+        border-left: 3px solid #007acc;
+        padding-left: 0.75rem;
+    }
+    
+    .log-info {
+        color: #9cdcfe;
+    }
+    
+    .log-success {
+        color: #4ec9b0;
+    }
+    
+    .log-error {
+        color: #f44747;
+    }
+    
+    .scenario-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .btn-return {
+        background: #6c757d;
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-return:hover {
+        background: #5a6268;
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container">
+    <div class="scenario-header text-center">
+        <h1 class="display-5 fw-bold">AI三层架构业务场景测试</h1>
+        <p class="lead">运行实际的业务场景测试，验证AI三层架构的功能</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card scenario-card">
+                <div class="card-body">
+                    <h5 class="card-title text-center mb-4">
+                        <i class="fas fa-cogs text-primary me-2"></i>测试场景
+                    </h5>
+                    <div class="d-grid gap-3">
+                        <button id="run-artist-scenario" class="btn btn-primary scenario-btn">
+                            <i class="fas fa-music me-2"></i>运行艺术家优化场景
+                        </button>
+                        <button id="run-invoice-scenario" class="btn btn-info scenario-btn">
+                            <i class="fas fa-file-invoice-dollar me-2"></i>运行发票预测场景
+                        </button>
+                        <button id="run-all-scenarios" class="btn btn-success scenario-btn">
+                            <i class="fas fa-project-diagram me-2"></i>运行所有场景
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h5 class="mb-3">
+                    <i class="fas fa-terminal text-secondary me-2"></i>执行日志
+                </h5>
+                <div class="log-container">
+                    <div id="execution-log">
+                        <div class="log-entry log-info">// 欢迎使用AI三层架构测试系统</div>
+                        <div class="log-entry log-info">// 请选择一个测试场景开始运行</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="@Url.Action("Index", "AiValidation")" class="btn btn-return">
+                    <i class="fas fa-arrow-left me-2"></i>返回AI验证首页
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('run-artist-scenario').addEventListener('click', function() {
+        runScenario('/api/ai-test/artist-optimization', '艺术家优化场景');
+    });
+    
+    document.getElementById('run-invoice-scenario').addEventListener('click', function() {
+        runScenario('/api/ai-test/invoice-prediction', '发票预测场景');
+    });
+    
+    document.getElementById('run-all-scenarios').addEventListener('click', function() {
+        runScenario('/api/ai-test/all', '完整架构验证');
+    });
+    
+    function runScenario(url, scenarioName) {
+        // 清空日志
+        document.getElementById('execution-log').innerHTML = `
+            <div class="log-entry log-info">// 正在运行 ${scenarioName}...</div>
+            <div class="log-entry log-info">// 时间: ${new Date().toLocaleTimeString()}</div>
+        `;
+        
+        // 调用API
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('网络响应不是ok状态: ' + response.status);
+            }
+            return response.text();
+        })
+        .then(data => {
+            // 解析并格式化日志输出
+            const logEntries = data.split('\n');
+            let html = '';
+            
+            logEntries.forEach(entry => {
+                if (entry.trim()) {
+                    if (entry.includes('===') || entry.includes('开始执行')) {
+                        html += `<div class="log-entry log-success">${escapeHtml(entry)}</div>`;
+                    } else if (entry.includes('错误') || entry.includes('fail')) {
+                        html += `<div class="log-entry log-error">${escapeHtml(entry)}</div>`;
+                    } else {
+                        html += `<div class="log-entry log-info">${escapeHtml(entry)}</div>`;
+                    }
+                }
+            });
+            
+            document.getElementById('execution-log').innerHTML += html;
+        })
+        .catch(error => {
+            document.getElementById('execution-log').innerHTML += `<div class="log-entry log-error">// 错误: ${error.message}</div>`;
+        });
+    }
+    
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>

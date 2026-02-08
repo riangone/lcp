@@ -1,0 +1,184 @@
+@{
+    ViewData["Title"] = "AI Validation System - Low Code Platform";
+    ViewData["ActivePage"] = "AI";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-800 mb-4">AI Three-Layer Architecture Validation System</h1>
+        <p class="text-lg text-gray-600">Easily validate the complete functionality of the AI three-layer architecture</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <a href="@Url.Action("GenerateSuggestions", "AiValidation", new { model = "Artist", id = 1 })" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-blue-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-lightbulb text-blue-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">AI Suggestions Generation</h3>
+                    <p class="text-gray-600 text-sm mb-3">Let AI provide intelligent suggestions for your data</p>
+                    <span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium">
+                        Start Experience
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <a href="@Url.Action("Snapshots", "AiValidation", new { model = "Artist" })" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-green-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-history text-green-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Snapshot Management</h3>
+                    <p class="text-gray-600 text-sm mb-3">Safely manage AI-generated content</p>
+                    <span class="inline-block px-3 py-1 bg-green-100 text-green-600 rounded-full text-xs font-medium">
+                        View Snapshots
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <a href="@Url.Action("Validate", "AiValidation")" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-yellow-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-project-diagram text-yellow-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Architecture Validation</h3>
+                    <p class="text-gray-600 text-sm mb-3">Validate how each layer of the AI architecture works together</p>
+                    <span class="inline-block px-3 py-1 bg-yellow-100 text-yellow-600 rounded-full text-xs font-medium">
+                        Validate Architecture
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <a href="@Url.Action("TestScenarios", "AiValidation")" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-purple-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-cogs text-purple-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Business Scenario Testing</h3>
+                    <p class="text-gray-600 text-sm mb-3">Run real business scenario tests</p>
+                    <span class="inline-block px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-xs font-medium">
+                        Run Tests
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <a href="@Url.Action("DefinitionLayer", "AiValidation")" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-red-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-file-code text-red-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Configuration Validation</h3>
+                    <p class="text-gray-600 text-sm mb-3">Validate AI feature configurations</p>
+                    <span class="inline-block px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-medium">
+                        Validate Config
+                    </span>
+                </div>
+            </div>
+        </a>
+
+        <a href="@Url.Action("Summary", "AiValidation")" class="card hover:shadow-md transition-shadow">
+            <div class="flex items-start">
+                <div class="bg-teal-100 p-3 rounded-lg mr-4">
+                    <i class="fas fa-chart-bar text-teal-600 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Validation Summary</h3>
+                    <p class="text-gray-600 text-sm mb-3">View complete validation reports</p>
+                    <span class="inline-block px-3 py-1 bg-teal-100 text-teal-600 rounded-full text-xs font-medium">
+                        View Report
+                    </span>
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="card p-8 mb-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-8 text-center">AI Three-Layer Architecture Explained</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="functional-core-card card p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-blue-100 p-2 rounded-lg mr-4">
+                        <i class="fas fa-cube text-blue-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Functional Core</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Handles pure business logic, ensuring data accuracy and consistency without side effects.</p>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Business Rule Validation</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>State Transitions</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Data Validation</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="deterministic-shell-card card p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-green-100 p-2 rounded-lg mr-4">
+                        <i class="fas fa-layer-group text-green-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Deterministic Shell</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Manages data storage and process control, handling all side effects.</p>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Snapshot Storage</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Approval Process</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Provenance Tracking</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="non-deterministic-edge-card card p-6">
+                <div class="flex items-start mb-4">
+                    <div class="bg-yellow-100 p-2 rounded-lg mr-4">
+                        <i class="fas fa-brain text-yellow-600"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-800">Non-deterministic Edge</h3>
+                </div>
+                <p class="text-gray-600 mb-4">Interacts with AI models to generate intelligent suggestions and predictions.</p>
+                <ul class="space-y-2">
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>AI Suggestion Generation</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Smart Predictions</span>
+                    </li>
+                    <li class="flex items-center">
+                        <i class="fas fa-check text-green-500 mr-2"></i>
+                        <span>Model Integration</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center text-gray-600 py-8">
+        <p>AI three-layer architecture ensures the safety, reliability, and traceability of AI features</p>
+    </div>
+</div>

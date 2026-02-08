@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using Platform.Infrastructure.Definitions;
 using Platform.Infrastructure;
 using Platform.Infrastructure.Repositories;
+using System;
+using System.Linq;
 
 namespace Platform.Api.Controllers;
 
 [ApiController]
-[Route("api/{model}")]
+[Route("api/data/{model}")]  // 修改路由以避免与其他API端点冲突
 [ValidateAntiForgeryToken]
 public class GenericApiController : ControllerBase
 {

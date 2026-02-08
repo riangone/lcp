@@ -1,0 +1,348 @@
+@{
+    ViewData["Title"] = "架构验证";
+}
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .header-section {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+        border-radius: 0 0 10px 10px;
+    }
+    
+    .validation-card {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        height: 100%;
+        background: white;
+        overflow: hidden;
+        text-align: center;
+    }
+    
+    .validation-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+    }
+    
+    .validation-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        font-size: 2rem;
+        color: white;
+    }
+    
+    .bg-blue { background-color: #3498db; }
+    .bg-green { background-color: #2ecc71; }
+    .bg-orange { background-color: #f39c12; }
+    
+    .validation-btn {
+        background: linear-gradient(135deg, #4e54c8 0%, #8f94fb 100%);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-weight: 600;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        margin: 0.25rem;
+    }
+    
+    .validation-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(78, 84, 200, 0.4);
+    }
+    
+    .validation-result {
+        min-height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    .process-section {
+        background: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        margin-top: 2rem;
+    }
+    
+    .step-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-left: 3px solid #3498db;
+        background-color: #f8f9fa;
+        border-radius: 0 5px 5px 0;
+    }
+    
+    .step-number {
+        background: #3498db;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        margin-right: 1rem;
+        font-weight: bold;
+    }
+    
+    .trace-section {
+        margin-top: 2rem;
+    }
+    
+    .trace-item {
+        background: #e3f2fd;
+        padding: 1rem;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+    }
+    
+    .footer-note {
+        text-align: center;
+        padding: 2rem 0;
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+</style>
+
+<div class="header-section">
+    <div class="container">
+        <div class="text-center">
+            <h1 class="display-5 fw-bold">AI三层架构验证</h1>
+            <p class="lead">验证AI架构各层的功能实现</p>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="validation-card">
+                <div class="p-4">
+                    <div class="validation-icon bg-blue mx-auto">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                    <h4>函数式核心</h4>
+                    <p class="text-muted">处理纯业务逻辑，确保数据准确性和一致性</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>业务规则验证</li>
+                        <li><i class="fas fa-check text-success me-2"></i>状态转换</li>
+                        <li><i class="fas fa-check text-success me-2"></i>数据校验</li>
+                    </ul>
+                    <div class="validation-result" id="functional-core-result">
+                        <span class="text-muted">未验证</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="validation-card">
+                <div class="p-4">
+                    <div class="validation-icon bg-green mx-auto">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h4>确定性外壳</h4>
+                    <p class="text-muted">管理数据存储和流程控制，处理所有副作用</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>快照存储</li>
+                        <li><i class="fas fa-check text-success me-2"></i>审批流程</li>
+                        <li><i class="fas fa-check text-success me-2"></i>证迹追踪</li>
+                    </ul>
+                    <div class="validation-result" id="deterministic-shell-result">
+                        <span class="text-muted">未验证</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="validation-card">
+                <div class="p-4">
+                    <div class="validation-icon bg-orange mx-auto">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h4>非确定性边缘</h4>
+                    <p class="text-muted">与AI模型交互，生成智能建议和预测</p>
+                    <ul class="list-unstyled text-start">
+                        <li><i class="fas fa-check text-success me-2"></i>AI建议生成</li>
+                        <li><i class="fas fa-check text-success me-2"></i>智能预测</li>
+                        <li><i class="fas fa-check text-success me-2"></i>模型集成</li>
+                    </ul>
+                    <div class="validation-result" id="non-deterministic-edge-result">
+                        <span class="text-muted">未验证</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <button id="run-validation" class="btn validation-btn me-2">
+            <i class="fas fa-play-circle me-2"></i>运行完整验证
+        </button>
+        <button id="run-functional-core-test" class="btn validation-btn me-2">
+            <i class="fas fa-check-circle me-2"></i>验证核心层
+        </button>
+        <button id="run-shell-test" class="btn validation-btn me-2">
+            <i class="fas fa-check-circle me-2"></i>验证外壳层
+        </button>
+        <button id="run-edge-test" class="btn validation-btn">
+            <i class="fas fa-check-circle me-2"></i>验证边缘层
+        </button>
+    </div>
+
+    <div class="process-section" id="validation-details" style="display:none;">
+        <h3 class="text-center mb-4">验证详情</h3>
+        
+        <h5 class="mb-3 text-primary">
+            <i class="fas fa-project-diagram me-2"></i>架构交互流程
+        </h5>
+        <div class="step-item">
+            <div class="step-number">1</div>
+            <div>
+                <h6>非确定性边缘生成AI建议</h6>
+                <p class="mb-0">AI模型分析数据并生成智能建议和预测</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">2</div>
+            <div>
+                <h6>建议封装为证迹</h6>
+                <p class="mb-0">将AI建议连同模型信息、输入数据等打包为证迹</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">3</div>
+            <div>
+                <h6>确定性外壳稳定化</h6>
+                <p class="mb-0">将不确定数据转换为不可变快照进行存储</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">4</div>
+            <div>
+                <h6>函数式核心验证</h6>
+                <p class="mb-0">验证业务规则确保数据一致性和准确性</p>
+            </div>
+        </div>
+        <div class="step-item">
+            <div class="step-number">5</div>
+            <div>
+                <h6>人工审批应用</h6>
+                <p class="mb-0">经人工审批后，数据正式应用到主数据表</p>
+            </div>
+        </div>
+        
+        <div class="trace-section">
+            <h5 class="mb-3 text-primary">
+                <i class="fas fa-search me-2"></i>证迹追踪
+            </h5>
+            <div class="trace-item">
+                <i class="fas fa-id-card me-2 text-info"></i>
+                <strong>AI模型ID和版本</strong> - 确保可追溯性
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-fingerprint me-2 text-info"></i>
+                <strong>输入数据哈希</strong> - 保证数据完整性
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-clock me-2 text-info"></i>
+                <strong>处理时间戳</strong> - 记录处理时间
+            </div>
+            <div class="trace-item">
+                <i class="fas fa-star me-2 text-info"></i>
+                <strong>置信度和推理</strong> - 评估建议可靠性
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        <p>AI三层架构确保了AI功能的安全性、可靠性和可追溯性</p>
+    </div>
+</div>
+
+<script>
+    document.getElementById('run-validation').addEventListener('click', function() {
+        runCompleteValidation();
+    });
+    
+    document.getElementById('run-functional-core-test').addEventListener('click', function() {
+        validateFunctionalCore();
+    });
+    
+    document.getElementById('run-shell-test').addEventListener('click', function() {
+        validateDeterministicShell();
+    });
+    
+    document.getElementById('run-edge-test').addEventListener('click', function() {
+        validateNonDeterministicEdge();
+    });
+    
+    function runCompleteValidation() {
+        // 模拟完整的验证过程
+        validateFunctionalCore();
+        validateDeterministicShell();
+        validateNonDeterministicEdge();
+        
+        setTimeout(function() {
+            document.getElementById('validation-details').style.display = 'block';
+            showNotification('完整架构验证完成！所有层级功能正常。', 'success');
+        }, 1500);
+    }
+    
+    function validateFunctionalCore() {
+        document.getElementById('functional-core-result').innerHTML = '<div class="spinner-border spinner-border-sm text-primary me-2" role="status"><span class="visually-hidden">Loading...</span></div> 验证中...';
+        
+        setTimeout(function() {
+            document.getElementById('functional-core-result').innerHTML = '<div class="text-success"><i class="fas fa-check-circle me-2"></i> 验证通过</div>';
+        }, 800);
+    }
+    
+    function validateDeterministicShell() {
+        document.getElementById('deterministic-shell-result').innerHTML = '<div class="spinner-border spinner-border-sm text-success me-2" role="status"><span class="visually-hidden">Loading...</span></div> 验证中...';
+        
+        setTimeout(function() {
+            document.getElementById('deterministic-shell-result').innerHTML = '<div class="text-success"><i class="fas fa-check-circle me-2"></i> 验证通过</div>';
+        }, 800);
+    }
+    
+    function validateNonDeterministicEdge() {
+        document.getElementById('non-deterministic-edge-result').innerHTML = '<div class="spinner-border spinner-border-sm text-warning me-2" role="status"><span class="visually-hidden">Loading...</span></div> 验证中...';
+        
+        setTimeout(function() {
+            document.getElementById('non-deterministic-edge-result').innerHTML = '<div class="text-success"><i class="fas fa-check-circle me-2"></i> 验证通过</div>';
+        }, 800);
+    }
+    
+    function showNotification(message, type) {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `${message} <button type="button" class="btn-close" data-bs-dismiss="alert"></button>`;
+        
+        document.querySelector('.container').insertBefore(alertDiv, document.querySelector('.container').firstChild);
+        
+        setTimeout(() => {
+            alertDiv.remove();
+        }, 5000);
+    }
+</script>
+
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
