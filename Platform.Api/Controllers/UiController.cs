@@ -39,6 +39,12 @@ public class UiController : Controller
         ViewData["Total"] = total;
         ViewData["Lang"] = lang;
 
+        // 检测是否为htmx请求，如果是则返回部分视图内容
+        if (Request.Headers["HX-Request"] == "true")
+        {
+            return PartialView("_ListContent", rows);
+        }
+
         return View("List", rows);
     }
 
