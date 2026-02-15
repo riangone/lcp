@@ -1,0 +1,100 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var createError = ViewData["CreateError"] as string;
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}";
+
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var uiLabels = def.Ui?.Labels;
+    Dictionary<string, string>? localizedLabels = null;
+
+    if (uiLabels != null)
+    {
+        if (currentLang == "zh" && uiLabels.Zh != null)
+        {
+            localizedLabels = uiLabels.Zh;
+        }
+        else if (currentLang == "en" && uiLabels.En != null)
+        {
+            localizedLabels = uiLabels.En;
+        }
+    }
+
+    localizedLabels ??= new Dictionary<string, string>();
+    var createLabel = localizedLabels.ContainsKey("create_form_title") ? localizedLabels["create_form_title"] : "Create";
+    var saveLabel = localizedLabels.ContainsKey("save_button") ? localizedLabels["save_button"] : "Save";
+    var cancelLabel = localizedLabels.ContainsKey("cancel_button") ? localizedLabels["cancel_button"] : "Cancel";
+    ViewData["Title"] = $"{createLabel} {modelName}";
+}
+
+<div class="container mx-auto px-4 py-8">
+  <div class="card max-w-2xl mx-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-gray-800">@createLabel @modelName</h1>
+      <a href="@backUrl" class="btn btn-outline">@cancelLabel</a>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(createError))
+    {
+      <div class="mb-4 rounded border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+        @createError
+      </div>
+    }
+
+    <form method="post" action="/ui/@modelName/create-page">
+      @Html.AntiForgeryToken()
+      <input type="hidden" name="returnUrl" value="@backUrl" />
+
+      <div class="space-y-4">
+        @foreach (var f in def.Form!.Fields)
+        {
+            var fieldLabel = localizedLabels.ContainsKey(f.Key) ? localizedLabels[f.Key] : f.Value.Label;
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                @fieldLabel @(f.Value.Required ? "*" : "")
+              </label>
+
+              @if (f.Value.Type == "select")
+              {
+                  <select name="@f.Key"
+                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          @(f.Value.Required ? "required" : "")>
+                    <option value="">Select...</option>
+                    @if (f.Value.Options != null)
+                    {
+                        @foreach (var opt in f.Value.Options)
+                        {
+                            <option value="@opt.Key">@opt.Value</option>
+                        }
+                    }
+                  </select>
+              }
+              else
+              {
+                  var inputType = f.Value.Type == "decimal" ? "number" : f.Value.Type;
+                  var step = f.Value.Type == "decimal" ? "step=\"0.01\"" : "";
+                  <input
+                    name="@f.Key"
+                    type="@inputType"
+                    @Html.Raw(step)
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    @(f.Value.Required ? "required" : "")
+                    @(f.Value.MinLength.HasValue ? $"minlength=\"{f.Value.MinLength}\"" : "")
+                    @(f.Value.MaxLength.HasValue ? $"maxlength=\"{f.Value.MaxLength}\"" : "")
+                    @(f.Value.Min.HasValue ? $"min=\"{f.Value.Min}\"" : "")
+                    @(f.Value.Max.HasValue ? $"max=\"{f.Value.Max}\"" : "") />
+              }
+            </div>
+        }
+      </div>
+
+      <div class="flex justify-end gap-3 pt-6">
+        <a href="@backUrl" class="btn btn-outline">@cancelLabel</a>
+        <button type="submit" class="btn btn-primary">@saveLabel</button>
+      </div>
+    </form>
+  </div>
+</div>

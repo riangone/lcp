@@ -76,7 +76,13 @@ public class DynamicRepository
             .ToDictionary(k => k.Key, v => v.Value);
 
     public async Task<(IEnumerable<Dictionary<string, object>> Rows, int Total)>
-        GetPagedAsync(ModelDefinition def, int page, int size, IDictionary<string, string> filters)
+        GetPagedAsync(
+            ModelDefinition def,
+            int page,
+            int size,
+            IDictionary<string, string> filters,
+            string? sortBy = null,
+            string? sortDir = "asc")
     {
         var offset = (page - 1) * size;
         var cols = GetColumns(def);
@@ -107,10 +113,19 @@ public class DynamicRepository
             ? "WHERE " + string.Join(" AND ", where)
             : "";
 
+        var allowedSortColumns = (def.List?.Columns?.Any() == true ? def.List.Columns : def.Columns)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var effectiveSortBy = !string.IsNullOrWhiteSpace(sortBy) && allowedSortColumns.Contains(sortBy)
+            ? sortBy
+            : def.PrimaryKey;
+        var effectiveSortDir = string.Equals(sortDir, "desc", StringComparison.OrdinalIgnoreCase)
+            ? "DESC"
+            : "ASC";
+
         var rowsSql = $@"
             SELECT {cols} FROM {Escape(def.Table)}
             {whereSql}
-            ORDER BY {Escape(def.PrimaryKey)}
+            ORDER BY {Escape(effectiveSortBy)} {effectiveSortDir}
             LIMIT @Size OFFSET @Offset";
 
         var countSql = $@"

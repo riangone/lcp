@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Platform.Infrastructure;
 using Platform.Infrastructure.Definitions;
 using Platform.Infrastructure.Repositories;
 
@@ -17,8 +18,23 @@ public class UiController : Controller
     }
 
     [HttpGet("")]
-    public async Task<IActionResult> Index(string model, int page = 1, int size = 10, bool clear = false, string lang = "en")
+    public async Task<IActionResult> Index(
+        string model,
+        int page = 1,
+        int size = 10,
+        bool clear = false,
+        string lang = "en",
+        string? sortBy = null,
+        string? sortDir = "asc",
+        string editMode = "modal")
     {
+        if (page < 1)
+            page = 1;
+        if (size <= 0)
+            size = 10;
+        if (size > 200)
+            size = 200;
+
         var def = GetModel(model);
 
         var filters = Request.Query
@@ -27,10 +43,10 @@ public class UiController : Controller
         // 如果请求清除过滤器，则重定向到没有过滤参数的URL
         if (clear)
         {
-            return RedirectToAction("Index", new { model = model, page = 1, size = size, lang = lang });
+            return RedirectToAction("Index", new { model = model, page = 1, size = size, lang = lang, sortBy = sortBy, sortDir = sortDir, editMode = editMode });
         }
 
-        var (rows, total) = await _repo.GetPagedAsync(def, page, size, filters);
+        var (rows, total) = await _repo.GetPagedAsync(def, page, size, filters, sortBy, sortDir);
 
         ViewData["ModelDef"] = def;
         ViewData["ModelName"] = model;
@@ -38,6 +54,9 @@ public class UiController : Controller
         ViewData["Size"] = size;
         ViewData["Total"] = total;
         ViewData["Lang"] = lang;
+        ViewData["SortBy"] = sortBy;
+        ViewData["SortDir"] = sortDir;
+        ViewData["EditMode"] = string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) ? "page" : "modal";
 
         // 检测是否为htmx请求，如果是则返回部分视图内容
         if (Request.Headers["HX-Request"] == "true")
@@ -49,14 +68,22 @@ public class UiController : Controller
     }
 
     [HttpGet("create")]
-    public IActionResult Create(string model)
+    public IActionResult Create(string model, string editMode = "modal", string? returnUrl = null)
     {
         Prepare(model);
+        ViewData["ReturnUrl"] = returnUrl;
+
+        if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+            Request.Headers["HX-Request"] != "true")
+        {
+            return View("CreatePage");
+        }
+
         return PartialView("FormModal");
     }
 
     [HttpGet("edit/{id}")]
-    public async Task<IActionResult> Edit(string model, string id)
+    public async Task<IActionResult> Edit(string model, string id, string editMode = "modal", string? returnUrl = null)
     {
         var def = GetModel(model);
         var row = await _repo.GetByIdAsync(def, id);
@@ -66,8 +93,78 @@ public class UiController : Controller
 
         Prepare(model);
         ViewData["Row"] = row;
+        ViewData["ReturnUrl"] = returnUrl;
+
+        if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+            Request.Headers["HX-Request"] != "true")
+        {
+            return View("EditPage", row);
+        }
 
         return PartialView("FormModal");
+    }
+
+    [HttpPost("edit-page/{id}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> EditPage(
+        string model,
+        string id,
+        [FromForm] Dictionary<string, string> data,
+        string? returnUrl = null)
+    {
+        try
+        {
+            var def = GetModel(model);
+            var objData = ModelBinder.Bind(def, data);
+
+            await _repo.UpdateAsync(def, id, objData);
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", new { model = model });
+        }
+        catch (Exception ex)
+        {
+            var def = GetModel(model);
+            var row = await _repo.GetByIdAsync(def, id);
+            if (row == null)
+                return NotFound();
+
+            Prepare(model);
+            ViewData["Row"] = row;
+            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["EditError"] = ex.Message;
+            return View("EditPage", row);
+        }
+    }
+
+    [HttpPost("create-page")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CreatePage(
+        string model,
+        [FromForm] Dictionary<string, string> data,
+        string? returnUrl = null)
+    {
+        try
+        {
+            var def = GetModel(model);
+            var objData = ModelBinder.Bind(def, data);
+
+            await _repo.InsertAsync(def, objData);
+
+            if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
+                return Redirect(returnUrl);
+
+            return RedirectToAction("Index", new { model = model });
+        }
+        catch (Exception ex)
+        {
+            Prepare(model);
+            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["CreateError"] = ex.Message;
+            return View("CreatePage");
+        }
     }
 
     private void Prepare(string model)

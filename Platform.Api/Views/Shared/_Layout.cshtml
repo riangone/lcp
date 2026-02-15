@@ -1,5 +1,7 @@
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
 @{
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var tokens = Antiforgery.GetAndStoreTokens(Context);
 }
 
 <!DOCTYPE html>
@@ -14,22 +16,35 @@
     <script src="https://unpkg.com/htmx.org@1.9.10"></script>
 </head>
 <body>
+    <input type="hidden" id="csrf-token" value="@tokens.RequestToken" />
+
     <nav class="navbar">
-        <a href="/" class="navbar-brand">
-            <i class="fas fa-cube"></i>
-            Low Code Platform
-        </a>
+        <div class="navbar-top">
+            <button id="mobile-menu-toggle" type="button" class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+            <a href="/" class="navbar-brand mobile-close-on-click">
+                <i class="fas fa-cube"></i>
+                Low Code Platform
+            </a>
+        </div>
         
-        <ul class="navbar-nav">
+        <ul id="main-nav" class="navbar-nav">
+            <li class="mobile-menu-header">
+                <span class="mobile-menu-title">Menu</span>
+                <button id="mobile-menu-close" type="button" class="mobile-menu-close" aria-label="Close menu" onclick="closeMobileMenu()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </li>
             <li class="nav-item">
-                <a href="/" class="nav-link @(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")">
+                <a href="/" class="nav-link mobile-close-on-click @(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")">
                     <i class="fas fa-home"></i>
                     Home
                 </a>
             </li>
             
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link dropdown-toggle">
                     <i class="fas fa-database"></i>
                     Data Management
                     <i class="fas fa-chevron-down ml-1 text-xs"></i>
@@ -39,7 +54,7 @@
                     {
                         @foreach (var model in models)
                         {
-                            <a href="/ui/@(model.Key)?lang=@currentLang" class="dropdown-item">
+                            <a href="/ui/@(model.Key)?lang=@currentLang" class="dropdown-item mobile-close-on-click">
                                 <i class="fas fa-table mr-2"></i>
                                 @(model.Key)
                             </a>
@@ -49,25 +64,25 @@
             </li>
             
             <li class="nav-item dropdown">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link dropdown-toggle">
                     <i class="fas fa-robot"></i>
                     AI Features
                     <i class="fas fa-chevron-down ml-1 text-xs"></i>
                 </a>
                 <div class="dropdown-menu">
-                    <a href="/InventoryAiPage" class="dropdown-item">
+                    <a href="/InventoryAiPage" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-chart-line mr-2"></i>
                         Inventory AI
                     </a>
-                    <a href="/ai-validation" class="dropdown-item">
+                    <a href="/ai-validation" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-shield-alt mr-2"></i>
                         AI Validation
                     </a>
-                    <a href="/ai-validation/snapshots" class="dropdown-item">
+                    <a href="/ai-validation/snapshots" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-cogs mr-2"></i>
                         Snapshots
                     </a>
-                    <a href="/ai-validation/test-scenarios" class="dropdown-item">
+                    <a href="/ai-validation/test-scenarios" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-flask mr-2"></i>
                         Test Scenarios
                     </a>
@@ -75,7 +90,7 @@
             </li>
             
             <li class="nav-item">
-                <a href="/docs" class="nav-link @(ViewData["ActivePage"]?.ToString() == "Docs" ? "active" : "")">
+                <a href="/docs" class="nav-link mobile-close-on-click @(ViewData["ActivePage"]?.ToString() == "Docs" ? "active" : "")">
                     <i class="fas fa-book"></i>
                     Docs
                 </a>
@@ -91,10 +106,14 @@
             </li>
         </ul>
     </nav>
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop" onclick="closeMobileMenu()"></div>
 
     <main class="main-content">
         @RenderBody()
     </main>
+
+    @await Html.PartialAsync("_DeleteDialog")
+    @await Html.PartialAsync("_ErrorDialog")
 
     <footer class="bg-gray-800 text-white py-8">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -106,7 +125,56 @@
         </div>
     </footer>
 
+    <script src="~/js/site.js"></script>
     <script>
+        function closeMobileMenu() {
+            document.body.classList.remove('mobile-menu-open');
+            const toggle = document.getElementById('mobile-menu-toggle');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', 'false');
+                toggle.innerHTML = '<i class="fas fa-bars"></i>';
+            }
+            document.querySelectorAll('.dropdown.active').forEach(el => el.classList.remove('active'));
+        }
+
+        function toggleMobileMenu() {
+            const isOpen = document.body.classList.toggle('mobile-menu-open');
+            const toggle = document.getElementById('mobile-menu-toggle');
+            if (toggle) {
+                toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+                toggle.innerHTML = isOpen ? '<i class="fas fa-times"></i>' : '<i class="fas fa-bars"></i>';
+            }
+            if (!isOpen) {
+                document.querySelectorAll('.dropdown.active').forEach(el => el.classList.remove('active'));
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.dropdown-toggle').forEach(function(el) {
+                el.addEventListener('click', function(event) {
+                    if (window.innerWidth > 768) return;
+                    event.preventDefault();
+                    const parent = el.closest('.dropdown');
+                    if (!parent) return;
+                    parent.classList.toggle('active');
+                });
+            });
+
+            document.querySelectorAll('.mobile-close-on-click').forEach(function(el) {
+                el.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) closeMobileMenu();
+                });
+            });
+
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape') closeMobileMenu();
+            });
+        });
+
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) closeMobileMenu();
+        });
+
         function changeLanguage(lang) {
             const url = new URL(window.location);
             url.searchParams.set('lang', lang);

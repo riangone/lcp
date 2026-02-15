@@ -8,7 +8,7 @@ using System.Linq;
 namespace Platform.Api.Controllers;
 
 [ApiController]
-[Route("api/data/{model}")]  // 修改路由以避免与其他API端点冲突
+[Route("api/{model}")]
 [ValidateAntiForgeryToken]
 public class GenericApiController : ControllerBase
 {
