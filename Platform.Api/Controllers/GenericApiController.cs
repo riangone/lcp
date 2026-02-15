@@ -37,6 +37,7 @@ public class GenericApiController : ControllerBase
         try
         {
             var def = GetModel(model);
+            EnsureWritable(def);
             var objData = ModelBinder.Bind(def, data);
 
             await _repo.InsertAsync(def, objData);
@@ -60,6 +61,7 @@ public class GenericApiController : ControllerBase
         try
         {
             var def = GetModel(model);
+            EnsureWritable(def);
             var objData = ModelBinder.Bind(def, data);
 
             await _repo.UpdateAsync(def, id, objData);
@@ -80,6 +82,7 @@ public class GenericApiController : ControllerBase
         try
         {
             var def = GetModel(model);
+            EnsureWritable(def);
             await _repo.DeleteAsync(def, id);
 
             return Content(string.Empty);
@@ -101,5 +104,11 @@ public class GenericApiController : ControllerBase
             k.Equals(model, StringComparison.OrdinalIgnoreCase));
         
         return _defs.Models[actualKey];
+    }
+
+    private static void EnsureWritable(ModelDefinition def)
+    {
+        if (def.IsReadOnly)
+            throw new Exception("This model is read-only and does not support write operations.");
     }
 }

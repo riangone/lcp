@@ -19,10 +19,24 @@ public class DynamicRepository
     private static string GetColumns(ModelDefinition def)
         => string.Join(", ", def.Columns.Select(Escape));
 
+    private static string GetReadableSourceSql(ModelDefinition def)
+    {
+        if (!string.IsNullOrWhiteSpace(def.Query))
+            return $"({def.Query}) AS src";
+
+        return Escape(def.Table);
+    }
+
+    private static void EnsureWritable(ModelDefinition def)
+    {
+        if (def.IsReadOnly)
+            throw new Exception("This model is read-only and does not support create/update/delete.");
+    }
+
     public async Task<IEnumerable<Dictionary<string, object>>> GetAllAsync(ModelDefinition def)
     {
         var cols = GetColumns(def);
-        var sql = $"SELECT {cols} FROM {Escape(def.Table)}";
+        var sql = $"SELECT {cols} FROM {GetReadableSourceSql(def)}";
         var rows = await _db.QueryAsync(sql);
 
         return rows.Select(ToDict);
@@ -31,7 +45,7 @@ public class DynamicRepository
     public async Task<Dictionary<string, object>?> GetByIdAsync(ModelDefinition def, object id)
     {
         var cols = GetColumns(def);
-        var sql = $"SELECT {cols} FROM {Escape(def.Table)} WHERE {Escape(def.PrimaryKey)}=@id";
+        var sql = $"SELECT {cols} FROM {GetReadableSourceSql(def)} WHERE {Escape(def.PrimaryKey)}=@id";
         var row = await _db.QuerySingleOrDefaultAsync(sql, new { id });
 
         return row == null ? null : ToDict(row);
@@ -39,6 +53,8 @@ public class DynamicRepository
 
     public async Task InsertAsync(ModelDefinition def, IDictionary<string, object> data)
     {
+        EnsureWritable(def);
+
         var cols = def.Columns.Intersect(data.Keys).ToList();
         if (!cols.Any())
             return;
@@ -50,6 +66,8 @@ public class DynamicRepository
 
     public async Task UpdateAsync(ModelDefinition def, object id, IDictionary<string, object> data)
     {
+        EnsureWritable(def);
+
         var update = def.Columns
             .Where(k => k != def.PrimaryKey)
             .Intersect(data.Keys)
@@ -67,6 +85,8 @@ public class DynamicRepository
 
     public async Task DeleteAsync(ModelDefinition def, object id)
     {
+        EnsureWritable(def);
+
         var sql = $"DELETE FROM {Escape(def.Table)} WHERE {Escape(def.PrimaryKey)}=@id";
         await _db.ExecuteAsync(sql, new { id });
     }
@@ -123,13 +143,13 @@ public class DynamicRepository
             : "ASC";
 
         var rowsSql = $@"
-            SELECT {cols} FROM {Escape(def.Table)}
+            SELECT {cols} FROM {GetReadableSourceSql(def)}
             {whereSql}
             ORDER BY {Escape(effectiveSortBy)} {effectiveSortDir}
             LIMIT @Size OFFSET @Offset";
 
         var countSql = $@"
-            SELECT COUNT(*) FROM {Escape(def.Table)} {whereSql}";
+            SELECT COUNT(*) FROM {GetReadableSourceSql(def)} {whereSql}";
 
         param.Add("Offset", offset);
         param.Add("Size", size);

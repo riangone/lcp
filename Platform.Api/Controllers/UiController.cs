@@ -70,6 +70,10 @@ public class UiController : Controller
     [HttpGet("create")]
     public IActionResult Create(string model, string editMode = "modal", string? returnUrl = null)
     {
+        var def = GetModel(model);
+        if (def.IsReadOnly)
+            return BadRequest("This model is read-only.");
+
         Prepare(model);
         ViewData["ReturnUrl"] = returnUrl;
 
@@ -86,6 +90,9 @@ public class UiController : Controller
     public async Task<IActionResult> Edit(string model, string id, string editMode = "modal", string? returnUrl = null)
     {
         var def = GetModel(model);
+        if (def.IsReadOnly)
+            return BadRequest("This model is read-only.");
+
         var row = await _repo.GetByIdAsync(def, id);
 
         if (row == null)
@@ -115,6 +122,9 @@ public class UiController : Controller
         try
         {
             var def = GetModel(model);
+            if (def.IsReadOnly)
+                return BadRequest("This model is read-only.");
+
             var objData = ModelBinder.Bind(def, data);
 
             await _repo.UpdateAsync(def, id, objData);
@@ -149,6 +159,9 @@ public class UiController : Controller
         try
         {
             var def = GetModel(model);
+            if (def.IsReadOnly)
+                return BadRequest("This model is read-only.");
+
             var objData = ModelBinder.Bind(def, data);
 
             await _repo.InsertAsync(def, objData);

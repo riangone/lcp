@@ -902,3 +902,58 @@ models:
       Total:
         type: decimal
         required: true
+
+  InvoiceWithCustomer:
+    query: |
+      SELECT
+        i.InvoiceId,
+        i.InvoiceDate,
+        i.Total,
+        c.FirstName || ' ' || c.LastName AS CustomerName,
+        c.Country
+      FROM Invoice i
+      JOIN Customer c ON c.CustomerId = i.CustomerId
+    primary_key: InvoiceId
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Invoice With Customer
+          CustomerName: Customer
+          InvoiceDate: Invoice Date
+          Country: Country
+          Total: Total
+        zh:
+          title: 发票客户视图
+          CustomerName: 客户
+          InvoiceDate: 发票日期
+          Country: 国家
+          Total: 总计
+
+    list:
+      columns:
+        - InvoiceId
+        - InvoiceDate
+        - CustomerName
+        - Country
+        - Total
+      filters:
+        CustomerName:
+          label: Customer
+          type: like
+        Country:
+          label: Country
+          type: like
+
+    properties:
+      InvoiceId:
+        type: int
+      InvoiceDate:
+        type: date
+      CustomerName:
+        type: string
+      Country:
+        type: string
+      Total:
+        type: decimal

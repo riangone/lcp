@@ -120,11 +120,48 @@ dotnet run --project Platform.Api
 ### 数据定义 (YAML)
 
 - `table`: SQLite 表名
+- `query`: 可选，自定义查询（用于多表关联/聚合/视图替代）
+- `read_only`: 可选，设置为 `true` 时禁用新增/编辑/删除
 - `primary_key`: 主键字段
 - `list.columns`: 列表显示的列
 - `list.filters`: 过滤条件配置
 - `form.fields`: 表单字段定义
 - `properties`: 属性类型映射
+
+### 多表关联/视图示例
+
+```yaml
+models:
+  InvoiceWithCustomer:
+    query: |
+      SELECT
+        i.InvoiceId,
+        i.InvoiceDate,
+        i.Total,
+        c.FirstName || ' ' || c.LastName AS CustomerName,
+        c.Country
+      FROM Invoice i
+      JOIN Customer c ON c.CustomerId = i.CustomerId
+    primary_key: InvoiceId
+    read_only: true
+
+    list:
+      columns: [InvoiceId, InvoiceDate, CustomerName, Country, Total]
+      filters:
+        CustomerName:
+          label: Customer
+          type: like
+        Country:
+          label: Country
+          type: like
+
+    properties:
+      InvoiceId: { type: int }
+      InvoiceDate: { type: date }
+      CustomerName: { type: string }
+      Country: { type: string }
+      Total: { type: decimal }
+```
 
 ### 字段类型
 

@@ -3,6 +3,8 @@ namespace Platform.Infrastructure.Definitions
     public class ModelDefinition
     {
         public string Table { get; set; } = "";
+        public string? Query { get; set; }
+        public bool ReadOnly { get; set; }
         public string PrimaryKey { get; set; } = "";
 
         public UiDefinition? Ui { get; set; }
@@ -12,5 +14,7 @@ namespace Platform.Infrastructure.Definitions
         public Dictionary<string, PropertyDefinition> Properties { get; set; } = new();
 
         public List<string> Columns => Properties.Keys.ToList();
+
+        public bool IsReadOnly => ReadOnly || !string.IsNullOrWhiteSpace(Query);
     }
 }

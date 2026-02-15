@@ -12,6 +12,7 @@
     var currentSortDir = string.Equals(ViewData["SortDir"] as string, "desc", StringComparison.OrdinalIgnoreCase)
         ? "desc"
         : "asc";
+    var isReadOnly = def.IsReadOnly;
     var currentEditMode = string.Equals(ViewData["EditMode"] as string, "page", StringComparison.OrdinalIgnoreCase)
         ? "page"
         : "modal";
@@ -95,6 +96,10 @@
   <div class="mb-8">
     <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
     <p class="text-gray-600">Manage your @modelName records</p>
+    @if (isReadOnly)
+    {
+      <p class="text-amber-700 text-sm mt-2">Read-only data source (query/view): create, edit and delete are disabled.</p>
+    }
   </div>
 
   @if (def.List?.Filters != null && def.List.Filters.Any())
@@ -137,8 +142,6 @@
           }
         </div>
 
-        <!-- 隐藏字段保留语言参数 -->
-        <input type="hidden" name="lang" value="@currentLang" />
         <input type="hidden" name="sortBy" value="@currentSortBy" />
         <input type="hidden" name="sortDir" value="@currentSortDir" />
         <input type="hidden" name="editMode" value="@currentEditMode" />
@@ -150,22 +153,13 @@
           <button type="submit" name="clear" value="true" class="btn btn-outline">
             <i class="fas fa-times mr-2"></i>@clearButtonLabel
           </button>
-
-          <!-- 语言切换 -->
-          <div class="ml-auto flex items-center">
-            <label class="mr-2 text-sm text-gray-600">Language:</label>
-            <select onchange="changeLanguage(this.value)" class="border border-gray-300 rounded-lg px-2 py-1 text-sm">
-              <option value="en" @(currentLang == "en" ? "selected" : "")>🇺🇸 EN</option>
-              <option value="zh" @(currentLang == "zh" ? "selected" : "")>🇨🇳 中文</option>
-            </select>
-          </div>
         </div>
       </form>
     </div>
   }
 
   <div class="flex flex-wrap justify-between items-center mb-6">
-    @if (currentEditMode == "page")
+    @if (!isReadOnly && currentEditMode == "page")
     {
       var createPageUrl = $"/ui/{modelName}/create?editMode=page&returnUrl={Uri.EscapeDataString(BuildListUrl())}";
       <a href="@createPageUrl" class="btn btn-success flex items-center">
@@ -180,7 +174,7 @@
         }
       </a>
     }
-    else
+    else if (!isReadOnly)
     {
       <button hx-get="/ui/@modelName/create?lang=@currentLang&editMode=modal" hx-target="#modal" hx-swap="innerHTML"
               class="btn btn-success flex items-center">
@@ -202,6 +196,8 @@
   </div>
 
   <div class="flex flex-wrap items-center justify-end gap-4 mb-4">
+    @if (!isReadOnly)
+    {
     <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="edit-mode-select">Edit mode:</label>
       <select id="edit-mode-select" name="editMode" class="border border-gray-300 rounded-lg px-2 py-1 text-sm"
@@ -212,7 +208,6 @@
 
       <input type="hidden" name="page" value="1" />
       <input type="hidden" name="size" value="@size" />
-      <input type="hidden" name="lang" value="@currentLang" />
       <input type="hidden" name="sortBy" value="@currentSortBy" />
       <input type="hidden" name="sortDir" value="@currentSortDir" />
       @foreach (var f in currentFilterValues)
@@ -223,6 +218,7 @@
         }
       }
     </form>
+    }
 
     <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="page-size-select">Rows per page:</label>
@@ -235,7 +231,6 @@
       </select>
 
       <input type="hidden" name="page" value="1" />
-      <input type="hidden" name="lang" value="@currentLang" />
       <input type="hidden" name="sortBy" value="@currentSortBy" />
       <input type="hidden" name="sortDir" value="@currentSortDir" />
       <input type="hidden" name="editMode" value="@currentEditMode" />
@@ -280,16 +275,19 @@
                 </a>
               </th>
             }
-            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-            @if (localizedLabels != null && localizedLabels.ContainsKey("Actions"))
+            @if (!isReadOnly)
             {
-                @localizedLabels["Actions"]
+              <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+              @if (localizedLabels != null && localizedLabels.ContainsKey("Actions"))
+              {
+                  @localizedLabels["Actions"]
+              }
+              else
+              {
+                  @:Actions
+              }
+              </th>
             }
-            else
-            {
-                @:Actions
-            }
-            </th>
           </tr>
         </thead>
         <tbody class="bg-white divide-y divide-gray-200">
@@ -302,6 +300,8 @@
                   @RenderValue(def, col, row[col])
                 </td>
               }
+              @if (!isReadOnly)
+              {
               <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                 @if (currentEditMode == "page")
                 {
@@ -348,6 +348,7 @@
                   }
                 </button>
               </td>
+              }
             </tr>
           }
         </tbody>
