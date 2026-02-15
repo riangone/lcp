@@ -111,6 +111,21 @@ public class UiController : Controller
         return PartialView("FormModal");
     }
 
+    [HttpGet("details/{id}")]
+    public async Task<IActionResult> Details(string model, string id, string? returnUrl = null)
+    {
+        var def = GetModel(model);
+        var row = await _repo.GetByIdAsync(def, id);
+
+        if (row == null)
+            return NotFound();
+
+        Prepare(model);
+        ViewData["Row"] = row;
+        ViewData["ReturnUrl"] = returnUrl;
+        return View("DetailsPage", row);
+    }
+
     [HttpPost("edit-page/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditPage(

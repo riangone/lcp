@@ -1,0 +1,57 @@
+@using Platform.Infrastructure.Definitions
+@model Dictionary<string, object>
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = (Dictionary<string, object>)ViewData["Row"]!;
+    var returnUrl = ViewData["ReturnUrl"] as string;
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}";
+
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var uiLabels = def.Ui?.Labels;
+    Dictionary<string, string>? localizedLabels = null;
+
+    if (uiLabels != null)
+    {
+        if (currentLang == "zh" && uiLabels.Zh != null)
+        {
+            localizedLabels = uiLabels.Zh;
+        }
+        else if (currentLang == "en" && uiLabels.En != null)
+        {
+            localizedLabels = uiLabels.En;
+        }
+    }
+
+    localizedLabels ??= new Dictionary<string, string>();
+    var detailsLabel = localizedLabels.ContainsKey("details_button") ? localizedLabels["details_button"] : "Details";
+    var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+    var backLabel = localizedLabels.ContainsKey("back_button") ? localizedLabels["back_button"] : "Back";
+    var detailColumns = (def.List?.Columns?.Any() == true ? def.List.Columns : def.Columns);
+    ViewData["Title"] = $"{detailsLabel} - {title}";
+}
+
+<div class="container mx-auto px-4 py-8">
+  <div class="card max-w-3xl mx-auto">
+    <div class="flex items-center justify-between mb-4">
+      <h1 class="text-2xl font-bold text-gray-800">@detailsLabel - @title</h1>
+      <a href="@backUrl" class="btn btn-outline">@backLabel</a>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="table w-full">
+        <tbody>
+          @foreach (var col in detailColumns)
+          {
+              var label = localizedLabels.ContainsKey(col) ? localizedLabels[col] : col;
+              var value = row.ContainsKey(col) && row[col] != null ? row[col]!.ToString() : "";
+              <tr>
+                <th class="w-1/3 px-4 py-3 text-left text-sm font-semibold text-gray-700">@label</th>
+                <td class="px-4 py-3 text-sm text-gray-900">@value</td>
+              </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
