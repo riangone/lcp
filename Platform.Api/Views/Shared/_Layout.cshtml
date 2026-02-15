@@ -28,8 +28,55 @@
                 Low Code Platform
             </a>
         </div>
-        
-        <ul id="main-nav" class="navbar-nav">
+
+        <div class="desktop-nav">
+            <div class="desktop-menu">
+                <button type="button" class="desktop-menu-trigger" onclick="toggleDesktopMenu('desktop-user-menu', this)">
+                    <i class="fas fa-user-circle"></i>
+                    用户状态
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div id="desktop-user-menu" class="desktop-menu-panel">
+                    <div class="desktop-menu-panel-inner">
+                        <div class="desktop-menu-section">
+                            <h4>当前用户</h4>
+                            <p>访客模式（Guest）</p>
+                            <p>状态：在线</p>
+                        </div>
+                        <div class="desktop-menu-section">
+                            <h4>快捷入口</h4>
+                            <div class="desktop-menu-links">
+                                <a href="/" class="desktop-menu-link">首页</a>
+                                <a href="/docs" class="desktop-menu-link">文档</a>
+                                <a href="/InventoryAiPage" class="desktop-menu-link">Inventory AI</a>
+                                <a href="/ai-validation" class="desktop-menu-link">AI Validation</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="desktop-menu">
+                <button type="button" class="desktop-menu-trigger" onclick="toggleDesktopMenu('desktop-lang-menu', this)">
+                    <i class="fas fa-language"></i>
+                    多语言
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div id="desktop-lang-menu" class="desktop-menu-panel">
+                    <div class="desktop-menu-panel-inner">
+                        <div class="desktop-menu-section">
+                            <h4>选择语言</h4>
+                            <div class="desktop-menu-links">
+                                <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('en')">🇺🇸 English</button>
+                                <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('zh')">🇨🇳 中文</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <ul id="main-nav" class="navbar-nav mobile-nav">
             <li class="mobile-menu-header">
                 <span class="mobile-menu-title">Menu</span>
                 <button id="mobile-menu-close" type="button" class="mobile-menu-close" aria-label="Close menu" onclick="closeMobileMenu()">
@@ -137,7 +184,27 @@
             document.querySelectorAll('.dropdown.active').forEach(el => el.classList.remove('active'));
         }
 
+        function closeDesktopMenus() {
+            document.querySelectorAll('.desktop-menu-panel.open').forEach(el => el.classList.remove('open'));
+            document.querySelectorAll('.desktop-menu-trigger.active').forEach(el => el.classList.remove('active'));
+        }
+
+        function toggleDesktopMenu(menuId, trigger) {
+            if (window.innerWidth <= 768) return;
+
+            const menu = document.getElementById(menuId);
+            if (!menu) return;
+            const isOpen = menu.classList.contains('open');
+
+            closeDesktopMenus();
+            if (!isOpen) {
+                menu.classList.add('open');
+                if (trigger) trigger.classList.add('active');
+            }
+        }
+
         function toggleMobileMenu() {
+            closeDesktopMenus();
             const isOpen = document.body.classList.toggle('mobile-menu-open');
             const toggle = document.getElementById('mobile-menu-toggle');
             if (toggle) {
@@ -167,12 +234,26 @@
             });
 
             document.addEventListener('keydown', function(event) {
-                if (event.key === 'Escape') closeMobileMenu();
+                if (event.key === 'Escape') {
+                    closeMobileMenu();
+                    closeDesktopMenus();
+                }
+            });
+
+            document.addEventListener('click', function(event) {
+                if (!event.target.closest('.desktop-menu')) {
+                    closeDesktopMenus();
+                }
             });
         });
 
         window.addEventListener('resize', function() {
-            if (window.innerWidth > 768) closeMobileMenu();
+            if (window.innerWidth > 768) {
+                closeMobileMenu();
+            }
+            if (window.innerWidth <= 768) {
+                closeDesktopMenus();
+            }
         });
 
         function changeLanguage(lang) {
