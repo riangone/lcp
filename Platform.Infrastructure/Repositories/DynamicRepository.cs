@@ -408,7 +408,14 @@ public class DynamicRepository
     {
         var useTransaction = multiTableDef.Transaction?.Enabled ?? true;
         
-        using var transaction = useTransaction ? _db.BeginTransaction() : null;
+        IDbTransaction? transaction = null;
+        if (useTransaction)
+        {
+            if (_db.State != ConnectionState.Open)
+                _db.Open();
+            transaction = _db.BeginTransaction();
+        }
+        
         try
         {
             int mainId = 0;
@@ -432,15 +439,21 @@ public class DynamicRepository
                 mainId = await DefaultInsertAsync(multiTableDef, data, transaction);
             }
 
-            if (useTransaction)
-                transaction?.Commit();
+            if (useTransaction && transaction != null)
+            {
+                transaction.Commit();
+                transaction.Dispose();
+            }
                 
             return mainId;
         }
         catch
         {
-            if (useTransaction)
-                transaction?.Rollback();
+            if (useTransaction && transaction != null)
+            {
+                transaction.Rollback();
+                transaction.Dispose();
+            }
             throw;
         }
     }

@@ -92,7 +92,6 @@ public class PageController : Controller
     /// 保存多表表单数据
     /// </summary>
     [HttpPost("{pageName}/multi-table/save")]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> SaveMultiTable(string pageName, [FromForm] Dictionary<string, string> data, string? id = null)
     {
         var page = GetPage(pageName);
