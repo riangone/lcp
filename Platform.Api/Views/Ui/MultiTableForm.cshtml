@@ -178,23 +178,37 @@
                     <i class="fas fa-list mr-2"></i>数据列表
                 </h2>
             </div>
-            
+
+            @* 分页控制 - 每页大小 *@
+            <div class="flex items-center justify-between mb-4 px-6">
+                <div class="flex items-center gap-4">
+                    <label class="text-sm text-gray-600" for="page-size-select">每页显示:</label>
+                    <select id="page-size-select" class="border border-gray-300 rounded-lg px-2 py-1 text-sm" onchange="changePageSize()">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+                <div class="text-sm text-gray-700">
+                    共 <span id="total-count" class="font-medium">0</span> 条记录
+                </div>
+            </div>
+
             <div class="overflow-x-auto">
                 <table class="table w-full">
                     <thead>
                         <tr class="bg-gray-50">
-                            @if (mainTable != null)
+                            @if (mainTable != null && formMapping.ContainsKey(mainTable.Table))
                             {
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">@mainTable.PrimaryKey</th>
-                            }
-                            @if (formMapping.ContainsKey(mainTable?.Table ?? ""))
-                            {
-                                foreach (var field in formMapping[mainTable!.Table].Take(5))
+                                var mainFields = formMapping[mainTable.Table];
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">@mainTable.PrimaryKey</th>
+                                foreach (var field in mainFields)
                                 {
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">@field.Label</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">@field.Label</th>
                                 }
                             }
-                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">操作</th>
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
                         </tr>
                     </thead>
                     <tbody id="data-list-body" class="bg-white divide-y divide-gray-200">
@@ -202,6 +216,31 @@
                     </tbody>
                 </table>
             </div>
+
+            @* 分页导航 - 与_ListContent 样式统一 *@
+            <nav id="pagination" class="flex items-center justify-between border-t border-gray-200 px-4 py-3 sm:px-6 mt-6" style="display: none;">
+                <div class="flex flex-1 justify-between sm:hidden">
+                    <button id="mobile-prev-btn" class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" onclick="goToPage(currentPage - 1)">
+                        Previous
+                    </button>
+                    <button id="mobile-next-btn" class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50" onclick="goToPage(currentPage + 1)">
+                        Next
+                    </button>
+                </div>
+                <div class="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
+                    <div>
+                        <p class="text-sm text-gray-700">
+                            Showing page <span id="current-page-num" class="font-medium">1</span> of <span id="total-pages-num" class="font-medium">1</span>,
+                            <span id="total-records" class="font-medium">0</span> records
+                        </p>
+                    </div>
+                    <div>
+                        <nav id="page-numbers" class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+                            <!-- 页码按钮将动态生成 -->
+                        </nav>
+                    </div>
+                </div>
+            </nav>
         </div>
     }
     else
@@ -218,22 +257,34 @@
         let rowIndex = 0;
         let currentEditId = null;
         const pageName = '@pageName';
+        const mainTable = '@(pageDef.MultiTableCrud?.MainTable?.Table ?? "")';
+        const mainFields = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+            pageDef.MultiTableCrud?.FormMapping?.GetValueOrDefault(pageDef.MultiTableCrud?.MainTable?.Table ?? "")
+                ?.Select(f => new { Field = f.Field, Label = f.Label })
+                ?? Enumerable.Empty<object>()
+        ));
+
+        // 分页变量
+        let currentPage = 1;
+        let pageSize = 10;
+        let totalCount = 0;
+        let totalPages = 1;
 
         // 添加新行
         function addRow(tableName) {
             const template = document.getElementById(`${tableName}-template`);
             const container = document.getElementById(`${tableName}-rows`);
-            
+
             if (!template || !container) return;
 
             const clone = template.content.cloneNode(true);
             const rowDiv = clone.querySelector(`.${tableName}-row`);
-            
+
             if (!rowDiv) return;
-            
+
             // 替换所有占位符 {index} 为实际索引
             rowDiv.innerHTML = rowDiv.innerHTML.replace(/{index}/g, rowIndex);
-            
+
             // 设置 input 的 name 属性
             rowDiv.querySelectorAll('input').forEach(input => {
                 const name = input.getAttribute('name');
@@ -241,7 +292,7 @@
                     input.setAttribute('name', name.replace('{index}', rowIndex));
                 }
             });
-            
+
             container.appendChild(rowDiv);
             rowIndex++;
         }
@@ -263,6 +314,111 @@
             document.getElementById('delete-btn').classList.add('hidden');
         }
 
+        // 改变每页大小
+        function changePageSize() {
+            const select = document.getElementById('page-size-select');
+            pageSize = parseInt(select.value);
+            currentPage = 1;
+            loadData();
+        }
+
+        // 跳转到指定页
+        function goToPage(page) {
+            if (page < 1) page = 1;
+            if (page > totalPages) page = totalPages;
+            if (page === currentPage) return;
+            currentPage = page;
+            loadData();
+        }
+
+        // 生成页码按钮 HTML
+        function renderPageNumbers() {
+            const container = document.getElementById('page-numbers');
+            if (!container) return;
+
+            let html = '';
+
+            // 首页按钮
+            if (currentPage > 1) {
+                html += `<button class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclick="goToPage(1)">
+                    <span class="sr-only">First</span>
+                    <i class="fas fa-angles-left h-5 w-5"></i>
+                </button>`;
+                html += `<button class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclick="goToPage(currentPage - 1)">
+                    <span class="sr-only">Previous</span>
+                    <i class="fas fa-chevron-left h-5 w-5"></i>
+                </button>`;
+            } else {
+                html += `<button disabled class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-angles-left h-5 w-5"></i>
+                </button>`;
+                html += `<button disabled class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-left h-5 w-5"></i>
+                </button>`;
+            }
+
+            // 页码按钮（显示当前页前后 2 页）
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+
+            for (let i = startPage; i <= endPage; i++) {
+                if (i === currentPage) {
+                    html += `<button aria-current="page" class="relative z-10 inline-flex items-center bg-blue-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                        ${i}
+                    </button>`;
+                } else {
+                    html += `<button class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclick="goToPage(${i})">
+                        ${i}
+                    </button>`;
+                }
+            }
+
+            // 末页按钮
+            if (currentPage < totalPages) {
+                html += `<button class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclick="goToPage(currentPage + 1)">
+                    <span class="sr-only">Next</span>
+                    <i class="fas fa-chevron-right h-5 w-5"></i>
+                </button>`;
+                html += `<button class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0" onclick="goToPage(totalPages)">
+                    <span class="sr-only">Last</span>
+                    <i class="fas fa-angles-right h-5 w-5"></i>
+                </button>`;
+            } else {
+                html += `<button disabled class="relative inline-flex items-center px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-chevron-right h-5 w-5"></i>
+                </button>`;
+                html += `<button disabled class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 opacity-50 cursor-not-allowed">
+                    <i class="fas fa-angles-right h-5 w-5"></i>
+                </button>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // 更新分页 UI
+        function updatePagination() {
+            // 更新统计信息
+            document.getElementById('total-count').textContent = totalCount;
+            document.getElementById('current-page-num').textContent = currentPage;
+            document.getElementById('total-pages-num').textContent = totalPages;
+            document.getElementById('total-records').textContent = totalCount;
+
+            // 更新移动端按钮状态
+            const mobilePrev = document.getElementById('mobile-prev-btn');
+            const mobileNext = document.getElementById('mobile-next-btn');
+            if (mobilePrev) mobilePrev.disabled = currentPage === 1;
+            if (mobileNext) mobileNext.disabled = currentPage === totalPages;
+
+            // 显示/隐藏分页导航
+            const pagination = document.getElementById('pagination');
+            if (pagination) {
+                pagination.style.display = totalPages > 1 ? 'flex' : 'none';
+            }
+
+            // 生成页码按钮
+            renderPageNumbers();
+        }
+
         // 保存表单
         document.getElementById('multi-table-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -279,13 +435,13 @@
             }
 
             const id = document.getElementById('edit-id').value;
-            const url = id 
+            const url = id
                 ? `/page/${pageName}/multi-table/save?id=${encodeURIComponent(id)}`
                 : `/page/${pageName}/multi-table/save`;
-            
+
             console.log('Submitting to:', url);
             console.log('Data:', data.toString());
-            
+
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -295,14 +451,14 @@
                     },
                     body: data.toString()
                 });
-                
+
                 if (!response.ok) {
                     const errorText = await response.text();
                     throw new Error(errorText || '请求失败');
                 }
-                
+
                 const result = await response.json();
-                
+
                 if (result.success) {
                     alert(result.message || '保存成功');
                     if (id) {
@@ -320,81 +476,195 @@
             }
         });
 
-        // 加载数据列表
+        // 加载数据列表（带分页）
         async function loadData() {
             try {
-                const response = await fetch(`/page/${pageName}/multi-table-data`);
+                const offset = (currentPage - 1) * pageSize;
+                const response = await fetch(`/page/${pageName}/multi-table-data?page=${currentPage}&size=${pageSize}&offset=${offset}`);
                 const result = await response.json();
-                
+
                 const tbody = document.getElementById('data-list-body');
                 tbody.innerHTML = '';
-                
+
                 if (result.success && result.data && result.data.length > 0) {
+                    // 更新总数
+                    totalCount = result.total || result.data.length;
+                    totalPages = Math.ceil(totalCount / pageSize);
+
                     result.data.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-gray-50 transition-colors';
-                        tr.innerHTML = `
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.id || ''}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.customerId || ''}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.invoiceDate || ''}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.total || ''}</td>
+
+                        // 动态生成表格行
+                        let cellsHtml = '';
+
+                        // 主键列 - 尝试多种可能的键名
+                        const pkValue = item[mainTable.toLowerCase() + 'id'] 
+                            || item['InvoiceId'] 
+                            || item['Id'] 
+                            || item['id'] 
+                            || item[Object.keys(item)[0]] // 使用第一个字段作为备选
+                            || '';
+                        
+                        console.log('生成行，item:', item, 'pkValue:', pkValue);
+                        
+                        cellsHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${pkValue}</td>`;
+
+                        // 动态字段列
+                        mainFields.forEach(field => {
+                            const fieldName = field.Field;
+                            const camelCaseName = fieldName.charAt(0).toLowerCase() + fieldName.slice(1);
+                            const value = item[camelCaseName] || item[fieldName] || item[fieldName.toLowerCase()] || '';
+                            cellsHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${value}</td>`;
+                        });
+
+                        // 操作列 - 使用 data 属性而不是 onclick
+                        cellsHtml += `
                             <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editItem(${item.id})">
+                                <button class="edit-btn text-blue-600 hover:text-blue-900 mr-3" data-id="${pkValue}">
                                     <i class="fas fa-edit"></i> 编辑
                                 </button>
-                                <button class="text-red-600 hover:text-red-900" onclick="deleteItem(${item.id})">
+                                <button class="delete-btn text-red-600 hover:text-red-900" data-id="${pkValue}">
                                     <i class="fas fa-trash"></i> 删除
                                 </button>
                             </td>
                         `;
+
+                        tr.innerHTML = cellsHtml;
                         tbody.appendChild(tr);
                     });
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500">暂无数据</td></tr>';
+                    totalCount = 0;
+                    totalPages = 1;
+                    tbody.innerHTML = '<tr><td colspan="' + (mainFields.length + 2) + '" class="text-center py-8 text-gray-500">暂无数据</td></tr>';
                 }
+
+                updatePagination();
             } catch (err) {
                 console.error('加载数据失败:', err);
+                totalCount = 0;
+                totalPages = 1;
+                updatePagination();
             }
         }
 
         // 编辑项目
         async function editItem(id) {
+            console.log('=== 开始编辑 ===');
+            console.log('ID:', id);
+            console.log('pageName:', pageName);
+            console.log('mainTable:', mainTable);
+            console.log('mainFields:', mainFields);
+            
             try {
-                const response = await fetch(`/page/${pageName}/multi-table/${id}`);
-                const result = await response.json();
+                const url = `/page/${pageName}/multi-table/${id}`;
+                console.log('请求 URL:', url);
                 
+                const response = await fetch(url);
+                console.log('响应状态:', response.status);
+                
+                const result = await response.json();
+                console.log('完整响应:', JSON.stringify(result, null, 2));
+                console.log('result.success:', result.success);
+                console.log('result.data:', result.data);
+                console.log('result.data 类型:', typeof result.data);
+                console.log('result.data 键名:', Object.keys(result.data || {}));
+
                 if (result.success) {
                     const data = result.data;
-                    const mainData = data.Invoice?.[0] || {};
                     
-                    // 填充主表字段
-                    document.getElementById('edit-id').value = mainData.InvoiceId || id;
-                    for (const [key, value] of Object.entries(mainData)) {
-                        const input = document.querySelector(`input[name="${key}"]`);
-                        if (input) {
-                            input.value = value || '';
-                        }
+                    console.log('data 对象:', data);
+                    console.log('data 键名:', Object.keys(data || {}));
+                    
+                    // 尝试不同的键名获取主表数据
+                    let mainData = {};
+                    if (data[mainTable] && Array.isArray(data[mainTable]) && data[mainTable].length > 0) {
+                        mainData = data[mainTable][0];
+                    } else if (data['Invoice'] && Array.isArray(data['Invoice']) && data['Invoice'].length > 0) {
+                        mainData = data['Invoice'][0];
+                    } else if (data['invoice'] && Array.isArray(data['invoice']) && data['invoice'].length > 0) {
+                        mainData = data['invoice'][0];
+                    } else {
+                        // 如果都没有，尝试从 data 中直接获取字段
+                        mainData = data;
                     }
                     
-                    // 填充关联表数据
-                    for (const [tableName, rows] of Object.entries(data)) {
-                        if (tableName !== 'Invoice' && Array.isArray(rows)) {
-                            const container = document.getElementById(`${tableName}-rows`);
-                            if (container) {
-                                container.innerHTML = '';
-                                rows.forEach(row => {
-                                    addRow(tableName);
-                                    // 填充行数据...
-                                });
+                    console.log('使用的 mainData:', mainData);
+                    console.log('mainData 键名:', Object.keys(mainData || {}));
+
+                    // 填充主表字段
+                    const idField = document.getElementById('edit-id');
+                    if (idField) {
+                        idField.value = mainData.InvoiceId || mainData[mainTable + 'Id'] || mainData['InvoiceId'] || id;
+                        console.log('设置 ID 字段:', idField.value);
+                    }
+
+                    // 遍历所有字段配置进行填充
+                    for (const field of mainFields) {
+                        const fieldName = field.Field;
+                        const value = mainData[fieldName];
+                        console.log(`字段 ${fieldName}:`, value);
+
+                        if (value !== undefined && value !== null && value !== '') {
+                            const input = document.querySelector(`input[name="${fieldName}"]`);
+                            console.log(`  输入框 ${fieldName}:`, input ? '找到' : '未找到');
+                            
+                            if (input) {
+                                // 处理日期格式
+                                if (input.type === 'date' && typeof value === 'string') {
+                                    const dateValue = value.split(' ')[0]; // 只取日期部分
+                                    input.value = dateValue;
+                                    console.log(`  设置日期 ${fieldName}: ${dateValue}`);
+                                } else {
+                                    input.value = value;
+                                    console.log(`  设置值 ${fieldName}: ${value}`);
+                                }
                             }
                         }
                     }
+
+                    // 填充关联表数据
+                    const relatedTableName = 'InvoiceLine';
+                    const relatedData = data[relatedTableName] || data['invoiceline'] || [];
+                    console.log('明细数据:', relatedData);
                     
+                    if (relatedData.length > 0) {
+                        const container = document.getElementById(`${relatedTableName}-rows`);
+                        console.log('容器:', container);
+                        
+                        if (container) {
+                            container.innerHTML = '';
+                            
+                            relatedData.forEach((row, index) => {
+                                addRow(relatedTableName);
+                                console.log(`添加行 ${index}:`, row);
+
+                                // 填充行数据
+                                const rows = container.querySelectorAll(`.${relatedTableName}-row`);
+                                const currentRow = rows[rows.length - 1];
+                                if (currentRow) {
+                                    for (const [key, value] of Object.entries(row)) {
+                                        const input = currentRow.querySelector(`input[name*="${key}"]`);
+                                        if (input) {
+                                            input.value = value;
+                                            console.log(`  设置明细 ${key}: ${value}`);
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+
                     currentEditId = id;
                     document.getElementById('delete-btn').classList.remove('hidden');
                     window.scrollTo({ top: 0, behavior: 'smooth' });
+                    
+                    console.log('=== 编辑加载完成 ===');
+                } else {
+                    alert('加载数据失败：' + (result.message || '未知错误'));
                 }
             } catch (err) {
+                console.error('编辑加载失败:', err);
                 alert('加载数据失败：' + err.message);
             }
         }
@@ -440,5 +710,33 @@
 
         // 页面加载时加载数据
         loadData();
+
+        // 事件委托 - 处理编辑和删除按钮点击
+        document.addEventListener('click', function(e) {
+            // 使用 closest 向上查找，因为点击的可能是按钮内的图标
+            const editBtn = e.target.closest('.edit-btn');
+            const deleteBtn = e.target.closest('.delete-btn');
+
+            if (editBtn) {
+                const id = editBtn.getAttribute('data-id');
+                console.log('点击编辑按钮，data-id:', id, 'element:', editBtn);
+                if (id) {
+                    editItem(parseInt(id));
+                } else {
+                    console.error('未找到 data-id 属性');
+                }
+                return;
+            }
+
+            if (deleteBtn) {
+                const id = deleteBtn.getAttribute('data-id');
+                console.log('点击删除按钮，data-id:', id, 'element:', deleteBtn);
+                if (id) {
+                    deleteItem(parseInt(id));
+                } else {
+                    console.error('未找到 data-id 属性');
+                }
+            }
+        });
     </script>
 }

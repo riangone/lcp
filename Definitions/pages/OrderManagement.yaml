@@ -2,21 +2,23 @@
 title: 订单管理
 description: 管理订单及其明细数据
 
+main_table: Invoice
+
 # 多表 CRUD 配置 - 定义基本的数据结构
 multi_table_crud:
   main_table:
     table: Invoice
     primary_key: InvoiceId
-    
+
   related_tables:
     - table: InvoiceLine
       foreign_key: InvoiceId
       type: many
-      
+
   transaction:
     enabled: true
     isolation_level: ReadCommitted
-    
+
   form_mapping:
     Invoice:
       - field: CustomerId
@@ -43,7 +45,7 @@ multi_table_crud:
         label: 总计
         type: decimal
         required: true
-        
+
     InvoiceLine:
       - field: TrackId
         label: 音轨 ID
@@ -71,7 +73,7 @@ steps:
       language: csharp
       content: |
         // 验证订单总额是否为正数
-        if (data.TryGetValue("Total", out var totalObj) && 
+        if (data.TryGetValue("Total", out var totalObj) &&
             decimal.TryParse(totalObj?.ToString(), out var total))
         {
           if (total <= 0) {
@@ -98,17 +100,54 @@ steps:
         订单日期：{{InvoiceDate}}
         订单总额：{{Total}}
 
-# 列表显示配置
-list:
-  columns:
-    - InvoiceId
-    - CustomerId
-    - InvoiceDate
-    - Total
-  filters:
-    CustomerId:
-      label: 客户 ID
-      type: like
-    BillingCity:
-      label: 城市
-      type: like
+# 列表显示配置 - 使用 sections 格式
+sections:
+  # 订单列表
+  - id: orders
+    title: 订单列表
+    type: table
+    source_type: model
+    source: Invoice
+    columns:
+      - InvoiceId
+      - CustomerId
+      - InvoiceDate
+      - BillingCity
+      - BillingCountry
+      - Total
+    editable: true
+    page_size: 15
+    filters:
+      CustomerId:
+        label: 客户 ID
+        type: like
+      BillingCity:
+        label: 城市
+        type: like
+      BillingCountry:
+        label: 国家
+        type: like
+
+  # 订单明细视图（只读）
+  - id: order_lines
+    title: 订单明细
+    type: table
+    source_type: model
+    source: InvoiceLine
+    columns:
+      - InvoiceLineId
+      - InvoiceId
+      - TrackId
+      - Quantity
+      - UnitPrice
+    editable: false
+    page_size: 10
+    foreign_key: InvoiceId
+    local_foreign_key: InvoiceId
+
+ui:
+  layout:
+    - section_id: orders
+      columns: 12
+    - section_id: order_lines
+      columns: 12

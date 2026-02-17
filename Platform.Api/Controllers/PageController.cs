@@ -1,8 +1,11 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Platform.Infrastructure;
+using Platform.Infrastructure.Data;
 using Platform.Infrastructure.Definitions;
 using Platform.Infrastructure.Repositories;
 using Platform.Infrastructure.Services;
+using System.Data;
 
 namespace Platform.Api.Controllers;
 
@@ -11,11 +14,13 @@ public class PageController : Controller
 {
     private readonly DynamicRepository _repo;
     private readonly AppDefinitions _defs;
+    private readonly IDbConnection _db;
 
-    public PageController(DynamicRepository repo, AppDefinitions defs)
+    public PageController(DynamicRepository repo, AppDefinitions defs, DbConnectionFactory dbFactory)
     {
         _repo = repo;
         _defs = defs;
+        _db = dbFactory.Create();
     }
 
     /// <summary>
@@ -197,38 +202,46 @@ public class PageController : Controller
     }
 
     /// <summary>
-    /// 获取多表列表数据
+    /// 获取多表列表数据（支持分页）
     /// </summary>
     [HttpGet("{pageName}/multi-table-data")]
-    public async Task<IActionResult> GetMultiTableData(string pageName)
+    public async Task<IActionResult> GetMultiTableData(string pageName, [FromQuery] int page = 1, [FromQuery] int size = 10, [FromQuery] int? offset = null)
     {
-        var page = GetPage(pageName);
-        
-        if (page.MultiTableCrud == null)
+        var pageDef = GetPage(pageName);
+
+        if (pageDef.MultiTableCrud == null)
             return BadRequest("This page does not support multi-table CRUD.");
 
         try
         {
             // 这里简化处理，只返回主表数据
-            var mainTable = page.MultiTableCrud.MainTable;
+            var mainTable = pageDef.MultiTableCrud.MainTable;
             if (mainTable == null)
-                return Json(new { success = true, data = new List<object>() });
+                return Json(new { success = true, data = new List<object>(), total = 0 });
 
-            var sql = $"SELECT * FROM {mainTable.Table} ORDER BY {mainTable.PrimaryKey} DESC LIMIT 100";
-            var rows = await _repo.GetAllAsync(new ModelDefinition 
-            { 
-                Table = mainTable.Table, 
-                PrimaryKey = mainTable.PrimaryKey ?? "Id",
-                Properties = new Dictionary<string, PropertyDefinition>()
-            });
+            var primaryKey = mainTable.PrimaryKey ?? "Id";
+            
+            // 计算实际的 offset
+            var actualOffset = offset ?? ((page - 1) * size);
+            
+            // 使用分页查询
+            var sql = $"SELECT * FROM {Escape(mainTable.Table)} ORDER BY {Escape(primaryKey)} DESC LIMIT @Size OFFSET @Offset";
+            var countSql = $"SELECT COUNT(*) FROM {Escape(mainTable.Table)}";
+            
+            var rows = await _db.QueryAsync(sql, new { Size = size, Offset = actualOffset });
+            
+            // 获取总数
+            var totalCount = await _db.ExecuteScalarAsync<int>(countSql);
 
-            return Json(new { success = true, data = rows });
+            return Json(new { success = true, data = rows, total = totalCount });
         }
         catch (Exception ex)
         {
             return Json(new { success = false, message = ex.Message });
         }
     }
+
+    private string Escape(string identifier) => identifier.Replace("\"", "\"\"");
 
     /// <summary>
     /// 删除多表数据

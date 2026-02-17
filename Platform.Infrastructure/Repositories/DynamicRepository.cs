@@ -17,7 +17,11 @@ public class DynamicRepository
     private static string Escape(string identifier) => SqlIdentifier.Escape(identifier);
 
     private static string GetColumns(ModelDefinition def)
-        => string.Join(", ", def.Columns.Select(Escape));
+    {
+        if (def.Columns == null || def.Columns.Count == 0)
+            return "*";
+        return string.Join(", ", def.Columns.Select(Escape));
+    }
 
     private static string GetReadableSourceSql(ModelDefinition def)
     {
@@ -40,6 +44,15 @@ public class DynamicRepository
         var rows = await _db.QueryAsync(sql);
 
         return rows.Select(ToDict);
+    }
+
+    /// <summary>
+    /// 获取表的总记录数
+    /// </summary>
+    public async Task<int> GetCountAsync(string tableName)
+    {
+        var sql = $"SELECT COUNT(*) FROM {Escape(tableName)}";
+        return await _db.ExecuteScalarAsync<int>(sql);
     }
 
     public async Task<Dictionary<string, object>?> GetByIdAsync(ModelDefinition def, object id)
@@ -916,13 +929,17 @@ public class DynamicRepository
         if (multiTableDef.MainTable != null)
         {
             var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
-            var cols = mainTableFields.Any() 
+            var cols = mainTableFields.Any()
                 ? string.Join(", ", mainTableFields.Select(f => Escape(f.Field)))
                 : "*";
 
-            var sql = $"SELECT {cols} FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(multiTableDef.MainTable.PrimaryKey)}=@id";
+            // 如果 cols 为空，使用 * 避免 SQL 语法错误
+            if (string.IsNullOrWhiteSpace(cols))
+                cols = "*";
+
+            var sql = $"SELECT {cols} FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(multiTableDef.MainTable.PrimaryKey ?? "Id")}=@id";
             var row = await _db.QueryFirstOrDefaultAsync(sql, new { id = mainId });
-            
+
             if (row != null)
             {
                 result[multiTableDef.MainTable.Table] = new List<Dictionary<string, object>> { ((IDictionary<string, object>)row).ToDictionary(k => k.Key, v => v.Value) };
@@ -937,10 +954,14 @@ public class DynamicRepository
                 ? string.Join(", ", tableFields.Select(f => Escape(f.Field)))
                 : "*";
 
+            // 如果 cols 为空，使用 * 避免 SQL 语法错误
+            if (string.IsNullOrWhiteSpace(cols))
+                cols = "*";
+
             var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
             var sql = $"SELECT {cols} FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
             var rows = await _db.QueryAsync(sql, new { id = mainId });
-            
+
             result[relatedTable.Table] = rows.Select(r => ((IDictionary<string, object>)r).ToDictionary(k => k.Key, v => v.Value)).ToList();
         }
 
