@@ -1,0 +1,120 @@
+# 音乐库管理页面 - 展示艺术家、专辑和音轨的关联管理
+title: 音乐库管理
+description: 管理艺术家、专辑和音轨数据
+
+# 主表（用于主要数据展示）
+main_table: Artist
+
+# 页面区域定义
+sections:
+  # 艺术家列表区域
+  - id: artists
+    title: 艺术家列表
+    type: table
+    source_type: model
+    source: Artist
+    columns:
+      - ArtistId
+      - Name
+    editable: true
+    page_size: 10
+    filters:
+      Name:
+        label: 艺术家名称
+        type: like
+  
+  # 专辑列表区域 - 与艺术家关联
+  - id: albums
+    title: 专辑列表
+    type: table
+    source_type: model
+    source: Album
+    columns:
+      - AlbumId
+      - Title
+      - ArtistId
+    editable: true
+    page_size: 10
+    foreign_key: ArtistId
+    local_foreign_key: ArtistId
+    filters:
+      Title:
+        label: 专辑名称
+        type: like
+  
+  # 音轨列表区域
+  - id: tracks
+    title: 音轨列表
+    type: table
+    source_type: model
+    source: Track
+    columns:
+      - TrackId
+      - Name
+      - AlbumId
+      - GenreId
+      - UnitPrice
+    editable: true
+    page_size: 20
+    foreign_key: AlbumId
+    local_foreign_key: AlbumId
+    filters:
+      Name:
+        label: 音轨名称
+        type: like
+  
+  # 流派选择区域（表单类型）
+  - id: genre_form
+    title: 添加新流派
+    type: form
+    source_type: model
+    source: Genre
+    editable: true
+    fields:
+      Name:
+        label: 流派名称
+        type: text
+        required: true
+        max_length: 120
+
+# 页面操作定义
+actions:
+  - id: export_all
+    title: 导出数据
+    type: submit
+    target: /api/export/music
+    method: POST
+    button_class: btn btn-success
+    icon: fas fa-download
+    confirm_message: 确定要导出所有音乐数据吗？
+    affects_sections:
+      - artists
+      - albums
+      - tracks
+  
+  - id: cleanup_empty
+    title: 清理空数据
+    type: ajax
+    method: DELETE
+    button_class: btn btn-outline
+    icon: fas fa-trash-alt
+    confirm_message: 确定要清理没有专辑的艺术家吗？
+    affects_sections:
+      - artists
+
+# UI 定义
+ui:
+  theme: default
+  layout:
+    - section_id: artists
+      columns: 12
+      full_width: true
+    - section_id: albums
+      columns: 12
+      full_width: true
+    - section_id: tracks
+      columns: 12
+      full_width: true
+    - section_id: genre_form
+      columns: 6
+      full_width: false

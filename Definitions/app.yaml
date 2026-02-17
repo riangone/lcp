@@ -957,3 +957,4 @@ models:
         type: string
       Total:
         type: decimal
+

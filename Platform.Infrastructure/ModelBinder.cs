@@ -62,6 +62,71 @@ public static class ModelBinder
         return result;
     }
 
+    /// <summary>
+    /// 绑定 SectionDefinition 的表单数据
+    /// </summary>
+    public static Dictionary<string, object> Bind(
+        SectionDefinition section,
+        Dictionary<string, string> input)
+    {
+        var result = new Dictionary<string, object>();
+
+        if (section.Fields == null)
+            throw new Exception("Form fields not defined for this section");
+
+        foreach (var field in section.Fields)
+        {
+            var name = field.Key;
+            var fieldDef = field.Value;
+
+            var required = fieldDef.Required;
+
+            if (!input.TryGetValue(name, out var raw))
+            {
+                if (required)
+                    throw new Exception($"{name} is required");
+                continue;
+            }
+
+            // 字符串长度校验
+            if (fieldDef.MinLength.HasValue && raw.Length < fieldDef.MinLength.Value)
+                throw new Exception($"{name} must be at least {fieldDef.MinLength.Value} characters");
+
+            if (fieldDef.MaxLength.HasValue && raw.Length > fieldDef.MaxLength.Value)
+                throw new Exception($"{name} must be at most {fieldDef.MaxLength.Value} characters");
+
+            if (fieldDef.Type == "select")
+            {
+                if (string.IsNullOrEmpty(raw))
+                {
+                    if (required)
+                        throw new Exception($"{name} is required");
+                    continue;
+                }
+
+                if (fieldDef.Options == null || !fieldDef.Options.ContainsKey(raw))
+                    throw new Exception($"{name} has invalid value");
+
+                result[name] = raw;
+                continue;
+            }
+
+            var type = fieldDef.Type switch
+            {
+                "number" => "decimal",
+                "email" => "string",
+                "textarea" => "string",
+                "text" => "string",
+                _ => "string"
+            };
+
+            var value = ConvertValue(name, raw, type, fieldDef);
+            result[name] = value;
+        }
+
+        return result;
+    }
+
     private static object ConvertValue(string name, string raw, string type, FormFieldDefinition fieldDef)
     {
         try

@@ -159,4 +159,245 @@ public class DynamicRepository
 
         return (rows.Select(ToDict), total);
     }
+
+    #region Page Methods - 多表支持
+
+    /// <summary>
+    /// 获取页面所有区域的数据
+    /// </summary>
+    public async Task<Dictionary<string, (IEnumerable<Dictionary<string, object>> Rows, int Total)>>
+        GetPageDataAsync(
+            PageDefinition page,
+            IDictionary<string, string> filters,
+            string? mainTableId = null)
+    {
+        var result = new Dictionary<string, (IEnumerable<Dictionary<string, object>>, int)>();
+
+        foreach (var section in page.Sections)
+        {
+            try
+            {
+                var sectionFilters = filters
+                    .Where(kvp => kvp.Key.StartsWith($"{section.Id}_"))
+                    .ToDictionary(
+                        kvp => kvp.Key.Substring(section.Id.Length + 1),
+                        kvp => kvp.Value);
+
+                // 如果有主表 ID，添加关联过滤
+                if (!string.IsNullOrEmpty(mainTableId) && 
+                    !string.IsNullOrEmpty(section.ForeignKey) &&
+                    !string.IsNullOrEmpty(section.LocalForeignKey))
+                {
+                    sectionFilters[section.ForeignKey] = mainTableId;
+                }
+
+                var (rows, total) = await GetSectionDataAsync(section, 1, section.PageSize, sectionFilters);
+                result[section.Id] = (rows, total);
+            }
+            catch (Exception)
+            {
+                // 记录错误但继续处理其他区域
+                result[section.Id] = (Enumerable.Empty<Dictionary<string, object>>(), 0);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 获取单个区域的数据
+    /// </summary>
+    public async Task<(IEnumerable<Dictionary<string, object>> Rows, int Total)>
+        GetSectionDataAsync(
+            SectionDefinition section,
+            int page,
+            int size,
+            IDictionary<string, string> filters)
+    {
+        var offset = (page - 1) * size;
+        var param = new DynamicParameters();
+
+        // 构建 SQL
+        string sql;
+        string countSql;
+
+        if (section.SourceType == "query" || section.SourceType == "custom")
+        {
+            // 自定义查询或命名查询
+            var sourceSql = section.SourceType == "query" 
+                ? GetNamedQuery(section.Source!) 
+                : section.Source;
+
+            var where = BuildWhereClause(section, filters, param);
+            var whereSql = where.Any() ? "WHERE " + string.Join(" AND ", where) : "";
+
+            sql = $@"
+                SELECT * FROM ({sourceSql}) AS src
+                {whereSql}
+                ORDER BY {Escape(section.Columns.FirstOrDefault() ?? "Id")} ASC
+                LIMIT @Size OFFSET @Offset";
+
+            countSql = $@"
+                SELECT COUNT(*) FROM ({sourceSql}) AS src
+                {whereSql}";
+        }
+        else
+        {
+            // 表查询
+            if (string.IsNullOrEmpty(section.Source))
+                throw new Exception($"Section '{section.Id}' has no data source defined.");
+
+            var cols = section.Columns.Any() 
+                ? string.Join(", ", section.Columns.Select(Escape))
+                : "*";
+
+            var where = BuildWhereClause(section, filters, param);
+            var whereSql = where.Any() ? "WHERE " + string.Join(" AND ", where) : "";
+
+            sql = $@"
+                SELECT {cols} FROM {Escape(section.Source)}
+                {whereSql}
+                ORDER BY {Escape(section.Columns.FirstOrDefault() ?? "Id")} ASC
+                LIMIT @Size OFFSET @Offset";
+
+            countSql = $@"
+                SELECT COUNT(*) FROM {Escape(section.Source)}
+                {whereSql}";
+        }
+
+        param.Add("Offset", offset);
+        param.Add("Size", size);
+
+        var rows = await _db.QueryAsync(sql, param);
+        var total = await _db.ExecuteScalarAsync<int>(countSql, param);
+
+        return (rows.Select(ToDict), total);
+    }
+
+    /// <summary>
+    /// 构建 WHERE 子句
+    /// </summary>
+    private List<string> BuildWhereClause(
+        SectionDefinition section,
+        IDictionary<string, string> filters,
+        DynamicParameters param)
+    {
+        var where = new List<string>();
+
+        var sectionFilters = section.Filters ?? new Dictionary<string, FilterDefinition>();
+
+        foreach (var f in sectionFilters)
+        {
+            if (!filters.TryGetValue(f.Key, out var val) || string.IsNullOrWhiteSpace(val))
+                continue;
+
+            var col = Escape(f.Key);
+
+            if (f.Value.Type == "like")
+            {
+                where.Add($"{col} LIKE @{f.Key}");
+                param.Add(f.Key, $"%{val}%");
+            }
+            else if (f.Value.Type == "in")
+            {
+                var values = val.Split(',').Select(v => v.Trim()).ToArray();
+                var inParams = string.Join(", ", values.Select((v, i) => $"@{f.Key}_{i}"));
+                where.Add($"{col} IN ({inParams})");
+                for (int i = 0; i < values.Length; i++)
+                {
+                    param.Add($"{f.Key}_{i}", values[i]);
+                }
+            }
+            else
+            {
+                where.Add($"{col} = @{f.Key}");
+                param.Add(f.Key, val);
+            }
+        }
+
+        // 添加外键过滤
+        if (!string.IsNullOrEmpty(section.ForeignKey) && 
+            !string.IsNullOrEmpty(section.LocalForeignKey) &&
+            filters.TryGetValue(section.ForeignKey, out var fkValue))
+        {
+            where.Add($"{Escape(section.LocalForeignKey)} = @{section.ForeignKey}");
+            param.Add(section.ForeignKey, fkValue);
+        }
+
+        return where;
+    }
+
+    /// <summary>
+    /// 获取命名查询
+    /// </summary>
+    private string GetNamedQuery(string queryName)
+    {
+        // 这里可以从配置中获取命名查询
+        // 目前返回空字符串，实际使用时需要从 YAML 或其他配置源加载
+        throw new Exception($"Named query '{queryName}' not found.");
+    }
+
+    /// <summary>
+    /// 执行页面操作（批量 CRUD）
+    /// </summary>
+    public async Task ExecutePageActionAsync(
+        PageDefinition page,
+        string actionId,
+        IDictionary<string, object> data,
+        string? mainTableId = null)
+    {
+        var action = page.Actions.FirstOrDefault(a => a.Id == actionId);
+        if (action == null)
+            throw new Exception($"Action '{actionId}' not found.");
+
+        using var transaction = _db.BeginTransaction();
+
+        try
+        {
+            foreach (var sectionId in action.AffectsSections)
+            {
+                var section = page.Sections.FirstOrDefault(s => s.Id == sectionId);
+                if (section == null || section.ReadOnly)
+                    continue;
+
+                if (string.IsNullOrEmpty(section.Source))
+                    continue;
+
+                // 根据操作类型执行不同的逻辑
+                if (action.Method == "DELETE")
+                {
+                    var ids = data.ContainsKey("ids") 
+                        ? ((string)data["ids"]).Split(',') 
+                        : new[] { data.ContainsKey("id") ? data["id"]!.ToString()! : "" };
+
+                    foreach (var id in ids.Where(i => !string.IsNullOrEmpty(i)))
+                    {
+                        var deleteSql = $"DELETE FROM {Escape(section.Source)} WHERE {Escape(section.Columns.First())}=@id";
+                        await _db.ExecuteAsync(deleteSql, new { id }, transaction);
+                    }
+                }
+                else if (action.Method == "POST" || action.Method == "PUT")
+                {
+                    // 插入或更新操作
+                    var cols = section.Columns.Intersect(data.Keys).ToList();
+                    if (!cols.Any())
+                        continue;
+
+                    var sets = string.Join(", ", cols.Select(k => $"{Escape(k)}=@{k}"));
+                    var sql = $"INSERT INTO {Escape(section.Source)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({string.Join(", ", cols.Select(k => "@" + k))})";
+                    
+                    await _db.ExecuteAsync(sql, data, transaction);
+                }
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    #endregion
 }

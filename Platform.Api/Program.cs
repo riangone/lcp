@@ -27,11 +27,15 @@ builder.Services.AddSingleton<AppDefinitions>(_ =>
 
     // 从 bin/Debug/net10.0 返回到项目根目录
     var yamlPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "app.yaml");
+    var pagesPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "pages");
+    
     var fullPath = Path.GetFullPath(yamlPath);
-    Console.WriteLine($"[DEBUG] YAML Path: {fullPath}");
-    Console.WriteLine($"[DEBUG] File Exists: {File.Exists(fullPath)}");
+    var pagesFullPath = Path.GetFullPath(pagesPath);
+    
+    Console.WriteLine($"[DEBUG] YAML Path: {fullPath}, Exists: {File.Exists(fullPath)}");
+    Console.WriteLine($"[DEBUG] Pages Path: {pagesFullPath}, Exists: {Directory.Exists(pagesFullPath)}");
 
-    return YamlLoader.Load(fullPath);
+    return YamlLoader.Load(fullPath, pagesFullPath);
 });
 
 // 数据库和服务
@@ -58,6 +62,21 @@ var app = builder.Build();
 
 // 静态文件
 app.UseStaticFiles();
+
+// 中间件：注入 Models 和 Pages 到 ViewData
+app.Use(async (context, next) =>
+{
+    if (context.RequestServices.GetService<AppDefinitions>() is AppDefinitions defs)
+    {
+        // 注入 Models
+        context.Items["Models"] = defs.Models;
+        
+        // 注入 Pages
+        context.Items["Pages"] = defs.Pages;
+    }
+    
+    await next();
+});
 
 if (app.Environment.IsDevelopment())
 {

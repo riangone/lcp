@@ -16,6 +16,7 @@ public class HomeController : Controller
     {
         // 传递模型定义给视图
         ViewData["Models"] = _defs.Models;
+        ViewData["Pages"] = _defs.Pages;
         return View();
     }
 }

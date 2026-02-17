@@ -1,0 +1,361 @@
+@using Platform.Infrastructure.Definitions
+@using Microsoft.AspNetCore.Http
+@model Dictionary<string, (IEnumerable<Dictionary<string, object>> Rows, int Total)>
+@{
+    var pageDef = (PageDefinition)ViewData["PageDef"]!;
+    var pageName = (string)ViewData["PageName"]!;
+    var httpContext = Context;
+    var currentLang = httpContext.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    
+    var title = pageDef.Title ?? pageName;
+    ViewData["Title"] = $"{title} - Low Code Platform";
+    ViewData["ActivePage"] = "Page";
+    ViewData["Lang"] = currentLang;
+}
+
+<div class="container mx-auto px-4 py-8">
+    @* 页面标题 *@
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
+        @if (!string.IsNullOrEmpty(pageDef.Description))
+        {
+            <p class="text-gray-600">@pageDef.Description</p>
+        }
+    </div>
+
+    @* 页面操作按钮 *@
+    @if (pageDef.Actions.Any())
+    {
+        <div class="mb-6 flex flex-wrap gap-3">
+            @foreach (var action in pageDef.Actions)
+            {
+                var buttonClass = action.ButtonClass ?? "btn btn-primary";
+                var icon = action.Icon ?? "fas fa-check";
+                
+                if (action.Type == "submit")
+                {
+                    <button type="button" 
+                            class="@buttonClass"
+                            hx-post="/page/@pageName/action/@action.Id"
+                            hx-target="#page-content"
+                            hx-swap="innerHTML"
+                            hx-on::before-request="return confirmAction('@(action.ConfirmMessage ?? "Are you sure?")')"
+                            onclick="return !@(string.IsNullOrEmpty(action.ConfirmMessage)) || confirm('@action.ConfirmMessage')">
+                        <i class="@icon mr-2"></i>@action.Title
+                    </button>
+                }
+                else if (action.Type == "ajax")
+                {
+                    <button type="button" 
+                            class="@buttonClass"
+                            onclick="executePageAction('@pageName', '@action.Id')">
+                        <i class="@icon mr-2"></i>@action.Title
+                    </button>
+                }
+                else
+                {
+                    <a href="@action.Target" class="@buttonClass">
+                        <i class="@icon mr-2"></i>@action.Title
+                    </a>
+                }
+            }
+        </div>
+    }
+
+    @* 页面内容区域 *@
+    <div id="page-content" class="space-y-6">
+        @foreach (var sec in pageDef.Sections)
+        {
+            var secData = Model.TryGetValue(sec.Id, out var data) ? data : (Enumerable.Empty<Dictionary<string, object>>(), 0);
+            var rowsList = secData.Item1.ToList();
+            var total = secData.Item2;
+
+            <div class="card" id="section-@sec.Id">
+                @if (!string.IsNullOrEmpty(sec.Title))
+                {
+                    <div class="card-header border-b border-gray-200 pb-4 mb-4">
+                        <h2 class="text-xl font-semibold text-gray-800">@sec.Title</h2>
+                        @if (sec.Editable && !sec.ReadOnly)
+                        {
+                            <span class="text-sm text-gray-500 ml-2">(可编辑)</span>
+                        }
+                        else if (sec.ReadOnly)
+                        {
+                            <span class="text-sm text-gray-500 ml-2">(只读)</span>
+                        }
+                    </div>
+                }
+
+                @* 过滤器 *@
+                @if (sec.Filters != null && sec.Filters.Any())
+                {
+                    <form hx-get="/page/@pageName/section/@sec.Id" 
+                          hx-target="#section-@sec.Id" 
+                          hx-swap="innerHTML" 
+                          class="mb-4 space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-@sec.Columns.Count gap-4">
+                            @foreach (var f in sec.Filters)
+                            {
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">@f.Value.Label</label>
+                                    @if (f.Value.Type == "select")
+                                    {
+                                        <select name="@(sec.Id)_@(f.Key)" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <option value="">全部</option>
+                                            @if (f.Value.Options != null)
+                                            {
+                                                @foreach (var opt in f.Value.Options)
+                                                {
+                                                    <option value="@opt.Key">@opt.Value</option>
+                                                }
+                                            }
+                                        </select>
+                                    }
+                                    else
+                                    {
+                                        <input name="@(sec.Id)_@(f.Key)" 
+                                               value="@(httpContext.Request.Query[$"{sec.Id}_{f.Key}"].FirstOrDefault() ?? "")" 
+                                               placeholder="输入 @f.Value.Label"
+                                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                                    }
+                                </div>
+                            }
+                        </div>
+                        <div class="flex gap-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-search mr-2"></i>搜索
+                            </button>
+                            <button type="button" onclick="clearFilters('@sec.Id')" class="btn btn-outline">
+                                <i class="fas fa-times mr-2"></i>清除
+                            </button>
+                        </div>
+                    </form>
+                }
+
+                @* 数据表格 *@
+                @if (sec.Type == "table" || sec.Type == "list")
+                {
+                    if (rowsList.Any())
+                    {
+                        <div class="overflow-x-auto">
+                            <table class="table w-full">
+                                <thead>
+                                    <tr class="bg-gray-50">
+                                        @if (sec.Editable && !sec.ReadOnly)
+                                        {
+                                            <th class="px-4 py-3 text-left">
+                                                <input type="checkbox" 
+                                                       onchange="toggleSectionCheckboxes('@sec.Id', this.checked)" 
+                                                       class="rounded border-gray-300" />
+                                            </th>
+                                        }
+                                        @foreach (var col in sec.Columns)
+                                        {
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">@col</th>
+                                        }
+                                        @if (sec.Editable && !sec.ReadOnly)
+                                        {
+                                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                        }
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach (var row in rowsList)
+                                    {
+                                        var primaryKey = row.Keys.First();
+                                        var rowId = row[primaryKey]?.ToString() ?? "";
+                                        
+                                        <tr class="hover:bg-gray-50 transition-colors" data-id="@rowId">
+                                            @if (sec.Editable && !sec.ReadOnly)
+                                            {
+                                                <td class="px-4 py-4">
+                                                    <input type="checkbox" 
+                                                           name="@(sec.Id)_selected" 
+                                                           value="@rowId" 
+                                                           class="rounded border-gray-300 section-checkbox" 
+                                                           data-section="@sec.Id" />
+                                                </td>
+                                            }
+                                            @foreach (var col in sec.Columns)
+                                            {
+                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                    @(row.TryGetValue(col, out var val) ? val?.ToString() : "")
+                                                </td>
+                                            }
+                                            @if (sec.Editable && !sec.ReadOnly)
+                                            {
+                                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                                    <button class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
+                                                            onclick="editSectionRow('@pageName', '@sec.Id', '@rowId')">
+                                                        <i class="fas fa-edit mr-1"></i>编辑
+                                                    </button>
+                                                    <button class="text-red-600 hover:text-red-900 transition-colors"
+                                                            onclick="deleteSectionRow('@pageName', '@sec.Id', '@rowId')">
+                                                        <i class="fas fa-trash mr-1"></i>删除
+                                                    </button>
+                                                </td>
+                                            }
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        @* 分页信息 *@
+                        <div class="mt-4 text-sm text-gray-600">
+                            共 @total 条记录
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-8 text-gray-500">
+                            <i class="fas fa-inbox text-4xl mb-2"></i>
+                            <p>暂无数据</p>
+                        </div>
+                    }
+                }
+                else if (sec.Type == "form")
+                {
+                    @* 表单区域 *@
+                    <form hx-post="/page/@pageName/section/@sec.Id/save"
+                          hx-target="#section-@sec.Id"
+                          hx-swap="innerHTML"
+                          class="space-y-4">
+                        @Html.AntiForgeryToken()
+                        
+                        @if (sec.Fields != null)
+                        {
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                @foreach (var field in sec.Fields)
+                                {
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">
+                                            @field.Value.Label
+                                            @if (field.Value.Required)
+                                            {
+                                                <span class="text-red-500">*</span>
+                                            }
+                                        </label>
+                                        
+                                        @if (field.Value.Type == "select")
+                                        {
+                                            <select name="@field.Key" 
+                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                @if (field.Value.Options != null)
+                                                {
+                                                    @foreach (var opt in field.Value.Options)
+                                                    {
+                                                        <option value="@opt.Key">@opt.Value</option>
+                                                    }
+                                                }
+                                            </select>
+                                        }
+                                        else if (field.Value.Type == "textarea")
+                                        {
+                                            <textarea name="@field.Key" 
+                                                      rows="3"
+                                                      class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                        }
+                                        else
+                                        {
+                                            <input name="@field.Key" 
+                                                   type="@(field.Value.Type == "number" ? "number" : "text")"
+                                                   class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        }
+                        
+                        <div class="flex gap-3">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save mr-2"></i>保存
+                            </button>
+                            <button type="reset" class="btn btn-outline">
+                                <i class="fas fa-undo mr-2"></i>重置
+                            </button>
+                        </div>
+                    </form>
+                }
+                else if (sec.Type == "card")
+                {
+                    @* 卡片布局 *@
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        @foreach (var row in rowsList)
+                        {
+                            <div class="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                                @foreach (var col in sec.Columns)
+                                {
+                                    if (row.TryGetValue(col, out var val) && val != null)
+                                    {
+                                        <div class="mb-2">
+                                            <span class="text-sm font-medium text-gray-500">@col:</span>
+                                            <span class="text-gray-800 ml-2">@val</span>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function confirmAction(message) {
+            if (!message) return true;
+            return confirm(message);
+        }
+
+        function toggleSectionCheckboxes(sectionId, checked) {
+            document.querySelectorAll(`input[name="${sectionId}_selected"]`).forEach(cb => {
+                cb.checked = checked;
+            });
+        }
+
+        function clearFilters(sectionId) {
+            const form = document.querySelector(`form[hx-target="#section-${sectionId}"]`);
+            if (form) {
+                form.reset();
+                form.submit();
+            }
+        }
+
+        function editSectionRow(pageName, sectionId, rowId) {
+            // TODO: 实现编辑功能
+            alert(`编辑 ${sectionId} - ${rowId}`);
+        }
+
+        function deleteSectionRow(pageName, sectionId, rowId) {
+            if (!confirm('确定要删除这条记录吗？')) return;
+            
+            fetch(`/page/${pageName}/section/${sectionId}/delete`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                },
+                body: `id=${encodeURIComponent(rowId)}`
+            })
+            .then(response => {
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    alert('删除失败');
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('删除失败');
+            });
+        }
+
+        function executePageAction(pageName, actionId) {
+            // TODO: 实现 AJAX 操作
+            alert(`执行操作：${actionId}`);
+        }
+    </script>
+}

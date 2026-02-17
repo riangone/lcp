@@ -35,8 +35,8 @@
     var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
 
     var action = isEdit
-        ? $"/api/{modelName}/{row![def.PrimaryKey]}"
-        : $"/api/{modelName}";
+        ? $"/api/data/{modelName}/{row![def.PrimaryKey]}"
+        : $"/api/data/{modelName}";
 
     var method = isEdit ? "put" : "post";
 }
@@ -60,6 +60,7 @@
             hx-swap="innerHTML"
             hx-on="htmx:afterRequest: closeModalOnSuccess(event)"
             class="space-y-4">
+        @Html.AntiForgeryToken()
 
           @foreach (var f in def.Form!.Fields)
           {
@@ -162,6 +163,14 @@
   document.getElementById('modal-form').addEventListener('click', function(event) {
     if (event.target === this) {
       this.remove();
+    }
+  });
+
+  // 自动添加CSRF令牌到htmx请求
+  document.addEventListener('htmx:configRequest', function(evt) {
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+    if(token) {
+      evt.detail.headers['RequestVerificationToken'] = token;
     }
   });
 </script>
