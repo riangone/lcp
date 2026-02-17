@@ -224,19 +224,25 @@
             const template = document.getElementById(`${tableName}-template`);
             const container = document.getElementById(`${tableName}-rows`);
             
+            if (!template || !container) return;
+
             const clone = template.content.cloneNode(true);
-            const row = clone.querySelector(`.${tableName}-row`);
+            const rowDiv = clone.querySelector(`.${tableName}-row`);
             
-            // 替换索引占位符
-            const html = row.outerHTML.replace(/{index}/g, rowIndex);
-            row.innerHTML = html;
+            if (!rowDiv) return;
             
-            // 重新绑定事件
-            row.querySelectorAll('input').forEach(input => {
-                input.name = input.name.replace('{index}', rowIndex);
+            // 替换所有占位符 {index} 为实际索引
+            rowDiv.innerHTML = rowDiv.innerHTML.replace(/{index}/g, rowIndex);
+            
+            // 设置 input 的 name 属性
+            rowDiv.querySelectorAll('input').forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    input.setAttribute('name', name.replace('{index}', rowIndex));
+                }
             });
             
-            container.appendChild(row);
+            container.appendChild(rowDiv);
             rowIndex++;
         }
 
@@ -260,20 +266,25 @@
         // 保存表单
         document.getElementById('multi-table-form').addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const data = new URLSearchParams();
-            
+
+            // 收集所有表单数据
             for (const [key, value] of formData.entries()) {
-                if (value) {
+                if (key === '__RequestVerificationToken') continue;
+                if (value && value.trim() !== '') {
                     data.append(key, value);
                 }
             }
-            
+
             const id = document.getElementById('edit-id').value;
             const url = id 
-                ? `/page/${pageName}/multi-table/save?id=${id}`
+                ? `/page/${pageName}/multi-table/save?id=${encodeURIComponent(id)}`
                 : `/page/${pageName}/multi-table/save`;
+            
+            console.log('Submitting to:', url);
+            console.log('Data:', data.toString());
             
             try {
                 const response = await fetch(url, {
@@ -285,12 +296,17 @@
                     body: data.toString()
                 });
                 
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || '请求失败');
+                }
+                
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert(result.message);
+                    alert(result.message || '保存成功');
                     if (id) {
-                        loadData(); // 刷新列表
+                        loadData();
                     } else {
                         resetForm();
                         loadData();
@@ -299,6 +315,7 @@
                     alert('错误：' + result.message);
                 }
             } catch (err) {
+                console.error('保存失败:', err);
                 alert('保存失败：' + err.message);
             }
         });

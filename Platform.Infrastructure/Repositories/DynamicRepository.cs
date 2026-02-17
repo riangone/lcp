@@ -654,31 +654,54 @@ public class DynamicRepository
 
     /// <summary>
     /// 提取表的多行数据（用于一对多）
+    /// 支持格式：TableName[0].FieldName, TableName[1].FieldName 等
     /// </summary>
     private List<Dictionary<string, object>> ExtractRowsForTable(IDictionary<string, object> data, string tableName)
     {
         var rows = new List<Dictionary<string, object>>();
-        
-        // 查找形如 "{tableName}[0].{field}" 的键
-        var tableKeys = data.Keys.Where(k => k.StartsWith($"{tableName}[", StringComparison.OrdinalIgnoreCase)).ToList();
-        
-        // 提取行索引
-        var indices = tableKeys.Select(k =>
-        {
-            var match = System.Text.RegularExpressions.Regex.Match(k, $@"\[{tableName}\]\[(\d+)\]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-            return match.Success ? int.Parse(match.Groups[1].Value) : -1;
-        }).Where(i => i >= 0).Distinct().OrderBy(i => i).ToList();
 
-        foreach (var index in indices)
+        // 查找形如 "TableName[0].FieldName" 的键
+        var tableKeys = data.Keys.Where(k => k.StartsWith($"{tableName}[", StringComparison.OrdinalIgnoreCase)).ToList();
+
+        if (!tableKeys.Any())
+            return rows;
+
+        // 提取行索引 - 匹配格式 [0], [1], [2] 等
+        var indices = new HashSet<int>();
+        foreach (var key in tableKeys)
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(key, $@"\[{tableName}\]\[(\d+)\]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            if (match.Success)
+            {
+                indices.Add(int.Parse(match.Groups[1].Value));
+            }
+        }
+
+        foreach (var index in indices.OrderBy(i => i))
         {
             var row = new Dictionary<string, object>();
             foreach (var key in tableKeys)
             {
+                // 匹配格式：TableName[0].FieldName
                 var match = System.Text.RegularExpressions.Regex.Match(key, $@"\[{tableName}\]\[{index}\]\.(.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     var field = match.Groups[1].Value;
-                    row[field] = data[key];
+                    var value = data[key]?.ToString() ?? "";
+                    
+                    // 尝试转换数字类型
+                    if (decimal.TryParse(value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var decimalVal))
+                    {
+                        row[field] = decimalVal;
+                    }
+                    else if (int.TryParse(value, out var intVal))
+                    {
+                        row[field] = intVal;
+                    }
+                    else
+                    {
+                        row[field] = value;
+                    }
                 }
             }
             if (row.Any())
