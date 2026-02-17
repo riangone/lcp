@@ -1,0 +1,139 @@
+# 订单客户管理 - 多表表单完整功能示例
+title: 订单客户管理
+description: 管理订单、客户和员工信息的完整示例
+
+# 数据加载配置
+data_loading:
+  strategy: parallel
+  timeout_ms: 5000
+  
+  sources:
+    # 客户数据
+    - id: customer_data
+      type: table
+      table: Customer
+      primary_key: CustomerId
+      where: "CustomerId = @CustomerId"
+      parameters:
+        - name: CustomerId
+          source: QueryString
+          default: null
+      
+    # 订单数据
+    - id: invoice_data
+      type: table
+      table: Invoice
+      primary_key: InvoiceId
+      where: "InvoiceId = @InvoiceId"
+      parameters:
+        - name: InvoiceId
+          source: QueryString
+      
+    # 订单明细
+    - id: invoice_lines
+      type: table
+      table: InvoiceLine
+      foreign_key: InvoiceId
+      where: "InvoiceId = @InvoiceId"
+      
+    # 员工列表（下拉选项）
+    - id: employees
+      type: table
+      table: Employee
+      load_all: true
+
+# 保存配置
+save_config:
+  transaction:
+    enabled: true
+    isolation_level: ReadCommitted
+    
+  save_order:
+    # 1. 先保存客户
+    - order: 1
+      table: Customer
+      crud_type: upsert
+      match_fields:
+        - CustomerId
+      condition: "data.FirstName != null"
+      output:
+        generated_id: CustomerId
+        
+    # 2. 保存订单（使用客户的 ID）
+    - order: 2
+      table: Invoice
+      crud_type: upsert
+      match_fields:
+        - InvoiceId
+      field_mappings:
+        CustomerId:
+          source: generated_id
+          from_table: Customer
+          field: CustomerId
+          
+    # 3. 同步订单明细
+    - order: 3
+      table: InvoiceLine
+      crud_type: sync
+      match_fields:
+        - InvoiceLineId
+      cascade_delete:
+        enabled: true
+        match_field: InvoiceId
+        source: Invoice.InvoiceId
+
+  # 保存后钩子
+  hooks:
+    after_save:
+      - type: notification
+        template: "订单保存成功，订单号：{{InvoiceId}}"
+
+# 表单区域配置
+form_sections:
+  # 客户信息区域
+  - id: customer_section
+    title: 客户信息
+    type: form
+    table: Customer
+    fields:
+      - CustomerId
+      - FirstName
+      - LastName
+      - Email
+      - Phone
+      - Company
+      
+  # 订单信息区域
+  - id: invoice_section
+    title: 订单信息
+    type: form
+    table: Invoice
+    fields:
+      - InvoiceId
+      - InvoiceDate
+      - Total
+      - BillingAddress
+      - BillingCity
+      - BillingCountry
+      
+  # 订单明细区域
+  - id: invoice_lines_section
+    title: 订单明细
+    type: editable_table
+    table: InvoiceLine
+    columns:
+      - InvoiceLineId
+      - TrackId
+      - Quantity
+      - UnitPrice
+
+# UI 配置
+ui:
+  theme: default
+  layout:
+    - section_id: customer_section
+      columns: 4
+    - section_id: invoice_section
+      columns: 8
+    - section_id: invoice_lines_section
+      columns: 12
