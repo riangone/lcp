@@ -1,5 +1,7 @@
 namespace Platform.Infrastructure.Definitions;
 
+using System.Collections.Generic;
+
 /// <summary>
 /// 页面定义 - 用于在单个页面上管理多个相关表的数据
 /// </summary>
@@ -26,17 +28,32 @@ public class PageDefinition
     public string? MainTable { get; set; }
 
     /// <summary>
-    /// 多表 CRUD 配置 - 单个表单对应多个表
+    /// 多表 CRUD 配置 - 单个表单对应多个表（旧版，保留兼容性）
     /// </summary>
     public MultiTableCrudDefinition? MultiTableCrud { get; set; }
 
     /// <summary>
-    /// 页面区域定义
+    /// 数据加载配置（新版多表支持）
+    /// </summary>
+    public DataLoadingConfig? DataLoading { get; set; }
+
+    /// <summary>
+    /// 保存配置（新版多表支持）
+    /// </summary>
+    public SaveConfig? SaveConfig { get; set; }
+
+    /// <summary>
+    /// 表单区域配置（新版多表支持）
+    /// </summary>
+    public List<FormSectionConfig>? FormSections { get; set; }
+
+    /// <summary>
+    /// 页面区域定义（旧版，保留兼容性）
     /// </summary>
     public List<SectionDefinition> Sections { get; set; } = new();
 
     /// <summary>
-    /// 页面操作定义
+    /// 页面操作定义（旧版，保留兼容性）
     /// </summary>
     public List<ActionDefinition> Actions { get; set; } = new();
 

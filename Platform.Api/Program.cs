@@ -7,6 +7,7 @@ using Platform.Infrastructure.Shell;
 using Platform.Application.Services;
 using Platform.Api.TestScenarios;
 using Scalar.AspNetCore;
+using Platform.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -45,6 +46,10 @@ builder.Services.AddScoped<ModelService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<AuditService>();
 builder.Services.AddSingleton<YamlModelStore>();
+
+// 多表表单服务
+builder.Services.AddScoped<PageDataLoader>();
+builder.Services.AddScoped<MultiTableSaver>();
 
 // AI服务和快照服务
 builder.Services.AddScoped<ISnapshotRepository, SnapshotRepository>();
