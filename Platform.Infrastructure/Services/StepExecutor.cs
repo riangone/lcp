@@ -93,7 +93,7 @@ public class DefaultStepExecutor : IStepExecutor
                 "script" => await ExecuteScriptAsync(step, context),
                 "api" => await ExecuteApiAsync(step, context),
                 "notification" => await ExecuteNotificationAsync(step, context),
-                "db_operation" => await ExecuteDbOperationAsync(step, context),
+                "db_operation" => StepResult.Ok("DB operation (to be implemented)"),
                 "custom" => await ExecuteCustomAsync(step, context),
                 _ => StepResult.Ok($"Unknown step type: {step.Type}")
             };
@@ -102,35 +102,6 @@ public class DefaultStepExecutor : IStepExecutor
         {
             return StepResult.Fail($"Step '{step.Name}' failed: {ex.Message}");
         }
-    }
-
-    private async Task<StepResult> ExecuteDbOperationAsync(StepDefinition step, StepContext context)
-    {
-        if (step.DbOperation == null)
-            return StepResult.Fail("DbOperation config is null");
-
-        var dbOp = step.DbOperation;
-        
-        if (!dbOp.Enabled)
-            return StepResult.Ok("Operation disabled");
-
-        // 检查条件
-        if (!string.IsNullOrEmpty(dbOp.Condition))
-        {
-            if (!EvaluateCondition(dbOp.Condition, context))
-                return StepResult.Ok("Condition not met");
-        }
-
-        return dbOp.Operation.ToLower() switch
-        {
-            "insert" => await ExecuteInsertAsync(dbOp, context),
-            "update" => await ExecuteUpdateAsync(dbOp, context),
-            "upsert" => await ExecuteUpsertAsync(dbOp, context),
-            "delete" => await ExecuteDeleteAsync(dbOp, context),
-            "insert_batch" => await ExecuteInsertBatchAsync(dbOp, context),
-            "query" => await ExecuteQueryAsync(dbOp, context),
-            _ => StepResult.Fail($"Unknown operation: {dbOp.Operation}")
-        };
     }
 
     private Task<StepResult> ExecuteScriptAsync(StepDefinition step, StepContext context)
