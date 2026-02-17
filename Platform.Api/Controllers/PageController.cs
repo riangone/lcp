@@ -84,6 +84,96 @@ public class PageController : Controller
     }
 
     /// <summary>
+    /// 保存多表表单数据
+    /// </summary>
+    [HttpPost("{pageName}/multi-table/save")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> SaveMultiTable(string pageName, [FromForm] Dictionary<string, string> data, string? id = null)
+    {
+        var page = GetPage(pageName);
+        
+        if (page.MultiTableCrud == null)
+            return BadRequest("This page does not support multi-table CRUD.");
+
+        try
+        {
+            // 将 string 字典转换为 object 字典
+            var objData = data.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
+            
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                // 插入
+                var mainId = await _repo.MultiTableInsertAsync(page.MultiTableCrud, objData);
+                return Json(new { success = true, id = mainId, message = "创建成功" });
+            }
+            else
+            {
+                // 更新
+                if (int.TryParse(id, out var mainIdInt))
+                {
+                    await _repo.MultiTableUpdateAsync(page.MultiTableCrud, mainIdInt, objData);
+                    return Json(new { success = true, message = "更新成功" });
+                }
+                return BadRequest("Invalid ID format");
+            }
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// 获取多表数据
+    /// </summary>
+    [HttpGet("{pageName}/multi-table/{id}")]
+    public async Task<IActionResult> GetMultiTable(string pageName, int id)
+    {
+        var page = GetPage(pageName);
+        
+        if (page.MultiTableCrud == null)
+            return BadRequest("This page does not support multi-table CRUD.");
+
+        try
+        {
+            var tableData = await _repo.MultiTableSelectAsync(page.MultiTableCrud, id);
+            return Json(new { success = true, data = tableData });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// 删除多表数据
+    /// </summary>
+    [HttpPost("{pageName}/multi-table/delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteMultiTable(string pageName, [FromForm] string id)
+    {
+        var page = GetPage(pageName);
+        
+        if (page.MultiTableCrud == null)
+            return BadRequest("This page does not support multi-table CRUD.");
+
+        if (int.TryParse(id, out var mainId))
+        {
+            try
+            {
+                await _repo.MultiTableDeleteAsync(page.MultiTableCrud, mainId);
+                return Json(new { success = true, message = "删除成功" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+        
+        return BadRequest("Invalid ID format");
+    }
+
+    /// <summary>
     /// 保存表单区域
     /// </summary>
     [HttpPost("{pageName}/section/{sectionId}/save")]

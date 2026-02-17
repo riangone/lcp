@@ -1,0 +1,101 @@
+# 订单管理页面 - 单个表单对应多个表（订单 + 订单明细）
+title: 订单管理
+description: 管理订单及其明细数据
+
+# 多表 CRUD 配置
+multi_table_crud:
+  # 主表配置
+  main_table:
+    table: Invoice
+    primary_key: InvoiceId
+    
+  # 关联表配置
+  related_tables:
+    - table: InvoiceLine
+      foreign_key: InvoiceId
+      type: many  # many=一对多，one=一对一
+      
+  # 表单字段映射到多个表
+  form_mapping:
+    # 映射到主表的字段
+    Invoice:
+      - field: CustomerId
+        label: 客户 ID
+        type: number
+        required: true
+      - field: InvoiceDate
+        label: 发票日期
+        type: date
+        required: true
+      - field: BillingAddress
+        label: 账单地址
+        type: text
+        max_length: 70
+      - field: BillingCity
+        label: 账单城市
+        type: text
+        max_length: 40
+      - field: BillingCountry
+        label: 账单国家
+        type: text
+        max_length: 40
+      - field: Total
+        label: 总计
+        type: decimal
+        required: true
+        
+    # 映射到关联表的字段（一对多）
+    InvoiceLine:
+      - field: TrackId
+        label: 音轨 ID
+        type: number
+        required: true
+      - field: AlbumId
+        label: 专辑 ID
+        type: number
+      - field: Quantity
+        label: 数量
+        type: number
+        required: true
+        default: 1
+      - field: UnitPrice
+        label: 单价
+        type: decimal
+        required: true
+
+# 列表显示配置
+list:
+  columns:
+    - InvoiceId
+    - CustomerId
+    - InvoiceDate
+    - Total
+  filters:
+    CustomerId:
+      label: 客户 ID
+      type: like
+    BillingCity:
+      label: 城市
+      type: like
+
+# UI 配置
+ui:
+  theme: default
+  # 表单布局
+  form_layout:
+    - section: 订单信息
+      fields:
+        - CustomerId
+        - InvoiceDate
+        - BillingAddress
+        - BillingCity
+        - BillingCountry
+        - Total
+    - section: 订单明细
+      type: grid  # 网格布局，支持多行
+      fields:
+        - TrackId
+        - AlbumId
+        - Quantity
+        - UnitPrice
+      allow_multiple: true  # 允许添加多行

@@ -399,5 +399,298 @@ public class DynamicRepository
         }
     }
 
+    #region Multi-Table CRUD - 多表事务性 CRUD
+
+    /// <summary>
+    /// 多表插入 - 单个表单数据插入到多个表
+    /// </summary>
+    public async Task<int> MultiTableInsertAsync(MultiTableCrudDefinition multiTableDef, IDictionary<string, object> data)
+    {
+        using var transaction = _db.BeginTransaction();
+        try
+        {
+            int mainId = 0;
+
+            // 1. 插入主表
+            if (multiTableDef.MainTable != null)
+            {
+                var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
+                var mainData = FilterDataForTable(data, mainTableFields.Select(f => f.Field).ToList());
+
+                var cols = mainData.Keys.ToList();
+                if (cols.Any())
+                {
+                    var values = string.Join(", ", cols.Select(k => "@" + k));
+                    var sql = $"INSERT INTO {Escape(multiTableDef.MainTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+                    await _db.ExecuteAsync(sql, mainData, transaction);
+
+                    // 获取自增主键
+                    var lastIdSql = "SELECT last_insert_rowid()";
+                    mainId = await _db.ExecuteScalarAsync<int>(lastIdSql, transaction: transaction);
+                }
+            }
+
+            // 2. 插入关联表
+            foreach (var relatedTable in multiTableDef.RelatedTables)
+            {
+                var tableFields = multiTableDef.FormMapping.GetValueOrDefault(relatedTable.Table, new List<FormFieldMappingDefinition>());
+                var fieldNames = tableFields.Select(f => f.Field).ToList();
+
+                if (relatedTable.Type == "many")
+                {
+                    // 一对多：处理多行数据
+                    var rowsData = ExtractRowsForTable(data, relatedTable.Table);
+                    foreach (var rowData in rowsData)
+                    {
+                        var filteredData = FilterDataForTable(rowData, fieldNames);
+                        
+                        // 添加外键
+                        if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
+                        {
+                            filteredData[relatedTable.ForeignKey] = mainId;
+                        }
+
+                        var cols = filteredData.Keys.ToList();
+                        if (cols.Any())
+                        {
+                            var values = string.Join(", ", cols.Select(k => "@" + k));
+                            var sql = $"INSERT INTO {Escape(relatedTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+                            await _db.ExecuteAsync(sql, filteredData, transaction);
+                        }
+                    }
+                }
+                else
+                {
+                    // 一对一：处理单行数据
+                    var filteredData = FilterDataForTable(data, fieldNames);
+                    
+                    // 添加外键
+                    if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
+                    {
+                        filteredData[relatedTable.ForeignKey] = mainId;
+                    }
+
+                    var cols = filteredData.Keys.ToList();
+                    if (cols.Any())
+                    {
+                        var values = string.Join(", ", cols.Select(k => "@" + k));
+                        var sql = $"INSERT INTO {Escape(relatedTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+                        await _db.ExecuteAsync(sql, filteredData, transaction);
+                    }
+                }
+            }
+
+            transaction.Commit();
+            return mainId;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 多表更新 - 更新多个表的数据
+    /// </summary>
+    public async Task MultiTableUpdateAsync(MultiTableCrudDefinition multiTableDef, int mainId, IDictionary<string, object> data)
+    {
+        using var transaction = _db.BeginTransaction();
+        try
+        {
+            // 1. 更新主表
+            if (multiTableDef.MainTable != null)
+            {
+                var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
+                var mainData = FilterDataForTable(data, mainTableFields.Select(f => f.Field).ToList());
+
+                var updateCols = mainData.Keys.Where(k => k != multiTableDef.MainTable.PrimaryKey).ToList();
+                if (updateCols.Any())
+                {
+                    var sets = string.Join(", ", updateCols.Select(k => $"{Escape(k)}=@{k}"));
+                    var sql = $"UPDATE {Escape(multiTableDef.MainTable.Table)} SET {sets} WHERE {Escape(multiTableDef.MainTable.PrimaryKey)}=@_id";
+                    mainData["_id"] = mainId;
+                    await _db.ExecuteAsync(sql, mainData, transaction);
+                }
+            }
+
+            // 2. 更新关联表
+            foreach (var relatedTable in multiTableDef.RelatedTables)
+            {
+                var tableFields = multiTableDef.FormMapping.GetValueOrDefault(relatedTable.Table, new List<FormFieldMappingDefinition>());
+                var fieldNames = tableFields.Select(f => f.Field).ToList();
+
+                if (relatedTable.Type == "many")
+                {
+                    // 一对多：先删除旧的，再插入新的
+                    var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
+                    var deleteSql = $"DELETE FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
+                    await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
+
+                    // 插入新数据
+                    var rowsData = ExtractRowsForTable(data, relatedTable.Table);
+                    foreach (var rowData in rowsData)
+                    {
+                        var filteredData = FilterDataForTable(rowData, fieldNames);
+                        filteredData[fkColumn] = mainId;
+
+                        var cols = filteredData.Keys.ToList();
+                        if (cols.Any())
+                        {
+                            var values = string.Join(", ", cols.Select(k => "@" + k));
+                            var sql = $"INSERT INTO {Escape(relatedTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+                            await _db.ExecuteAsync(sql, filteredData, transaction);
+                        }
+                    }
+                }
+                else
+                {
+                    // 一对一：直接更新
+                    var filteredData = FilterDataForTable(data, fieldNames);
+                    var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
+
+                    var updateCols = filteredData.Keys.ToList();
+                    if (updateCols.Any())
+                    {
+                        var sets = string.Join(", ", updateCols.Select(k => $"{Escape(k)}=@{k}"));
+                        var sql = $"UPDATE {Escape(relatedTable.Table)} SET {sets} WHERE {Escape(fkColumn)}=@_id";
+                        filteredData["_id"] = mainId;
+                        await _db.ExecuteAsync(sql, filteredData, transaction);
+                    }
+                }
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 多表删除 - 删除多个表的关联数据
+    /// </summary>
+    public async Task MultiTableDeleteAsync(MultiTableCrudDefinition multiTableDef, int mainId)
+    {
+        using var transaction = _db.BeginTransaction();
+        try
+        {
+            // 1. 先删除关联表数据（外键约束）
+            foreach (var relatedTable in multiTableDef.RelatedTables)
+            {
+                var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
+                var deleteSql = $"DELETE FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
+                await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
+            }
+
+            // 2. 再删除主表数据
+            if (multiTableDef.MainTable != null)
+            {
+                var deleteSql = $"DELETE FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(multiTableDef.MainTable.PrimaryKey)}=@id";
+                await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
+            }
+
+            transaction.Commit();
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    /// <summary>
+    /// 获取多表数据
+    /// </summary>
+    public async Task<Dictionary<string, List<Dictionary<string, object>>>> MultiTableSelectAsync(MultiTableCrudDefinition multiTableDef, int mainId)
+    {
+        var result = new Dictionary<string, List<Dictionary<string, object>>>();
+
+        // 1. 获取主表数据
+        if (multiTableDef.MainTable != null)
+        {
+            var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
+            var cols = mainTableFields.Any() 
+                ? string.Join(", ", mainTableFields.Select(f => Escape(f.Field)))
+                : "*";
+
+            var sql = $"SELECT {cols} FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(multiTableDef.MainTable.PrimaryKey)}=@id";
+            var row = await _db.QueryFirstOrDefaultAsync(sql, new { id = mainId });
+            
+            if (row != null)
+            {
+                result[multiTableDef.MainTable.Table] = new List<Dictionary<string, object>> { ((IDictionary<string, object>)row).ToDictionary(k => k.Key, v => v.Value) };
+            }
+        }
+
+        // 2. 获取关联表数据
+        foreach (var relatedTable in multiTableDef.RelatedTables)
+        {
+            var tableFields = multiTableDef.FormMapping.GetValueOrDefault(relatedTable.Table, new List<FormFieldMappingDefinition>());
+            var cols = tableFields.Any()
+                ? string.Join(", ", tableFields.Select(f => Escape(f.Field)))
+                : "*";
+
+            var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
+            var sql = $"SELECT {cols} FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
+            var rows = await _db.QueryAsync(sql, new { id = mainId });
+            
+            result[relatedTable.Table] = rows.Select(r => ((IDictionary<string, object>)r).ToDictionary(k => k.Key, v => v.Value)).ToList();
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 为表过滤数据
+    /// </summary>
+    private IDictionary<string, object> FilterDataForTable(IDictionary<string, object> data, List<string> fields)
+    {
+        return data.Where(kvp => fields.Contains(kvp.Key, StringComparer.OrdinalIgnoreCase))
+                   .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    }
+
+    /// <summary>
+    /// 提取表的多行数据（用于一对多）
+    /// </summary>
+    private List<Dictionary<string, object>> ExtractRowsForTable(IDictionary<string, object> data, string tableName)
+    {
+        var rows = new List<Dictionary<string, object>>();
+        
+        // 查找形如 "{tableName}[0].{field}" 的键
+        var tableKeys = data.Keys.Where(k => k.StartsWith($"{tableName}[", StringComparison.OrdinalIgnoreCase)).ToList();
+        
+        // 提取行索引
+        var indices = tableKeys.Select(k =>
+        {
+            var match = System.Text.RegularExpressions.Regex.Match(k, $@"\[{tableName}\]\[(\d+)\]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            return match.Success ? int.Parse(match.Groups[1].Value) : -1;
+        }).Where(i => i >= 0).Distinct().OrderBy(i => i).ToList();
+
+        foreach (var index in indices)
+        {
+            var row = new Dictionary<string, object>();
+            foreach (var key in tableKeys)
+            {
+                var match = System.Text.RegularExpressions.Regex.Match(key, $@"\[{tableName}\]\[{index}\]\.(.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                if (match.Success)
+                {
+                    var field = match.Groups[1].Value;
+                    row[field] = data[key];
+                }
+            }
+            if (row.Any())
+            {
+                rows.Add(row);
+            }
+        }
+
+        return rows;
+    }
+
+    #endregion
+
     #endregion
 }

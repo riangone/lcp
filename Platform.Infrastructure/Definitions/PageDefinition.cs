@@ -26,6 +26,11 @@ public class PageDefinition
     public string? MainTable { get; set; }
 
     /// <summary>
+    /// 多表 CRUD 配置 - 单个表单对应多个表
+    /// </summary>
+    public MultiTableCrudDefinition? MultiTableCrud { get; set; }
+
+    /// <summary>
     /// 页面区域定义
     /// </summary>
     public List<SectionDefinition> Sections { get; set; } = new();
@@ -39,6 +44,94 @@ public class PageDefinition
     /// UI 定义
     /// </summary>
     public PageUiDefinition? Ui { get; set; }
+}
+
+/// <summary>
+/// 多表 CRUD 定义 - 单个表单对应多个表的 CRUD
+/// </summary>
+public class MultiTableCrudDefinition
+{
+    /// <summary>
+    /// 主表配置
+    /// </summary>
+    public TableMappingDefinition? MainTable { get; set; }
+
+    /// <summary>
+    /// 关联表配置
+    /// </summary>
+    public List<TableMappingDefinition> RelatedTables { get; set; } = new();
+
+    /// <summary>
+    /// 表单字段映射 - 键为表名，值为该表的字段列表
+    /// </summary>
+    public Dictionary<string, List<FormFieldMappingDefinition>> FormMapping { get; set; } = new();
+}
+
+/// <summary>
+/// 表映射定义
+/// </summary>
+public class TableMappingDefinition
+{
+    /// <summary>
+    /// 表名
+    /// </summary>
+    public string Table { get; set; } = "";
+
+    /// <summary>
+    /// 主键字段
+    /// </summary>
+    public string? PrimaryKey { get; set; }
+
+    /// <summary>
+    /// 外键字段（用于关联主表）
+    /// </summary>
+    public string? ForeignKey { get; set; }
+
+    /// <summary>
+    /// 关联类型：many(一对多) / one(一对一)
+    /// </summary>
+    public string Type { get; set; } = "many";
+}
+
+/// <summary>
+/// 表单字段映射定义
+/// </summary>
+public class FormFieldMappingDefinition
+{
+    /// <summary>
+    /// 字段名
+    /// </summary>
+    public string Field { get; set; } = "";
+
+    /// <summary>
+    /// 显示标签
+    /// </summary>
+    public string Label { get; set; } = "";
+
+    /// <summary>
+    /// 字段类型：text/number/decimal/date/select 等
+    /// </summary>
+    public string Type { get; set; } = "text";
+
+    /// <summary>
+    /// 是否必填
+    /// </summary>
+    public bool Required { get; set; }
+
+    /// <summary>
+    /// 默认值
+    /// </summary>
+    public string? Default { get; set; }
+
+    /// <summary>
+    /// 最大长度
+    /// </summary>
+    public int? MaxLength { get; set; }
+
+    /// <summary>
+    /// 选项（用于 select 类型）
+    /// </summary>
+    public Dictionary<string, string>? Options { get; set; }
 }
 
 /// <summary>
