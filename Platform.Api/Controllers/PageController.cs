@@ -18,31 +18,35 @@ public class PageController : Controller
     }
 
     /// <summary>
-    /// 渲染页面
+    /// 渲染多表 CRUD 页面
     /// </summary>
     [HttpGet("{pageName}")]
     public async Task<IActionResult> Index(string pageName)
     {
         var page = GetPage(pageName);
-        
-        // 获取过滤器参数
+
+        // 如果是多表 CRUD 页面，使用专用视图
+        if (page.MultiTableCrud != null)
+        {
+            ViewData["PageDef"] = page;
+            ViewData["PageName"] = pageName;
+            ViewData["Lang"] = Request.Query["lang"].FirstOrDefault() ?? "en";
+            return View("~/Views/Ui/MultiTableForm.cshtml");
+        }
+
+        // 否则使用普通页面视图
         var filters = Request.Query
             .ToDictionary(k => k.Key, v => v.Value.ToString());
 
-        // 获取主表 ID（如果有）
         var mainTableId = filters.TryGetValue("mainTableId", out var mtid) ? mtid : null;
-
-        // 获取所有区域的数据
         var pageData = await _repo.GetPageDataAsync(page, filters, mainTableId);
 
         ViewData["PageDef"] = page;
         ViewData["PageName"] = pageName;
         ViewData["Lang"] = Request.Query["lang"].FirstOrDefault() ?? "en";
 
-        // 检测是否为 htmx 请求
         if (Request.Headers["HX-Request"] == "true")
         {
-            // 返回部分视图
             return PartialView("~/Views/Ui/PageView.cshtml", pageData);
         }
 
@@ -138,6 +142,40 @@ public class PageController : Controller
         {
             var tableData = await _repo.MultiTableSelectAsync(page.MultiTableCrud, id);
             return Json(new { success = true, data = tableData });
+        }
+        catch (Exception ex)
+        {
+            return Json(new { success = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>
+    /// 获取多表列表数据
+    /// </summary>
+    [HttpGet("{pageName}/multi-table-data")]
+    public async Task<IActionResult> GetMultiTableData(string pageName)
+    {
+        var page = GetPage(pageName);
+        
+        if (page.MultiTableCrud == null)
+            return BadRequest("This page does not support multi-table CRUD.");
+
+        try
+        {
+            // 这里简化处理，只返回主表数据
+            var mainTable = page.MultiTableCrud.MainTable;
+            if (mainTable == null)
+                return Json(new { success = true, data = new List<object>() });
+
+            var sql = $"SELECT * FROM {mainTable.Table} ORDER BY {mainTable.PrimaryKey} DESC LIMIT 100";
+            var rows = await _repo.GetAllAsync(new ModelDefinition 
+            { 
+                Table = mainTable.Table, 
+                PrimaryKey = mainTable.PrimaryKey ?? "Id",
+                Properties = new Dictionary<string, PropertyDefinition>()
+            });
+
+            return Json(new { success = true, data = rows });
         }
         catch (Exception ex)
         {

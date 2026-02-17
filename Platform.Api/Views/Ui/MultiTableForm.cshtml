@@ -1,0 +1,427 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var pageDef = (PageDefinition)ViewData["PageDef"]!;
+    var pageName = (string)ViewData["PageName"]!;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    
+    var title = pageDef.Title ?? pageName;
+    ViewData["Title"] = $"{title} - Low Code Platform";
+    ViewData["ActivePage"] = "Page";
+    ViewData["Lang"] = currentLang;
+}
+
+<div class="container mx-auto px-4 py-8">
+    @* 页面标题 *@
+    <div class="mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
+        @if (!string.IsNullOrEmpty(pageDef.Description))
+        {
+            <p class="text-gray-600">@pageDef.Description</p>
+        }
+    </div>
+
+    @* 多表 CRUD 表单 *@
+    @if (pageDef.MultiTableCrud != null)
+    {
+        var mainTable = pageDef.MultiTableCrud.MainTable;
+        var relatedTables = pageDef.MultiTableCrud.RelatedTables;
+        var formMapping = pageDef.MultiTableCrud.FormMapping;
+
+        <div class="card">
+            <div class="card-header border-b border-gray-200 pb-4 mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <i class="fas fa-edit mr-2"></i>@(mainTable?.Table ?? "Form")
+                </h2>
+            </div>
+
+            <form id="multi-table-form" class="space-y-6">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="edit-id" name="id" value="" />
+
+                @* 主表字段 *@
+                @if (mainTable != null && formMapping.ContainsKey(mainTable.Table))
+                {
+                    var mainFields = formMapping[mainTable.Table];
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @foreach (var field in mainFields)
+                        {
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                    @field.Label
+                                    @if (field.Required)
+                                    {
+                                        <span class="text-red-500">*</span>
+                                    }
+                                </label>
+                                
+                                @if (field.Type == "date")
+                                {
+                                    <input type="date" name="@field.Field" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                           @(field.Required ? "required" : "") />
+                                }
+                                else if (field.Type == "number" || field.Type == "decimal")
+                                {
+                                    <input type="number" step="0.01" name="@field.Field" 
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                           @(field.Required ? "required" : "") />
+                                }
+                                else if (field.Type == "select" && field.Options != null)
+                                {
+                                    <select name="@field.Field" 
+                                            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                            @(field.Required ? "required" : "")>
+                                        <option value="">请选择</option>
+                                        @foreach (var opt in field.Options)
+                                        {
+                                            <option value="@opt.Key">@opt.Value</option>
+                                        }
+                                    </select>
+                                }
+                                else
+                                {
+                                    <input type="text" name="@field.Field" maxlength="@(field.MaxLength ?? 100)"
+                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                           @(field.Required ? "required" : "") />
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+
+                @* 关联表字段（一对多） *@
+                @foreach (var relatedTable in relatedTables.Where(t => t.Type == "many"))
+                {
+                    if (formMapping.ContainsKey(relatedTable.Table))
+                    {
+                        var tableFields = formMapping[relatedTable.Table];
+                        var tableName = relatedTable.Table;
+                        
+                        <div class="border-t border-gray-200 pt-6">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">
+                                    <i class="fas fa-list mr-2"></i>@relatedTable.Table
+                                </h3>
+                                <button type="button" onclick="addRow('@tableName')" 
+                                        class="btn btn-success btn-sm">
+                                    <i class="fas fa-plus mr-1"></i>添加明细
+                                </button>
+                            </div>
+                            
+                            <div id="@tableName-rows" class="space-y-4">
+                                @* 动态添加的行将放在这里 *@
+                            </div>
+                            
+                            @* 行模板（隐藏） *@
+                            <template id="@tableName-template">
+                                <div class="@(tableName)-row border rounded-lg p-4 bg-gray-50 relative">
+                                    <button type="button" onclick="removeRow(this)" 
+                                            class="absolute top-2 right-2 text-red-500 hover:text-red-700">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                                        @foreach (var field in tableFields)
+                                        {
+                                            <div>
+                                                <label class="block text-sm font-medium text-gray-700 mb-1">
+                                                    @field.Label
+                                                    @if (field.Required)
+                                                    {
+                                                        <span class="text-red-500">*</span>
+                                                    }
+                                                </label>
+                                                
+                                                @if (field.Type == "number" || field.Type == "decimal")
+                                                {
+                                                    <input type="number" step="0.01" 
+                                                           name="@(tableName)[{index}].@(field.Field)" 
+                                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                           @(field.Required ? "required" : "") 
+                                                           value="@(field.Default ?? "")" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" 
+                                                           name="@(tableName)[{index}].@(field.Field)" 
+                                                           class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                                           @(field.Required ? "required" : "") 
+                                                           value="@(field.Default ?? "")" />
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    }
+                }
+
+                @* 表单按钮 *@
+                <div class="flex gap-3 pt-6 border-t border-gray-200">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save mr-2"></i>保存
+                    </button>
+                    <button type="button" onclick="resetForm()" class="btn btn-outline">
+                        <i class="fas fa-undo mr-2"></i>重置
+                    </button>
+                    <button type="button" onclick="deleteCurrent()" id="delete-btn" class="btn btn-danger hidden">
+                        <i class="fas fa-trash mr-2"></i>删除
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        @* 数据列表 *@
+        <div class="card mt-6">
+            <div class="card-header border-b border-gray-200 pb-4 mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <i class="fas fa-list mr-2"></i>数据列表
+                </h2>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="table w-full">
+                    <thead>
+                        <tr class="bg-gray-50">
+                            @if (mainTable != null)
+                            {
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">@mainTable.PrimaryKey</th>
+                            }
+                            @if (formMapping.ContainsKey(mainTable?.Table ?? ""))
+                            {
+                                foreach (var field in formMapping[mainTable!.Table].Take(5))
+                                {
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">@field.Label</th>
+                                }
+                            }
+                            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-list-body" class="bg-white divide-y divide-gray-200">
+                        @* 数据将通过 JS 加载 *@
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="text-center py-12">
+            <i class="fas fa-exclamation-circle text-6xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600">此页面未配置多表 CRUD</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        let rowIndex = 0;
+        let currentEditId = null;
+        const pageName = '@pageName';
+
+        // 添加新行
+        function addRow(tableName) {
+            const template = document.getElementById(`${tableName}-template`);
+            const container = document.getElementById(`${tableName}-rows`);
+            
+            const clone = template.content.cloneNode(true);
+            const row = clone.querySelector(`.${tableName}-row`);
+            
+            // 替换索引占位符
+            const html = row.outerHTML.replace(/{index}/g, rowIndex);
+            row.innerHTML = html;
+            
+            // 重新绑定事件
+            row.querySelectorAll('input').forEach(input => {
+                input.name = input.name.replace('{index}', rowIndex);
+            });
+            
+            container.appendChild(row);
+            rowIndex++;
+        }
+
+        // 删除行
+        function removeRow(btn) {
+            const row = btn.closest(`.${btn.className.split(' ').find(c => c.endsWith('-row'))}`);
+            if (row) {
+                row.remove();
+            }
+        }
+
+        // 重置表单
+        function resetForm() {
+            document.getElementById('multi-table-form').reset();
+            document.querySelectorAll('[id$="-rows"]').forEach(el => el.innerHTML = '');
+            document.getElementById('edit-id').value = '';
+            currentEditId = null;
+            document.getElementById('delete-btn').classList.add('hidden');
+        }
+
+        // 保存表单
+        document.getElementById('multi-table-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = new URLSearchParams();
+            
+            for (const [key, value] of formData.entries()) {
+                if (value) {
+                    data.append(key, value);
+                }
+            }
+            
+            const id = document.getElementById('edit-id').value;
+            const url = id 
+                ? `/page/${pageName}/multi-table/save?id=${id}`
+                : `/page/${pageName}/multi-table/save`;
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: data.toString()
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert(result.message);
+                    if (id) {
+                        loadData(); // 刷新列表
+                    } else {
+                        resetForm();
+                        loadData();
+                    }
+                } else {
+                    alert('错误：' + result.message);
+                }
+            } catch (err) {
+                alert('保存失败：' + err.message);
+            }
+        });
+
+        // 加载数据列表
+        async function loadData() {
+            try {
+                const response = await fetch(`/page/${pageName}/multi-table-data`);
+                const result = await response.json();
+                
+                const tbody = document.getElementById('data-list-body');
+                tbody.innerHTML = '';
+                
+                if (result.success && result.data && result.data.length > 0) {
+                    result.data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.className = 'hover:bg-gray-50 transition-colors';
+                        tr.innerHTML = `
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.id || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.customerId || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.invoiceDate || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${item.total || ''}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editItem(${item.id})">
+                                    <i class="fas fa-edit"></i> 编辑
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" onclick="deleteItem(${item.id})">
+                                    <i class="fas fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8 text-gray-500">暂无数据</td></tr>';
+                }
+            } catch (err) {
+                console.error('加载数据失败:', err);
+            }
+        }
+
+        // 编辑项目
+        async function editItem(id) {
+            try {
+                const response = await fetch(`/page/${pageName}/multi-table/${id}`);
+                const result = await response.json();
+                
+                if (result.success) {
+                    const data = result.data;
+                    const mainData = data.Invoice?.[0] || {};
+                    
+                    // 填充主表字段
+                    document.getElementById('edit-id').value = mainData.InvoiceId || id;
+                    for (const [key, value] of Object.entries(mainData)) {
+                        const input = document.querySelector(`input[name="${key}"]`);
+                        if (input) {
+                            input.value = value || '';
+                        }
+                    }
+                    
+                    // 填充关联表数据
+                    for (const [tableName, rows] of Object.entries(data)) {
+                        if (tableName !== 'Invoice' && Array.isArray(rows)) {
+                            const container = document.getElementById(`${tableName}-rows`);
+                            if (container) {
+                                container.innerHTML = '';
+                                rows.forEach(row => {
+                                    addRow(tableName);
+                                    // 填充行数据...
+                                });
+                            }
+                        }
+                    }
+                    
+                    currentEditId = id;
+                    document.getElementById('delete-btn').classList.remove('hidden');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            } catch (err) {
+                alert('加载数据失败：' + err.message);
+            }
+        }
+
+        // 删除项目
+        async function deleteItem(id) {
+            if (!confirm('确定要删除这条记录吗？')) return;
+            
+            try {
+                const formData = new FormData();
+                formData.append('id', id);
+                
+                const response = await fetch(`/page/${pageName}/multi-table/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                    },
+                    body: formData
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('删除成功');
+                    loadData();
+                    if (currentEditId === id) {
+                        resetForm();
+                    }
+                } else {
+                    alert('删除失败：' + result.message);
+                }
+            } catch (err) {
+                alert('删除失败：' + err.message);
+            }
+        }
+
+        // 删除当前编辑的项目
+        function deleteCurrent() {
+            if (currentEditId) {
+                deleteItem(currentEditId);
+            }
+        }
+
+        // 页面加载时加载数据
+        loadData();
+    </script>
+}
