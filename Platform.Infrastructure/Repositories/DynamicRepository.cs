@@ -965,16 +965,16 @@ public class DynamicRepository
         var rows = new List<Dictionary<string, object>>();
 
         // 查找形如 "TableName[0].FieldName" 的键
-        var tableKeys = data.Keys.Where(k => k.StartsWith($"{tableName}[", StringComparison.OrdinalIgnoreCase)).ToList();
+        var tableKeys = data.Keys.Where(k => k.StartsWith(tableName + "[", StringComparison.OrdinalIgnoreCase)).ToList();
 
         if (!tableKeys.Any())
             return rows;
 
-        // 提取行索引 - 匹配格式 [0], [1], [2] 等
+        // 提取行索引
         var indices = new HashSet<int>();
         foreach (var key in tableKeys)
         {
-            var match = System.Text.RegularExpressions.Regex.Match(key, $@"\[{tableName}\]\[(\d+)\]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+            var match = System.Text.RegularExpressions.Regex.Match(key, System.Text.RegularExpressions.Regex.Escape(tableName) + @"\[(\d+)\]", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
             if (match.Success)
             {
                 indices.Add(int.Parse(match.Groups[1].Value));
@@ -986,14 +986,12 @@ public class DynamicRepository
             var row = new Dictionary<string, object>();
             foreach (var key in tableKeys)
             {
-                // 匹配格式：TableName[0].FieldName
-                var match = System.Text.RegularExpressions.Regex.Match(key, $@"\[{tableName}\]\[{index}\]\.(.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                var match = System.Text.RegularExpressions.Regex.Match(key, System.Text.RegularExpressions.Regex.Escape(tableName) + $@"\[{index}\]\.(.+)", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
                 if (match.Success)
                 {
                     var field = match.Groups[1].Value;
                     var value = data[key]?.ToString() ?? "";
                     
-                    // 尝试转换数字类型
                     if (decimal.TryParse(value, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out var decimalVal))
                     {
                         row[field] = decimalVal;

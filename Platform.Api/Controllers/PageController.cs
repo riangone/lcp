@@ -92,7 +92,7 @@ public class PageController : Controller
     /// 保存多表表单数据
     /// </summary>
     [HttpPost("{pageName}/multi-table/save")]
-    public async Task<IActionResult> SaveMultiTable(string pageName, [FromForm] Dictionary<string, string> data, string? id = null)
+    public async Task<IActionResult> SaveMultiTable(string pageName, string? id = null)
     {
         var page = GetPage(pageName);
         
@@ -101,46 +101,48 @@ public class PageController : Controller
 
         try
         {
-            // 将 string 字典转换为 object 字典
-            var objData = data.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
+            // 从 Request.Form 直接读取所有数据，保留原始键名
+            var data = Request.Form
+                .SelectMany(kvp => kvp.Value, (kvp, val) => new { Key = kvp.Key, Value = val })
+                .ToDictionary(x => x.Key, x => (object)x.Value);
             
             // 执行 before_save 步骤
             var stepContext = new StepContext
             {
                 ActionType = string.IsNullOrWhiteSpace(id) ? "create" : "update",
-                MainData = objData,
+                MainData = data,
                 UserId = User.Identity?.Name
             };
-            
+
             var beforeSteps = page.MultiTableCrud.Steps
                 .Where(s => s.Trigger == "before_save" || s.Trigger == "on_validate")
                 .OrderBy(s => s.Id)
                 .ToList();
-                
+
             foreach (var step in beforeSteps)
             {
                 var executor = new DefaultStepExecutor();
                 var result = await executor.ExecuteAsync(step, stepContext);
-                
+
                 if (!result.Success && step.StopOnError)
                 {
                     return Json(new { success = false, message = result.Message });
                 }
             }
-            
+
             int mainId;
-            
+
             if (string.IsNullOrWhiteSpace(id))
             {
                 // 插入
-                mainId = await _repo.MultiTableInsertAsync(page.MultiTableCrud, objData);
+                mainId = await _repo.MultiTableInsertAsync(page.MultiTableCrud, data);
             }
             else
             {
                 // 更新
                 if (int.TryParse(id, out var mainIdInt))
                 {
-                    await _repo.MultiTableUpdateAsync(page.MultiTableCrud, mainIdInt, objData);
+                    await _repo.MultiTableUpdateAsync(page.MultiTableCrud, mainIdInt, data);
                     mainId = mainIdInt;
                 }
                 else
