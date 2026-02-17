@@ -1,40 +1,23 @@
-# 订单管理页面 - 单个表单对应多个表（订单 + 订单明细）
+# 订单管理页面 - 使用多表 CRUD + steps 扩展
 title: 订单管理
 description: 管理订单及其明细数据
 
-# 多表 CRUD 配置
+# 多表 CRUD 配置 - 定义基本的数据结构
 multi_table_crud:
-  # 主表配置
   main_table:
     table: Invoice
     primary_key: InvoiceId
     
-  # 关联表配置
   related_tables:
     - table: InvoiceLine
       foreign_key: InvoiceId
-      type: many  # many=一对多，one=一对一
+      type: many
       
-  # 事务配置
   transaction:
     enabled: true
-    isolation_level: ReadCommitted  # ReadUncommitted, ReadCommitted, RepeatableRead, Serializable
-    timeout_seconds: 30
+    isolation_level: ReadCommitted
     
-  # 级联操作配置
-  cascade:
-    on_delete: true   # 删除主表记录时级联删除关联表
-    on_update: false  # 更新主表主键时级联更新（通常不需要）
-    
-  # 更新操作配置（暂时使用默认逻辑）
-  update_operations: null
-
-  # 处理步骤配置（暂时禁用）
-  steps: []
-    
-  # 表单字段映射到多个表
   form_mapping:
-    # 映射到主表的字段
     Invoice:
       - field: CustomerId
         label: 客户 ID
@@ -61,15 +44,11 @@ multi_table_crud:
         type: decimal
         required: true
         
-    # 映射到关联表的字段（一对多）
     InvoiceLine:
       - field: TrackId
         label: 音轨 ID
         type: number
         required: true
-      - field: AlbumId
-        label: 专辑 ID
-        type: number
       - field: Quantity
         label: 数量
         type: number
@@ -79,6 +58,45 @@ multi_table_crud:
         label: 单价
         type: decimal
         required: true
+
+# 处理步骤配置 - 扩展验证、通知等功能
+steps:
+  # 步骤 1: 保存前验证
+  - id: validate_total
+    name: 验证订单总额
+    trigger: before_save
+    type: script
+    stop_on_error: true
+    script:
+      language: csharp
+      content: |
+        // 验证订单总额是否为正数
+        if (data.TryGetValue("Total", out var totalObj) && 
+            decimal.TryParse(totalObj?.ToString(), out var total))
+        {
+          if (total <= 0) {
+            throw new Exception("订单总额必须大于 0");
+          }
+        }
+        return true;
+
+  # 步骤 2: 保存后发送通知
+  - id: send_notification
+    name: 发送订单通知
+    trigger: after_save
+    type: notification
+    stop_on_error: false
+    notification:
+      type: email
+      recipients:
+        - admin@example.com
+      subject: "新订单通知 - {{LastInsertedId}}"
+      message_template: |
+        新订单已创建：
+        订单 ID: {{LastInsertedId}}
+        客户 ID: {{CustomerId}}
+        订单日期：{{InvoiceDate}}
+        订单总额：{{Total}}
 
 # 列表显示配置
 list:
@@ -94,25 +112,3 @@ list:
     BillingCity:
       label: 城市
       type: like
-
-# UI 配置
-ui:
-  theme: default
-  # 表单布局
-  form_layout:
-    - section: 订单信息
-      fields:
-        - CustomerId
-        - InvoiceDate
-        - BillingAddress
-        - BillingCity
-        - BillingCountry
-        - Total
-    - section: 订单明细
-      type: grid  # 网格布局，支持多行
-      fields:
-        - TrackId
-        - AlbumId
-        - Quantity
-        - UnitPrice
-      allow_multiple: true  # 允许添加多行

@@ -213,12 +213,12 @@ public class StepDefinition
     public string Name { get; set; } = "";
 
     /// <summary>
-    /// 触发时机：before_save, after_save, before_delete, after_delete, on_validate
+    /// 触发时机：before_save, after_save, before_delete, after_delete, on_validate, on_save
     /// </summary>
     public string Trigger { get; set; } = "before_save";
 
     /// <summary>
-    /// 步骤类型：script, api, notification, custom
+    /// 步骤类型：script, api, notification, db_operation, custom
     /// </summary>
     public string Type { get; set; } = "script";
 
@@ -226,6 +226,11 @@ public class StepDefinition
     /// 是否停止后续步骤（如果失败）
     /// </summary>
     public bool StopOnError { get; set; } = true;
+
+    /// <summary>
+    /// 数据库操作配置（当 Type=db_operation 时）
+    /// </summary>
+    public DbOperationConfig? DbOperation { get; set; }
 
     /// <summary>
     /// 脚本配置（当 Type=script 时）
@@ -246,6 +251,42 @@ public class StepDefinition
     /// 自定义配置
     /// </summary>
     public Dictionary<string, object>? Custom { get; set; }
+}
+
+/// <summary>
+/// 数据库操作配置
+/// </summary>
+public class DbOperationConfig
+{
+    /// <summary>
+    /// 操作类型：insert, update, upsert, delete, query
+    /// </summary>
+    public string Operation { get; set; } = "insert";
+
+    /// <summary>
+    /// 目标表名
+    /// </summary>
+    public string Table { get; set; } = "";
+
+    /// <summary>
+    /// 匹配条件（用于 update/delete）
+    /// </summary>
+    public List<MatchCondition> MatchConditions { get; set; } = new();
+
+    /// <summary>
+    /// 字段映射配置
+    /// </summary>
+    public List<FieldUpdateConfig> Fields { get; set; } = new();
+
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>
+    /// 条件表达式（C# 语法，满足条件才执行）
+    /// </summary>
+    public string? Condition { get; set; }
 }
 
 /// <summary>
