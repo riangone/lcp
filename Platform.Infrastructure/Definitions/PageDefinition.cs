@@ -80,6 +80,121 @@ public class MultiTableCrudDefinition
     /// 处理步骤配置
     /// </summary>
     public List<StepDefinition> Steps { get; set; } = new();
+
+    /// <summary>
+    /// 更新操作配置
+    /// </summary>
+    public UpdateOperationsDefinition? UpdateOperations { get; set; }
+}
+
+/// <summary>
+/// 更新操作配置
+/// </summary>
+public class UpdateOperationsDefinition
+{
+    /// <summary>
+    /// 更新策略：overwrite, merge, append
+    /// overwrite=覆盖所有，merge=合并，append=仅追加
+    /// </summary>
+    public string Strategy { get; set; } = "overwrite";
+
+    /// <summary>
+    /// 表更新配置列表
+    /// </summary>
+    public List<TableUpdateConfig> Tables { get; set; } = new();
+}
+
+/// <summary>
+/// 表更新配置
+/// </summary>
+public class TableUpdateConfig
+{
+    /// <summary>
+    /// 表名
+    /// </summary>
+    public string Table { get; set; } = "";
+
+    /// <summary>
+    /// 更新类型：upsert, update_only, insert_only
+    /// </summary>
+    public string Type { get; set; } = "upsert";
+
+    /// <summary>
+    /// 匹配条件（用于查找要更新的记录）
+    /// </summary>
+    public List<MatchCondition> MatchConditions { get; set; } = new();
+
+    /// <summary>
+    /// 字段映射配置
+    /// </summary>
+    public List<FieldUpdateConfig> Fields { get; set; } = new();
+
+    /// <summary>
+    /// 是否启用
+    /// </summary>
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>
+    /// 条件表达式（C# 语法）
+    /// </summary>
+    public string? Condition { get; set; }
+}
+
+/// <summary>
+/// 匹配条件
+/// </summary>
+public class MatchCondition
+{
+    /// <summary>
+    /// 字段名
+    /// </summary>
+    public string Field { get; set; } = "";
+
+    /// <summary>
+    /// 操作符：=, !=, >, <, >=, <=, like, in
+    /// </summary>
+    public string Operator { get; set; } = "=";
+
+    /// <summary>
+    /// 值或表单字段引用（@FieldName）
+    /// </summary>
+    public string? Value { get; set; }
+}
+
+/// <summary>
+/// 字段更新配置
+/// </summary>
+public class FieldUpdateConfig
+{
+    /// <summary>
+    /// 目标字段名
+    /// </summary>
+    public string TargetField { get; set; } = "";
+
+    /// <summary>
+    /// 源：form（表单字段）, expression（表达式）, value（固定值）
+    /// </summary>
+    public string SourceType { get; set; } = "form";
+
+    /// <summary>
+    /// 源字段名（当 SourceType=form 时）
+    /// </summary>
+    public string? SourceField { get; set; }
+
+    /// <summary>
+    /// 固定值（当 SourceType=value 时）
+    /// </summary>
+    public object? Value { get; set; }
+
+    /// <summary>
+    /// 表达式（当 SourceType=expression 时）
+    /// </summary>
+    public string? Expression { get; set; }
+
+    /// <summary>
+    /// 转换函数：upper, lower, trim, date, number 等
+    /// </summary>
+    public string? Transform { get; set; }
 }
 
 /// <summary>

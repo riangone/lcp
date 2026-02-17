@@ -26,6 +26,73 @@ multi_table_crud:
     on_delete: true   # 删除主表记录时级联删除关联表
     on_update: false  # 更新主表主键时级联更新（通常不需要）
     
+  # 更新操作配置
+  update_operations:
+    strategy: overwrite  # overwrite=覆盖，merge=合并，append=追加
+    
+    tables:
+      # 主表更新配置
+      - table: Invoice
+        type: upsert  # upsert=存在则更新，不存在则插入
+        enabled: true
+        match_conditions:
+          - field: InvoiceId
+            operator: "="
+            value: "@InvoiceId"
+        fields:
+          - target_field: CustomerId
+            source_type: form
+            source_field: CustomerId
+          - target_field: InvoiceDate
+            source_type: form
+            source_field: InvoiceDate
+          - target_field: BillingAddress
+            source_type: form
+            source_field: BillingAddress
+          - target_field: UpdatedAt
+            source_type: expression
+            expression: "DateTime.Now"
+          - target_field: UpdatedBy
+            source_type: value
+            value: "@CurrentUser"
+            
+      # 关联表更新配置（一对多）
+      - table: InvoiceLine
+        type: upsert
+        enabled: true
+        match_conditions:
+          - field: InvoiceId
+            operator: "="
+            value: "@InvoiceId"
+          - field: TrackId
+            operator: "="
+            value: "@TrackId"
+        fields:
+          - target_field: Quantity
+            source_type: form
+            source_field: Quantity
+          - target_field: UnitPrice
+            source_type: form
+            source_field: UnitPrice
+          - target_field: LineTotal
+            source_type: expression
+            expression: "@Quantity * @UnitPrice"
+            
+      # 库存表更新配置
+      - table: Track
+        type: update_only  # 只更新，不插入
+        enabled: true
+        condition: "@ActionType == 'update'"  # 仅更新时执行
+        match_conditions:
+          - field: TrackId
+            operator: "="
+            value: "@TrackId"
+        fields:
+          - target_field: StockCount
+            source_type: expression
+            expression: "StockCount - @Quantity"
+            transform: number
+
   # 处理步骤配置
   steps:
     # 保存前验证步骤

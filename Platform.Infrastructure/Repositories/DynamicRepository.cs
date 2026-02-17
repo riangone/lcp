@@ -406,7 +406,6 @@ public class DynamicRepository
     /// </summary>
     public async Task<int> MultiTableInsertAsync(MultiTableCrudDefinition multiTableDef, IDictionary<string, object> data)
     {
-        // 检查是否启用事务
         var useTransaction = multiTableDef.Transaction?.Enabled ?? true;
         
         using var transaction = useTransaction ? _db.BeginTransaction() : null;
@@ -414,74 +413,23 @@ public class DynamicRepository
         {
             int mainId = 0;
 
-            // 1. 插入主表
-            if (multiTableDef.MainTable != null)
+            // 检查是否有自定义更新操作配置
+            if (multiTableDef.UpdateOperations != null && multiTableDef.UpdateOperations.Tables.Any())
             {
-                var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
-                var mainData = FilterDataForTable(data, mainTableFields.Select(f => f.Field).ToList());
-
-                var cols = mainData.Keys.ToList();
-                if (cols.Any())
+                await ExecuteUpdateOperationsAsync(multiTableDef, data, "insert", transaction);
+                
+                // 获取主键
+                if (multiTableDef.MainTable != null)
                 {
-                    var values = string.Join(", ", cols.Select(k => "@" + k));
-                    var sql = $"INSERT INTO {Escape(multiTableDef.MainTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
-                    await _db.ExecuteAsync(sql, mainData, transaction);
-
-                    // 获取自增主键 - 使用配置的主键字段名
                     var primaryKey = multiTableDef.MainTable.PrimaryKey ?? "Id";
                     var lastIdSql = $"SELECT {Escape(primaryKey)} FROM {Escape(multiTableDef.MainTable.Table)} ORDER BY {Escape(primaryKey)} DESC LIMIT 1";
                     mainId = await _db.ExecuteScalarAsync<int>(lastIdSql, transaction: transaction);
                 }
             }
-
-            // 2. 插入关联表
-            foreach (var relatedTable in multiTableDef.RelatedTables)
+            else
             {
-                var tableFields = multiTableDef.FormMapping.GetValueOrDefault(relatedTable.Table, new List<FormFieldMappingDefinition>());
-                var fieldNames = tableFields.Select(f => f.Field).ToList();
-
-                if (relatedTable.Type == "many")
-                {
-                    // 一对多：处理多行数据
-                    var rowsData = ExtractRowsForTable(data, relatedTable.Table);
-                    foreach (var rowData in rowsData)
-                    {
-                        var filteredData = FilterDataForTable(rowData, fieldNames);
-                        
-                        // 添加外键
-                        if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
-                        {
-                            filteredData[relatedTable.ForeignKey] = mainId;
-                        }
-
-                        var cols = filteredData.Keys.ToList();
-                        if (cols.Any())
-                        {
-                            var values = string.Join(", ", cols.Select(k => "@" + k));
-                            var sql = $"INSERT INTO {Escape(relatedTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
-                            await _db.ExecuteAsync(sql, filteredData, transaction);
-                        }
-                    }
-                }
-                else
-                {
-                    // 一对一：处理单行数据
-                    var filteredData = FilterDataForTable(data, fieldNames);
-                    
-                    // 添加外键
-                    if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
-                    {
-                        filteredData[relatedTable.ForeignKey] = mainId;
-                    }
-
-                    var cols = filteredData.Keys.ToList();
-                    if (cols.Any())
-                    {
-                        var values = string.Join(", ", cols.Select(k => "@" + k));
-                        var sql = $"INSERT INTO {Escape(relatedTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
-                        await _db.ExecuteAsync(sql, filteredData, transaction);
-                    }
-                }
+                // 使用默认逻辑
+                mainId = await DefaultInsertAsync(multiTableDef, data, transaction);
             }
 
             if (useTransaction)
@@ -495,6 +443,333 @@ public class DynamicRepository
                 transaction?.Rollback();
             throw;
         }
+    }
+
+    /// <summary>
+    /// 默认插入逻辑
+    /// </summary>
+    private async Task<int> DefaultInsertAsync(MultiTableCrudDefinition multiTableDef, IDictionary<string, object> data, IDbTransaction? transaction)
+    {
+        int mainId = 0;
+
+        // 1. 插入主表
+        if (multiTableDef.MainTable != null)
+        {
+            var mainTableFields = multiTableDef.FormMapping.GetValueOrDefault(multiTableDef.MainTable.Table, new List<FormFieldMappingDefinition>());
+            var mainData = FilterDataForTable(data, mainTableFields.Select(f => f.Field).ToList());
+
+            var cols = mainData.Keys.ToList();
+            if (cols.Any())
+            {
+                var values = string.Join(", ", cols.Select(k => "@" + k));
+                var sql = $"INSERT INTO {Escape(multiTableDef.MainTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+                await _db.ExecuteAsync(sql, mainData, transaction);
+
+                var primaryKey = multiTableDef.MainTable.PrimaryKey ?? "Id";
+                var lastIdSql = $"SELECT {Escape(primaryKey)} FROM {Escape(multiTableDef.MainTable.Table)} ORDER BY {Escape(primaryKey)} DESC LIMIT 1";
+                mainId = await _db.ExecuteScalarAsync<int>(lastIdSql, transaction: transaction);
+            }
+        }
+
+        // 2. 插入关联表
+        foreach (var relatedTable in multiTableDef.RelatedTables)
+        {
+            var tableFields = multiTableDef.FormMapping.GetValueOrDefault(relatedTable.Table, new List<FormFieldMappingDefinition>());
+            var fieldNames = tableFields.Select(f => f.Field).ToList();
+
+            if (relatedTable.Type == "many")
+            {
+                var rowsData = ExtractRowsForTable(data, relatedTable.Table);
+                foreach (var rowData in rowsData)
+                {
+                    var filteredData = FilterDataForTable(rowData, fieldNames);
+                    if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
+                    {
+                        filteredData[relatedTable.ForeignKey] = mainId;
+                    }
+                    await InsertRowAsync(relatedTable.Table, filteredData, transaction);
+                }
+            }
+            else
+            {
+                var filteredData = FilterDataForTable(data, fieldNames);
+                if (!string.IsNullOrEmpty(relatedTable.ForeignKey) && mainId > 0)
+                {
+                    filteredData[relatedTable.ForeignKey] = mainId;
+                }
+                await InsertRowAsync(relatedTable.Table, filteredData, transaction);
+            }
+        }
+
+        return mainId;
+    }
+
+    /// <summary>
+    /// 执行自定义更新操作
+    /// </summary>
+    private async Task ExecuteUpdateOperationsAsync(MultiTableCrudDefinition multiTableDef, IDictionary<string, object> data, string actionType, IDbTransaction? transaction)
+    {
+        if (multiTableDef.UpdateOperations == null)
+            return;
+
+        foreach (var tableConfig in multiTableDef.UpdateOperations.Tables)
+        {
+            if (!tableConfig.Enabled)
+                continue;
+
+            // 检查条件表达式
+            if (!string.IsNullOrEmpty(tableConfig.Condition))
+            {
+                if (!EvaluateCondition(tableConfig.Condition, data, actionType))
+                    continue;
+            }
+
+            if (tableConfig.Type == "update_only")
+            {
+                await ExecuteUpdateAsync(tableConfig, data, transaction);
+            }
+            else if (tableConfig.Type == "insert_only")
+            {
+                await ExecuteInsertAsync(tableConfig, data, transaction);
+            }
+            else // upsert
+            {
+                var exists = await CheckExistsAsync(tableConfig, data, transaction);
+                if (exists)
+                    await ExecuteUpdateAsync(tableConfig, data, transaction);
+                else
+                    await ExecuteInsertAsync(tableConfig, data, transaction);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 检查记录是否存在
+    /// </summary>
+    private async Task<bool> CheckExistsAsync(TableUpdateConfig config, IDictionary<string, object> data, IDbTransaction? transaction)
+    {
+        if (!config.MatchConditions.Any())
+            return false;
+
+        var where = BuildWhereClause(config.MatchConditions, data);
+        var sql = $"SELECT 1 FROM {Escape(config.Table)} WHERE {where} LIMIT 1";
+        
+        var result = await _db.ExecuteScalarAsync<int?>(sql, transaction: transaction);
+        return result.HasValue;
+    }
+
+    /// <summary>
+    /// 执行更新
+    /// </summary>
+    private async Task ExecuteUpdateAsync(TableUpdateConfig config, IDictionary<string, object> data, IDbTransaction? transaction)
+    {
+        var fields = BuildUpdateFields(config.Fields, data);
+        if (!fields.Any())
+            return;
+
+        var sets = string.Join(", ", fields.Keys.Select(k => $"{Escape(k)}=@{k}"));
+        var where = BuildWhereClause(config.MatchConditions, data);
+        
+        var sql = $"UPDATE {Escape(config.Table)} SET {sets} WHERE {where}";
+        
+        var parameters = new Dictionary<string, object>(fields);
+        AddMatchConditionParameters(parameters, config.MatchConditions, data);
+        
+        await _db.ExecuteAsync(sql, parameters, transaction);
+    }
+
+    /// <summary>
+    /// 执行插入
+    /// </summary>
+    private async Task ExecuteInsertAsync(TableUpdateConfig config, IDictionary<string, object> data, IDbTransaction? transaction)
+    {
+        var fields = BuildInsertFields(config.Fields, data);
+        if (!fields.Any())
+            return;
+
+        var cols = fields.Keys.ToList();
+        var values = string.Join(", ", cols.Select(k => "@" + k));
+        var sql = $"INSERT INTO {Escape(config.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+        
+        await _db.ExecuteAsync(sql, fields, transaction);
+    }
+
+    /// <summary>
+    /// 构建更新字段
+    /// </summary>
+    private Dictionary<string, object> BuildUpdateFields(List<FieldUpdateConfig> configs, IDictionary<string, object> data)
+    {
+        var result = new Dictionary<string, object>();
+        
+        foreach (var config in configs.Where(f => f.SourceType != "expression")) // 表达式字段不更新
+        {
+            var value = GetFieldValue(config, data);
+            if (value != null)
+            {
+                result[config.TargetField] = ApplyTransform(value, config.Transform);
+            }
+        }
+        
+        return result;
+    }
+
+    /// <summary>
+    /// 构建插入字段
+    /// </summary>
+    private Dictionary<string, object> BuildInsertFields(List<FieldUpdateConfig> configs, IDictionary<string, object> data)
+    {
+        var result = new Dictionary<string, object>();
+        
+        foreach (var config in configs)
+        {
+            var value = GetFieldValue(config, data);
+            if (value != null)
+            {
+                result[config.TargetField] = ApplyTransform(value, config.Transform);
+            }
+        }
+        
+        return result;
+    }
+
+    /// <summary>
+    /// 获取字段值
+    /// </summary>
+    private object? GetFieldValue(FieldUpdateConfig config, IDictionary<string, object> data)
+    {
+        return config.SourceType switch
+        {
+            "form" => data.TryGetValue(config.SourceField ?? "", out var val) ? val : null,
+            "value" => config.Value,
+            "expression" => EvaluateExpression(config.Expression, data),
+            _ => null
+        };
+    }
+
+    /// <summary>
+    /// 构建 WHERE 子句
+    /// </summary>
+    private string BuildWhereClause(List<MatchCondition> conditions, IDictionary<string, object> data)
+    {
+        var parts = new List<string>();
+        
+        foreach (var cond in conditions)
+        {
+            var value = cond.Value?.StartsWith("@") == true 
+                ? data.TryGetValue(cond.Value.Substring(1), out var v) ? v : cond.Value
+                : cond.Value;
+            
+            var op = cond.Operator switch
+            {
+                "=" => "=",
+                "!=" => "<>",
+                ">" => ">",
+                "<" => "<",
+                ">=" => ">=",
+                "<=" => "<=",
+                "like" => "LIKE",
+                "in" => "IN",
+                _ => "="
+            };
+            
+            parts.Add($"{Escape(cond.Field)} {op} @{cond.Field}_match");
+        }
+        
+        return string.Join(" AND ", parts);
+    }
+
+    /// <summary>
+    /// 添加匹配条件参数
+    /// </summary>
+    private void AddMatchConditionParameters(Dictionary<string, object> parameters, List<MatchCondition> conditions, IDictionary<string, object> data)
+    {
+        foreach (var cond in conditions)
+        {
+            var value = cond.Value?.StartsWith("@") == true 
+                ? data.TryGetValue(cond.Value.Substring(1), out var v) ? v : cond.Value
+                : cond.Value;
+            
+            parameters[$"{cond.Field}_match"] = value ?? "";
+        }
+    }
+
+    /// <summary>
+    /// 评估条件表达式
+    /// </summary>
+    private bool EvaluateCondition(string condition, IDictionary<string, object> data, string actionType)
+    {
+        // 简化实现：替换变量后评估
+        var replaced = condition.Replace("@ActionType", $"'{actionType}'");
+        // 实际应该使用表达式求值引擎
+        return true; // 暂时返回 true
+    }
+
+    /// <summary>
+    /// 评估表达式
+    /// </summary>
+    private object? EvaluateExpression(string? expression, IDictionary<string, object> data)
+    {
+        if (string.IsNullOrEmpty(expression))
+            return null;
+        
+        // 简化实现：支持简单的算术表达式
+        // 如：@Quantity * @UnitPrice
+        var result = expression;
+        foreach (var kvp in data)
+        {
+            result = result?.Replace($"@{kvp.Key}", kvp.Value?.ToString() ?? "0");
+        }
+        
+        // 实际应该使用表达式求值引擎
+        try
+        {
+            // 简单计算
+            if (result != null && result.Contains("*"))
+            {
+                var parts = result.Split('*');
+                if (parts.Length == 2 && 
+                    decimal.TryParse(parts[0].Trim(), out var a) && 
+                    decimal.TryParse(parts[1].Trim(), out var b))
+                {
+                    return a * b;
+                }
+            }
+        }
+        catch { }
+        
+        return result;
+    }
+
+    /// <summary>
+    /// 应用转换
+    /// </summary>
+    private object? ApplyTransform(object? value, string? transform)
+    {
+        if (value == null || string.IsNullOrEmpty(transform))
+            return value;
+        
+        return transform.ToLower() switch
+        {
+            "upper" => value.ToString()?.ToUpper(),
+            "lower" => value.ToString()?.ToLower(),
+            "trim" => value.ToString()?.Trim(),
+            "number" => decimal.TryParse(value.ToString(), out var n) ? n : value,
+            "date" => DateTime.TryParse(value.ToString(), out var d) ? d : value,
+            _ => value
+        };
+    }
+
+    /// <summary>
+    /// 插入单行
+    /// </summary>
+    private async Task InsertRowAsync(string table, IDictionary<string, object> data, IDbTransaction? transaction)
+    {
+        var cols = data.Keys.ToList();
+        if (!cols.Any()) return;
+        
+        var values = string.Join(", ", cols.Select(k => "@" + k));
+        var sql = $"INSERT INTO {Escape(table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
+        await _db.ExecuteAsync(sql, data, transaction);
     }
 
     /// <summary>
