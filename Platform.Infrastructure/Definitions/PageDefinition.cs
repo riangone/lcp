@@ -65,6 +65,53 @@ public class MultiTableCrudDefinition
     /// 表单字段映射 - 键为表名，值为该表的字段列表
     /// </summary>
     public Dictionary<string, List<FormFieldMappingDefinition>> FormMapping { get; set; } = new();
+
+    /// <summary>
+    /// 事务配置
+    /// </summary>
+    public TransactionDefinition? Transaction { get; set; }
+
+    /// <summary>
+    /// 级联操作配置
+    /// </summary>
+    public CascadeDefinition? Cascade { get; set; }
+}
+
+/// <summary>
+/// 事务配置定义
+/// </summary>
+public class TransactionDefinition
+{
+    /// <summary>
+    /// 是否启用事务（默认 true）
+    /// </summary>
+    public bool Enabled { get; set; } = true;
+
+    /// <summary>
+    /// 事务隔离级别
+    /// </summary>
+    public string IsolationLevel { get; set; } = "ReadCommitted";
+
+    /// <summary>
+    /// 事务超时（秒）
+    /// </summary>
+    public int TimeoutSeconds { get; set; } = 30;
+}
+
+/// <summary>
+/// 级联操作定义
+/// </summary>
+public class CascadeDefinition
+{
+    /// <summary>
+    /// 删除时级联
+    /// </summary>
+    public bool OnDelete { get; set; } = true;
+
+    /// <summary>
+    /// 更新时级联
+    /// </summary>
+    public bool OnUpdate { get; set; } = false;
 }
 
 /// <summary>

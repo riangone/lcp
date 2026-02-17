@@ -15,6 +15,17 @@ multi_table_crud:
       foreign_key: InvoiceId
       type: many  # many=一对多，one=一对一
       
+  # 事务配置
+  transaction:
+    enabled: true
+    isolation_level: ReadCommitted  # ReadUncommitted, ReadCommitted, RepeatableRead, Serializable
+    timeout_seconds: 30
+    
+  # 级联操作配置
+  cascade:
+    on_delete: true   # 删除主表记录时级联删除关联表
+    on_update: false  # 更新主表主键时级联更新（通常不需要）
+    
   # 表单字段映射到多个表
   form_mapping:
     # 映射到主表的字段

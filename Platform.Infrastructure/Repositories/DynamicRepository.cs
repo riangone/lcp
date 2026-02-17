@@ -406,7 +406,10 @@ public class DynamicRepository
     /// </summary>
     public async Task<int> MultiTableInsertAsync(MultiTableCrudDefinition multiTableDef, IDictionary<string, object> data)
     {
-        using var transaction = _db.BeginTransaction();
+        // 检查是否启用事务
+        var useTransaction = multiTableDef.Transaction?.Enabled ?? true;
+        
+        using var transaction = useTransaction ? _db.BeginTransaction() : null;
         try
         {
             int mainId = 0;
@@ -424,8 +427,9 @@ public class DynamicRepository
                     var sql = $"INSERT INTO {Escape(multiTableDef.MainTable.Table)} ({string.Join(", ", cols.Select(Escape))}) VALUES ({values})";
                     await _db.ExecuteAsync(sql, mainData, transaction);
 
-                    // 获取自增主键
-                    var lastIdSql = "SELECT last_insert_rowid()";
+                    // 获取自增主键 - 使用配置的主键字段名
+                    var primaryKey = multiTableDef.MainTable.PrimaryKey ?? "Id";
+                    var lastIdSql = $"SELECT {Escape(primaryKey)} FROM {Escape(multiTableDef.MainTable.Table)} ORDER BY {Escape(primaryKey)} DESC LIMIT 1";
                     mainId = await _db.ExecuteScalarAsync<int>(lastIdSql, transaction: transaction);
                 }
             }
@@ -480,12 +484,15 @@ public class DynamicRepository
                 }
             }
 
-            transaction.Commit();
+            if (useTransaction)
+                transaction?.Commit();
+                
             return mainId;
         }
         catch
         {
-            transaction.Rollback();
+            if (useTransaction)
+                transaction?.Rollback();
             throw;
         }
     }
@@ -574,29 +581,38 @@ public class DynamicRepository
     /// </summary>
     public async Task MultiTableDeleteAsync(MultiTableCrudDefinition multiTableDef, int mainId)
     {
-        using var transaction = _db.BeginTransaction();
+        var useTransaction = multiTableDef.Transaction?.Enabled ?? true;
+        var cascade = multiTableDef.Cascade?.OnDelete ?? true;
+        
+        using var transaction = useTransaction ? _db.BeginTransaction() : null;
         try
         {
-            // 1. 先删除关联表数据（外键约束）
-            foreach (var relatedTable in multiTableDef.RelatedTables)
+            // 1. 先删除关联表数据（如果启用级联）
+            if (cascade)
             {
-                var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
-                var deleteSql = $"DELETE FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
-                await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
+                foreach (var relatedTable in multiTableDef.RelatedTables)
+                {
+                    var fkColumn = relatedTable.ForeignKey ?? $"{multiTableDef.MainTable?.PrimaryKey ?? "Id"}";
+                    var deleteSql = $"DELETE FROM {Escape(relatedTable.Table)} WHERE {Escape(fkColumn)}=@id";
+                    await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
+                }
             }
 
             // 2. 再删除主表数据
             if (multiTableDef.MainTable != null)
             {
-                var deleteSql = $"DELETE FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(multiTableDef.MainTable.PrimaryKey)}=@id";
+                var primaryKey = multiTableDef.MainTable.PrimaryKey ?? "Id";
+                var deleteSql = $"DELETE FROM {Escape(multiTableDef.MainTable.Table)} WHERE {Escape(primaryKey)}=@id";
                 await _db.ExecuteAsync(deleteSql, new { id = mainId }, transaction);
             }
 
-            transaction.Commit();
+            if (useTransaction)
+                transaction?.Commit();
         }
         catch
         {
-            transaction.Rollback();
+            if (useTransaction)
+                transaction?.Rollback();
             throw;
         }
     }
