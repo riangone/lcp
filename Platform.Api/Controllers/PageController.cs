@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Platform.Infrastructure;
 using Platform.Infrastructure.Definitions;
 using Platform.Infrastructure.Repositories;
+using Platform.Infrastructure.Services;
 
 namespace Platform.Api.Controllers;
 
@@ -104,11 +105,36 @@ public class PageController : Controller
             // 将 string 字典转换为 object 字典
             var objData = data.ToDictionary(kvp => kvp.Key, kvp => (object)kvp.Value);
             
+            // 执行 before_save 步骤
+            var stepContext = new StepContext
+            {
+                ActionType = string.IsNullOrWhiteSpace(id) ? "create" : "update",
+                MainData = objData,
+                UserId = User.Identity?.Name
+            };
+            
+            var beforeSteps = page.MultiTableCrud.Steps
+                .Where(s => s.Trigger == "before_save" || s.Trigger == "on_validate")
+                .OrderBy(s => s.Id)
+                .ToList();
+                
+            foreach (var step in beforeSteps)
+            {
+                var executor = new DefaultStepExecutor();
+                var result = await executor.ExecuteAsync(step, stepContext);
+                
+                if (!result.Success && step.StopOnError)
+                {
+                    return Json(new { success = false, message = result.Message });
+                }
+            }
+            
+            int mainId;
+            
             if (string.IsNullOrWhiteSpace(id))
             {
                 // 插入
-                var mainId = await _repo.MultiTableInsertAsync(page.MultiTableCrud, objData);
-                return Json(new { success = true, id = mainId, message = "创建成功" });
+                mainId = await _repo.MultiTableInsertAsync(page.MultiTableCrud, objData);
             }
             else
             {
@@ -116,10 +142,30 @@ public class PageController : Controller
                 if (int.TryParse(id, out var mainIdInt))
                 {
                     await _repo.MultiTableUpdateAsync(page.MultiTableCrud, mainIdInt, objData);
-                    return Json(new { success = true, message = "更新成功" });
+                    mainId = mainIdInt;
                 }
-                return BadRequest("Invalid ID format");
+                else
+                {
+                    return BadRequest("Invalid ID format");
+                }
             }
+            
+            // 更新上下文
+            stepContext.MainId = mainId;
+            
+            // 执行 after_save 步骤
+            var afterSteps = page.MultiTableCrud.Steps
+                .Where(s => s.Trigger == "after_save")
+                .OrderBy(s => s.Id)
+                .ToList();
+                
+            foreach (var step in afterSteps)
+            {
+                var executor = new DefaultStepExecutor();
+                _ = executor.ExecuteAsync(step, stepContext); // 不等待完成
+            }
+            
+            return Json(new { success = true, id = mainId, message = "保存成功" });
         }
         catch (Exception ex)
         {

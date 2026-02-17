@@ -26,6 +26,63 @@ multi_table_crud:
     on_delete: true   # 删除主表记录时级联删除关联表
     on_update: false  # 更新主表主键时级联更新（通常不需要）
     
+  # 处理步骤配置
+  steps:
+    # 保存前验证步骤
+    - id: validate_total
+      name: 验证订单总额
+      trigger: before_save
+      type: script
+      stop_on_error: true
+      script:
+        language: csharp
+        content: |
+          // 验证订单总额是否为正数
+          if (data.Total <= 0) {
+            throw new Exception("订单总额必须大于 0");
+          }
+          return true;
+
+    # 保存后发送通知
+    - id: send_notification
+      name: 发送订单通知
+      trigger: after_save
+      type: notification
+      stop_on_error: false
+      notification:
+        type: email
+        recipients:
+          - admin@example.com
+          - sales@example.com
+        subject: "新订单通知 - {{InvoiceId}}"
+        message_template: |
+          新订单已创建：
+          订单 ID: {{InvoiceId}}
+          客户 ID: {{CustomerId}}
+          订单日期：{{InvoiceDate}}
+          订单总额：{{Total}}
+
+    # 保存后调用外部 API
+    - id: sync_erp
+      name: 同步到 ERP 系统
+      trigger: after_save
+      type: api
+      stop_on_error: false
+      api:
+        url: "https://erp.example.com/api/orders"
+        method: POST
+        headers:
+          Content-Type: application/json
+          Authorization: "Bearer {{API_TOKEN}}"
+        body_template: |
+          {
+            "orderId": "{{InvoiceId}}",
+            "customerId": {{CustomerId}},
+            "orderDate": "{{InvoiceDate}}",
+            "total": {{Total}},
+            "items": {{InvoiceLine}}
+          }
+    
   # 表单字段映射到多个表
   form_mapping:
     # 映射到主表的字段

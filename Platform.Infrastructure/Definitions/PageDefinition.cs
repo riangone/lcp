@@ -75,6 +75,135 @@ public class MultiTableCrudDefinition
     /// 级联操作配置
     /// </summary>
     public CascadeDefinition? Cascade { get; set; }
+
+    /// <summary>
+    /// 处理步骤配置
+    /// </summary>
+    public List<StepDefinition> Steps { get; set; } = new();
+}
+
+/// <summary>
+/// 处理步骤定义
+/// </summary>
+public class StepDefinition
+{
+    /// <summary>
+    /// 步骤唯一标识
+    /// </summary>
+    public string Id { get; set; } = "";
+
+    /// <summary>
+    /// 步骤名称
+    /// </summary>
+    public string Name { get; set; } = "";
+
+    /// <summary>
+    /// 触发时机：before_save, after_save, before_delete, after_delete, on_validate
+    /// </summary>
+    public string Trigger { get; set; } = "before_save";
+
+    /// <summary>
+    /// 步骤类型：script, api, notification, custom
+    /// </summary>
+    public string Type { get; set; } = "script";
+
+    /// <summary>
+    /// 是否停止后续步骤（如果失败）
+    /// </summary>
+    public bool StopOnError { get; set; } = true;
+
+    /// <summary>
+    /// 脚本配置（当 Type=script 时）
+    /// </summary>
+    public ScriptConfig? Script { get; set; }
+
+    /// <summary>
+    /// API 配置（当 Type=api 时）
+    /// </summary>
+    public ApiConfig? Api { get; set; }
+
+    /// <summary>
+    /// 通知配置（当 Type=notification 时）
+    /// </summary>
+    public NotificationConfig? Notification { get; set; }
+
+    /// <summary>
+    /// 自定义配置
+    /// </summary>
+    public Dictionary<string, object>? Custom { get; set; }
+}
+
+/// <summary>
+/// 脚本配置
+/// </summary>
+public class ScriptConfig
+{
+    /// <summary>
+    /// 脚本语言：csharp, javascript, python
+    /// </summary>
+    public string Language { get; set; } = "csharp";
+
+    /// <summary>
+    /// 脚本内容或文件路径
+    /// </summary>
+    public string Content { get; set; } = "";
+
+    /// <summary>
+    /// 脚本参数
+    /// </summary>
+    public Dictionary<string, object>? Parameters { get; set; }
+}
+
+/// <summary>
+/// API 配置
+/// </summary>
+public class ApiConfig
+{
+    /// <summary>
+    /// API URL
+    /// </summary>
+    public string Url { get; set; } = "";
+
+    /// <summary>
+    /// HTTP 方法
+    /// </summary>
+    public string Method { get; set; } = "POST";
+
+    /// <summary>
+    /// 请求头
+    /// </summary>
+    public Dictionary<string, string>? Headers { get; set; }
+
+    /// <summary>
+    /// 请求体模板
+    /// </summary>
+    public string? BodyTemplate { get; set; }
+}
+
+/// <summary>
+/// 通知配置
+/// </summary>
+public class NotificationConfig
+{
+    /// <summary>
+    /// 通知类型：email, sms, webhook
+    /// </summary>
+    public string Type { get; set; } = "email";
+
+    /// <summary>
+    /// 接收者
+    /// </summary>
+    public List<string> Recipients { get; set; } = new();
+
+    /// <summary>
+    /// 主题
+    /// </summary>
+    public string? Subject { get; set; }
+
+    /// <summary>
+    /// 消息模板
+    /// </summary>
+    public string? MessageTemplate { get; set; }
 }
 
 /// <summary>
