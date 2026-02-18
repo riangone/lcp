@@ -92,4 +92,6 @@ $RECYCLE.BIN/
 # Environment specific files
 .env
 app.db
-app.db-journal
+app.db-journalnode_modules/
+*.db
+.qwen/

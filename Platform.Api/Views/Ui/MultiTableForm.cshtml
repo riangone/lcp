@@ -45,3 +45,249 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    @* 新版配置格式 - 内嵌 JavaScript *@
+    @if (pageDef.FormSections != null && pageDef.FormSections.Any())
+    {
+        var formSections = pageDef.FormSections;
+        <script>
+            const pageName = '@pageName';
+            const formSections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(formSections));
+            let loadedData = {};
+
+            // 从 URL 获取参数
+            function getUrlParams() {
+                const params = new URLSearchParams(window.location.search);
+                const result = {};
+                for (const [key, value] of params) {
+                    result[key] = value;
+                }
+                return result;
+            }
+
+            // 加载所有数据
+            async function loadAllData() {
+                try {
+                    // 从 URL 获取参数
+                    const urlParams = getUrlParams();
+
+                    // 构建查询字符串
+                    const queryString = new URLSearchParams(urlParams).toString();
+                    const url = `/api/multi-table/${pageName}/load${queryString ? '?' + queryString : ''}`;
+
+                    const response = await fetch(url);
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // 填充各个区域的数据
+                        for (const [sourceId, data] of Object.entries(result.data)) {
+                            fillSectionData(sourceId, data);
+                        }
+                    } else {
+                        console.error('加载失败:', result.message);
+                    }
+                } catch (err) {
+                    console.error('加载数据失败:', err);
+                }
+            }
+
+            // 填充区域数据
+            function fillSectionData(sourceId, data) {
+                // 查找对应的 section
+                // 尝试多种匹配方式：
+                // 1. sourceId 直接匹配 section.id (如：invoice_lines)
+                // 2. sourceId 匹配 section.table (如：invoice_lines -> InvoiceLine)
+                // 3. sourceId 去掉 '_data' 后缀后匹配 section.id (如：customer_data -> customer)
+                const section = formSections.find(s =>
+                    s.id === sourceId ||
+                    s.table?.toLowerCase() === sourceId.toLowerCase() ||
+                    s.id.toLowerCase().startsWith(sourceId.replace('_data', '').toLowerCase() + '_') ||
+                    s.table?.toLowerCase() === sourceId.replace('_data', '').toLowerCase()
+                );
+                
+                if (!section) {
+                    console.error(`未找到匹配的 section for sourceId: ${sourceId}`);
+                    return;
+                }
+
+                const sectionType = section.type || 'form';
+
+                if (sectionType === 'editable_table' || sectionType === 'table') {
+                    fillTableData(sourceId, data, section);
+                } else if (sectionType === 'form') {
+                    fillFormData(sourceId, data, section);
+                }
+            }
+
+            // 填充表格数据
+            function fillTableData(sourceId, data, section) {
+                // 使用 section.id 而不是 sourceId 来查找 tbody
+                const tbody = document.getElementById(`${section.id}-body`);
+                if (!tbody) {
+                    console.error(`未找到 tbody: ${section.id}-body`);
+                    return;
+                }
+
+                tbody.innerHTML = '';
+
+                // 数据为 null 或未定义时，显示加载中的提示
+                if (data === null || data === undefined) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="${section.columns?.length || 4}" class="px-6 py-4 text-center text-gray-500">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>加载中...
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="${section.columns?.length || 4}" class="px-6 py-4 text-center text-gray-500">
+                                暂无数据
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                data.forEach((row, index) => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-gray-50 transition-colors';
+
+                    let cellsHtml = '';
+                    const columns = section.columns || Object.keys(row);
+
+                    columns.forEach(col => {
+                        const value = row[col] !== undefined ? row[col] : '';
+                        cellsHtml += `<td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${value}</td>`;
+                    });
+
+                    if (section.editable) {
+                        cellsHtml += `
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button class="text-blue-600 hover:text-blue-900 mr-3" onclick="editTableRow('${sourceId}', ${index})">
+                                    <i class="fas fa-edit"></i> 编辑
+                                </button>
+                                <button class="text-red-600 hover:text-red-900" onclick="deleteTableRow('${sourceId}', ${index})">
+                                    <i class="fas fa-trash"></i> 删除
+                                </button>
+                            </td>
+                        `;
+                    }
+
+                    tr.innerHTML = cellsHtml;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // 填充表单数据
+            function fillFormData(sourceId, data, section) {
+                // 使用 section.id 而不是 sourceId 来查找 form
+                const form = document.getElementById(`${section.id}-form`);
+                if (!form) {
+                    console.error(`未找到 form: ${section.id}-form`);
+                    return;
+                }
+
+                // 如果是单个对象，转换为数组
+                const dataArray = Array.isArray(data) ? data : [data];
+                if (dataArray.length === 0 || !dataArray[0]) return;
+
+                const rowData = dataArray[0];
+
+                // 填充表单字段
+                Object.keys(rowData).forEach(key => {
+                    const input = form.querySelector(`input[name="${key}"]`);
+                    if (input) {
+                        let value = rowData[key];
+                        // 处理日期格式
+                        if (input.type === 'date' && typeof value === 'string') {
+                            value = value.split(' ')[0];
+                        }
+                        input.value = value || '';
+                    }
+                });
+            }
+
+            // 编辑表格行
+            function editTableRow(sourceId, index) {
+                console.log('编辑行', sourceId, index);
+                // TODO: 实现编辑逻辑
+            }
+
+            // 删除表格行
+            function deleteTableRow(sourceId, index) {
+                console.log('删除行', sourceId, index);
+                // TODO: 实现删除逻辑
+            }
+
+            // 保存所有表单
+            async function saveAllForms() {
+                try {
+                    const formData = new FormData();
+
+                    // 收集所有表单数据
+                    document.querySelectorAll('form').forEach(form => {
+                        const formDataEntries = new FormData(form).entries();
+                        for (const [key, value] of formDataEntries) {
+                            formData.append(key, value);
+                        }
+                    });
+
+                    const response = await fetch(`/api/multi-table/${pageName}/save`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams(formData)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        alert('保存成功！');
+                        loadAllData();
+                    } else {
+                        alert('保存失败：' + result.message);
+                    }
+                } catch (err) {
+                    console.error('保存失败:', err);
+                    alert('保存失败：' + err.message);
+                }
+            }
+
+            // 页面加载时加载数据
+            loadAllData();
+
+            // 初始化：为所有表格区域显示加载状态
+            function initLoadingStates() {
+                formSections.forEach(section => {
+                    const sectionType = section.type || 'form';
+                    if (sectionType === 'editable_table' || sectionType === 'table') {
+                        const tbody = document.getElementById(`${section.id}-body`);
+                        if (tbody) {
+                            tbody.innerHTML = `
+                                <tr>
+                                    <td colspan="${section.columns?.length || 4}" class="px-6 py-4 text-center text-gray-500">
+                                        <i class="fas fa-spinner fa-spin mr-2"></i>加载中...
+                                    </td>
+                                </tr>
+                            `;
+                        }
+                    }
+                });
+            }
+
+            // 在 DOM 加载完成后初始化
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initLoadingStates);
+            } else {
+                initLoadingStates();
+            }
+        </script>
+    }
+}

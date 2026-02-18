@@ -112,6 +112,24 @@ public class PageDataLoader
                 ? "1=1"
                 : source.Where;
 
+            // 处理 where 条件中的 null/DBNull 参数 - 如果参数为 null 则移除该条件
+            if (!string.IsNullOrEmpty(source.Where))
+            {
+                where = ProcessWhereClause(source.Where, resolvedParams);
+            }
+
+            // 如果 where 条件处理后为空，返回空结果
+            if (string.IsNullOrWhiteSpace(where) || where == "1=1" && resolvedParams.Any(kvp => kvp.Value == DBNull.Value))
+            {
+                // 检查是否所有参数都是 DBNull
+                var hasValidParams = resolvedParams.Any(kvp => kvp.Value != DBNull.Value);
+                if (!hasValidParams && source.Where != null && source.Where.Contains("@"))
+                {
+                    // 所有参数都是 DBNull 且 where 中有参数引用，返回空结果
+                    return new List<object>();
+                }
+            }
+
             var sql = $"SELECT * FROM {Escape(source.Table)} WHERE {where}";
 
             if (source.LoadAll)
@@ -128,6 +146,45 @@ public class PageDataLoader
         }
 
         return new List<object>();
+    }
+
+    /// <summary>
+    /// 处理 where 条件，移除值为 null 的参数条件
+    /// </summary>
+    private string ProcessWhereClause(string where, IDictionary<string, object> parameters)
+    {
+        var result = where;
+        
+        // 查找所有 @ParameterName 模式的参数
+        var paramPattern = @"@(\w+)";
+        var matches = System.Text.RegularExpressions.Regex.Matches(where, paramPattern);
+        
+        foreach (System.Text.RegularExpressions.Match match in matches)
+        {
+            var paramName = match.Groups[1].Value;
+            if (parameters.TryGetValue(paramName, out var paramValue))
+            {
+                // 参数为 null、DBNull.Value、0 或空字符串时，移除条件
+                var shouldRemove = paramValue == null || 
+                                   paramValue == DBNull.Value || 
+                                   (paramValue is int i && i == 0) ||
+                                   (paramValue is string s && string.IsNullOrEmpty(s));
+                
+                if (shouldRemove)
+                {
+                    // 参数为 null，移除整个条件（假设条件格式为：AND Field = @Param 或 WHERE Field = @Param）
+                    // 简单处理：移除包含该参数的条件子句
+                    var conditionPattern = $@"(\s*(AND\s+|OR\s+|WHERE\s+))?[^\s]+\s*=\s*@{paramName}";
+                    result = System.Text.RegularExpressions.Regex.Replace(result, conditionPattern, "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+                }
+            }
+        }
+        
+        // 清理多余的 AND/OR 在开头
+        result = System.Text.RegularExpressions.Regex.Replace(result, @"^\s*(AND\s+|OR\s+)", "", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        
+        // 如果结果为空，返回 1=1
+        return string.IsNullOrWhiteSpace(result) ? "1=1" : result;
     }
 
     /// <summary>
@@ -172,10 +229,8 @@ public class PageDataLoader
                 _ => param.Default
             };
 
-            if (value != null)
-            {
-                resolved[param.Name] = value;
-            }
+            // 将 null 值也添加到字典中，以便后续处理
+            resolved[param.Name] = value ?? DBNull.Value;
         }
 
         return resolved;

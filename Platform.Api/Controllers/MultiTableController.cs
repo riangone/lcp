@@ -34,7 +34,7 @@ public class MultiTableController : Controller
         try
         {
             var page = GetPage(pageName);
-            
+
             if (page.DataLoading == null)
             {
                 return Json(new { success = false, message = "No data loading configuration found" });
@@ -43,13 +43,25 @@ public class MultiTableController : Controller
             var parameters = Request.Query
                 .ToDictionary(k => k.Key, v => (object)v.Value.ToString());
 
+            Console.WriteLine($"[MultiTableController] Loading page: {pageName}");
+            Console.WriteLine($"[MultiTableController] Parameters: {string.Join(", ", parameters.Select(kvp => $"{kvp.Key}={kvp.Value}"))}");
+            Console.WriteLine($"[MultiTableController] DataLoading sources: {page.DataLoading.Sources?.Count ?? 0}");
+            foreach (var source in page.DataLoading.Sources ?? new List<DataSourceConfig>())
+            {
+                Console.WriteLine($"[MultiTableController]   Source: {source.Id}, Table: {source.Table}, Where: {source.Where}");
+            }
+
             // 加载所有配置的数据源
             var data = await _loader.LoadPageDataAsync(page.DataLoading, parameters);
+
+            Console.WriteLine($"[MultiTableController] Loaded data keys: {string.Join(", ", data.Keys)}");
 
             return Json(new { success = true, data });
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"[MultiTableController] ERROR: {ex.Message}");
+            Console.WriteLine($"[MultiTableController] StackTrace: {ex.StackTrace}");
             return Json(new { success = false, message = ex.Message });
         }
     }

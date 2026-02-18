@@ -2,14 +2,51 @@
 
 ## 📋 项目概述
 
-这是一个基于 **.NET 10** 的低代码平台，能够根据 YAML 定义自动生成：
-- RESTful CRUD API
-- 动态 Web UI（支持实时更新）
-- 数据验证和表单支持
-- 分页、过滤、搜索功能
-- AI 三层架构整合（函数式核心、确定性外壳、非确定性边缘）
+这是一个基于 **.NET 10** 的**运行时驱动**低代码平台，核心理念是：
 
-## 🏗️ 技术栈
+> **通过 YAML 定义驱动一切，尽可能不写代码、不生成代码**
+
+平台根据 YAML 定义**运行时动态**生成：
+- ✅ RESTful CRUD API（单个通用控制器处理所有模型）
+- ✅ 动态 Web UI（列表页、表单、过滤、分页）
+- ✅ 数据验证和表单支持（运行时读取配置验证）
+- ✅ 多表关联和复杂业务场景支持
+
+## 🏗️ 架构设计
+
+### 运行时驱动架构
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    HTTP Request                          │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              GenericApiController                       │
+│           (一个控制器处理所有模型，无代码生成)             │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              AppDefinitions (YAML 加载)                  │
+│           - Models (模型定义)                            │
+│           - Pages (多表页面定义)                          │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│              DynamicRepository                          │
+│           (动态构建 SQL 执行 CRUD)                        │
+└────────────────────┬────────────────────────────────────┘
+                     │
+                     ▼
+┌─────────────────────────────────────────────────────────┐
+│                   SQLite Database                       │
+└─────────────────────────────────────────────────────────┘
+```
+
+### 技术栈
 
 | 类别 | 技术 |
 |------|------|
@@ -26,63 +63,57 @@
 lcp/
 ├── Platform.Api/                    # ASP.NET Core Web 应用
 │   ├── Controllers/
-│   │   ├── GenericApiController.cs  # 通用 CRUD API
-│   │   ├── UiController.cs          # UI 页面控制器
-│   │   └── AiController.cs          # AI 相关 API
+│   │   ├── GenericApiController.cs  # ★ 通用 CRUD API（核心）
+│   │   ├── UiController.cs          # ★ UI 页面控制器（核心）
+│   │   ├── PageController.cs        # 多表页面控制器
+│   │   └── MultiTableController.cs  # 多表 CRUD 控制器
 │   ├── Views/
 │   │   ├── Shared/
 │   │   │   ├── _Layout.cshtml
-│   │   │   ├── _DeleteDialog.cshtml
-│   │   │   └── _ErrorDialog.cshtml
+│   │   │   └── _DeleteDialog.cshtml
 │   │   └── Ui/
-│   │       ├── List.cshtml          # 列表页面
-│   │       └── FormModal.cshtml     # 表单模态框
-│   ├── TestScenarios/
-│   ├── wwwroot/
-│   │   └── js/site.js               # HTMX 交互脚本
-│   ├── Program.cs                   # 应用入口和 DI 配置
-│   └── Platform.Api.csproj
+│   │       ├── List.cshtml          # ★ 通用列表页模板
+│   │       ├── FormModal.cshtml     # ★ 通用表单模态框
+│   │       └── _ListContent.cshtml  # 列表内容（支持 HTMX）
+│   └── wwwroot/
+│       └── js/site.js               # HTMX 交互脚本
 │
 ├── Platform.Application/            # 应用服务层
 │   └── Services/
-│       ├── IAiSuggestionService.cs
-│       ├── MockAISuggestionService.cs
-│       ├── AiIntegrationService.cs
 │       ├── AuthService.cs
 │       └── AuditService.cs
 │
 ├── Platform.Domain/                 # 领域模型层
 │   └── Core/
-│       ├── IEntityValidator.cs      # 实体验证器接口
-│       ├── BusinessRuleValidator.cs # 业务规则验证（纯函数）
-│       └── EntityStateTransition.cs # 状态转换（纯函数）
+│       ├── IEntityValidator.cs
+│       ├── BusinessRuleValidator.cs # 纯函数验证逻辑
+│       └── EntityStateTransition.cs # 纯函数状态转换
 │
 ├── Platform.Infrastructure/         # 数据访问和工具
 │   ├── Data/
 │   │   └── DbConnectionFactory.cs   # 数据库连接工厂
 │   ├── Repositories/
-│   │   ├── DynamicRepository.cs     # 动态 CRUD 仓储
-│   │   └── SnapshotRepository.cs    # 快照仓储
+│   │   └── DynamicRepository.cs     # ★ 动态 CRUD 仓储（核心）
 │   ├── Definitions/                 # 数据结构定义
-│   ├── Services/
-│   ├── Shell/                       # 确定性外壳组件
-│   │   ├── Snapshot.cs              # 快照模型
-│   │   └── ISnapshotRepository.cs
-│   ├── Yaml/
-│   │   └── YamlLoader.cs            # YAML 加载器
-│   ├── ModelBinder.cs               # 模型绑定和验证
-│   └── SqlIdentifier.cs             # SQL 标识符转义工具
+│   │   ├── ModelDefinition.cs
+│   │   ├── PageDefinition.cs
+│   │   ├── MultiTableFormDefinition.cs
+│   │   └── ...
+│   ├── ModelBinder.cs               # ★ 模型绑定和验证（核心）
+│   ├── SqlIdentifier.cs             # SQL 标识符转义工具
+│   └── Yaml/
+│       └── YamlLoader.cs            # ★ YAML 加载器（核心）
 │
-├── Definitions/                     # YAML 定义文件
-│   ├── app.yaml                     # 核心应用配置
-│   └── pages/                       # 多表页面配置
+├── Definitions/                     # ★ YAML 定义文件（核心配置）
+│   ├── app.yaml                     # 模型定义
+│   └── pages/                       # 多表页面定义
 │
 ├── Docs/                            # 文档
-│   └── MultiTableForm.md            # 多表表单功能文档
+│   ├── MultiTableForm.md            # 多表表单功能文档
+│   └── LowCode_Enhancement_Plan.md  # 低代码增强计划
 │
 ├── init_db.sql                      # 数据库初始化脚本
-├── LowCodePlatform.sln              # Visual Studio 解决方案
-└── package.json                     # Node.js 配置（Puppeteer 测试）
+└── LowCodePlatform.sln              # Visual Studio 解决方案
 ```
 
 ## 🚀 构建和运行
@@ -103,11 +134,7 @@ dotnet run --project Platform.Api
 
 ### 初始化数据库
 ```bash
-# 使用 SQLite CLI
 sqlite3 app.db < init_db.sql
-
-# 或使用已有的 Chinook 数据库
-# chinook.db 或 chinook_with_data.db 已包含示例数据
 ```
 
 ### 访问应用
@@ -117,7 +144,7 @@ sqlite3 app.db < init_db.sql
 
 ## 📝 YAML 配置示例
 
-### 单表模型定义 (Definitions/app.yaml)
+### 单表模型定义
 
 ```yaml
 models:
@@ -126,9 +153,6 @@ models:
     primary_key: ArtistId
 
     ui:
-      layout:
-        theme: default
-        grid_columns: 2
       labels:
         en:
           title: Artists
@@ -145,7 +169,6 @@ models:
           type: like
 
     form:
-      title: Artist
       fields:
         Name:
           label: Name
@@ -157,7 +180,7 @@ models:
       Name: { type: string }
 ```
 
-### 多表关联/视图示例
+### 多表关联视图（只读）
 
 ```yaml
 models:
@@ -188,82 +211,156 @@ models:
       Total: { type: decimal }
 ```
 
+### 多表页面定义
+
+```yaml
+pages:
+  OrderCustomer:
+    title: Order & Customer
+    main_table: Customer
+    
+    data_loading:
+      strategy: parallel
+      sources:
+        - id: customer_data
+          type: table
+          table: Customer
+          where: "CustomerId = @CustomerId"
+        
+        - id: invoice_data
+          type: table
+          table: Invoice
+          where: "CustomerId = @CustomerId"
+    
+    save_config:
+      transaction:
+        enabled: true
+      save_order:
+        - order: 1
+          table: Customer
+          crud_type: upsert
+          match_fields: [CustomerId]
+        - order: 2
+          table: Invoice
+          crud_type: insert
+          field_mappings:
+            CustomerId:
+              source: generated_id
+              from_table: Customer
+              field: CustomerId
+```
+
 ## 🔌 API 端点
 
-### 通用 CRUD API
+### 通用 CRUD API（所有模型自动支持）
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
 | `GET` | `/api/{model}` | 获取所有数据 |
-| `POST` | `/api/{model}` | 创建数据（form-data） |
-| `PUT` | `/api/{model}/{id}` | 更新数据（form-data） |
+| `POST` | `/api/{model}` | 创建数据 |
+| `PUT` | `/api/{model}/{id}` | 更新数据 |
 | `DELETE` | `/api/{model}/{id}` | 删除数据 |
 
-### AI 相关 API
+### UI 端点
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `POST` | `/api/ai/suggest` | 生成 AI 建议 |
-| `GET` | `/api/ai/pending` | 获取待审批快照 |
-| `POST` | `/api/ai/approve/{id}` | 审批快照 |
-| `POST` | `/api/ai/reject/{id}` | 拒绝快照 |
+| `GET` | `/ui/{model}` | 列表页面 |
+| `GET` | `/ui/{model}/create` | 创建表单 |
+| `GET` | `/ui/{model}/edit/{id}` | 编辑表单 |
+| `GET` | `/ui/{model}/details/{id}` | 详情页面 |
 
-### 多表表单 API
+### 多表 API
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `GET` | `/api/multi-table/{pageName}/load` | 加载多表数据 |
-| `POST` | `/api/multi-table/{pageName}/save` | 保存多表数据 |
+| `GET` | `/api/page/{pageName}/load` | 加载多表数据 |
+| `POST` | `/api/page/{pageName}/save` | 保存多表数据 |
 
-## 🎯 AI 三层架构
+## 🎯 核心机制
 
-项目实现了 AI 三层架构模式：
+### 1. GenericApiController - 通用控制器
 
-### 1. Functional Core (函数式核心)
-- **位置**: `Platform.Domain/Core/`
-- **特点**: 纯函数，无副作用
-- **组件**:
-  - `IEntityValidator` - 实体验证器接口
-  - `BusinessRuleValidator` - 业务规则验证
-  - `EntityStateTransition` - 状态转换
+**一个控制器处理所有模型，无需为每个模型创建控制器**
 
-### 2. Deterministic Shell (确定性外壳)
-- **位置**: `Platform.Infrastructure/Shell/`
-- **特点**: 处理副作用，确定性行为
-- **组件**:
-  - `Snapshot` / `Provenance` - 快照和证迹模型
-  - `ISnapshotRepository` / `SnapshotRepository` - 快照仓储
+```csharp
+[ApiController]
+[Route("api/{model}")]
+public class GenericApiController : ControllerBase
+{
+    private readonly DynamicRepository _repo;
+    private readonly AppDefinitions _defs;
 
-### 3. Non-deterministic Edge (非确定性边缘)
-- **位置**: `Platform.Application/Services/`
-- **特点**: AI/ML 集成，非确定性行为
-- **组件**:
-  - `IAiSuggestionService` - AI 建议服务接口
-  - `MockAISuggestionService` - 模拟 AI 服务
-  - `AiIntegrationService` - AI 集成协调器
+    [HttpPost]
+    public async Task<IActionResult> Create(
+        string model,
+        [FromForm] Dictionary<string, string> data)
+    {
+        var def = GetModel(model);  // 从 YAML 获取定义
+        var objData = ModelBinder.Bind(def, data);  // 运行时绑定验证
+        await _repo.InsertAsync(def, objData);  // 动态执行 SQL
+        return Ok();
+    }
+}
+```
 
-## 🛠️ 开发约定
+### 2. DynamicRepository - 动态仓储
 
-### 代码风格
-- 使用 C# 10+ 特性（`record`、模式匹配等）
-- 启用 nullable reference types
-- 依赖注入优先
-- 仓储模式进行数据访问
+**运行时动态构建 SQL，无需为每个表创建仓储类**
 
-### 测试实践
-- 函数式核心组件应编写单元测试
-- AI 服务使用模拟实现进行测试
-- Puppeteer 用于端到端测试（`test_page.js`）
+```csharp
+public class DynamicRepository
+{
+    public async Task InsertAsync(ModelDefinition def, IDictionary<string, object> data)
+    {
+        // 根据 YAML 定义动态构建 SQL
+        var cols = def.Columns.Intersect(data.Keys).ToList();
+        var sql = $"INSERT INTO {Escape(def.Table)} (...) VALUES (...)";
+        await _db.ExecuteAsync(sql, data);
+    }
+}
+```
 
-### 数据库约定
-- 使用 SQLite 进行开发和测试
-- 主键统一使用 `Id` 或 `{TableName}Id` 格式
-- 所有数据库变更需更新 `init_db.sql`
+### 3. ModelBinder - 模型绑定器
 
-### YAML 配置约定
-- 模型名称使用 PascalCase
-- 表名使用数据库实际名称（如 Chinook 数据库的表名）
-- 支持中英文双语标签
+**运行时读取 YAML 配置进行数据绑定和验证**
+
+```csharp
+public static class ModelBinder
+{
+    public static Dictionary<string, object> Bind(
+        ModelDefinition def,
+        Dictionary<string, string> input)
+    {
+        // 读取 YAML 中的 form.fields 配置
+        foreach (var field in def.Form.Fields)
+        {
+            // 运行时验证类型、长度、必填等
+            var value = ConvertValue(name, raw, propDef.Type, fieldDef);
+            result[name] = value;
+        }
+        return result;
+    }
+}
+```
+
+### 4. YamlLoader - YAML 加载器
+
+**应用启动时加载 YAML 定义到内存**
+
+```csharp
+public static class YamlLoader
+{
+    public static AppDefinitions Load(string filePath, string pagesDir)
+    {
+        var yaml = File.ReadAllText(filePath);
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .Build();
+        return deserializer.Deserialize<AppDefinitions>(yaml);
+    }
+}
+```
 
 ## 📦 已配置的数据模型
 
@@ -284,50 +381,38 @@ models:
 
 - ✅ CSRF 保护（X-CSRF-TOKEN）
 - ✅ SQL 注入防护（参数化查询 + 标识符验证）
-- ✅ 输入验证（类型检查 + 长度限制）
+- ✅ 输入验证（运行时类型检查 + 长度限制）
 - ✅ 表单验证（服务端 + 客户端）
-- ✅ JWT 认证支持（Microsoft.AspNetCore.Authentication.JwtBearer）
+- ✅ JWT 认证支持
 
-## 🤖 AI 代码生成系统
+## 🚀 增强计划
 
-项目包含完整的**确定性代码生成系统**，确保 AI 生成的代码是稳定的、一致的、可维护的：
+### P0 - 核心增强
 
-### 核心组件
+1. **业务规则验证** - 通过 YAML 配置验证规则
+2. **完善多表表单** - 已有基础，需要测试和文档
+3. **权限控制基础** - 简单的角色权限
 
-| 组件 | 文件 | 说明 |
-|------|------|------|
-| **代码生成器接口** | `ICodeGenerator.cs` | 定义代码生成标准接口 |
-| **模型代码生成器** | `ModelCodeGenerator.cs` | 从 ModelDefinition 生成代码 |
-| **代码模板引擎** | `CodeTemplateEngine.cs` | 使用模板确保代码一致性 |
-| **版本管理器** | `CodeVersionManager.cs` | 追踪代码版本和变更 |
-| **质量验证器** | `CodeQualityValidator.cs` | 验证代码语法和质量 |
-| **生成服务** | `CodeGenerationService.cs` | 统一入口，整合所有组件 |
+### P1 - 重要增强
 
-### 使用示例
+4. **计算字段** - 通过表达式配置
+5. **级联操作** - 通过 YAML 配置
+6. **审计字段** - 自动填充创建/修改信息
 
-```csharp
-var service = new CodeGenerationService(new CodeGenerationSettings
-{
-    RootNamespace = "Platform.Api",
-    AddHeaderComments = true
-});
+### P2 - 高级功能
 
-// 从 YAML 生成代码
-var result = await service.GenerateFromYamlAsync(
-    "Definitions/app.yaml",
-    "Generated"
-);
-```
+7. **动态表单布局** - 通过 YAML 配置布局
+8. **工作流引擎** - YAML 定义的状态机
+9. **动态列表操作** - 通过 YAML 配置操作按钮
 
-### 主要特性
+详细计划见 `Docs/LowCode_Enhancement_Plan.md`
 
-- ✅ **模板驱动** - 预定义模板确保代码结构一致
-- ✅ **版本管理** - 追踪每次生成，支持回滚
-- ✅ **质量验证** - Roslyn 分析语法和质量
-- ✅ **变更检测** - 只在 YAML 变更时重新生成
-- ✅ **确定性输出** - 相同输入产生相同输出
+## 🎯 设计原则
 
-详细文档见 `Docs/CodeGeneration.md`
+1. **运行时驱动** - 不要生成代码，在运行时读取 YAML 执行
+2. **一个控制器处理所有** - 不要为每个模型创建控制器
+3. **配置优于编码** - 能通过 YAML 配置的就不写代码
+4. **渐进式增强** - 保持现有功能，逐步增强
 
 ## 📚 重要文件说明
 
@@ -335,18 +420,12 @@ var result = await service.GenerateFromYamlAsync(
 |------|------|
 | `Definitions/app.yaml` | 核心配置文件，定义所有数据模型 |
 | `Program.cs` | 应用入口，配置依赖注入和中间件 |
-| `DynamicRepository.cs` | 核心数据仓储，处理动态 CRUD |
-| `ModelBinder.cs` | 模型绑定和类型转换 |
-| `SqlIdentifier.cs` | SQL 标识符转义工具，防止注入 |
-| `init_db.sql` | 数据库初始化和测试数据 |
+| `GenericApiController.cs` | ★ 通用 CRUD API 控制器 |
+| `DynamicRepository.cs` | ★ 动态数据仓储 |
+| `ModelBinder.cs` | ★ 模型绑定和验证 |
+| `YamlLoader.cs` | ★ YAML 加载器 |
 | `Docs/MultiTableForm.md` | 多表表单功能详细文档 |
-
-## 🐛 已知问题/注意事项
-
-1. **YAML 路径解析**: `Program.cs` 中 YAML 文件路径从 `bin/Debug/net10.0` 返回到项目根目录
-2. **静态文件路径**: `WebRootPath` 设置为 `../wwwroot`
-3. **模拟 AI 服务**: `MockAISuggestionService` 是模拟实现，需要替换为真实 AI 模型
-4. **多表表单**: 复杂的多表配置需要参考 `Docs/MultiTableForm.md`
+| `Docs/LowCode_Enhancement_Plan.md` | 低代码增强计划 |
 
 ## 🔗 相关资源
 
@@ -354,4 +433,12 @@ var result = await service.GenerateFromYamlAsync(
 - [Dapper ORM](https://github.com/DapperLib/Dapper)
 - [HTMX](https://htmx.org)
 - [YamlDotNet](https://github.com/aaubry/YamlDotNet)
-- [Scalar API 文档](https://github.com/scalar/scalar)
+
+## 💡 与代码生成的对比
+
+| 方案 | 优点 | 缺点 |
+|------|------|------|
+| **运行时驱动（本项目）** | 无需生成文件，修改 YAML 即可，维护简单 | 性能略低（但可接受） |
+| **代码生成** | 生成的代码可单独优化 | 生成的文件多，难以维护 |
+
+**本项目的选择：运行时驱动为主，必要时生成代码**

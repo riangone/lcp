@@ -17,8 +17,9 @@ data_loading:
       parameters:
         - name: CustomerId
           source: QueryString
-          default: null
-      
+          required: false
+          default: 0
+
     # 订单数据
     - id: invoice_data
       type: table
@@ -35,6 +36,10 @@ data_loading:
       table: InvoiceLine
       foreign_key: InvoiceId
       where: "InvoiceId = @InvoiceId"
+      load_all: true
+      parameters:
+        - name: InvoiceId
+          source: QueryString
       
     # 员工列表（下拉选项）
     - id: employees

@@ -1,0 +1,24 @@
+{
+  "name": "lcp",
+  "version": "1.0.0",
+  "description": "这是一个基于 .NET 10 的低代码平台，能够根据 YAML 定义自动生成： - ✅ RESTful CRUD API - ✅ 动态 Web UI（带实时更新） - ✅ 数据验证和表单支持 - ✅ 分页、过滤、搜索功能",
+  "main": "test_page.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/riangone/lcp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/riangone/lcp/issues"
+  },
+  "homepage": "https://github.com/riangone/lcp#readme",
+  "dependencies": {
+    "puppeteer-core": "^24.37.3"
+  }
+}
