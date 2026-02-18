@@ -20,21 +20,40 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
 
+// ★ 支持通过环境变量选择项目配置
+// 使用方式：export LCP_PROJECT=todo 然后 dotnet run
+var projectName = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "app";
+var yamlFileName = $"{projectName}_app.yaml";
+
+Console.WriteLine($"");
+Console.WriteLine($"╔════════════════════════════════════════════════════════╗");
+Console.WriteLine($"║           LowCode Platform - Project Loader            ║");
+Console.WriteLine($"╠════════════════════════════════════════════════════════╣");
+Console.WriteLine($"║  Project: {projectName,-45} ║");
+Console.WriteLine($"║  Config:  {yamlFileName,-45} ║");
+Console.WriteLine($"╚════════════════════════════════════════════════════════╝");
+Console.WriteLine($"");
+
 // YAML 定义加载
 builder.Services.AddSingleton<AppDefinitions>(_ =>
 {
     var basePath = AppContext.BaseDirectory;
-    Console.WriteLine($"[DEBUG] BaseDirectory: {basePath}");
 
     // 从 bin/Debug/net10.0 返回到项目根目录
-    var yamlPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "app.yaml");
+    var yamlPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", yamlFileName);
     var pagesPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "pages");
-    
+
     var fullPath = Path.GetFullPath(yamlPath);
     var pagesFullPath = Path.GetFullPath(pagesPath);
-    
-    Console.WriteLine($"[DEBUG] YAML Path: {fullPath}, Exists: {File.Exists(fullPath)}");
-    Console.WriteLine($"[DEBUG] Pages Path: {pagesFullPath}, Exists: {Directory.Exists(pagesFullPath)}");
+
+    Console.WriteLine($"[PROJECT] Loading YAML from: {fullPath}");
+
+    if (!File.Exists(fullPath))
+    {
+        // 如果指定的项目文件不存在，回退到默认的 app.yaml
+        Console.WriteLine($"[WARN] {yamlFileName} not found, falling back to app.yaml");
+        fullPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "app.yaml");
+    }
 
     return YamlLoader.Load(fullPath, pagesFullPath);
 });
@@ -51,7 +70,7 @@ builder.Services.AddSingleton<YamlModelStore>();
 builder.Services.AddScoped<PageDataLoader>();
 builder.Services.AddScoped<MultiTableSaver>();
 
-// AI服务和快照服务
+// AI 服务和快照服务
 builder.Services.AddScoped<ISnapshotRepository, SnapshotRepository>();
 builder.Services.AddScoped<IAiSuggestionService, MockAISuggestionService>();
 builder.Services.AddScoped<AiIntegrationService>();
@@ -75,11 +94,11 @@ app.Use(async (context, next) =>
     {
         // 注入 Models
         context.Items["Models"] = defs.Models;
-        
+
         // 注入 Pages
         context.Items["Pages"] = defs.Pages;
     }
-    
+
     await next();
 });
 
@@ -89,16 +108,19 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-// 首页显示所有模型的链接
-app.MapGet("/", () => Results.Redirect("/Home"));
+// 首页显示项目信息
+app.MapGet("/", () =>
+{
+    return Results.Redirect("/Home");
+});
 
-// 添加一个特定的API文档入口点
+// 添加一个特定的 API 文档入口点
 app.MapGet("/docs", () => Results.Redirect("/scalar/v1"));
 
-// 启用控制器 - 这会处理API控制器和MVC控制器
+// 启用控制器 - 这会处理 API 控制器和 MVC 控制器
 app.MapControllers();
 
-// 启用MVC路由
+// 启用 MVC 路由
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

@@ -4,17 +4,42 @@
     var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
     var pages = ViewData["Pages"] as Dictionary<string, Platform.Infrastructure.Definitions.PageDefinition>;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var projectName = ViewData["ProjectName"] as string ?? "app";
 }
 
 <div class="container mx-auto px-4 py-8">
+    <!-- 项目标题 -->
     <div class="text-center mb-12">
         <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            Welcome to Low Code Platform
+            @if (projectName == "todo")
+            {
+                <span>📋 TODO 项目管理</span>
+            }
+            else
+            {
+                <span>Welcome to Low Code Platform</span>
+            }
         </h1>
         <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            A modern platform for building data-driven applications with AI-powered features
+            @if (projectName == "todo")
+            {
+                <span>通过 YAML 定义驱动，无需编写代码即可管理任务和项目</span>
+            }
+            else
+            {
+                <span>A modern platform for building data-driven applications with AI-powered features</span>
+            }
         </p>
+        
+        @if (projectName != "app")
+        {
+            <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
+                <span class="font-semibold">当前项目：</span>@projectName
+                <a href="/?LCP_PROJECT=app" class="ml-4 text-blue-600 underline">切换到默认项目</a>
+            </div>
+        }
     </div>
+</div>
 
     <!-- Feature Cards Section -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">

@@ -1,0 +1,400 @@
+# TODO 项目管理应用
+# 只需定义 YAML，即可自动生成完整的 CRUD API 和 UI
+
+models:
+  # ==================== 任务表 ====================
+  Task:
+    table: Task
+    primary_key: Id
+
+    # UI 配置
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Tasks
+          create_button: Add Task
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search tasks...
+          Id: ID
+          Title: Title
+          Description: Description
+          Status: Status
+          Priority: Priority
+          DueDate: Due Date
+          CreatedAt: Created At
+          CompletedAt: Completed At
+          Actions: Actions
+          new_button: New
+          save_button: Save
+          cancel_button: Cancel
+        zh:
+          title: 任务管理
+          create_button: 添加任务
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索任务...
+          Id: 编号
+          Title: 标题
+          Description: 描述
+          Status: 状态
+          Priority: 优先级
+          DueDate: 截止日期
+          CreatedAt: 创建时间
+          CompletedAt: 完成时间
+          Actions: 操作
+          new_button: 新增
+          save_button: 保存
+          cancel_button: 取消
+      styles:
+        card_class: "card-task"
+        button_class: "btn btn-primary"
+
+    # 列表配置
+    list:
+      columns:
+        - Id
+        - Title
+        - Status
+        - Priority
+        - DueDate
+
+      filters:
+        Title:
+          label: Title
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            pending: Pending
+            in_progress: In Progress
+            completed: Completed
+            cancelled: Cancelled
+        Priority:
+          label: Priority
+          type: select
+          options:
+            low: Low
+            medium: Medium
+            high: High
+            urgent: Urgent
+
+    # 表单配置
+    form:
+      title: Task
+      fields:
+        Title:
+          label: Title
+          type: text
+          required: true
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 2000
+
+        Status:
+          label: Status
+          type: select
+          required: true
+          options:
+            pending: Pending
+            in_progress: In Progress
+            completed: Completed
+            cancelled: Cancelled
+          default: pending
+
+        Priority:
+          label: Priority
+          type: select
+          required: true
+          options:
+            low: Low
+            medium: Medium
+            high: High
+            urgent: Urgent
+          default: medium
+
+        DueDate:
+          label: Due Date
+          type: date
+
+    # 属性定义
+    properties:
+      Id:
+        type: int
+      Title:
+        type: string
+        required: true
+      Description:
+        type: string
+      Status:
+        type: string
+        required: true
+      Priority:
+        type: string
+        required: true
+      DueDate:
+        type: date
+      CreatedAt:
+        type: datetime
+      CompletedAt:
+        type: datetime
+
+  # ==================== 项目表 ====================
+  Project:
+    table: Project
+    primary_key: Id
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Projects
+          create_button: Add Project
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search projects...
+          Id: ID
+          Name: Project Name
+          Description: Description
+          Status: Status
+          StartDate: Start Date
+          EndDate: End Date
+          Actions: Actions
+        zh:
+          title: 项目管理
+          create_button: 添加项目
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索项目...
+          Id: 编号
+          Name: 项目名称
+          Description: 描述
+          Status: 状态
+          StartDate: 开始日期
+          EndDate: 结束日期
+          Actions: 操作
+      styles:
+        card_class: "card-project"
+        button_class: "btn btn-success"
+
+    list:
+      columns:
+        - Id
+        - Name
+        - Status
+        - StartDate
+        - EndDate
+
+      filters:
+        Name:
+          label: Name
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            planning: Planning
+            active: Active
+            on_hold: On Hold
+            completed: Completed
+            cancelled: Cancelled
+
+    form:
+      title: Project
+      fields:
+        Name:
+          label: Project Name
+          type: text
+          required: true
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 2000
+
+        Status:
+          label: Status
+          type: select
+          required: true
+          options:
+            planning: Planning
+            active: Active
+            on_hold: On Hold
+            completed: Completed
+            cancelled: Cancelled
+          default: planning
+
+        StartDate:
+          label: Start Date
+          type: date
+
+        EndDate:
+          label: End Date
+          type: date
+
+    properties:
+      Id:
+        type: int
+      Name:
+        type: string
+        required: true
+      Description:
+        type: string
+      Status:
+        type: string
+        required: true
+      StartDate:
+        type: date
+      EndDate:
+        type: date
+
+  # ==================== 任务与项目关联视图 ====================
+  TaskWithProject:
+    query: |
+      SELECT
+        t.Id,
+        t.Title,
+        t.Description,
+        t.Status,
+        t.Priority,
+        t.DueDate,
+        t.CreatedAt,
+        t.CompletedAt,
+        p.Name as ProjectName,
+        p.Status as ProjectStatus
+      FROM Task t
+      LEFT JOIN Project p ON p.Id = t.ProjectId
+    primary_key: Id
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Tasks by Project
+          ProjectName: Project
+          ProjectStatus: Project Status
+        zh:
+          title: 项目任务视图
+          ProjectName: 项目
+          ProjectStatus: 项目状态
+
+    list:
+      columns:
+        - Id
+        - Title
+        - ProjectName
+        - Status
+        - Priority
+        - DueDate
+      filters:
+        ProjectName:
+          label: Project
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            pending: Pending
+            in_progress: In Progress
+            completed: Completed
+
+    properties:
+      Id:
+        type: int
+      Title:
+        type: string
+      ProjectName:
+        type: string
+      Status:
+        type: string
+      Priority:
+        type: string
+      DueDate:
+        type: date
+      ProjectStatus:
+        type: string
+
+  # ==================== 项目统计视图 ====================
+  ProjectStats:
+    query: |
+      SELECT
+        p.Id,
+        p.Name,
+        p.Status,
+        COUNT(t.Id) as TotalTasks,
+        SUM(CASE WHEN t.Status = 'pending' THEN 1 ELSE 0 END) as PendingTasks,
+        SUM(CASE WHEN t.Status = 'in_progress' THEN 1 ELSE 0 END) as InProgressTasks,
+        SUM(CASE WHEN t.Status = 'completed' THEN 1 ELSE 0 END) as CompletedTasks,
+        SUM(CASE WHEN t.Priority = 'urgent' THEN 1 ELSE 0 END) as UrgentTasks
+      FROM Project p
+      LEFT JOIN Task t ON t.ProjectId = p.Id
+      GROUP BY p.Id, p.Name, p.Status
+    primary_key: Id
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Project Statistics
+          TotalTasks: Total Tasks
+          PendingTasks: Pending
+          InProgressTasks: In Progress
+          CompletedTasks: Completed
+          UrgentTasks: Urgent
+        zh:
+          title: 项目统计
+          TotalTasks: 总任务数
+          PendingTasks: 待处理
+          InProgressTasks: 进行中
+          CompletedTasks: 已完成
+          UrgentTasks: 紧急
+
+    list:
+      columns:
+        - Id
+        - Name
+        - Status
+        - TotalTasks
+        - PendingTasks
+        - InProgressTasks
+        - CompletedTasks
+        - UrgentTasks
+      filters:
+        Name:
+          label: Name
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            planning: Planning
+            active: Active
+            completed: Completed
+
+    properties:
+      Id:
+        type: int
+      Name:
+        type: string
+      Status:
+        type: string
+      TotalTasks:
+        type: int
+      PendingTasks:
+        type: int
+      InProgressTasks:
+        type: int
+      CompletedTasks:
+        type: int
+      UrgentTasks:
+        type: int
