@@ -31,8 +31,8 @@ public class PageController : Controller
     {
         var page = GetPage(pageName);
 
-        // 如果是多表 CRUD 页面，使用专用视图
-        if (page.MultiTableCrud != null)
+        // 如果是多表 CRUD 页面（旧版或新版），使用专用视图
+        if (page.MultiTableCrud != null || page.FormSections != null)
         {
             ViewData["PageDef"] = page;
             ViewData["PageName"] = pageName;

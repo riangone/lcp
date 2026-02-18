@@ -1,0 +1,155 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var pageDef = (PageDefinition)ViewData["PageDef"]!;
+    var pageName = (string)ViewData["PageName"]!;
+    
+    var formSections = pageDef.FormSections;
+    var dataLoading = pageDef.DataLoading;
+}
+
+<div class="space-y-6">
+    @* 动态生成表单区域 *@
+    @foreach (var section in formSections)
+    {
+        var sectionId = section.Id;
+        var sectionTitle = section.Title ?? sectionId;
+        var sectionType = section.Type ?? "form";
+        var table = section.Table;
+        
+        <div class="card">
+            <div class="card-header border-b border-gray-200 pb-4 mb-4">
+                <h2 class="text-xl font-semibold text-gray-800">
+                    <i class="fas fa-@(sectionType == "form" ? "edit" : "list") mr-2"></i>@sectionTitle
+                </h2>
+            </div>
+            
+            @if (sectionType == "form")
+            {
+                <form id="@sectionId-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        @if (!string.IsNullOrEmpty(table) && dataLoading?.Sources != null)
+                        {
+                            var source = dataLoading.Sources.FirstOrDefault(s => s.Id == sectionId || s.Table == table);
+                            if (source != null)
+                            {
+                                @* 简单处理：显示所有字段 *@
+                                <div class="col-span-2">
+                                    <p class="text-gray-500 text-sm">表单字段配置来自表：@table</p>
+                                </div>
+                            }
+                        }
+                    </div>
+                </form>
+            }
+            else if (sectionType == "editable_table" || sectionType == "table")
+            {
+                <div class="overflow-x-auto">
+                    <table class="table w-full">
+                        <thead>
+                            <tr class="bg-gray-50">
+                                @if (section.Columns != null && section.Columns.Any())
+                                {
+                                    foreach (var col in section.Columns)
+                                    {
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">@col</th>
+                                    }
+                                }
+                                else
+                                {
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">数据</th>
+                                }
+                                @if (section.Editable)
+                                {
+                                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody id="@sectionId-body" class="bg-white divide-y divide-gray-200">
+                            <tr>
+                                <td colspan="@(section.Columns?.Count ?? 2)" class="px-6 py-4 text-center text-gray-500">
+                                    数据将通过 API 加载
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    }
+    
+    @* 保存按钮 *@
+    <div class="flex gap-3">
+        <button type="button" onclick="saveAllForms()" class="btn btn-primary">
+            <i class="fas fa-save mr-2"></i>保存全部
+        </button>
+        <button type="button" onclick="loadAllData()" class="btn btn-outline">
+            <i class="fas fa-sync mr-2"></i>刷新数据
+        </button>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const pageName = '@pageName';
+        const formSections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(formSections));
+        
+        // 加载所有数据
+        async function loadAllData() {
+            try {
+                const response = await fetch(`/api/multi-table/${pageName}/load`);
+                const result = await response.json();
+                
+                console.log('加载的数据:', result);
+                
+                if (result.success) {
+                    // 填充各个区域的数据
+                    for (const [sourceId, data] of Object.entries(result.data)) {
+                        console.log(`填充 ${sourceId}:`, data);
+                        // TODO: 根据数据类型填充到对应的表单/表格
+                    }
+                }
+            } catch (err) {
+                console.error('加载数据失败:', err);
+            }
+        }
+        
+        // 保存所有表单
+        async function saveAllForms() {
+            try {
+                const formData = new FormData();
+                
+                // 收集所有表单数据
+                document.querySelectorAll('form').forEach(form => {
+                    const formDataEntries = new FormData(form).entries();
+                    for (const [key, value] of formDataEntries) {
+                        formData.append(key, value);
+                    }
+                });
+                
+                const response = await fetch(`/api/multi-table/${pageName}/save`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('保存成功！');
+                    loadAllData();
+                } else {
+                    alert('保存失败：' + result.message);
+                }
+            } catch (err) {
+                console.error('保存失败:', err);
+                alert('保存失败：' + err.message);
+            }
+        }
+        
+        // 页面加载时加载数据
+        loadAllData();
+    </script>
+}
