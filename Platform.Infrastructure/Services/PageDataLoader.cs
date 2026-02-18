@@ -122,7 +122,8 @@ public class PageDataLoader
             else
             {
                 var row = await _db.QueryFirstOrDefaultAsync(sql, resolvedParams);
-                return row == null ? null : (IDictionary<string, object>)row;
+                // 返回数组格式，即使是单行
+                return row == null ? new List<object>() : new List<object> { (IDictionary<string, object>)row };
             }
         }
 
