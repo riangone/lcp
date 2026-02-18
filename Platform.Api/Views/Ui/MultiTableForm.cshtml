@@ -24,18 +24,24 @@
     @if (pageDef.FormSections != null && pageDef.FormSections.Any())
     {
         @* 新版配置格式 *@
-        @await Html.PartialAsync("_MultiTableFormNew", pageDef)
+        @await Html.PartialAsync("~/Views/Ui/_MultiTableFormNew.cshtml", pageDef)
     }
     else if (pageDef.MultiTableCrud != null)
     {
         @* 旧版配置格式 *@
-        @await Html.PartialAsync("_MultiTableFormLegacy", pageDef)
+        @await Html.PartialAsync("~/Views/Ui/_MultiTableFormLegacy.cshtml", pageDef)
     }
     else
     {
         <div class="text-center py-12">
             <i class="fas fa-exclamation-circle text-6xl text-gray-400 mb-4"></i>
             <p class="text-gray-600">此页面未配置多表 CRUD</p>
+            <p class="text-sm text-gray-500 mt-2">
+                FormSections: @(pageDef.FormSections == null ? "null" : pageDef.FormSections.Count.ToString())
+            </p>
+            <p class="text-sm text-gray-500">
+                MultiTableCrud: @(pageDef.MultiTableCrud == null ? "null" : "configured")
+            </p>
         </div>
     }
 </div>
