@@ -127,10 +127,30 @@
         const formSections = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(formSections));
         let loadedData = {};
 
+        // 从 URL 获取参数
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            const result = {};
+            for (const [key, value] of params) {
+                result[key] = value;
+            }
+            return result;
+        }
+
         // 加载所有数据
         async function loadAllData() {
             try {
-                const response = await fetch(`/api/multi-table/${pageName}/load`);
+                // 从 URL 获取参数
+                const urlParams = getUrlParams();
+                console.log('URL 参数:', urlParams);
+
+                // 构建查询字符串
+                const queryString = new URLSearchParams(urlParams).toString();
+                const url = `/api/multi-table/${pageName}/load${queryString ? '?' + queryString : ''}`;
+
+                console.log('请求 URL:', url);
+
+                const response = await fetch(url);
                 const result = await response.json();
 
                 console.log('加载的数据:', result);
@@ -142,6 +162,8 @@
                         console.log(`填充 ${sourceId}:`, data);
                         fillSectionData(sourceId, data);
                     }
+                } else {
+                    console.error('加载失败:', result.message);
                 }
             } catch (err) {
                 console.error('加载数据失败:', err);
