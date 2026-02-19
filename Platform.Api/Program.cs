@@ -8,6 +8,7 @@ using Platform.Application.Services;
 using Platform.Api.TestScenarios;
 using Scalar.AspNetCore;
 using Platform.Infrastructure.Services;
+using Platform.Api.Services;
 using System.Text;
 using System.Text.Json;
 using YamlDotNet.Serialization;
@@ -24,36 +25,33 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
 
-// ★ 项目加载器 - 支持独立项目
-// 首先尝试从命令行参数获取项目名，否则使用环境变量
-var projectName = args.FirstOrDefault(a => a.StartsWith("--project="))?.Substring("--project=".Length) 
-    ?? Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "todo";
-    
-var projectLoader = new ProjectLoader(projectName);
-var projectConfig = projectLoader.LoadProject();
-
-Console.WriteLine($"");
-Console.WriteLine($"╔════════════════════════════════════════════════════════╗");
-Console.WriteLine($"║           LowCode Platform - Project Loader            ║");
-Console.WriteLine($"╠════════════════════════════════════════════════════════╣");
-Console.WriteLine($"║  Project: {projectConfig.DisplayName,-45} ║");
-Console.WriteLine($"║  Version: {projectConfig.Version,-45} ║");
-Console.WriteLine($"║  Database: {projectConfig.DatabasePath,-45} ║");
-Console.WriteLine($"╚════════════════════════════════════════════════════════╝");
-Console.WriteLine($"");
-
-// YAML 定义加载
-builder.Services.AddSingleton<AppDefinitions>(_ =>
+// ★ 项目管理服务 - 支持运行时动态切换项目
+var projectsDirectory = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
+builder.Services.AddSingleton<ProjectManager>(sp => 
 {
-    var appDefinitions = projectLoader.LoadAppDefinitions();
-    Console.WriteLine($"[PROJECT] Loaded {appDefinitions.Models.Count} models and {appDefinitions.Pages.Count} pages");
-    return appDefinitions;
+    var logger = sp.GetRequiredService<ILogger<ProjectManager>>();
+    return new ProjectManager(projectsDirectory, logger);
 });
 
-// 数据库和服务 - 使用项目配置的数据库路径
-var dbPath = projectConfig.DatabasePath;
-var connString = $"Data Source={dbPath}";
-builder.Services.AddScoped<DbConnectionFactory>(sp => new DbConnectionFactory(connString));
+// ★ 项目作用域服务 - 每请求存储当前项目
+builder.Services.AddScoped<ProjectScope>();
+
+// YAML 定义加载 - 从 ProjectScope 动态获取（scoped 而非 singleton）
+builder.Services.AddScoped<AppDefinitions>(sp =>
+{
+    var projectScope = sp.GetRequiredService<ProjectScope>();
+    return projectScope.CurrentProject?.AppDefinitions 
+        ?? throw new InvalidOperationException("No project selected");
+});
+
+// 数据库和服务 - 从 ProjectScope 动态获取数据库路径
+builder.Services.AddScoped<DbConnectionFactory>(sp =>
+{
+    var projectScope = sp.GetRequiredService<ProjectScope>();
+    var dbPath = projectScope.CurrentProject?.DatabasePath ?? "app.db";
+    var connString = $"Data Source={dbPath}";
+    return new DbConnectionFactory(connString);
+});
 
 builder.Services.AddScoped<DynamicRepository>();
 builder.Services.AddScoped<ModelService>();
@@ -79,29 +77,30 @@ builder.Services.AddAntiforgery(options =>
 
 var app = builder.Build();
 
-// 静态文件 - 添加项目静态资源目录
+// 静态文件
 app.UseStaticFiles();
 
-// 项目静态文件（自定义 CSS/JS）
-var projectWwwRoot = Path.Combine(projectLoader.ProjectDirectory, "wwwroot");
-if (Directory.Exists(projectWwwRoot))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(projectWwwRoot),
-        RequestPath = "/project"
-    });
-    Console.WriteLine($"[STATIC] Serving project static files from: {projectWwwRoot}");
-}
-
-// 中间件：注入 Models 和 Pages 到 ViewData
+// 中间件：从 URL 参数切换项目
 app.Use(async (context, next) =>
 {
-    if (context.RequestServices.GetService<AppDefinitions>() is AppDefinitions defs)
+    var projectScope = context.RequestServices.GetService<ProjectScope>();
+    var projectName = context.Request.Query["project"].FirstOrDefault() 
+        ?? context.Request.Headers["X-Project"].FirstOrDefault();
+    
+    if (!string.IsNullOrEmpty(projectName) && projectScope != null)
     {
-        context.Items["Models"] = defs.Models;
-        context.Items["Pages"] = defs.Pages;
-        context.Items["ProjectConfig"] = projectConfig;
+        if (projectScope.SwitchProject(projectName))
+        {
+            context.Response.Headers["X-Project"] = projectName;
+        }
+    }
+    
+    // 存储当前项目到 HttpContext
+    if (projectScope?.CurrentProject != null)
+    {
+        context.Items["CurrentProject"] = projectScope.CurrentProject;
+        context.Items["Models"] = projectScope.CurrentProject.AppDefinitions.Models;
+        context.Items["Pages"] = projectScope.CurrentProject.AppDefinitions.Pages;
     }
 
     await next();
