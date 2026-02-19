@@ -4,7 +4,7 @@ using System.Data;
 
 namespace Platform.Infrastructure.Data;
 
-public class DbConnectionFactory
+public partial class DbConnectionFactory
 {
     private readonly string _conn;
 
@@ -13,7 +13,7 @@ public class DbConnectionFactory
         // 支持通过环境变量指定数据库路径
         // 使用方式：export LCP_DB_PATH=/path/to/todo.db
         var dbPath = Environment.GetEnvironmentVariable("LCP_DB_PATH");
-        
+
         if (!string.IsNullOrEmpty(dbPath))
         {
             _conn = $"Data Source={dbPath}";
@@ -30,6 +30,11 @@ public class DbConnectionFactory
             dbPath = Path.Combine(Directory.GetCurrentDirectory(), "app.db");
             _conn = $"Data Source={dbPath}";
         }
+    }
+
+    public DbConnectionFactory(string connectionString)
+    {
+        _conn = connectionString;
     }
 
     public IDbConnection Create()

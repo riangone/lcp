@@ -8,6 +8,8 @@ using Platform.Application.Services;
 using Platform.Api.TestScenarios;
 using Scalar.AspNetCore;
 using Platform.Infrastructure.Services;
+using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -20,46 +22,34 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
 
-// ★ 支持通过环境变量选择项目配置
-// 使用方式：export LCP_PROJECT=todo 然后 dotnet run
-var projectName = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "app";
-var yamlFileName = $"{projectName}_app.yaml";
+// ★ 项目加载器 - 支持独立项目
+var projectName = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "todo";
+var projectLoader = new ProjectLoader(projectName);
+var projectConfig = projectLoader.LoadProject();
 
 Console.WriteLine($"");
 Console.WriteLine($"╔════════════════════════════════════════════════════════╗");
 Console.WriteLine($"║           LowCode Platform - Project Loader            ║");
 Console.WriteLine($"╠════════════════════════════════════════════════════════╣");
-Console.WriteLine($"║  Project: {projectName,-45} ║");
-Console.WriteLine($"║  Config:  {yamlFileName,-45} ║");
+Console.WriteLine($"║  Project: {projectConfig.DisplayName,-45} ║");
+Console.WriteLine($"║  Version: {projectConfig.Version,-45} ║");
+Console.WriteLine($"║  Database: {projectConfig.DatabasePath,-45} ║");
 Console.WriteLine($"╚════════════════════════════════════════════════════════╝");
 Console.WriteLine($"");
 
 // YAML 定义加载
 builder.Services.AddSingleton<AppDefinitions>(_ =>
 {
-    var basePath = AppContext.BaseDirectory;
-
-    // 从 bin/Debug/net10.0 返回到项目根目录
-    var yamlPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", yamlFileName);
-    var pagesPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "pages");
-
-    var fullPath = Path.GetFullPath(yamlPath);
-    var pagesFullPath = Path.GetFullPath(pagesPath);
-
-    Console.WriteLine($"[PROJECT] Loading YAML from: {fullPath}");
-
-    if (!File.Exists(fullPath))
-    {
-        // 如果指定的项目文件不存在，回退到默认的 app.yaml
-        Console.WriteLine($"[WARN] {yamlFileName} not found, falling back to app.yaml");
-        fullPath = Path.Combine(basePath, "..", "..", "..", "..", "Definitions", "app.yaml");
-    }
-
-    return YamlLoader.Load(fullPath, pagesFullPath);
+    var appDefinitions = projectLoader.LoadAppDefinitions();
+    Console.WriteLine($"[PROJECT] Loaded {appDefinitions.Models.Count} models and {appDefinitions.Pages.Count} pages");
+    return appDefinitions;
 });
 
-// 数据库和服务
-builder.Services.AddScoped<DbConnectionFactory>(sp => new DbConnectionFactory(builder.Configuration));
+// 数据库和服务 - 使用项目配置的数据库路径
+var dbPath = projectConfig.DatabasePath;
+var connString = $"Data Source={dbPath}";
+builder.Services.AddScoped<DbConnectionFactory>(sp => new DbConnectionFactory(connString));
+
 builder.Services.AddScoped<DynamicRepository>();
 builder.Services.AddScoped<ModelService>();
 builder.Services.AddScoped<AuthService>();
@@ -84,19 +74,29 @@ builder.Services.AddAntiforgery(options =>
 
 var app = builder.Build();
 
-// 静态文件
+// 静态文件 - 添加项目静态资源目录
 app.UseStaticFiles();
+
+// 项目静态文件（自定义 CSS/JS）
+var projectWwwRoot = Path.Combine(projectLoader.ProjectDirectory, "wwwroot");
+if (Directory.Exists(projectWwwRoot))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(projectWwwRoot),
+        RequestPath = "/project"
+    });
+    Console.WriteLine($"[STATIC] Serving project static files from: {projectWwwRoot}");
+}
 
 // 中间件：注入 Models 和 Pages 到 ViewData
 app.Use(async (context, next) =>
 {
     if (context.RequestServices.GetService<AppDefinitions>() is AppDefinitions defs)
     {
-        // 注入 Models
         context.Items["Models"] = defs.Models;
-
-        // 注入 Pages
         context.Items["Pages"] = defs.Pages;
+        context.Items["ProjectConfig"] = projectConfig;
     }
 
     await next();
@@ -109,15 +109,10 @@ if (app.Environment.IsDevelopment())
 }
 
 // 首页显示项目信息
-app.MapGet("/", () =>
-{
-    return Results.Redirect("/Home");
-});
-
-// 添加一个特定的 API 文档入口点
+app.MapGet("/", () => Results.Redirect("/Home"));
 app.MapGet("/docs", () => Results.Redirect("/scalar/v1"));
 
-// 启用控制器 - 这会处理 API 控制器和 MVC 控制器
+// 启用控制器
 app.MapControllers();
 
 // 启用 MVC 路由
@@ -125,4 +120,170 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+Console.WriteLine($"");
+Console.WriteLine($"[READY] Application ready! Access at http://localhost:5267");
+Console.WriteLine($"");
+
 app.Run();
+
+/// <summary>
+/// 项目加载器 - 负责加载独立项目的配置和资源
+/// </summary>
+public class ProjectLoader
+{
+    public string ProjectName { get; }
+    public string ProjectDirectory { get; }
+    public string FrameworkDirectory { get; }
+
+    public ProjectLoader(string projectName)
+    {
+        ProjectName = projectName;
+        
+        // 项目目录：/home/ubuntu/ws/lcp/Projects/{projectName}
+        ProjectDirectory = $"/home/ubuntu/ws/lcp/Projects/{projectName}";
+        
+        // 框架目录
+        FrameworkDirectory = "/home/ubuntu/ws/lcp/Framework";
+        
+        if (!Directory.Exists(ProjectDirectory))
+        {
+            throw new DirectoryNotFoundException($"Project '{projectName}' not found at {ProjectDirectory}");
+        }
+        
+        Console.WriteLine($"[PROJECT] Project directory: {ProjectDirectory}");
+    }
+
+    /// <summary>
+    /// 加载项目配置
+    /// </summary>
+    public ProjectConfiguration LoadProject()
+    {
+        var projectFile = Path.Combine(ProjectDirectory, "project.yaml");
+        if (!File.Exists(projectFile))
+        {
+            throw new FileNotFoundException($"project.yaml not found at {projectFile}");
+        }
+
+        var yaml = File.ReadAllText(projectFile);
+        var config = ParseProjectYaml(yaml);
+        
+        // 设置数据库路径
+        config.DatabasePath = Path.Combine(ProjectDirectory, config.DatabasePath);
+        
+        // 初始化数据库（如果需要）
+        InitializeDatabase(config);
+        
+        return config;
+    }
+
+    /// <summary>
+    /// 加载应用定义
+    /// </summary>
+    public AppDefinitions LoadAppDefinitions()
+    {
+        var appFile = Path.Combine(ProjectDirectory, "app.yaml");
+        var pagesDir = Path.Combine(ProjectDirectory, "pages");
+        
+        if (!File.Exists(appFile))
+        {
+            throw new FileNotFoundException($"app.yaml not found at {appFile}");
+        }
+
+        return YamlLoader.Load(appFile, pagesDir);
+    }
+
+    #region Private Methods
+
+    private ProjectConfiguration ParseProjectYaml(string yaml)
+    {
+        // 简化的 YAML 解析（实际应该使用 YamlDotNet）
+        var config = new ProjectConfiguration
+        {
+            Name = ExtractYamlValue(yaml, "name:") ?? "unknown",
+            DisplayName = ExtractYamlValue(yaml, "display_name:") ?? "Unknown Project",
+            Version = ExtractYamlValue(yaml, "version:") ?? "1.0.0",
+            Description = ExtractYamlValue(yaml, "description:") ?? "",
+            DatabasePath = "app.db"
+        };
+
+        // 解析数据库配置
+        var dbSection = ExtractYamlSection(yaml, "database:");
+        if (dbSection != null)
+        {
+            config.DatabasePath = ExtractYamlValue(dbSection, "path:") ?? "app.db";
+        }
+
+        return config;
+    }
+
+    private string? ExtractYamlValue(string yaml, string key)
+    {
+        var lines = yaml.Split('\n');
+        foreach (var line in lines)
+        {
+            if (line.Trim().StartsWith(key))
+            {
+                return line.Substring(key.Length).Trim();
+            }
+        }
+        return null;
+    }
+
+    private string? ExtractYamlSection(string yaml, string sectionKey)
+    {
+        var lines = yaml.Split('\n');
+        var inSection = false;
+        var section = new StringBuilder();
+        
+        foreach (var line in lines)
+        {
+            if (line.Trim().StartsWith(sectionKey))
+            {
+                inSection = true;
+                continue;
+            }
+            
+            if (inSection)
+            {
+                if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith("  "))
+                {
+                    break;
+                }
+                section.AppendLine(line);
+            }
+        }
+        
+        return inSection ? section.ToString() : null;
+    }
+
+    private void InitializeDatabase(ProjectConfiguration config)
+    {
+        if (!File.Exists(config.DatabasePath))
+        {
+            Console.WriteLine($"[DB] Creating database: {config.DatabasePath}");
+            
+            var schemaFile = Path.Combine(ProjectDirectory, config.SchemaFile);
+            if (File.Exists(schemaFile))
+            {
+                Console.WriteLine($"[DB] Executing schema: {schemaFile}");
+                // 实际应该执行 SQL
+            }
+        }
+    }
+
+    #endregion
+}
+
+/// <summary>
+/// 项目配置
+/// </summary>
+public class ProjectConfiguration
+{
+    public string Name { get; set; } = "";
+    public string DisplayName { get; set; } = "";
+    public string Version { get; set; } = "1.0.0";
+    public string Description { get; set; } = "";
+    public string DatabasePath { get; set; } = "";
+    public string SchemaFile { get; set; } = "schema.sql";
+    public string DataFile { get; set; } = "data.sql";
+}

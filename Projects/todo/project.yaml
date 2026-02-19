@@ -1,0 +1,37 @@
+# TODO 项目配置
+name: todo
+display_name: TODO 项目管理
+description: 基于低代码平台的任务和项目管理系统
+version: 1.0.0
+author: LowCode Platform
+
+# 数据库配置
+database:
+  type: sqlite
+  path: todo.db
+  schema: schema.sql
+  seed_data: data.sql
+
+# 功能配置
+features:
+  multi_language: true      # 多语言支持
+  custom_pages: true        # 自定义页面
+  custom_views: false       # 自定义视图覆盖
+  
+# 依赖扩展
+extensions: []
+
+# UI 配置
+ui:
+  theme: default
+  custom_css: css/custom.css
+  custom_js: js/custom.js
+
+# 项目元数据
+metadata:
+  created: 2026-02-19
+  updated: 2026-02-19
+  tags:
+    - task
+    - project
+    - management

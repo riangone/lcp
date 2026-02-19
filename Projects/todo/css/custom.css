@@ -1,0 +1,81 @@
+/* TODO 项目自定义样式 */
+
+/* 任务卡片样式 */
+.card-task {
+    border-left: 4px solid #3b82f6;
+    transition: all 0.3s ease;
+}
+
+.card-task:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+}
+
+/* 项目卡片样式 */
+.card-project {
+    border-left: 4px solid #10b981;
+}
+
+/* 优先级标识 */
+.priority-urgent {
+    border-left-color: #ef4444 !important;
+}
+
+.priority-high {
+    border-left-color: #f59e0b !important;
+}
+
+.priority-medium {
+    border-left-color: #3b82f6 !important;
+}
+
+.priority-low {
+    border-left-color: #6b7280 !important;
+}
+
+/* 状态标识 */
+.status-pending {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-in_progress {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-completed {
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-cancelled {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/* 仪表盘样式 */
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 0.75rem;
+    text-align: center;
+}
+
+.stat-card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    opacity: 0.9;
+    font-size: 0.875rem;
+}

@@ -12,11 +12,14 @@ public class HomeController : Controller
         _defs = defs;
     }
 
+    [HttpGet("/Home")]
     public IActionResult Index()
     {
-        // 传递模型定义给视图
+        ViewData["Title"] = "LowCode Platform - Home";
+        ViewData["ActivePage"] = "Home";
         ViewData["Models"] = _defs.Models;
-        ViewData["Pages"] = _defs.Pages;
+        ViewData["ProjectName"] = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "app";
+
         return View();
     }
 }

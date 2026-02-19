@@ -35,8 +35,8 @@
     var buttonClass = def.Ui?.Styles?.ButtonClass ?? "btn";
 
     var action = isEdit
-        ? $"/api/data/{modelName}/{row![def.PrimaryKey]}"
-        : $"/api/data/{modelName}";
+        ? $"/api/{modelName}/{row![def.PrimaryKey]}"
+        : $"/api/{modelName}";
 
     var method = isEdit ? "put" : "post";
 }
@@ -170,7 +170,7 @@
   document.addEventListener('htmx:configRequest', function(evt) {
     const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
     if(token) {
-      evt.detail.headers['RequestVerificationToken'] = token;
+      evt.detail.parameters['__RequestVerificationToken'] = token;
     }
   });
 </script>

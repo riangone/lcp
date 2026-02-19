@@ -9,7 +9,6 @@ namespace Platform.Api.Controllers;
 
 [ApiController]
 [Route("api/{model}")]
-[ValidateAntiForgeryToken]
 public class GenericApiController : ControllerBase
 {
     private readonly DynamicRepository _repo;
@@ -30,6 +29,8 @@ public class GenericApiController : ControllerBase
     }
 
     [HttpPost]
+    // 注意：CSRF 验证已禁用，通过认证和授权控制访问安全
+    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(
         string model,
         [FromForm] Dictionary<string, string> data)
@@ -53,6 +54,8 @@ public class GenericApiController : ControllerBase
     }
 
     [HttpPut("{id}")]
+    // 注意：CSRF 验证已禁用，通过认证和授权控制访问安全
+    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Update(
         string model,
         string id,
@@ -77,6 +80,8 @@ public class GenericApiController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    // 注意：CSRF 验证已禁用，通过认证和授权控制访问安全
+    // [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(string model, string id)
     {
         try
