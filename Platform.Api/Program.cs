@@ -25,7 +25,10 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
 
 // ★ 项目加载器 - 支持独立项目
-var projectName = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "todo";
+// 首先尝试从命令行参数获取项目名，否则使用环境变量
+var projectName = args.FirstOrDefault(a => a.StartsWith("--project="))?.Substring("--project=".Length) 
+    ?? Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "todo";
+    
 var projectLoader = new ProjectLoader(projectName);
 var projectConfig = projectLoader.LoadProject();
 

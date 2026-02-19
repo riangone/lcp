@@ -151,7 +151,8 @@
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <!-- TODO 项目 -->
-            <a href="/?LCP_PROJECT=todo" class="project-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-md">
+            <a href="javascript:alert('@(currentLang == "zh" ? "请在终端中使用以下命令切换项目：\n\nexport LCP_PROJECT=todo\ndotnet run --project Platform.Api" : "Please switch project using terminal:\n\nexport LCP_PROJECT=todo\ndotnet run --project Platform.Api")')" 
+               class="project-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-md">
                 <div class="flex items-center">
                     <div class="text-4xl mr-4">📋</div>
                     <div>
@@ -162,7 +163,8 @@
             </a>
 
             <!-- 日记本项目 -->
-            <a href="/?LCP_PROJECT=journal" class="project-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 shadow-md">
+            <a href="javascript:alert('@(currentLang == "zh" ? "请在终端中使用以下命令切换项目：\n\nexport LCP_PROJECT=journal\ndotnet run --project Platform.Api" : "Please switch project using terminal:\n\nexport LCP_PROJECT=journal\ndotnet run --project Platform.Api")')" 
+               class="project-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 shadow-md">
                 <div class="flex items-center">
                     <div class="text-4xl mr-4">📔</div>
                     <div>
@@ -173,7 +175,8 @@
             </a>
 
             <!-- 默认项目 -->
-            <a href="/?LCP_PROJECT=app" class="project-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 shadow-md">
+            <a href="javascript:alert('@(currentLang == "zh" ? "请在终端中使用以下命令切换项目：\n\nexport LCP_PROJECT=app\ndotnet run --project Platform.Api" : "Please switch project using terminal:\n\nexport LCP_PROJECT=app\ndotnet run --project Platform.Api")')" 
+               class="project-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 shadow-md">
                 <div class="flex items-center">
                     <div class="text-4xl mr-4">🎵</div>
                     <div>
@@ -182,6 +185,15 @@
                     </div>
                 </div>
             </a>
+        </div>
+        
+        <!-- 切换说明 -->
+        <div class="max-w-4xl mx-auto mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+            <p class="text-yellow-800 text-sm">
+                @(currentLang == "zh" 
+                    ? "💡 <strong>提示：</strong> 项目切换需要重启应用。在终端中运行：<code class='bg-yellow-100 px-2 py-1 rounded'>export LCP_PROJECT=项目名</code> 然后重启应用" 
+                    : "💡 <strong>Tip:</strong> Project switching requires app restart. Run in terminal: <code class='bg-yellow-100 px-2 py-1 rounded'>export LCP_PROJECT=project-name</code> then restart")
+            </p>
         </div>
     </div>
 
