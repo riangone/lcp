@@ -39,6 +39,38 @@ public static class YamlLoader
         return defs;
     }
 
+    /// <summary>
+    /// 加载首页配置
+    /// </summary>
+    public static HomeDefinition? LoadHome(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            return null;
+        }
+
+        var yaml = File.ReadAllText(filePath);
+
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
+
+        try
+        {
+            var home = deserializer.Deserialize<HomeDefinition>(yaml);
+            return home;
+        }
+        catch (Exception ex)
+        {
+            using (var writer = File.AppendText("/tmp/yaml_debug.log"))
+            {
+                writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] Error loading home config from {filePath}: {ex.Message}");
+            }
+            return null;
+        }
+    }
+
     private static Dictionary<string, PageDefinition> LoadPages(string pagesDir, IDeserializer deserializer)
     {
         var pages = new Dictionary<string, PageDefinition>();

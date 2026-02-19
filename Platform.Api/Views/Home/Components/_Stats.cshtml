@@ -1,0 +1,24 @@
+@model Platform.Infrastructure.Definitions.StatsConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+}
+
+<div class="max-w-4xl mx-auto mt-4 grid grid-cols-2 md:grid-cols-@Model.Items.Count gap-4">
+    @foreach (var item in Model.Items)
+    {
+        var colorClass = item.Color switch
+        {
+            "blue" => "text-blue-600",
+            "green" => "text-green-600",
+            "purple" => "text-purple-600",
+            "orange" => "text-orange-600",
+            "red" => "text-red-600",
+            _ => "text-gray-600"
+        };
+
+        <div class="bg-white rounded-lg p-4 text-center shadow">
+            <div class="text-2xl font-bold @colorClass">@item.Value</div>
+            <div class="text-sm text-gray-600">@item.Label.GetText(currentLang)</div>
+        </div>
+    }
+</div>

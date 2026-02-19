@@ -63,17 +63,21 @@ public class ProjectManager
     {
         var projectFile = Path.Combine(projectDirectory, "project.yaml");
         var appFile = Path.Combine(projectDirectory, "app.yaml");
-        
+        var homeFile = Path.Combine(projectDirectory, "home.yaml");
+
         // 解析 project.yaml
         var projectYaml = File.ReadAllText(projectFile);
         var projectConfig = ParseProjectYaml(projectYaml);
-        
+
         // 解析 app.yaml
         var appDefinitions = YamlLoader.Load(appFile, Path.Combine(projectDirectory, "pages"));
-        
+
+        // 解析 home.yaml（可选）
+        var homeConfig = YamlLoader.LoadHome(homeFile);
+
         // 设置数据库路径
         var dbPath = Path.Combine(projectDirectory, projectConfig.Database.Path);
-        
+
         return new ProjectInfo
         {
             Name = projectName,
@@ -82,7 +86,8 @@ public class ProjectManager
             Version = projectConfig.Version,
             Directory = projectDirectory,
             DatabasePath = dbPath,
-            AppDefinitions = appDefinitions
+            AppDefinitions = appDefinitions,
+            HomeConfig = homeConfig
         };
     }
 
@@ -179,6 +184,7 @@ public class ProjectInfo
     public string Directory { get; set; } = "";
     public string DatabasePath { get; set; } = "";
     public AppDefinitions AppDefinitions { get; set; } = new();
+    public HomeDefinition? HomeConfig { get; set; }
 }
 
 /// <summary>

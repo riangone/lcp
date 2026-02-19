@@ -1,0 +1,104 @@
+@model Platform.Infrastructure.Definitions.CardGridConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var projectName = Context.Request.Query["project"].FirstOrDefault() ?? "app";
+    var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
+    var pages = ViewData["Pages"] as Dictionary<string, Platform.Infrastructure.Definitions.PageDefinition>;
+}
+
+@if (Model.Source == "models" && models != null && models.Any())
+{
+    <div class="container mx-auto px-4 pb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            @Model.Title.GetText(currentLang)
+        </h2>
+
+        <div class="grid grid-cols-1 sm:grid-cols-@Model.Columns.Tablet lg:grid-cols-@Model.Columns.Desktop xl:grid-cols-@Model.Columns.Wide gap-6">
+            @foreach (var model in models)
+            {
+                var modelKey = model.Key;
+                var uiLabels = model.Value.Ui?.Labels;
+                var localizedLabels = currentLang == "zh" && uiLabels?.Zh != null ? uiLabels.Zh : uiLabels?.En;
+                var title = localizedLabels?.ContainsKey("title") == true ? localizedLabels["title"] : modelKey;
+                var icon = GetIconForModel(modelKey);
+                var color = GetColorForModel(modelKey);
+
+                <a href="/ui/@modelKey?project=@projectName" class="@Model.CardStyle.BaseClass @Model.CardStyle.HoverClass transition cursor-pointer">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">@icon</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
+                        <p class="text-sm text-gray-500 mb-3">@model.Value.Table</p>
+                        <span class="inline-block px-3 py-1 @color rounded-full text-xs font-medium">
+                            @(currentLang == "zh" ? "管理数据" : "Manage Data")
+                        </span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+else if (Model.Source == "projects" && Model.Projects != null)
+{
+    <div class="container mx-auto px-4 pb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            @Model.Title.GetText(currentLang)
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-@Model.Columns.Tablet lg:grid-cols-@Model.Columns.Desktop gap-6 max-w-6xl mx-auto">
+            @foreach (var project in Model.Projects)
+            {
+                var gradientFrom = string.IsNullOrEmpty(project.GradientFrom) ? $"from-{project.Color}-500" : project.GradientFrom;
+                var gradientTo = string.IsNullOrEmpty(project.GradientTo) ? $"to-{project.Color}-600" : project.GradientTo;
+                var isCurrent = projectName == project.Key;
+
+                <a href="/?project=@project.Key" class="@Model.CardStyle.BaseClass @Model.CardStyle.HoverClass bg-gradient-to-br @gradientFrom @gradientTo text-white transition cursor-pointer">
+                    <div class="flex items-center">
+                        <div class="text-4xl mr-4">@project.Icon</div>
+                        <div>
+                            <h3 class="text-xl font-bold">@project.Name.GetText(currentLang)</h3>
+                            <p class="text-white text-opacity-80 text-sm">@project.Description.GetText(currentLang)</p>
+                            @if (isCurrent)
+                            {
+                                <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ @(currentLang == "zh" ? "当前项目" : "Current")</span>
+                            }
+                        </div>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+
+@functions {
+    string GetIconForModel(string modelName)
+    {
+        return modelName.ToLower() switch
+        {
+            "task" => "✅",
+            "project" => "📁",
+            "customer" => "👥",
+            "contact" => "📇",
+            "opportunity" => "💰",
+            "product" => "📦",
+            "quote" => "📄",
+            "order" => "🛒",
+            "artist" => "🎤",
+            "album" => "💿",
+            "track" => "🎵",
+            _ => "📊"
+        };
+    }
+
+    string GetColorForModel(string modelName)
+    {
+        return modelName.ToLower() switch
+        {
+            "task" => "bg-blue-100 text-blue-700",
+            "project" => "bg-green-100 text-green-700",
+            "customer" => "bg-indigo-100 text-indigo-700",
+            "opportunity" => "bg-orange-100 text-orange-700",
+            "product" => "bg-purple-100 text-purple-700",
+            _ => "bg-gray-100 text-gray-700"
+        };
+    }
+}

@@ -1,0 +1,106 @@
+# Ecommerce 电商项目首页配置
+title: 电商订单系统
+
+layout:
+  - type: hero
+    icon: 🛒
+    title:
+      zh: 电商订单系统
+      en: E-commerce Order System
+    subtitle:
+      zh: 产品、订单、客户管理
+      en: Product, Order, and Customer Management
+    style:
+      background: from-orange-50 via-white to-amber-50
+
+  - type: alert
+    alert_type: info
+    content:
+      zh: ✅ 当前项目：Ecommerce
+      en: ✅ Current Project: Ecommerce
+    link:
+      text:
+        zh: 切换项目
+        en: Switch Project
+      href: /
+
+  - type: card_grid
+    source: models
+    title:
+      zh: 电商数据管理
+      en: E-commerce Data Management
+    card_style:
+      base_class: bg-white rounded-xl p-6 shadow-md
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+
+  - type: card_grid
+    source: pages
+    title:
+      zh: 多表页面
+      en: Multi-Table Pages
+    card_style:
+      base_class: bg-white rounded-xl p-6 shadow-md
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+
+  - type: card_grid
+    source: projects
+    title:
+      zh: 可用项目
+      en: Available Projects
+    card_style:
+      base_class: rounded-xl p-6 shadow-md text-white
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+    projects:
+      - key: todo
+        icon: 📋
+        name:
+          zh: TODO 项目管理
+          en: TODO Project
+        color: blue
+      - key: chinook
+        icon: 🎵
+        name:
+          zh: Chinook 音乐商店
+          en: Chinook Music Store
+        color: green
+      - key: ecommerce
+        icon: 🛒
+        name:
+          zh: 电商订单系统
+          en: E-commerce Order System
+        color: orange
+      - key: crm
+        icon: 💼
+        name:
+          zh: CRM 客户管理
+          en: CRM
+        color: indigo
+
+  - type: stats
+    items:
+      - value: "5"
+        label:
+          zh: 个项目
+          en: Projects
+        color: blue
+      - value: "~40"
+        label:
+          zh: 个数据模型
+          en: Data Models
+        color: green
+      - value: "~12"
+        label:
+          zh: 个多表页面
+          en: Multi-Table Pages
+        color: purple

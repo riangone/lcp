@@ -1,0 +1,141 @@
+# CRM 项目首页配置
+title: CRM 客户关系管理
+
+layout:
+  # Hero 区域
+  - type: hero
+    icon: 💼
+    title:
+      zh: CRM 客户关系管理
+      en: CRM Customer Relationship Management
+    subtitle:
+      zh: 完整的客户、销售机会、订单管理系统
+      en: Complete customer, opportunity, and order management system
+    style:
+      background: from-indigo-50 via-white to-blue-50
+      title_size: text-5xl
+
+  # 当前项目提示
+  - type: alert
+    alert_type: info
+    content:
+      zh: ✅ 当前项目：CRM
+      en: ✅ Current Project: CRM
+    link:
+      text:
+        zh: 切换项目
+        en: Switch Project
+      href: /
+
+  # 数据模型网格
+  - type: card_grid
+    source: models
+    title:
+      zh: 数据管理
+      en: Data Management
+    card_style:
+      base_class: bg-white rounded-xl p-6 shadow-md
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+      wide: 4
+
+  # 多表页面
+  - type: card_grid
+    source: pages
+    title:
+      zh: 多表页面
+      en: Multi-Table Pages
+    card_style:
+      base_class: bg-white rounded-xl p-6 shadow-md
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 2
+
+  # 项目切换
+  - type: card_grid
+    source: projects
+    title:
+      zh: 可用项目
+      en: Available Projects
+    card_style:
+      base_class: rounded-xl p-6 shadow-md text-white
+      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+    projects:
+      - key: todo
+        icon: 📋
+        name:
+          zh: TODO 项目管理
+          en: TODO Project
+        description:
+          zh: 任务和项目管理系统
+          en: Task and Project Management
+        color: blue
+      - key: journal
+        icon: 📔
+        name:
+          zh: 我的日记本
+          en: My Journal
+        description:
+          zh: 个人日记管理系统
+          en: Personal Journal System
+        color: purple
+      - key: chinook
+        icon: 🎵
+        name:
+          zh: Chinook 音乐商店
+          en: Chinook Music Store
+        description:
+          zh: 艺术家、专辑、音轨管理
+          en: Artist, Album, Track Management
+        color: green
+      - key: ecommerce
+        icon: 🛒
+        name:
+          zh: 电商订单系统
+          en: E-commerce Order System
+        description:
+          zh: 产品、订单、客户管理
+          en: Product, Order, Customer Management
+        color: orange
+      - key: crm
+        icon: 💼
+        name:
+          zh: CRM 客户管理
+          en: CRM
+        description:
+          zh: 客户、销售机会、订单管理
+          en: Customer, Opportunity, Order
+        color: indigo
+
+  # 统计信息
+  - type: stats
+    items:
+      - value: "5"
+        label:
+          zh: 个项目
+          en: Projects
+        color: blue
+      - value: "~40"
+        label:
+          zh: 个数据模型
+          en: Data Models
+        color: green
+      - value: "~12"
+        label:
+          zh: 个多表页面
+          en: Multi-Table Pages
+        color: purple
+      - value: 100%
+        label:
+          zh: YAML 驱动
+          en: YAML-Driven
+        color: orange

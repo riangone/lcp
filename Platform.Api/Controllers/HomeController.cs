@@ -16,16 +16,17 @@ public class HomeController : Controller
     [HttpGet("/Home")]
     public IActionResult Index()
     {
-        ViewData["Title"] = "LowCode Platform";
-        ViewData["ActivePage"] = "Home";
-        ViewData["Models"] = _projectScope.CurrentProject?.AppDefinitions.Models;
-        ViewData["Pages"] = _projectScope.CurrentProject?.AppDefinitions.Pages;
-        ViewData["ProjectName"] = _projectScope.CurrentProject?.Name ?? "app";
-        ViewData["ProjectConfig"] = _projectScope.CurrentProject;
+        var project = _projectScope.CurrentProject;
         
-        // 获取所有可用项目
-        ViewData["AvailableProjects"] = _projectScope.GetAvailableProjects();
+        ViewData["Title"] = project?.HomeConfig?.Title ?? "LowCode Platform";
+        ViewData["ActivePage"] = "Home";
+        ViewData["Models"] = project?.AppDefinitions.Models;
+        ViewData["Pages"] = project?.AppDefinitions.Pages;
+        ViewData["ProjectName"] = project?.Name ?? "app";
+        ViewData["ProjectDisplayName"] = project?.DisplayName ?? "LowCode Platform";
+        ViewData["ProjectConfig"] = project;
 
-        return View();
+        // 传递 HomeConfig 到视图
+        return View(project?.HomeConfig);
     }
 }

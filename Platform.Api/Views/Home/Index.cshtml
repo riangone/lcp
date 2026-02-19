@@ -1,309 +1,39 @@
+@model Platform.Infrastructure.Definitions.HomeDefinition
 @{
-    ViewData["Title"] = "LowCode Platform";
+    ViewData["Title"] = Model?.Title ?? "LowCode Platform";
     ViewData["ActivePage"] = "Home";
-    var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
-    var pages = ViewData["Pages"] as Dictionary<string, Platform.Infrastructure.Definitions.PageDefinition>;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
-    var projectName = ViewData["ProjectName"] as string ?? "app";
-    
-    // 获取项目配置
-    var projectConfig = ViewData["ProjectConfig"] as dynamic;
-    var projectDisplayName = projectConfig?.DisplayName as string ?? projectName;
 }
 
-<style>
-    .project-card {
-        transition: all 0.3s ease;
-        cursor: pointer;
-        border: 2px solid transparent;
-    }
-    .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-        border-color: #3b82f6;
-    }
-    .project-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
-    }
-    .lang-switch {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-    }
-</style>
-
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-    <!-- 语言切换 -->
-    <div class="lang-switch">
-        <a href="?lang=@(currentLang == "zh" ? "en" : "zh")" 
-           class="inline-block px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition">
-            @(currentLang == "zh" ? "🇨🇳 中文" : "🇺🇸 English")
-        </a>
-    </div>
-
-    <!-- 主标题 -->
-    <div class="container mx-auto px-4 pt-16 pb-8">
-        <div class="text-center">
-            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
-                🚀 LowCode Platform
-            </h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                @(currentLang == "zh" ? "通过 YAML 定义驱动，快速创建应用程序" : "Build applications fast with YAML-driven low-code platform")
-            </p>
-        </div>
-    </div>
-
-    <!-- 当前项目提示 -->
-    @if (!string.IsNullOrEmpty(projectName))
+<div class="min-h-screen">
+    @if (Model?.Layout != null)
     {
-        <div class="container mx-auto px-4 mb-8">
-            <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <span class="text-green-800 font-semibold">
-                    @(currentLang == "zh" ? "✅ 当前项目：" : "✅ Current Project: ")
-                </span>
-                <span class="text-green-600 font-bold text-lg">@projectDisplayName</span>
-                <span class="text-green-600 mx-2">|</span>
-                <a href="/" class="text-green-600 hover:underline">
-                    @(currentLang == "zh" ? "切换其他项目" : "Switch Project")
-                </a>
-            </div>
-        </div>
+        @foreach (var component in Model.Layout)
+        {
+            @await RenderComponentAsync(component.Type, component.Data)
+        }
     }
-
-    <!-- 项目模型列表 -->
-    @if (models != null && models.Any())
+    else
     {
-        <div class="container mx-auto px-4 pb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                @(currentLang == "zh" ? "数据模型" : "Data Models")
-            </h2>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @foreach (var model in models)
-                {
-                    var modelKey = model.Key;
-                    var uiLabels = model.Value.Ui?.Labels;
-                    Dictionary<string, string>? localizedLabels = null;
-
-                    if (uiLabels != null)
-                    {
-                        localizedLabels = currentLang == "zh" && uiLabels.Zh != null 
-                            ? uiLabels.Zh 
-                            : uiLabels.En;
-                    }
-
-                    var title = localizedLabels?.ContainsKey("title") == true 
-                        ? localizedLabels["title"] 
-                        : modelKey;
-
-                    var icon = GetIconForModel(modelKey);
-                    var color = GetColorForModel(modelKey);
-
-                    <a href="/ui/@(model.Key)?project=@projectName" class="project-card bg-white rounded-xl p-6 shadow-md">
-                        <div class="text-center">
-                            <div class="project-icon">@icon</div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
-                            <p class="text-sm text-gray-500 mb-3">@(model.Value.Table)</p>
-                            <span class="inline-block px-3 py-1 @color rounded-full text-xs font-medium">
-                                @(currentLang == "zh" ? "管理数据" : "Manage Data")
-                            </span>
-                        </div>
-                    </a>
-                }
-            </div>
-        </div>
+        <!-- 默认布局：当没有 home.yaml 时使用 -->
+        @await Html.PartialAsync("_DefaultHome")
     }
-
-    <!-- 多表页面 -->
-    @if (pages != null && pages.Any())
-    {
-        <div class="container mx-auto px-4 pb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                @(currentLang == "zh" ? "多表页面" : "Multi-Table Pages")
-            </h2>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach (var pageItem in pages)
-                {
-                    var pageKey = pageItem.Key;
-                    var pageTitle = pageItem.Value.Title ?? pageKey;
-
-                    <a href="/page/@(pageItem.Key)?project=@projectName" class="project-card bg-white rounded-xl p-6 shadow-md">
-                        <div class="flex items-center">
-                            <div class="text-3xl mr-4">📄</div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800">@pageTitle</h3>
-                                <p class="text-sm text-gray-500">@pageItem.Value.Description</p>
-                            </div>
-                        </div>
-                    </a>
-                }
-            </div>
-        </div>
-    }
-
-    <!-- 项目切换 -->
-    <div class="container mx-auto px-4 pb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-            @(currentLang == "zh" ? "可用项目" : "Available Projects")
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            <!-- TODO 项目 -->
-            <a href="/?project=todo"
-               class="project-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-md"
-               title="@(currentLang == "zh" ? "点击切换到 TODO 项目管理" : "Click to switch to TODO Project")">
-                <div class="flex items-center">
-                    <div class="text-4xl mr-4">📋</div>
-                    <div>
-                        <h3 class="text-xl font-bold">TODO 项目管理</h3>
-                        <p class="text-blue-100 text-sm">任务和项目管理系统</p>
-                        @if (projectName == "todo") {
-                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
-                        }
-                    </div>
-                </div>
-            </a>
-
-            <!-- 日记本项目 -->
-            <a href="/?project=journal"
-               class="project-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 shadow-md"
-               title="@(currentLang == "zh" ? "点击切换到日记本应用" : "Click to switch to Journal Project")">
-                <div class="flex items-center">
-                    <div class="text-4xl mr-4">📔</div>
-                    <div>
-                        <h3 class="text-xl font-bold">我的日记本</h3>
-                        <p class="text-purple-100 text-sm">个人日记管理系统</p>
-                        @if (projectName == "journal") {
-                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
-                        }
-                    </div>
-                </div>
-            </a>
-
-            <!-- Chinook 音乐项目 -->
-            <a href="/?project=chinook"
-               class="project-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 shadow-md"
-               title="@(currentLang == "zh" ? "点击切换到 Chinook 音乐商店" : "Click to switch to Chinook Music Store")">
-                <div class="flex items-center">
-                    <div class="text-4xl mr-4">🎵</div>
-                    <div>
-                        <h3 class="text-xl font-bold">Chinook 音乐商店</h3>
-                        <p class="text-green-100 text-sm">艺术家、专辑、音轨管理</p>
-                        @if (projectName == "chinook") {
-                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
-                        }
-                    </div>
-                </div>
-            </a>
-
-            <!-- 电商订单项目 -->
-            <a href="/?project=ecommerce"
-               class="project-card bg-gradient-to-br from-orange-500 to-orange-600 text-white rounded-xl p-6 shadow-md"
-               title="@(currentLang == "zh" ? "点击切换到电商订单系统" : "Click to switch to E-commerce Order System")">
-                <div class="flex items-center">
-                    <div class="text-4xl mr-4">🛒</div>
-                    <div>
-                        <h3 class="text-xl font-bold">电商订单系统</h3>
-                        <p class="text-orange-100 text-sm">产品、订单、客户管理</p>
-                        @if (projectName == "ecommerce") {
-                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
-                        }
-                    </div>
-                </div>
-            </a>
-
-            <!-- CRM 项目 -->
-            <a href="/?project=crm"
-               class="project-card bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl p-6 shadow-md"
-               title="@(currentLang == "zh" ? "点击切换到 CRM 客户关系管理" : "Click to switch to CRM Project")">
-                <div class="flex items-center">
-                    <div class="text-4xl mr-4">💼</div>
-                    <div>
-                        <h3 class="text-xl font-bold">CRM 客户关系管理</h3>
-                        <p class="text-indigo-100 text-sm">客户、销售机会、订单管理</p>
-                        @if (projectName == "crm") {
-                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
-                        }
-                    </div>
-                </div>
-            </a>
-        </div>
-
-        <!-- 切换说明 -->
-        <div class="max-w-4xl mx-auto mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p class="text-blue-800 text-sm">
-                @(currentLang == "zh"
-                    ? "💡 <strong>提示：</strong> 点击上面的项目卡片即可切换项目，无需重启应用！每个项目都有独立的数据模型和页面。"
-                    : "💡 <strong>Tip:</strong> Click project cards above to switch projects instantly, no restart needed! Each project has its own data models and pages.")
-            </p>
-        </div>
-
-        <!-- 项目统计 -->
-        <div class="max-w-4xl mx-auto mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-blue-600">5</div>
-                <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个项目" : "Projects")</div>
-            </div>
-            <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-green-600">~40</div>
-                <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个数据模型" : "Data Models")</div>
-            </div>
-            <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-purple-600">~12</div>
-                <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个多表页面" : "Multi-Table Pages")</div>
-            </div>
-            <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-orange-600">100%</div>
-                <div class="text-sm text-gray-600">@(currentLang == "zh" ? "YAML 驱动" : "YAML-Driven")</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 页脚 -->
-    <footer class="bg-gray-800 text-white py-8 mt-12">
-        <div class="container mx-auto px-4 text-center">
-            <p class="text-gray-400">
-                @(currentLang == "zh" ? "低代码平台 - 通过 YAML 定义驱动" : "LowCode Platform - YAML-Driven Development")
-            </p>
-            <p class="text-gray-500 text-sm mt-2">
-                Built with ASP.NET Core, Dapper, HTMX
-            </p>
-        </div>
-    </footer>
 </div>
 
 @functions {
-    string GetIconForModel(string modelName)
+    async Task RenderComponentAsync(string type, Dictionary<string, object> data)
     {
-        return modelName.ToLower() switch
+        var viewName = $"~/Views/Home/Components/_{type}.cshtml";
+        
+        try
         {
-            "task" => "✅",
-            "project" => "📁",
-            "entry" => "📔",
-            "category" => "🏷️",
-            "tag" => "🔖",
-            "artist" => "🎤",
-            "album" => "💿",
-            "track" => "🎵",
-            "employee" => "👤",
-            "invoice" => "📄",
-            _ => "📊"
-        };
-    }
-
-    string GetColorForModel(string modelName)
-    {
-        return modelName.ToLower() switch
+            @await Html.PartialAsync(viewName, data)
+        }
+        catch (Exception ex)
         {
-            "task" => "bg-blue-100 text-blue-700",
-            "project" => "bg-green-100 text-green-700",
-            "entry" => "bg-purple-100 text-purple-700",
-            "category" => "bg-orange-100 text-orange-700",
-            "tag" => "bg-pink-100 text-pink-700",
-            _ => "bg-gray-100 text-gray-700"
-        };
+            <div class="text-red-500 p-4">
+                Component '@type' not found or failed to render: @ex.Message
+            </div>
+        }
     }
 }
