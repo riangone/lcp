@@ -2,189 +2,151 @@
 
 ## 概述
 
-多表表单功能允许在单个页面上管理多个相关或不相关表的数据，支持复杂的业务场景，如：
-- 订单 + 客户 + 订单明细
-- 主表 + 多个不关联的查找表
-- 跨多个表的事务性保存
+多表表单功能允许在一个页面中管理多个关联表的数据，支持：
+- 主表与明细表联动
+- 并行数据加载
+- 事务性保存
+- 字段映射和自动生成
 
-## 配置结构
+## YAML 配置
 
-### 1. 数据加载配置 (DataLoadingConfig)
-
-```yaml
-data_loading:
-  strategy: parallel  # parallel | sequential | single_query
-  timeout_ms: 5000
-  
-  sources:
-    - id: customer_data
-      type: table     # table | query
-      table: Customer
-      where: "CustomerId = @CustomerId"
-      parameters:
-        - name: CustomerId
-          source: QueryString  # QueryString | Form | Route | Constant | GeneratedId
-          default: null
-```
-
-### 2. 保存配置 (SaveConfig)
+### 基本结构
 
 ```yaml
-save_config:
-  transaction:
-    enabled: true
-    isolation_level: ReadCommitted
+pages:
+  OrderCustomer:
+    title: Order & Customer
+    main_table: Customer
     
-  save_order:
-    - order: 1
-      table: Customer
-      crud_type: upsert  # insert | update | upsert | sync | delete | skip
-      match_fields:
-        - CustomerId
-      condition: "data.FirstName != null"
-      field_mappings:
-        CustomerId:
-          source: generated_id
-          from_table: Customer
-          field: CustomerId
-      output:
-        generated_id: CustomerId
-      cascade_delete:
+    data_loading:
+      strategy: parallel
+      sources:
+        - id: customer_data
+          type: table
+          table: Customer
+          where: "CustomerId = @CustomerId"
+        
+        - id: invoice_data
+          type: table
+          table: Invoice
+          where: "CustomerId = @CustomerId"
+    
+    save_config:
+      transaction:
         enabled: true
-        match_field: InvoiceId
-        source: Invoice.InvoiceId
+      save_order:
+        - order: 1
+          table: Customer
+          crud_type: upsert
+          match_fields: [CustomerId]
+        - order: 2
+          table: Invoice
+          crud_type: insert
+          field_mappings:
+            CustomerId:
+              source: generated_id
+              from_table: Customer
+              field: CustomerId
 ```
 
-### 3. CRUD 类型说明
+### 数据加载配置
 
-| 类型 | 说明 |
-|------|------|
-| `insert` | 插入新记录 |
-| `update` | 更新现有记录 |
-| `upsert` | 存在则更新，不存在则插入 |
-| `sync` | 同步（删除不存在的，更新存在的，插入新的） |
-| `delete` | 删除记录 |
-| `skip` | 跳过不处理 |
+| 属性 | 说明 | 可选值 |
+|------|------|--------|
+| `strategy` | 加载策略 | `parallel`（并行）, `sequential`（串行） |
+| `sources` | 数据源列表 | - |
+| `sources[].id` | 数据源 ID | - |
+| `sources[].type` | 数据源类型 | `table` |
+| `sources[].table` | 表名 | - |
+| `sources[].where` | WHERE 条件 | 支持 `@CustomerId` 等参数 |
 
-### 4. 字段映射源
+### 保存配置
 
-| 源类型 | 说明 |
-|--------|------|
-| `form` | 从表单数据获取 |
-| `generated_id` | 从上一步生成的 ID 获取 |
-| `constant` | 使用固定值 |
+| 属性 | 说明 | 可选值 |
+|------|------|--------|
+| `transaction.enabled` | 是否启用事务 | `true`, `false` |
+| `save_order` | 保存顺序配置 | - |
+| `save_order[].order` | 保存顺序 | 数字，小的先保存 |
+| `save_order[].table` | 表名 | - |
+| `save_order[].crud_type` | CRUD 类型 | `insert`, `update`, `upsert` |
+| `save_order[].match_fields` | 匹配字段（用于 update/upsert） | 字段列表 |
+| `save_order[].field_mappings` | 字段映射 | - |
+
+### 字段映射
+
+```yaml
+field_mappings:
+  CustomerId:
+    source: generated_id        # 从生成的 ID 获取
+    from_table: Customer        # 从 Customer 表
+    field: CustomerId           # 获取 CustomerId 字段
+  
+  OrderDate:
+    source: current_timestamp   # 当前时间戳
+  
+  Status:
+    source: constant            # 常量值
+    value: "Pending"            # 常量值
+```
 
 ## API 端点
 
-### 加载数据
-```
-GET /api/multi-table/{pageName}/load?CustomerId=1&InvoiceId=100
-```
-
-响应：
-```json
-{
-  "success": true,
-  "data": {
-    "customer_data": { "CustomerId": 1, "FirstName": "John", ... },
-    "invoice_data": { "InvoiceId": 100, "Total": 99.99, ... },
-    "invoice_lines": [...],
-    "employees": [...]
-  }
-}
-```
-
-### 保存数据
-```
-POST /api/multi-table/{pageName}/save
-Content-Type: application/x-www-form-urlencoded
-
-CustomerId=1&FirstName=John&...
-```
-
-响应：
-```json
-{
-  "success": true,
-  "ids": {
-    "Customer": 1,
-    "Invoice": 100
-  }
-}
-```
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/api/page/{pageName}/load` | GET | 加载多表数据 |
+| `/api/page/{pageName}/save` | POST | 保存多表数据 |
 
 ## 使用示例
 
-### 示例 1：新建订单（客户已存在）
+### 1. 创建页面定义
 
-```yaml
-save_config:
-  save_order:
-    - order: 1
-      table: Invoice
-      crud_type: insert
-    - order: 2
-      table: InvoiceLine
-      crud_type: sync
+在 `Projects/{project}/pages/` 目录下创建 YAML 文件。
+
+### 2. 访问页面
+
+访问：`/page/{pageName}?project={project}`
+
+### 3. 加载数据
+
+```javascript
+const response = await fetch(`/api/page/OrderCustomer/load?CustomerId=1`);
+const data = await response.json();
+// data.customer_data, data.invoice_data
 ```
 
-### 示例 2：注册客户并下单
+### 4. 保存数据
 
-```yaml
-save_config:
-  save_order:
-    - order: 1
-      table: Customer
-      crud_type: insert
-      output:
-        generated_id: CustomerId
-    - order: 2
-      table: Invoice
-      crud_type: insert
-      field_mappings:
-        CustomerId:
-          source: generated_id
-          from_table: Customer
-          field: CustomerId
-    - order: 3
-      table: InvoiceLine
-      crud_type: sync
+```javascript
+const formData = {
+  customer_data: {
+    FirstName: 'John',
+    LastName: 'Doe',
+    Email: 'john@example.com'
+  },
+  invoice_data: [
+    {
+      InvoiceDate: '2024-01-15',
+      Total: 100.00
+    }
+  ]
+};
+
+const response = await fetch(`/api/page/OrderCustomer/save`, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(formData)
+});
 ```
-
-### 示例 3：更新订单（不修改客户）
-
-```yaml
-save_config:
-  save_order:
-    - order: 1
-      table: Customer
-      crud_type: skip
-    - order: 2
-      table: Invoice
-      crud_type: update
-    - order: 3
-      table: InvoiceLine
-      crud_type: sync
-```
-
-## 最佳实践
-
-1. **保存顺序**：有外键依赖的表先保存（如 Customer -> Invoice -> InvoiceLine）
-2. **事务使用**：涉及多个表的保存操作应启用事务
-3. **字段映射**：使用 `field_mappings` 处理表之间的 ID 引用
-4. **条件执行**：使用 `condition` 控制何时执行特定表的保存
-5. **同步模式**：对于明细表，使用 `sync` 模式自动处理增删改
 
 ## 注意事项
 
-1. 确保 `match_fields` 配置正确，否则 upsert 操作可能无法正常工作
-2. `sync` 模式会删除不存在的记录，使用时需谨慎
-3. 字段映射的 `from_table` 必须与 `save_order` 中的表名一致
-4. 并行加载时，数据源之间不能有依赖关系
+1. **事务处理**：启用事务后，所有表保存失败会回滚
+2. **字段映射**：确保 `from_table` 在 `save_order` 中排在前面
+3. **主键处理**：使用 `generated_id` 自动获取刚插入的主键
+4. **并发控制**：并行加载时注意数据库连接数限制
 
-## 测试
+## 相关文件
 
-访问示例页面：
-```
-http://localhost:5267/page/OrderCustomer?CustomerId=1&InvoiceId=100
-```
+- `Platform.Infrastructure/Services/PageDataLoader.cs` - 数据加载器
+- `Platform.Infrastructure/Services/MultiTableSaver.cs` - 多表保存器
+- `Platform.Api/Controllers/PageController.cs` - 页面控制器
