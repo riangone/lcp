@@ -1,0 +1,132 @@
+/* 日记本应用自定义样式 */
+
+/* 日记卡片样式 */
+.card-entry {
+    border-left: 4px solid #3b82f6;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card-entry::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card-entry:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2);
+}
+
+.card-entry:hover::before {
+    opacity: 1;
+}
+
+/* 分类卡片样式 */
+.card-category {
+    border-left: 4px solid var(--category-color, #3b82f6);
+}
+
+/* 标签卡片样式 */
+.card-tag {
+    border-radius: 20px;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+/* 心情标识 */
+.mood-indicator {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.mood-happy { background-color: #fef3c7; color: #92400e; }
+.mood-good { background-color: #d1fae5; color: #065f46; }
+.mood-neutral { background-color: #f3f4f6; color: #374151; }
+.mood-bad { background-color: #fee2e2; color: #991b1b; }
+.mood-angry { background-color #7f1d1d; color: #fecaca; }
+
+/* 日记内容样式 */
+.entry-content {
+    line-height: 1.8;
+    color: #374151;
+    white-space: pre-wrap;
+}
+
+/* 日期样式 */
+.entry-date {
+    color: #6b7280;
+    font-size: 14px;
+    font-style: italic;
+}
+
+/* 统计卡片 */
+.stat-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.stat-card p {
+    opacity: 0.9;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 日记列表布局 */
+.journal-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .journal-list {
+        grid-template-columns: 1fr;
+    }
+    
+    .stat-card {
+        padding: 1.5rem;
+    }
+    
+    .stat-card h3 {
+        font-size: 2rem;
+    }
+}
+
+/* 心情选择器样式 */
+select[name="Mood"] {
+    background-image: linear-gradient(45deg, #fef3c7 25%, #d1fae5 25%, #d1fae5 50%, #f3f4f6 50%, #f3f4f6 75%, #fee2e2 75%);
+    background-size: 20px 20px;
+}
+
+/* 分类颜色标记 */
+.category-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    color: white;
+    background-color: var(--category-color, #3b82f6);
+}

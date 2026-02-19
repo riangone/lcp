@@ -1,0 +1,386 @@
+# 日记本应用 - 模型定义
+
+models:
+  # ==================== 日记表 ====================
+  Entry:
+    table: Entry
+    primary_key: Id
+
+    ui:
+      layout:
+        theme: journal
+        grid_columns: 2
+      labels:
+        en:
+          title: My Journal
+          create_button: New Entry
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search entries...
+          Id: ID
+          Title: Title
+          Content: Content
+          Mood: Mood
+          CategoryId: Category
+          Date: Date
+          CreatedAt: Created At
+          Actions: Actions
+        zh:
+          title: 我的日记本
+          create_button: 写日记
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索日记...
+          Id: 编号
+          Title: 标题
+          Content: 内容
+          Mood: 心情
+          CategoryId: 分类
+          Date: 日期
+          CreatedAt: 创建时间
+          Actions: 操作
+      styles:
+        card_class: "card-entry"
+        button_class: "btn btn-primary"
+
+    list:
+      columns:
+        - Id
+        - Title
+        - Mood
+        - Date
+        - CategoryId
+
+      filters:
+        Title:
+          label: Title
+          type: like
+        Mood:
+          label: Mood
+          type: select
+          options:
+            happy: Happy
+            good: Good
+            neutral: Neutral
+            bad: Bad
+            angry: Angry
+        CategoryId:
+          label: Category
+          type: select
+          options:
+            1: Life
+            2: Work
+            3: Study
+            4: Travel
+            5: Other
+
+    form:
+      title: Journal Entry
+      fields:
+        Title:
+          label: Title
+          type: text
+          required: true
+          max_length: 200
+
+        Content:
+          label: Content
+          type: textarea
+          required: true
+          max_length: 10000
+
+        Mood:
+          label: Mood
+          type: select
+          required: true
+          options:
+            happy: Happy
+            good: Good
+            neutral: Neutral
+            bad: Bad
+            angry: Angry
+          default: neutral
+
+        CategoryId:
+          label: Category
+          type: number
+
+        Date:
+          label: Date
+          type: date
+
+    properties:
+      Id:
+        type: int
+      Title:
+        type: string
+        required: true
+      Content:
+        type: string
+        required: true
+      Mood:
+        type: string
+        required: true
+      CategoryId:
+        type: int
+      Date:
+        type: date
+      CreatedAt:
+        type: datetime
+
+  # ==================== 分类表 ====================
+  Category:
+    table: Category
+    primary_key: Id
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 3
+      labels:
+        en:
+          title: Categories
+          create_button: Add Category
+          edit_button: Edit
+          delete_button: Delete
+          Id: ID
+          Name: Name
+          Color: Color
+          Description: Description
+          Actions: Actions
+        zh:
+          title: 分类管理
+          create_button: 添加分类
+          edit_button: 编辑
+          delete_button: 删除
+          Id: 编号
+          Name: 名称
+          Color: 颜色
+          Description: 描述
+          Actions: 操作
+      styles:
+        card_class: "card-category"
+        button_class: "btn btn-success"
+
+    list:
+      columns:
+        - Id
+        - Name
+        - Color
+        - Description
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Category
+      fields:
+        Name:
+          label: Name
+          type: text
+          required: true
+          max_length: 50
+
+        Color:
+          label: Color
+          type: text
+          max_length: 20
+          default: "#3b82f6"
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 500
+
+    properties:
+      Id:
+        type: int
+      Name:
+        type: string
+        required: true
+      Color:
+        type: string
+      Description:
+        type: string
+
+  # ==================== 标签表 ====================
+  Tag:
+    table: Tag
+    primary_key: Id
+
+    ui:
+      labels:
+        en:
+          title: Tags
+          create_button: Add Tag
+          Name: Name
+          Color: Color
+        zh:
+          title: 标签管理
+          create_button: 添加标签
+          Name: 名称
+          Color: 颜色
+      styles:
+        card_class: "card-tag"
+        button_class: "btn btn-info"
+
+    list:
+      columns: [Id, Name, Color]
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      fields:
+        Name:
+          label: Name
+          type: text
+          required: true
+          max_length: 30
+        Color:
+          label: Color
+          type: text
+          max_length: 20
+          default: "#10b981"
+
+    properties:
+      Id: { type: int }
+      Name: { type: string, required: true }
+      Color: { type: string }
+
+  # ==================== 日记标签关联表 ====================
+  EntryTag:
+    table: EntryTag
+    primary_key: Id
+
+    ui:
+      labels:
+        en:
+          title: Entry Tags
+        zh:
+          title: 日记标签
+
+    list:
+      columns: [Id, EntryId, TagId]
+
+    form:
+      fields:
+        EntryId:
+          label: Entry
+          type: number
+          required: true
+        TagId:
+          label: Tag
+          type: number
+          required: true
+
+    properties:
+      Id: { type: int }
+      EntryId: { type: int, required: true }
+      TagId: { type: int, required: true }
+
+  # ==================== 日记带分类视图（只读） ====================
+  EntryWithCategory:
+    query: |
+      SELECT
+        e.Id,
+        e.Title,
+        e.Content,
+        e.Mood,
+        e.Date,
+        e.CreatedAt,
+        c.Name as CategoryName,
+        c.Color as CategoryColor
+      FROM Entry e
+      LEFT JOIN Category c ON c.Id = e.CategoryId
+      ORDER BY e.Date DESC, e.CreatedAt DESC
+    primary_key: Id
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Journal with Category
+          CategoryName: Category
+          CategoryColor: Color
+        zh:
+          title: 日记分类视图
+          CategoryName: 分类
+          CategoryColor: 颜色
+
+    list:
+      columns:
+        - Id
+        - Title
+        - CategoryName
+        - Mood
+        - Date
+      filters:
+        CategoryName:
+          label: Category
+          type: like
+        Mood:
+          label: Mood
+          type: select
+          options:
+            happy: Happy
+            good: Good
+            neutral: Neutral
+            bad: Bad
+            angry: Angry
+
+    properties:
+      Id: { type: int }
+      Title: { type: string }
+      CategoryName: { type: string }
+      CategoryColor: { type: string }
+      Mood: { type: string }
+      Date: { type: date }
+      CreatedAt: { type: datetime }
+
+  # ==================== 统计视图（只读） ====================
+  JournalStats:
+    query: |
+      SELECT
+        'Total Entries' as StatName,
+        COUNT(*) as StatValue
+      FROM Entry
+      UNION ALL
+      SELECT
+        'Entries This Month',
+        COUNT(*)
+      FROM Entry
+      WHERE strftime('%Y-%m', Date) = strftime('%Y-%m', 'now')
+      UNION ALL
+      SELECT
+        'Total Categories',
+        COUNT(*)
+      FROM Category
+      UNION ALL
+      SELECT
+        'Total Tags',
+        COUNT(*)
+      FROM Tag
+    primary_key: StatName
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Statistics
+          StatName: Statistic
+          StatValue: Value
+        zh:
+          title: 统计信息
+          StatName: 统计项
+          StatValue: 数值
+
+    list:
+      columns: [StatName, StatValue]
+
+    properties:
+      StatName: { type: string }
+      StatValue: { type: int }

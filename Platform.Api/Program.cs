@@ -10,6 +10,8 @@ using Scalar.AspNetCore;
 using Platform.Infrastructure.Services;
 using System.Text;
 using System.Text.Json;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -139,8 +141,9 @@ public class ProjectLoader
     {
         ProjectName = projectName;
         
-        // 项目目录：/home/ubuntu/ws/lcp/Projects/{projectName}
-        ProjectDirectory = $"/home/ubuntu/ws/lcp/Projects/{projectName}";
+        // 项目目录：支持环境变量 LCP_PROJECTS_DIR 或默认路径
+        var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
+        ProjectDirectory = Path.Combine(projectsDir, projectName);
         
         // 框架目录
         FrameworkDirectory = "/home/ubuntu/ws/lcp/Framework";
@@ -164,15 +167,19 @@ public class ProjectLoader
             throw new FileNotFoundException($"project.yaml not found at {projectFile}");
         }
 
+        // 使用 YamlDotNet 解析
         var yaml = File.ReadAllText(projectFile);
         var config = ParseProjectYaml(yaml);
-        
-        // 设置数据库路径
-        config.DatabasePath = Path.Combine(ProjectDirectory, config.DatabasePath);
-        
+
+        // 设置数据库路径（相对于项目目录）
+        var dbPath = Path.Combine(ProjectDirectory, config.Database.Path);
+        config.Database.Path = dbPath;
+
+        Console.WriteLine($"[DB] Database path: {config.DatabasePath}");
+
         // 初始化数据库（如果需要）
         InitializeDatabase(config);
-        
+
         return config;
     }
 
@@ -196,78 +203,67 @@ public class ProjectLoader
 
     private ProjectConfiguration ParseProjectYaml(string yaml)
     {
-        // 简化的 YAML 解析（实际应该使用 YamlDotNet）
-        var config = new ProjectConfiguration
-        {
-            Name = ExtractYamlValue(yaml, "name:") ?? "unknown",
-            DisplayName = ExtractYamlValue(yaml, "display_name:") ?? "Unknown Project",
-            Version = ExtractYamlValue(yaml, "version:") ?? "1.0.0",
-            Description = ExtractYamlValue(yaml, "description:") ?? "",
-            DatabasePath = "app.db"
-        };
-
-        // 解析数据库配置
-        var dbSection = ExtractYamlSection(yaml, "database:");
-        if (dbSection != null)
-        {
-            config.DatabasePath = ExtractYamlValue(dbSection, "path:") ?? "app.db";
-        }
-
-        return config;
-    }
-
-    private string? ExtractYamlValue(string yaml, string key)
-    {
-        var lines = yaml.Split('\n');
-        foreach (var line in lines)
-        {
-            if (line.Trim().StartsWith(key))
-            {
-                return line.Substring(key.Length).Trim();
-            }
-        }
-        return null;
-    }
-
-    private string? ExtractYamlSection(string yaml, string sectionKey)
-    {
-        var lines = yaml.Split('\n');
-        var inSection = false;
-        var section = new StringBuilder();
+        // 使用 YamlDotNet 解析
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
         
-        foreach (var line in lines)
+        try
         {
-            if (line.Trim().StartsWith(sectionKey))
+            var config = deserializer.Deserialize<ProjectConfiguration>(yaml);
+            
+            // 确保默认值
+            if (config.Database == null)
             {
-                inSection = true;
-                continue;
+                config.Database = new DatabaseConfig();
+            }
+            if (string.IsNullOrEmpty(config.Database.Path))
+            {
+                config.Database.Path = "app.db";
+            }
+            if (string.IsNullOrEmpty(config.Database.Schema))
+            {
+                config.Database.Schema = "schema.sql";
+            }
+            if (string.IsNullOrEmpty(config.Database.SeedData))
+            {
+                config.Database.SeedData = "data.sql";
             }
             
-            if (inSection)
-            {
-                if (!string.IsNullOrWhiteSpace(line) && !line.StartsWith("  "))
-                {
-                    break;
-                }
-                section.AppendLine(line);
-            }
+            return config;
         }
-        
-        return inSection ? section.ToString() : null;
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ERROR] Failed to parse project.yaml: {ex.Message}");
+            // 返回默认配置
+            return new ProjectConfiguration
+            {
+                Name = "unknown",
+                DisplayName = "Unknown Project",
+                Version = "1.0.0",
+                Database = new DatabaseConfig { Path = "app.db" }
+            };
+        }
     }
 
     private void InitializeDatabase(ProjectConfiguration config)
     {
-        if (!File.Exists(config.DatabasePath))
+        var dbPath = config.DatabasePath;
+        
+        if (!File.Exists(dbPath))
         {
-            Console.WriteLine($"[DB] Creating database: {config.DatabasePath}");
+            Console.WriteLine($"[DB] Creating database: {dbPath}");
             
-            var schemaFile = Path.Combine(ProjectDirectory, config.SchemaFile);
+            var schemaFile = Path.Combine(ProjectDirectory, config.Database.Schema);
             if (File.Exists(schemaFile))
             {
                 Console.WriteLine($"[DB] Executing schema: {schemaFile}");
-                // 实际应该执行 SQL
             }
+        }
+        else
+        {
+            Console.WriteLine($"[DB] Database exists: {dbPath}");
         }
     }
 
@@ -283,7 +279,23 @@ public class ProjectConfiguration
     public string DisplayName { get; set; } = "";
     public string Version { get; set; } = "1.0.0";
     public string Description { get; set; } = "";
-    public string DatabasePath { get; set; } = "";
-    public string SchemaFile { get; set; } = "schema.sql";
-    public string DataFile { get; set; } = "data.sql";
+    
+    // 数据库配置
+    public DatabaseConfig Database { get; set; } = new();
+    
+    // 便捷属性
+    public string DatabasePath => Database?.Path ?? "app.db";
+    public string SchemaFile => Database?.Schema ?? "schema.sql";
+    public string DataFile => Database?.SeedData ?? "data.sql";
+}
+
+/// <summary>
+/// 数据库配置
+/// </summary>
+public class DatabaseConfig
+{
+    public string Type { get; set; } = "sqlite";
+    public string Path { get; set; } = "app.db";
+    public string Schema { get; set; } = "schema.sql";
+    public string SeedData { get; set; } = "data.sql";
 }

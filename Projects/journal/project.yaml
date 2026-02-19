@@ -1,0 +1,39 @@
+# 日记本项目配置
+name: journal
+display_name: 我的日记本
+description: 个人日记管理系统，支持分类、标签和心情记录
+version: 1.0.0
+author: LowCode Platform
+
+# 数据库配置
+database:
+  type: sqlite
+  path: journal.db
+  schema: schema.sql
+  seed_data: data.sql
+
+# 功能配置
+features:
+  multi_language: true      # 多语言支持
+  custom_pages: true        # 自定义页面
+  custom_views: true        # 自定义视图
+  rich_text: false          # 富文本编辑器（规划中）
+  
+# 依赖扩展
+extensions: []
+
+# UI 配置
+ui:
+  theme: journal
+  custom_css: css/custom.css
+  custom_js: js/custom.js
+
+# 项目元数据
+metadata:
+  created: 2026-02-19
+  updated: 2026-02-19
+  tags:
+    - journal
+    - diary
+    - note
+    - personal
