@@ -1,0 +1,42 @@
+@model Platform.Infrastructure.Definitions.QuickActionsConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+}
+
+<div class="container mx-auto px-4 -mt-16 relative z-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        @foreach (var action in Model.Actions)
+        {
+            var colorClass = action.Color switch
+            {
+                "blue" => "bg-blue-500 hover:bg-blue-600",
+                "green" => "bg-green-500 hover:bg-green-600",
+                "purple" => "bg-purple-500 hover:bg-purple-600",
+                "orange" => "bg-orange-500 hover:bg-orange-600",
+                "red" => "bg-red-500 hover:bg-red-600",
+                _ => "bg-gray-500 hover:bg-gray-600"
+            };
+            
+            <a href="@action.Href" class="bg-white rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-gray-100 group">
+                <div class="flex items-start space-x-4">
+                    <div class="@colorClass w-14 h-14 rounded-xl flex items-center justify-center text-2xl text-white flex-shrink-0 transition-transform group-hover:scale-110">
+                        @action.Icon
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-indigo-600 transition-colors">
+                            @action.Label.GetText(currentLang)
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            @action.Description.GetText(currentLang)
+                        </p>
+                    </div>
+                    <div class="text-gray-300 group-hover:text-indigo-500 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

@@ -1,0 +1,34 @@
+@model Platform.Infrastructure.Definitions.StatsModernConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var bgClass = Model.Background ?? "bg-gradient-to-r from-gray-50 to-gray-100";
+}
+
+<div class="@bgClass py-16">
+    <div class="container mx-auto px-4">
+        @if (!string.IsNullOrEmpty(Model.Title?.GetText(currentLang)))
+        {
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-3">@Model.Title.GetText(currentLang)</h2>
+                <div class="w-20 h-1 bg-gradient-to-r from-indigo-500 to-purple-500 mx-auto rounded-full"></div>
+            </div>
+        }
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
+            @foreach (var item in Model.Items)
+            {
+                <div class="text-center group">
+                    <div class="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                        @item.Icon
+                    </div>
+                    <div class="relative inline-block mb-3">
+                        <div class="text-5xl font-extrabold bg-gradient-to-r @item.Color bg-clip-text text-transparent">
+                            @item.Value@item.Suffix
+                        </div>
+                    </div>
+                    <div class="text-gray-600 font-medium">@item.Label.GetText(currentLang)</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
