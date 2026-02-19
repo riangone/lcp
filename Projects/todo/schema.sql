@@ -70,3 +70,30 @@ INSERT OR IGNORE INTO Task (Id, Title, Description, Status, Priority, DueDate, P
 
 -- 更新已完成任务的 CompletedAt
 UPDATE Task SET CompletedAt = datetime('now') WHERE Status = 'completed';
+
+-- ==================== 用户表 ====================
+CREATE TABLE IF NOT EXISTS "User" (
+    UserId INTEGER PRIMARY KEY AUTOINCREMENT,
+    Username TEXT NOT NULL UNIQUE,
+    Email TEXT NOT NULL UNIQUE,
+    PasswordHash TEXT NOT NULL,
+    DisplayName TEXT,
+    Role TEXT DEFAULT 'User',
+    Avatar TEXT,
+    Bio TEXT,
+    IsActive INTEGER DEFAULT 1,
+    LastLoginAt TEXT,
+    LastLoginIP TEXT,
+    CreatedAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TEXT DEFAULT CURRENT_TIMESTAMP,
+    CreatedBy TEXT,
+    UpdatedBy TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_user_username ON "User"(Username);
+CREATE INDEX IF NOT EXISTS idx_user_email ON "User"(Email);
+CREATE INDEX IF NOT EXISTS idx_user_role ON "User"(Role);
+
+-- 默认管理员账户（密码：admin123）
+INSERT OR IGNORE INTO "User" (Username, Email, PasswordHash, DisplayName, Role) VALUES 
+('admin', 'admin@todo.com', '$2a$11$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', '系统管理员', 'Admin');

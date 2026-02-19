@@ -13,6 +13,9 @@ using System.Text;
 using System.Text.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -24,6 +27,43 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 // ★ MVC - 支持 Views 和 Razor
 builder.Services.AddControllersWithViews();
 builder.Services.AddOpenApi();
+
+// ★ JWT 认证配置
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"] ?? "LowCodePlatform",
+        ValidAudience = builder.Configuration["Jwt:Audience"] ?? "LowCodePlatform",
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            builder.Configuration["Jwt:Key"] ?? "YourSuperSecretKeyThatIsAtLeast32CharactersLong!"))
+    };
+
+    // 支持从 Cookie 读取 Token
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var token = context.Request.Cookies["token"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                context.Token = token;
+            }
+            return Task.CompletedTask;
+        }
+    };
+});
+
+builder.Services.AddAuthorization();
 
 // ★ 项目管理服务 - 支持运行时动态切换项目
 var projectsDirectory = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
@@ -55,7 +95,7 @@ builder.Services.AddScoped<DbConnectionFactory>(sp =>
 
 builder.Services.AddScoped<DynamicRepository>();
 builder.Services.AddScoped<ModelService>();
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<Platform.Infrastructure.Services.IAuthService, Platform.Infrastructure.Services.AuthService>();
 builder.Services.AddScoped<AuditService>();
 builder.Services.AddSingleton<YamlModelStore>();
 
@@ -79,6 +119,10 @@ var app = builder.Build();
 
 // 静态文件
 app.UseStaticFiles();
+
+// ★ 认证和授权中间件
+app.UseAuthentication();
+app.UseAuthorization();
 
 // 中间件：从 URL 参数切换项目（必须在所有控制器之前执行）
 app.Use(async (context, next) =>

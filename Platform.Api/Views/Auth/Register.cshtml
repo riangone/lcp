@@ -1,0 +1,224 @@
+@{
+    ViewData["Title"] = "用户注册";
+    var projectName = Context.Request.Query["project"].FirstOrDefault() ?? "app";
+}
+
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <h1>📝 用户注册</h1>
+            <p>创建新账户</p>
+        </div>
+
+        <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+            <div class="form-group">
+                <label for="username">用户名 *</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="3-20 个字符，字母数字下划线"
+                       pattern="[a-zA-Z0-9_]{3,20}"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="email">邮箱 *</label>
+                <input type="email" id="email" name="email" required 
+                       placeholder="your@email.com"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="displayName">显示名称</label>
+                <input type="text" id="displayName" name="displayName" 
+                       placeholder="可选，默认为用户名"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="password">密码 *</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="至少 6 个字符"
+                       minlength="6"
+                       class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">确认密码 *</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required 
+                       placeholder="再次输入密码"
+                       class="form-control">
+            </div>
+
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+
+            <button type="submit" class="btn btn-primary btn-block">
+                注册
+            </button>
+        </form>
+
+        <div class="auth-footer">
+            <p>已有账户？<a href="/auth/login?project=@projectName" class="auth-link">立即登录</a></p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .auth-container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        padding: 20px;
+    }
+
+    .auth-card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        padding: 40px;
+        width: 100%;
+        max-width: 420px;
+    }
+
+    .auth-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .auth-header h1 {
+        font-size: 28px;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .auth-header p {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .auth-form {
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 12px 16px;
+        border: 2px solid #e1e1e1;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+
+    .form-control:focus {
+        outline: none;
+        border-color: #764ba2;
+    }
+
+    .btn-block {
+        width: 100%;
+        padding: 14px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .auth-footer {
+        text-align: center;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+        color: #666;
+    }
+
+    .auth-link {
+        color: #764ba2;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .auth-link:hover {
+        text-decoration: underline;
+    }
+
+    .error-message {
+        background: #fee;
+        color: #c33;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        border-left: 4px solid #c33;
+    }
+</style>
+
+<script>
+    async function handleRegister(event) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = new FormData(form);
+        
+        const password = formData.get('password');
+        const confirmPassword = formData.get('confirmPassword');
+        
+        if (password !== confirmPassword) {
+            showError('两次输入的密码不一致');
+            return;
+        }
+        
+        const data = {
+            username: formData.get('username'),
+            email: formData.get('email'),
+            displayName: formData.get('displayName') || formData.get('username'),
+            password: password
+        };
+        
+        const errorDiv = document.getElementById('errorMessage');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        
+        // 禁用按钮
+        submitBtn.disabled = true;
+        submitBtn.textContent = '注册中...';
+        errorDiv.style.display = 'none';
+        
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            
+            const result = await response.json();
+            
+            if (response.ok) {
+                // 注册成功，跳转到登录页
+                const urlParams = new URLSearchParams(window.location.search);
+                const project = urlParams.get('project') || 'app';
+                window.location.href = '/?project=' + project;
+            } else {
+                throw new Error(result.error || '注册失败');
+            }
+        } catch (error) {
+            showError(error.message);
+            submitBtn.disabled = false;
+            submitBtn.textContent = '注册';
+        }
+        
+        function showError(message) {
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+    }
+</script>

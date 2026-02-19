@@ -41,18 +41,9 @@
                 </button>
                 <div id="desktop-user-menu" class="desktop-menu-panel">
                     <div class="desktop-menu-panel-inner">
-                        <div class="desktop-menu-section">
-                            <h4>当前用户</h4>
-                            <p>访客模式（Guest）</p>
-                            <p>状态：在线</p>
-                        </div>
-                        <div class="desktop-menu-section">
-                            <h4>快捷入口</h4>
-                            <div class="desktop-menu-links">
-                                <a href="/" class="desktop-menu-link">首页</a>
-                                <a href="/docs" class="desktop-menu-link">文档</a>
-                                <a href="/InventoryAiPage" class="desktop-menu-link">Inventory AI</a>
-                                <a href="/ai-validation" class="desktop-menu-link">AI Validation</a>
+                        <div class="user-status-display">
+                            <div class="guest-user">
+                                <p>加载中...</p>
                             </div>
                         </div>
                     </div>
@@ -280,5 +271,8 @@
             window.location = url.toString();
         }
     </script>
+
+    <!-- 用户状态组件 -->
+    @await Html.PartialAsync("_UserStatus")
 </body>
 </html>
