@@ -612,15 +612,33 @@ models:
       CustomerId:
         type: int
         required: true
+      ContactId:
+        type: int
       Title:
         type: string
         required: true
+      Description:
+        type: string
       Stage:
         type: string
       Probability:
         type: int
       Amount:
         type: decimal
+      ExpectedCloseDate:
+        type: string
+      ActualCloseDate:
+        type: string
+      CloseReason:
+        type: string
+      Competitor:
+        type: string
+      NextStep:
+        type: string
+      NextStepDate:
+        type: string
+      OwnerId:
+        type: int
       Status:
         type: string
       Priority:
@@ -751,11 +769,25 @@ models:
       ProductName:
         type: string
         required: true
+      Category:
+        type: string
+      Specification:
+        type: string
+      Unit:
+        type: string
       UnitPrice:
         type: decimal
         required: true
+      CostPrice:
+        type: decimal
       StockQuantity:
         type: int
+      ReorderLevel:
+        type: int
+      Supplier:
+        type: string
+      Description:
+        type: string
       IsActive:
         type: bool
 
@@ -905,11 +937,31 @@ models:
       CustomerId:
         type: int
         required: true
+      ContactId:
+        type: int
+      OpportunityId:
+        type: int
+      QuoteDate:
+        type: string
+      ExpiryDate:
+        type: string
+      Status:
+        type: string
+      Subtotal:
+        type: decimal
+      Discount:
+        type: decimal
+      Tax:
+        type: decimal
       TotalAmount:
         type: decimal
         required: true
-      Status:
+      Notes:
         type: string
+      Terms:
+        type: string
+      OwnerId:
+        type: int
 
   # ==================== 报价明细 ====================
   QuoteItem:
@@ -1012,9 +1064,13 @@ models:
       UnitPrice:
         type: decimal
         required: true
+      Discount:
+        type: decimal
       Subtotal:
         type: decimal
         required: true
+      Notes:
+        type: string
 
   # ==================== 订单管理 ====================
   Order:
@@ -1210,13 +1266,45 @@ models:
       CustomerId:
         type: int
         required: true
+      ContactId:
+        type: int
+      QuoteId:
+        type: int
+      OpportunityId:
+        type: int
+      OrderDate:
+        type: string
+      RequiredDate:
+        type: string
+      ShippedDate:
+        type: string
+      Status:
+        type: string
+      Subtotal:
+        type: decimal
+      Discount:
+        type: decimal
+      Tax:
+        type: decimal
+      ShippingCost:
+        type: decimal
       TotalAmount:
         type: decimal
         required: true
-      Status:
+      PaymentTerms:
         type: string
       PaymentStatus:
         type: string
+      ShippingAddress:
+        type: string
+      ShippingCity:
+        type: string
+      ShippingCountry:
+        type: string
+      Notes:
+        type: string
+      OwnerId:
+        type: int
 
   # ==================== 订单明细 ====================
   OrderItem:
@@ -1317,9 +1405,13 @@ models:
       UnitPrice:
         type: decimal
         required: true
+      Discount:
+        type: decimal
       Subtotal:
         type: decimal
         required: true
+      Notes:
+        type: string
 
   # ==================== 活动管理 ====================
   Activity:
@@ -1469,10 +1561,22 @@ models:
       Subject:
         type: string
         required: true
+      Description:
+        type: string
+      RelatedTo:
+        type: string
+      RelatedId:
+        type: int
       Status:
         type: string
       Priority:
         type: string
+      DueDate:
+        type: string
+      CompletedDate:
+        type: string
+      OwnerId:
+        type: int
 
   # ==================== 视图：订单客户视图（只读） ====================
   OrderWithCustomer:
@@ -1545,7 +1649,15 @@ models:
         type: int
       OrderNo:
         type: string
+      OrderDate:
+        type: string
       CustomerName:
+        type: string
+      ContactPerson:
+        type: string
+      CustomerPhone:
+        type: string
+      CustomerEmail:
         type: string
       TotalAmount:
         type: decimal
