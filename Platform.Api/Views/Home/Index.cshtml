@@ -214,6 +214,22 @@
                     </div>
                 </div>
             </a>
+
+            <!-- CRM 项目 -->
+            <a href="/?project=crm"
+               class="project-card bg-gradient-to-br from-indigo-500 to-indigo-600 text-white rounded-xl p-6 shadow-md"
+               title="@(currentLang == "zh" ? "点击切换到 CRM 客户关系管理" : "Click to switch to CRM Project")">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">💼</div>
+                    <div>
+                        <h3 class="text-xl font-bold">CRM 客户关系管理</h3>
+                        <p class="text-indigo-100 text-sm">客户、销售机会、订单管理</p>
+                        @if (projectName == "crm") {
+                            <span class="inline-block mt-2 px-2 py-1 bg-white bg-opacity-20 rounded text-xs">✅ 当前项目</span>
+                        }
+                    </div>
+                </div>
+            </a>
         </div>
 
         <!-- 切换说明 -->
@@ -228,15 +244,15 @@
         <!-- 项目统计 -->
         <div class="max-w-4xl mx-auto mt-4 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-blue-600">4</div>
+                <div class="text-2xl font-bold text-blue-600">5</div>
                 <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个项目" : "Projects")</div>
             </div>
             <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-green-600">~30</div>
+                <div class="text-2xl font-bold text-green-600">~40</div>
                 <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个数据模型" : "Data Models")</div>
             </div>
             <div class="bg-white rounded-lg p-4 text-center shadow">
-                <div class="text-2xl font-bold text-purple-600">~10</div>
+                <div class="text-2xl font-bold text-purple-600">~12</div>
                 <div class="text-sm text-gray-600">@(currentLang == "zh" ? "个多表页面" : "Multi-Table Pages")</div>
             </div>
             <div class="bg-white rounded-lg p-4 text-center shadow">
