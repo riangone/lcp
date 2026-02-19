@@ -5,6 +5,7 @@
     var tokens = Antiforgery.GetAndStoreTokens(Context);
     var models = Defs.Models;
     var pages = Defs.Pages;
+    var projectName = Context.Request.Query["project"].FirstOrDefault() ?? "app";
 }
 
 <!DOCTYPE html>
@@ -33,6 +34,36 @@
         </div>
 
         <div class="desktop-nav">
+            <!-- 项目切换菜单 -->
+            <div class="desktop-menu">
+                <button type="button" class="desktop-menu-trigger" onclick="toggleDesktopMenu('desktop-project-menu', this)">
+                    <i class="fas fa-folder"></i>
+                    @(currentLang == "zh" ? "项目" : "Projects")
+                    <i class="fas fa-chevron-down text-xs"></i>
+                </button>
+                <div id="desktop-project-menu" class="desktop-menu-panel">
+                    <div class="desktop-menu-panel-inner">
+                        <div class="desktop-menu-section">
+                            <h4>@(currentLang == "zh" ? "选择项目" : "Select Project")</h4>
+                            <div class="desktop-menu-links">
+                                <a href="/?project=todo" class="desktop-menu-link">
+                                    📋 TODO @(currentLang == "zh" ? "项目管理" : "Project")
+                                </a>
+                                <a href="/?project=journal" class="desktop-menu-link">
+                                    📔 @(currentLang == "zh" ? "我的日记本" : "Journal")
+                                </a>
+                                <a href="/?project=chinook" class="desktop-menu-link">
+                                    🎵 Chinook @(currentLang == "zh" ? "音乐商店" : "Music")
+                                </a>
+                                <a href="/?project=ecommerce" class="desktop-menu-link">
+                                    🛒 @(currentLang == "zh" ? "电商订单" : "E-commerce")
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="desktop-menu">
                 <button type="button" class="desktop-menu-trigger" onclick="toggleDesktopMenu('desktop-user-menu', this)">
                     <i class="fas fa-user-circle"></i>
@@ -80,77 +111,126 @@
             <li class="nav-item">
                 <a href="/" class="nav-link mobile-close-on-click @(ViewData["ActivePage"]?.ToString() == "Home" ? "active" : "")">
                     <i class="fas fa-home"></i>
-                    Home
+                    @(currentLang == "zh" ? "首页" : "Home")
                 </a>
             </li>
-            
+
+            <!-- 项目切换菜单 -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle">
-                    <i class="fas fa-database"></i>
-                    Data Management
+                    <i class="fas fa-folder"></i>
+                    @(currentLang == "zh" ? "项目" : "Projects")
                     <i class="fas fa-chevron-down ml-1 text-xs"></i>
                 </a>
                 <div class="dropdown-menu">
-                    @foreach (var model in models)
-                    {
-                        <a href="/ui/@(model.Key)?lang=@currentLang" class="dropdown-item mobile-close-on-click">
-                            <i class="fas fa-table mr-2"></i>
-                            @(model.Key)
-                        </a>
-                    }
+                    <a href="/?project=todo" class="dropdown-item mobile-close-on-click">
+                        <i class="fas fa-folder mr-2"></i>
+                        📋 TODO @(currentLang == "zh" ? "项目管理" : "Project")
+                    </a>
+                    <a href="/?project=journal" class="dropdown-item mobile-close-on-click">
+                        <i class="fas fa-folder mr-2"></i>
+                        📔 @(currentLang == "zh" ? "我的日记本" : "Journal")
+                    </a>
+                    <a href="/?project=chinook" class="dropdown-item mobile-close-on-click">
+                        <i class="fas fa-folder mr-2"></i>
+                        🎵 Chinook @(currentLang == "zh" ? "音乐商店" : "Music Store")
+                    </a>
+                    <a href="/?project=ecommerce" class="dropdown-item mobile-close-on-click">
+                        <i class="fas fa-folder mr-2"></i>
+                        🛒 @(currentLang == "zh" ? "电商订单系统" : "E-commerce")
+                    </a>
                 </div>
             </li>
 
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link dropdown-toggle">
-                    <i class="fas fa-th-large"></i>
-                    Pages
-                    <i class="fas fa-chevron-down ml-1 text-xs"></i>
-                </a>
-                <div class="dropdown-menu">
-                    @foreach (var page in pages)
-                    {
-                        <a href="/page/@(page.Key)?lang=@currentLang" class="dropdown-item mobile-close-on-click">
-                            <i class="fas fa-file-alt mr-2"></i>
-                            @(page.Value.Title ?? page.Key)
-                        </a>
-                    }
-                </div>
-            </li>
-            
+            <!-- 数据模型菜单 -->
+            @if (models != null && models.Any())
+            {
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-database"></i>
+                        @(currentLang == "zh" ? "数据管理" : "Data Management")
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        @foreach (var model in models)
+                        {
+                            var uiLabels = model.Value.Ui?.Labels;
+                            string displayName = model.Key;
+                            
+                            if (uiLabels != null)
+                            {
+                                var labels = currentLang == "zh" && uiLabels.Zh != null ? uiLabels.Zh : uiLabels.En;
+                                if (labels != null && labels.ContainsKey("title"))
+                                {
+                                    displayName = labels["title"];
+                                }
+                            }
+                            
+                            <a href="/ui/@(model.Key)?project=@projectName&lang=@currentLang" class="dropdown-item mobile-close-on-click">
+                                <i class="fas fa-table mr-2"></i>
+                                @displayName
+                            </a>
+                        }
+                    </div>
+                </li>
+            }
+
+            <!-- 多表页面菜单 -->
+            @if (pages != null && pages.Any())
+            {
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle">
+                        <i class="fas fa-th-large"></i>
+                        @(currentLang == "zh" ? "多表页面" : "Multi-Table Pages")
+                        <i class="fas fa-chevron-down ml-1 text-xs"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        @foreach (var page in pages)
+                        {
+                            var pageTitle = page.Value.Title ?? page.Key;
+                            <a href="/page/@(page.Key)?project=@projectName&lang=@currentLang" class="dropdown-item mobile-close-on-click">
+                                <i class="fas fa-file-alt mr-2"></i>
+                                @pageTitle
+                            </a>
+                        }
+                    </div>
+                </li>
+            }
+
+            <!-- AI 功能菜单 -->
             <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle">
                     <i class="fas fa-robot"></i>
-                    AI Features
+                    @(currentLang == "zh" ? "AI 功能" : "AI Features")
                     <i class="fas fa-chevron-down ml-1 text-xs"></i>
                 </a>
                 <div class="dropdown-menu">
                     <a href="/InventoryAiPage" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-chart-line mr-2"></i>
-                        Inventory AI
+                        @(currentLang == "zh" ? "库存 AI 分析" : "Inventory AI")
                     </a>
                     <a href="/ai-validation" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-shield-alt mr-2"></i>
-                        AI Validation
+                        @(currentLang == "zh" ? "AI 验证" : "AI Validation")
                     </a>
                     <a href="/ai-validation/snapshots" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-cogs mr-2"></i>
-                        Snapshots
+                        @(currentLang == "zh" ? "快照管理" : "Snapshots")
                     </a>
                     <a href="/ai-validation/test-scenarios" class="dropdown-item mobile-close-on-click">
                         <i class="fas fa-flask mr-2"></i>
-                        Test Scenarios
+                        @(currentLang == "zh" ? "测试场景" : "Test Scenarios")
                     </a>
                 </div>
             </li>
-            
+
             <li class="nav-item">
                 <a href="/docs" class="nav-link mobile-close-on-click @(ViewData["ActivePage"]?.ToString() == "Docs" ? "active" : "")">
                     <i class="fas fa-book"></i>
-                    Docs
+                    @(currentLang == "zh" ? "文档" : "Docs")
                 </a>
             </li>
-            
+
             <li class="nav-item">
                 <div class="language-switcher">
                     <select onchange="changeLanguage(this.value)" class="bg-transparent border-none focus:ring-0">
