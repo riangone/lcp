@@ -57,13 +57,21 @@
     <!-- 工具栏 -->
     <div class="journal-toolbar">
         <div class="toolbar-left">
-            <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang&editMode=@currentEditMode" 
+            <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
                class="btn btn-primary btn-write">
                 <i class="fas fa-pen-fancy"></i>
                 @(currentLang == "zh" ? "写日记" : "Write")
             </a>
         </div>
         <div class="toolbar-right">
+            <!-- UI 切换按钮 -->
+            <a href="/ui/Entry?project=@currentProject&lang=@currentLang&ui=generic"
+               class="btn btn-outline btn-sm"
+               title="@(currentLang == "zh" ? "切换到通用 UI" : "Switch to Generic UI")">
+                <i class="fas fa-th-large"></i>
+                @(currentLang == "zh" ? "通用视图" : "Generic View")
+            </a>
+            
             <form class="search-form" hx-get="/ui/Entry?project=@currentProject" hx-target="#journal-list" hx-swap="innerHTML" hx-push-url="true">
                 <input type="text" name="Title" placeholder="@(currentLang == "zh" ? "搜索日记..." : "Search entries...")" 
                        value="@(Context.Request.Query["Title"].FirstOrDefault() ?? "")"

@@ -67,6 +67,13 @@ public class UiController : Controller
             return PartialView("_ListContent", rows);
         }
 
+        // 检查是否强制使用通用 UI（通过 ui=generic 参数）
+        var uiMode = Request.Query["ui"].FirstOrDefault();
+        if (uiMode == "generic")
+        {
+            return View("List", rows);
+        }
+
         // 检查是否有专用 UI 视图定义
         if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate))
         {
@@ -90,15 +97,22 @@ public class UiController : Controller
         ViewData["ReturnUrl"] = returnUrl;
         ViewData["Project"] = project;
 
+        // 检查是否强制使用通用 UI
+        var uiMode = Request.Query["ui"].FirstOrDefault();
+        if (uiMode == "generic")
+        {
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+                Request.Headers["HX-Request"] != "true")
+            {
+                return View("CreatePage");
+            }
+            return PartialView("FormModal");
+        }
+
         // 检查是否有专用表单视图
         if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate))
         {
-            // Project dir from Razor options
             return View("Journal/Form");
-            // Check view exists
-            {
-                return View("Journal/Form");
-            }
         }
 
         if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
