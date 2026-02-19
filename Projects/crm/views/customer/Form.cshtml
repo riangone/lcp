@@ -8,9 +8,8 @@
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "crm";
     var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Customer?project={currentProject}";
 
-    var firstName = isEdit && row != null && row.ContainsKey("FirstName") ? row["FirstName"]?.ToString() ?? "" : "";
-    var lastName = isEdit && row != null && row.ContainsKey("LastName") ? row["LastName"]?.ToString() ?? "" : "";
-    var company = isEdit && row != null && row.ContainsKey("Company") ? row["Company"]?.ToString() ?? "" : "";
+    var contactPerson = isEdit && row != null && row.ContainsKey("ContactPerson") ? row["ContactPerson"]?.ToString() ?? "" : "";
+    var company = isEdit && row != null && row.ContainsKey("CompanyName") ? row["CompanyName"]?.ToString() ?? "" : "";
     var email = isEdit && row != null && row.ContainsKey("Email") ? row["Email"]?.ToString() ?? "" : "";
     var phone = isEdit && row != null && row.ContainsKey("Phone") ? row["Phone"]?.ToString() ?? "" : "";
 
@@ -34,33 +33,22 @@
             <input type="hidden" name="returnUrl" value="@returnUrl" />
             <input type="hidden" name="@method" value="true" />
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label" for="FirstName">
-                        @(currentLang == "zh" ? "名字" : "First Name")
-                    </label>
-                    <input type="text" id="FirstName" name="FirstName" value="@firstName" 
-                           class="form-input" maxlength="100" 
-                           placeholder="@(currentLang == "zh" ? "输入名字" : "Enter first name")" />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="LastName">
-                        @(currentLang == "zh" ? "姓氏" : "Last Name")
-                    </label>
-                    <input type="text" id="LastName" name="LastName" value="@lastName" 
-                           class="form-input" maxlength="100" 
-                           placeholder="@(currentLang == "zh" ? "输入姓氏" : "Enter last name")" />
-                </div>
+            <div class="form-group">
+                <label class="form-label" for="CompanyName">
+                    @(currentLang == "zh" ? "公司名称" : "Company Name") <span class="required">*</span>
+                </label>
+                <input type="text" id="CompanyName" name="CompanyName" value="@company" 
+                       class="form-input" required maxlength="200" 
+                       placeholder="@(currentLang == "zh" ? "输入公司名称" : "Enter company name")" />
             </div>
 
             <div class="form-group">
-                <label class="form-label" for="Company">
-                    @(currentLang == "zh" ? "公司" : "Company")
+                <label class="form-label" for="ContactPerson">
+                    @(currentLang == "zh" ? "联系人" : "Contact Person")
                 </label>
-                <input type="text" id="Company" name="Company" value="@company" 
+                <input type="text" id="ContactPerson" name="ContactPerson" value="@contactPerson" 
                        class="form-input" maxlength="200" 
-                       placeholder="@(currentLang == "zh" ? "输入公司名称" : "Enter company name")" />
+                       placeholder="@(currentLang == "zh" ? "输入联系人姓名" : "Enter contact person name")" />
             </div>
 
             <div class="form-row">
