@@ -45,7 +45,7 @@
                     <tr class="customer-row" data-id="@id">
                         <td>
                             <div class="customer-info">
-                                <span class="avatar">@firstName[0]@lastName[0]</span>
+                                <span class="avatar">@(firstName.Length > 0 ? firstName[0].ToString() : "?")@(lastName.Length > 0 ? lastName[0].ToString() : "")</span>
                                 <span class="name">@firstName @lastName</span>
                             </div>
                         </td>
