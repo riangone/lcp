@@ -1,79 +1,79 @@
-# Ecommerce 电商项目首页配置 - 活力电商风格（橙色主题）
-title: 电商订单系统
+# Journal 日记本项目首页配置 - 温馨日记风格（紫色主题）
+title: 我的日记本
 
 layout:
-  # Hero 区域 - 活力橙色渐变
+  # Hero 区域 - 温馨紫色渐变
   - type: hero
-    icon: 🛒
+    icon: 📔
     title:
-      zh: 电商订单系统
-      en: E-commerce Order System
+      zh: 我的日记本
+      en: My Journal
     subtitle:
-      zh: 一站式产品、订单、客户管理平台
-      en: All-in-one product, order, and customer management
+      zh: 记录生活点滴，珍藏美好回忆
+      en: Record life's moments, cherish beautiful memories
     style:
-      background: "bg-gradient-to-br from-orange-500 via-amber-500 to-red-500"
+      background: "bg-gradient-to-br from-purple-600 via-violet-600 to-fuchsia-600"
       title_size: "text-6xl"
-      title_class: "font-extrabold tracking-tight"
-      subtitle_class: "text-lg font-medium text-white text-opacity-95"
+      title_class: "font-bold tracking-wide"
+      subtitle_class: "text-lg font-light text-white text-opacity-90"
       icon_size: "text-8xl"
-      icon_animation: "animate-bounce"
-      height: "h-96"
-      show_wave: true
+      icon_animation: ""
+      height: "h-80"
+      show_wave: false
 
-  # 快捷操作区 - 电商风格
+  # 日记快捷操作
   - type: quick_actions
     title:
-      zh: 快捷操作
-      en: Quick Actions
+      zh: 开始记录
+      en: Start Writing
     actions:
-      - icon: 📦
+      - icon: ✍️
         label:
-          zh: 产品管理
-          en: Products
-        href: "/ui/Product?project=ecommerce"
-        color: "orange"
+          zh: 写日记
+          en: Write Entry
+        href: "/ui/Entry?project=journal"
+        color: "purple"
         description:
-          zh: 管理产品目录
-          en: Manage product catalog
-      - icon: 🛍️
+          zh: 记录今天的故事
+          en: Write today's story
+      - icon: 🏷️
         label:
-          zh: 订单处理
-          en: Orders
-        href: "/ui/Order?project=ecommerce"
-        color: "red"
+          zh: 分类管理
+          en: Categories
+        href: "/ui/Category?project=journal"
+        color: "violet"
         description:
-          zh: 处理客户订单
-          en: Process customer orders
-      - icon: 👥
+          zh: 管理日记分类
+          en: Manage categories
+      - icon: 🎨
         label:
-          zh: 客户管理
-          en: Customers
-        href: "/ui/Customer?project=ecommerce"
-        color: "amber"
+          zh: 标签管理
+          en: Tags
+        href: "/ui/Tag?project=journal"
+        color: "fuchsia"
         description:
-          zh: 管理客户信息
-          en: Manage customer info
-      - icon: 📊
+          zh: 管理标签
+          en: Manage tags
+      - icon: 😊
         label:
-          zh: 销售分析
-          en: Sales Analytics
-        href: "/ui/ProductSales?project=ecommerce"
-        color: "yellow"
+          zh: 心情追踪
+          en: Mood Tracker
+        href: "/ui/EntryWithCategory?project=journal"
+        color: "pink"
         description:
-          zh: 查看销售数据
-          en: View sales data
+          zh: 查看心情记录
+          en: View mood entries
 
-  # 电商数据管理
+  # 日记数据管理
   - type: section_title
     title:
-      zh: 电商数据
-      en: E-commerce Data
+      zh: 日记管理
+      en: Journal Management
     subtitle:
-      zh: 管理您的电商业务数据
-      en: Manage your e-commerce business
+      zh: 管理您的日记和分类
+      en: Manage your entries and categories
     style:
-      icon: "🏪"
+      icon: "📖"
       align: "center"
 
   - type: card_grid
@@ -82,76 +82,76 @@ layout:
       en: Data Models
     source: models
     card_style:
-      base_class: "bg-gradient-to-br from-white to-orange-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-orange-100"
-      hover_class: "hover:shadow-2xl hover:border-orange-300"
+      base_class: "bg-gradient-to-br from-white via-purple-50 to-pink-50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-purple-400"
+      hover_class: "hover:shadow-2xl hover:border-purple-500"
     columns:
       mobile: 1
       tablet: 2
       desktop: 3
       wide: 4
 
-  # 多表页面
+  # 统计视图
   - type: section_title
     title:
-      zh: 高级功能
-      en: Advanced Features
+      zh: 统计视图
+      en: Statistics Views
     subtitle:
-      zh: 多表关联管理
-      en: Multi-table management
+      zh: 查看日记统计数据
+      en: View journal statistics
     style:
-      icon: "🔗"
+      icon: "📊"
       align: "center"
 
   - type: card_grid
     title:
-      zh: 多表页面
-      en: Multi-Table Pages
-    source: pages
+      zh: 统计与视图
+      en: Stats & Views
+    source: models
     card_style:
-      base_class: "bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-orange-200"
-      hover_class: "hover:shadow-2xl hover:from-orange-100 hover:to-amber-100"
+      base_class: "bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-violet-200"
+      hover_class: "hover:shadow-2xl hover:border-violet-300"
     columns:
       mobile: 1
       tablet: 2
       desktop: 2
 
-  # 电商统计
+  # 日记统计
   - type: stats_modern
     title:
-      zh: 业务概览
-      en: Business Overview
-    background: "bg-gradient-to-r from-orange-50 via-amber-50 to-red-50"
+      zh: 日记概览
+      en: Journal Overview
+    background: "bg-gradient-to-r from-purple-50 via-pink-50 to-violet-50"
     items:
-      - value: "8"
+      - value: "6"
         suffix: "+"
         label:
           zh: 数据模型
           en: Data Models
-        color: "from-orange-500 to-red-500"
-        icon: "📦"
-      - value: "2"
-        suffix: "+"
-        label:
-          zh: 多表页面
-          en: Multi-Table Pages
-        color: "from-amber-500 to-yellow-500"
-        icon: "📄"
+        color: "from-purple-500 to-pink-500"
+        icon: "📝"
       - value: "5"
         suffix: "+"
         label:
           zh: 可用项目
           en: Projects
-        color: "from-red-500 to-pink-500"
+        color: "from-violet-500 to-fuchsia-500"
         icon: "📁"
+      - value: "40"
+        suffix: "+"
+        label:
+          zh: 总模型数
+          en: Total Models
+        color: "from-pink-500 to-rose-500"
+        icon: "🗄️"
       - value: "100"
         suffix: "%"
         label:
-          zh: 低代码驱动
+          zh: 低代码
           en: Low-Code
         color: "from-green-500 to-emerald-500"
         icon: "⚡"
 
-  # 项目切换 - 电商卡片风格
+  # 项目切换 - 日记卡片风格
   - type: section_title
     title:
       zh: 其他项目
@@ -160,7 +160,7 @@ layout:
       zh: 探索更多功能
       en: Explore more features
     style:
-      icon: "🌟"
+      icon: "🌈"
       align: "center"
 
   - type: card_grid
@@ -169,7 +169,7 @@ layout:
       en: Available Projects
     source: projects
     card_style:
-      base_class: "rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+      base_class: "rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
       hover_class: "hover:shadow-3xl"
     columns:
       mobile: 1
@@ -197,11 +197,12 @@ layout:
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
-        gradient: "from-purple-500 to-purple-600"
+        gradient: "from-purple-500 to-pink-500"
         features:
           - "日记记录"
           - "分类管理"
           - "心情追踪"
+        current: true
       - key: chinook
         icon: 🎵
         name:
@@ -228,7 +229,6 @@ layout:
           - "产品管理"
           - "订单处理"
           - "库存跟踪"
-        current: true
       - key: crm
         icon: 💼
         name:
@@ -243,22 +243,22 @@ layout:
           - "销售漏斗"
           - "报价订单"
 
-  # 页脚 - 电商风格
+  # 页脚 - 日记风格
   - type: footer
-    background: "bg-gradient-to-r from-gray-900 via-orange-900 to-gray-900"
+    background: "bg-gradient-to-r from-purple-900 via-violet-900 to-fuchsia-900"
     links:
       - text:
-          zh: 电商文档
-          en: E-commerce Docs
+          zh: 日记文档
+          en: Journal Docs
         href: "/docs"
       - text:
           zh: API
           en: API
         href: "/docs"
       - text:
-          zh: 支持
-          en: Support
+          zh: 关于
+          en: About
         href: "/docs"
     copyright:
-      zh: "© 2026 E-commerce Platform. All rights reserved."
-      en: "© 2026 E-commerce Platform. All rights reserved."
+      zh: "© 2026 我的日记本。All rights reserved."
+      en: "© 2026 My Journal. All rights reserved."

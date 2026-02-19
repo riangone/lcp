@@ -1,64 +1,161 @@
-# TODO 项目首页配置
+# TODO 项目首页配置 - 简洁现代风格（蓝色主题）
 title: TODO 项目管理
 
 layout:
+  # Hero 区域 - 简洁蓝色渐变
   - type: hero
-    icon: 📋
+    icon: ✅
     title:
       zh: TODO 项目管理
       en: TODO Project Management
     subtitle:
-      zh: 任务和项目管理系统
-      en: Task and Project Management System
+      zh: 高效的任务和项目管理系统，让工作更有序
+      en: Efficient task and project management system
     style:
-      background: from-blue-50 via-white to-blue-50
+      background: "bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600"
+      title_size: "text-6xl"
+      title_class: "font-bold tracking-tight"
+      subtitle_class: "text-lg font-light text-white text-opacity-90"
+      icon_size: "text-8xl"
+      icon_animation: "animate-pulse"
+      height: "h-80"
+      show_wave: false
 
-  - type: alert
-    alert_type: info
-    content:
-      zh: ✅ 当前项目：TODO
-      en: ✅ Current Project: TODO
-    link:
-      text:
-        zh: 切换项目
-        en: Switch Project
-      href: /
+  # 快捷操作区
+  - type: quick_actions
+    title:
+      zh: 快速开始
+      en: Quick Start
+    actions:
+      - icon: 📝
+        label:
+          zh: 创建任务
+          en: New Task
+        href: "/ui/Task?project=todo"
+        color: "blue"
+        description:
+          zh: 快速添加新任务
+          en: Add a new task
+      - icon: 📁
+        label:
+          zh: 项目管理
+          en: Projects
+        href: "/ui/Project?project=todo"
+        color: "indigo"
+        description:
+          zh: 管理项目信息
+          en: Manage projects
+      - icon: 📊
+        label:
+          zh: 任务统计
+          en: Task Stats
+        href: "/ui/TaskWithProject?project=todo"
+        color: "cyan"
+        description:
+          zh: 查看任务详情
+          en: View task details
 
-  - type: card_grid
-    source: models
+  # 数据模型网格
+  - type: section_title
     title:
       zh: 数据管理
       en: Data Management
+    subtitle:
+      zh: 管理您的任务数据
+      en: Manage your task data
+    style:
+      icon: "📊"
+      align: "center"
+
+  - type: card_grid
+    title:
+      zh: 数据模型
+      en: Data Models
+    source: models
     card_style:
-      base_class: bg-white rounded-xl p-6 shadow-md
-      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+      base_class: "bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-blue-500"
+      hover_class: "hover:shadow-2xl hover:border-blue-600"
     columns:
       mobile: 1
       tablet: 2
       desktop: 3
+      wide: 4
+
+  # 统计信息
+  - type: stats_modern
+    title:
+      zh: 平台概览
+      en: Platform Overview
+    background: "bg-gradient-to-r from-blue-50 to-cyan-50"
+    items:
+      - value: "5"
+        suffix: "+"
+        label:
+          zh: 可用项目
+          en: Projects
+        color: "from-blue-500 to-cyan-500"
+        icon: "📁"
+      - value: "40"
+        suffix: "+"
+        label:
+          zh: 数据模型
+          en: Data Models
+        color: "from-indigo-500 to-purple-500"
+        icon: "🗄️"
+      - value: "12"
+        suffix: "+"
+        label:
+          zh: 多表页面
+          en: Multi-Table Pages
+        color: "from-orange-500 to-red-500"
+        icon: "📄"
+      - value: "100"
+        suffix: "%"
+        label:
+          zh: YAML 驱动
+          en: YAML-Driven
+        color: "from-green-500 to-emerald-500"
+        icon: "⚡"
+
+  # 项目切换
+  - type: section_title
+    title:
+      zh: 切换项目
+      en: Switch Project
+    subtitle:
+      zh: 选择其他项目
+      en: Select another project
+    style:
+      icon: "🔄"
+      align: "center"
 
   - type: card_grid
-    source: projects
     title:
       zh: 可用项目
       en: Available Projects
+    source: projects
     card_style:
-      base_class: rounded-xl p-6 shadow-md text-white
-      hover_class: hover:shadow-lg hover:-translate-y-1 transition
+      base_class: "rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+      hover_class: "hover:shadow-3xl"
     columns:
       mobile: 1
       tablet: 2
       desktop: 3
     projects:
       - key: todo
-        icon: 📋
+        icon: ✅
         name:
           zh: TODO 项目管理
           en: TODO Project
         description:
           zh: 任务和项目管理系统
           en: Task and Project Management
-        color: blue
+        gradient: "from-blue-500 to-cyan-500"
+        features:
+          - "任务管理"
+          - "项目跟踪"
+          - "状态流转"
+        current: true
       - key: journal
         icon: 📔
         name:
@@ -67,7 +164,11 @@ layout:
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
-        color: purple
+        gradient: "from-purple-500 to-purple-600"
+        features:
+          - "日记记录"
+          - "分类管理"
+          - "心情追踪"
       - key: chinook
         icon: 🎵
         name:
@@ -76,7 +177,11 @@ layout:
         description:
           zh: 艺术家、专辑、音轨管理
           en: Artist, Album, Track Management
-        color: green
+        gradient: "from-green-500 to-emerald-600"
+        features:
+          - "音乐库管理"
+          - "多表关联"
+          - "只读视图"
       - key: ecommerce
         icon: 🛒
         name:
@@ -85,7 +190,11 @@ layout:
         description:
           zh: 产品、订单、客户管理
           en: Product, Order, Customer
-        color: orange
+        gradient: "from-orange-500 to-red-500"
+        features:
+          - "产品管理"
+          - "订单处理"
+          - "库存跟踪"
       - key: crm
         icon: 💼
         name:
@@ -94,22 +203,28 @@ layout:
         description:
           zh: 客户、销售机会、订单管理
           en: Customer, Opportunity, Order
-        color: indigo
+        gradient: "from-indigo-500 to-pink-500"
+        features:
+          - "客户 360°视图"
+          - "销售漏斗"
+          - "报价订单"
 
-  - type: stats
-    items:
-      - value: "5"
-        label:
-          zh: 个项目
-          en: Projects
-        color: blue
-      - value: "~40"
-        label:
-          zh: 个数据模型
-          en: Data Models
-        color: green
-      - value: "~12"
-        label:
-          zh: 个多表页面
-          en: Multi-Table Pages
-        color: purple
+  # 页脚
+  - type: footer
+    background: "bg-gradient-to-r from-gray-800 to-gray-900"
+    links:
+      - text:
+          zh: 文档
+          en: Documentation
+        href: "/docs"
+      - text:
+          zh: API
+          en: API
+        href: "/docs"
+      - text:
+          zh: GitHub
+          en: GitHub
+        href: "https://github.com"
+    copyright:
+      zh: "© 2026 TODO Project. All rights reserved."
+      en: "© 2026 TODO Project. All rights reserved."
