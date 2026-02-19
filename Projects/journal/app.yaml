@@ -10,6 +10,7 @@ models:
     custom_view:
       enabled: true
       type: custom
+      default_ui_mode: custom    # custom=默认使用专用 UI, generic=默认使用通用 UI
       list_template: "views/entry/List.cshtml"
       form_template: "views/entry/Form.cshtml"
       details_template: "views/entry/Details.cshtml"

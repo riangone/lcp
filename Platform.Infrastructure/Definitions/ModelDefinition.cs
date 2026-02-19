@@ -35,6 +35,13 @@ namespace Platform.Infrastructure.Definitions
         public string Type { get; set; } = "custom";
 
         /// <summary>
+        /// 默认 UI 模式：custom（专用 UI）/ generic（通用 UI）
+        /// 如果为 custom，默认访问时使用专用 UI
+        /// 如果为 generic，默认访问时使用通用 UI，需要 ?ui=custom 才使用专用 UI
+        /// </summary>
+        public string DefaultUiMode { get; set; } = "custom";
+
+        /// <summary>
         /// 专用视图模板路径（相对于项目目录）
         /// </summary>
         public string? Template { get; set; }

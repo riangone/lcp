@@ -96,12 +96,25 @@
 }
 
   <div class="mb-8">
-    <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
-    <p class="text-gray-600">Manage your @modelName records</p>
-    @if (isReadOnly)
-    {
-      <p class="text-amber-700 text-sm mt-2">Read-only data source (query/view): create, edit and delete are disabled.</p>
-    }
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">@title</h1>
+        <p class="text-gray-600">Manage your @modelName records</p>
+        @if (isReadOnly)
+        {
+          <p class="text-amber-700 text-sm mt-2">Read-only data source (query/view): create, edit and delete are disabled.</p>
+        }
+      </div>
+      @if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate))
+      {
+        var customUiText = currentLang == "zh" ? "专用视图" : "Custom View";
+        <a href="/ui/@modelName?project=@currentProject&lang=@currentLang&ui=custom"
+           class="btn btn-outline"
+           title="@(currentLang == "zh" ? "切换到专用 UI" : "Switch to Custom UI")">
+          <i class="fas fa-stream"></i> @customUiText
+        </a>
+      }
+    </div>
   </div>
 
   @if (def.List?.Filters != null && def.List.Filters.Any())

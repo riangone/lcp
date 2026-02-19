@@ -67,22 +67,28 @@ public class UiController : Controller
             return PartialView("_ListContent", rows);
         }
 
-        // 检查是否强制使用通用 UI（通过 ui=generic 参数）
+        // 检查是否有专用 UI 视图定义
+        var hasCustomView = def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate);
+        
+        // 获取 URL 参数中的 ui 模式，如果没有则使用 YAML 配置的默认值
         var uiMode = Request.Query["ui"].FirstOrDefault();
-        if (uiMode == "generic")
+        if (string.IsNullOrEmpty(uiMode))
         {
+            // 使用 YAML 配置的默认 UI 模式
+            uiMode = hasCustomView ? def.CustomView?.DefaultUiMode : "generic";
+        }
+
+        // 根据 UI 模式决定使用哪个视图
+        if (uiMode == "generic" || !hasCustomView)
+        {
+            // 使用通用 UI
             return View("List", rows);
         }
-
-        // 检查是否有专用 UI 视图定义
-        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate))
+        else
         {
-            // 使用专用视图 - Journal 项目使用专用视图
+            // 使用专用 UI
             return View("Journal/List", rows);
         }
-
-        // 使用通用视图
-        return View("List", rows);
     }
 
     [HttpGet("create")]
@@ -97,9 +103,18 @@ public class UiController : Controller
         ViewData["ReturnUrl"] = returnUrl;
         ViewData["Project"] = project;
 
-        // 检查是否强制使用通用 UI
+        // 检查是否有专用表单视图
+        var hasCustomView = def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate);
+        
+        // 获取 UI 模式
         var uiMode = Request.Query["ui"].FirstOrDefault();
-        if (uiMode == "generic")
+        if (string.IsNullOrEmpty(uiMode))
+        {
+            uiMode = hasCustomView ? def.CustomView?.DefaultUiMode : "generic";
+        }
+
+        // 根据 UI 模式决定使用哪个视图
+        if (uiMode == "generic" || !hasCustomView)
         {
             if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
                 Request.Headers["HX-Request"] != "true")
@@ -108,20 +123,10 @@ public class UiController : Controller
             }
             return PartialView("FormModal");
         }
-
-        // 检查是否有专用表单视图
-        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate))
+        else
         {
             return View("Journal/Form");
         }
-
-        if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-            Request.Headers["HX-Request"] != "true")
-        {
-            return View("CreatePage");
-        }
-
-        return PartialView("FormModal");
     }
 
     [HttpGet("edit/{id}")]

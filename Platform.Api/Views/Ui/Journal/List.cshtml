@@ -71,6 +71,13 @@
                 <i class="fas fa-th-large"></i>
                 @(currentLang == "zh" ? "通用视图" : "Generic View")
             </a>
+            <a href="/ui/Entry?project=@currentProject&lang=@currentLang&ui=custom"
+               class="btn btn-outline btn-sm"
+               title="@(currentLang == "zh" ? "切换到专用 UI" : "Switch to Custom UI")"
+               style="display: none;" id="show-custom-ui-btn">
+                <i class="fas fa-stream"></i>
+                @(currentLang == "zh" ? "专用视图" : "Custom View")
+            </a>
             
             <form class="search-form" hx-get="/ui/Entry?project=@currentProject" hx-target="#journal-list" hx-swap="innerHTML" hx-push-url="true">
                 <input type="text" name="Title" placeholder="@(currentLang == "zh" ? "搜索日记..." : "Search entries...")" 
