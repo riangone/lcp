@@ -1,0 +1,148 @@
+# 产品目录管理页面 - 展示产品、分类和供应商的关联管理
+title: 产品目录管理
+description: 管理产品、分类和供应商数据
+
+# 主表（用于主要数据展示）
+main_table: Product
+
+# 页面区域定义
+sections:
+  # 产品列表区域
+  - id: products
+    title: 产品列表
+    type: table
+    source_type: model
+    source: Product
+    columns:
+      - ProductId
+      - ProductName
+      - CategoryId
+      - SupplierId
+      - UnitPrice
+      - StockQuantity
+      - Discontinued
+    editable: true
+    page_size: 15
+    filters:
+      ProductName:
+        label: 产品名称
+        type: like
+      CategoryId:
+        label: 分类
+        type: like
+      Discontinued:
+        label: 状态
+        type: select
+        options:
+          "0": 销售中
+          "1": 停售
+
+  # 分类列表区域
+  - id: categories
+    title: 产品分类
+    type: table
+    source_type: model
+    source: Category
+    columns:
+      - CategoryId
+      - Name
+      - Description
+      - ParentCategoryId
+    editable: true
+    page_size: 10
+    filters:
+      Name:
+        label: 分类名称
+        type: like
+
+  # 供应商列表区域
+  - id: suppliers
+    title: 供应商
+    type: table
+    source_type: model
+    source: Supplier
+    columns:
+      - SupplierId
+      - CompanyName
+      - ContactName
+      - ContactEmail
+      - City
+      - Country
+    editable: true
+    page_size: 10
+    filters:
+      CompanyName:
+        label: 公司名称
+        type: like
+      Country:
+        label: 国家
+        type: like
+
+  # 添加产品表单区域
+  - id: add_product_form
+    title: 快速添加产品
+    type: form
+    source_type: model
+    source: Product
+    editable: true
+    fields:
+      ProductName:
+        label: 产品名称
+        type: text
+        required: true
+        max_length: 200
+      CategoryId:
+        label: 分类
+        type: number
+        required: true
+      SupplierId:
+        label: 供应商
+        type: number
+        required: true
+      UnitPrice:
+        label: 单价
+        type: number
+        required: true
+      StockQuantity:
+        label: 库存
+        type: number
+        required: true
+
+# 页面操作定义
+actions:
+  - id: export_products
+    title: 导出产品
+    type: submit
+    target: /api/export/products
+    method: POST
+    button_class: btn btn-success
+    icon: fas fa-download
+    confirm_message: 确定要导出所有产品数据吗？
+    affects_sections:
+      - products
+
+  - id: low_stock_report
+    title: 低库存报告
+    type: ajax
+    method: GET
+    button_class: btn btn-warning
+    icon: fas fa-exclamation-triangle
+    target: /api/product/low-stock
+    confirm_message: 生成低库存产品报告？
+
+# UI 定义
+ui:
+  theme: default
+  layout:
+    - section_id: products
+      columns: 12
+      full_width: true
+    - section_id: categories
+      columns: 6
+      full_width: false
+    - section_id: suppliers
+      columns: 6
+      full_width: false
+    - section_id: add_product_form
+      columns: 12
+      full_width: true

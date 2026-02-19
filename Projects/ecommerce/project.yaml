@@ -1,0 +1,38 @@
+# 电商订单项目配置
+name: ecommerce
+display_name: 电商订单管理系统
+description: 基于低代码平台的电商订单、客户和产品管理系统
+version: 1.0.0
+author: LowCode Platform
+
+# 数据库配置
+database:
+  type: sqlite
+  path: ecommerce.db
+  schema: schema.sql
+  seed_data: data.sql
+
+# 功能配置
+features:
+  multi_language: true      # 多语言支持
+  custom_pages: true        # 自定义页面
+  custom_views: false       # 自定义视图覆盖
+  business_rules: true      # 业务规则验证
+  state_machine: true       # 状态机
+
+# 依赖扩展
+extensions: []
+
+# UI 配置
+ui:
+  theme: default
+
+# 项目元数据
+metadata:
+  created: 2026-02-19
+  updated: 2026-02-19
+  tags:
+    - ecommerce
+    - order
+    - customer
+    - product

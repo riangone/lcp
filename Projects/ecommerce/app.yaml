@@ -1,0 +1,1116 @@
+# 电商订单系统应用定义
+# 只需定义 YAML，即可自动生成完整的 CRUD API 和 UI
+
+models:
+  # ==================== 产品分类 ====================
+  Category:
+    table: Category
+    primary_key: CategoryId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 3
+      labels:
+        en:
+          title: Categories
+          create_button: Add Category
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search categories...
+          Name: Name
+          Description: Description
+          ParentCategoryId: Parent Category
+          Actions: Actions
+        zh:
+          title: 产品分类
+          create_button: 添加分类
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索分类...
+          Name: 分类名称
+          Description: 描述
+          ParentCategoryId: 父分类
+          Actions: 操作
+      styles:
+        card_class: "card-category"
+        button_class: "btn btn-primary"
+
+    list:
+      columns:
+        - CategoryId
+        - Name
+        - Description
+        - ParentCategoryId
+
+      filters:
+        Name:
+          label: Name
+          type: like
+
+    form:
+      title: Category
+      fields:
+        Name:
+          label: Name
+          type: text
+          required: true
+          max_length: 100
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 500
+
+        ParentCategoryId:
+          label: Parent Category
+          type: number
+
+    properties:
+      CategoryId:
+        type: int
+      Name:
+        type: string
+        required: true
+      Description:
+        type: string
+      ParentCategoryId:
+        type: int
+
+  # ==================== 供应商 ====================
+  Supplier:
+    table: Supplier
+    primary_key: SupplierId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Suppliers
+          create_button: Add Supplier
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search suppliers...
+          CompanyName: Company Name
+          ContactName: Contact Name
+          ContactEmail: Email
+          ContactPhone: Phone
+          City: City
+          Country: Country
+          Actions: Actions
+        zh:
+          title: 供应商
+          create_button: 添加供应商
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索供应商...
+          CompanyName: 公司名称
+          ContactName: 联系人
+          ContactEmail: 邮箱
+          ContactPhone: 电话
+          City: 城市
+          Country: 国家
+          Actions: 操作
+      styles:
+        card_class: "card-supplier"
+        button_class: "btn btn-success"
+
+    list:
+      columns:
+        - SupplierId
+        - CompanyName
+        - ContactName
+        - ContactEmail
+        - City
+        - Country
+
+      filters:
+        CompanyName:
+          label: Company Name
+          type: like
+        ContactEmail:
+          label: Email
+          type: like
+        Country:
+          label: Country
+          type: like
+
+    form:
+      title: Supplier
+      fields:
+        CompanyName:
+          label: Company Name
+          type: text
+          required: true
+          max_length: 200
+
+        ContactName:
+          label: Contact Name
+          type: text
+          max_length: 100
+
+        ContactEmail:
+          label: Email
+          type: email
+
+        ContactPhone:
+          label: Phone
+          type: text
+          max_length: 30
+
+        Address:
+          label: Address
+          type: textarea
+          max_length: 300
+
+        City:
+          label: City
+          type: text
+          max_length: 100
+
+        Country:
+          label: Country
+          type: text
+          max_length: 100
+
+    properties:
+      SupplierId:
+        type: int
+      CompanyName:
+        type: string
+        required: true
+      ContactName:
+        type: string
+      ContactEmail:
+        type: string
+      ContactPhone:
+        type: string
+      Address:
+        type: string
+      City:
+        type: string
+      Country:
+        type: string
+
+  # ==================== 产品 ====================
+  Product:
+    table: Product
+    primary_key: ProductId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Products
+          create_button: Add Product
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search products...
+          ProductName: Product Name
+          Description: Description
+          CategoryId: Category
+          SupplierId: Supplier
+          UnitPrice: Unit Price
+          StockQuantity: Stock
+          ReorderLevel: Reorder Level
+          Discontinued: Discontinued
+          Actions: Actions
+        zh:
+          title: 产品
+          create_button: 添加产品
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索产品...
+          ProductName: 产品名称
+          Description: 描述
+          CategoryId: 分类
+          SupplierId: 供应商
+          UnitPrice: 单价
+          StockQuantity: 库存
+          ReorderLevel: 补货点
+          Discontinued: 停售
+          Actions: 操作
+      styles:
+        card_class: "card-product"
+        button_class: "btn btn-info"
+
+    list:
+      columns:
+        - ProductId
+        - ProductName
+        - CategoryId
+        - UnitPrice
+        - StockQuantity
+        - Discontinued
+
+      filters:
+        ProductName:
+          label: Product Name
+          type: like
+        CategoryId:
+          label: Category
+          type: like
+        Discontinued:
+          label: Status
+          type: select
+          options:
+            "0": Active
+            "1": Discontinued
+
+    form:
+      title: Product
+      fields:
+        ProductName:
+          label: Product Name
+          type: text
+          required: true
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 1000
+
+        CategoryId:
+          label: Category
+          type: number
+
+        SupplierId:
+          label: Supplier
+          type: number
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+          min: 0
+
+        StockQuantity:
+          label: Stock Quantity
+          type: number
+          required: true
+          min: 0
+
+        ReorderLevel:
+          label: Reorder Level
+          type: number
+          min: 0
+
+        Discontinued:
+          label: Discontinued
+          type: checkbox
+
+    properties:
+      ProductId:
+        type: int
+      ProductName:
+        type: string
+        required: true
+      Description:
+        type: string
+      CategoryId:
+        type: int
+      SupplierId:
+        type: int
+      UnitPrice:
+        type: decimal
+        required: true
+      StockQuantity:
+        type: int
+        required: true
+      ReorderLevel:
+        type: int
+      Discontinued:
+        type: bool
+
+  # ==================== 客户 ====================
+  Customer:
+    table: Customer
+    primary_key: CustomerId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        en:
+          title: Customers
+          create_button: Add Customer
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search customers...
+          FirstName: First Name
+          LastName: Last Name
+          Email: Email
+          Phone: Phone
+          City: City
+          Country: Country
+          CustomerType: Customer Type
+          Actions: Actions
+        zh:
+          title: 客户
+          create_button: 添加客户
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索客户...
+          FirstName: 名
+          LastName: 姓
+          Email: 邮箱
+          Phone: 电话
+          City: 城市
+          Country: 国家
+          CustomerType: 客户类型
+          Actions: 操作
+      styles:
+        card_class: "card-customer"
+        button_class: "btn btn-warning"
+
+    list:
+      columns:
+        - CustomerId
+        - FirstName
+        - LastName
+        - Email
+        - Phone
+        - City
+        - Country
+        - CustomerType
+
+      filters:
+        FirstName:
+          label: First Name
+          type: like
+        LastName:
+          label: Last Name
+          type: like
+        Email:
+          label: Email
+          type: like
+        Country:
+          label: Country
+          type: like
+        CustomerType:
+          label: Type
+          type: select
+          options:
+            Retail: Retail
+            Wholesale: Wholesale
+            VIP: VIP
+
+    form:
+      title: Customer
+      fields:
+        FirstName:
+          label: First Name
+          type: text
+          required: true
+          max_length: 50
+
+        LastName:
+          label: Last Name
+          type: text
+          required: true
+          max_length: 50
+
+        Email:
+          label: Email
+          type: email
+          required: true
+          max_length: 100
+
+        Phone:
+          label: Phone
+          type: text
+          max_length: 30
+
+        Address:
+          label: Address
+          type: textarea
+          max_length: 300
+
+        City:
+          label: City
+          type: text
+          max_length: 100
+
+        State:
+          label: State
+          type: text
+          max_length: 100
+
+        Country:
+          label: Country
+          type: text
+          max_length: 100
+
+        PostalCode:
+          label: Postal Code
+          type: text
+          max_length: 20
+
+        CustomerType:
+          label: Customer Type
+          type: select
+          options:
+            Retail: Retail
+            Wholesale: Wholesale
+            VIP: VIP
+
+    properties:
+      CustomerId:
+        type: int
+      FirstName:
+        type: string
+        required: true
+      LastName:
+        type: string
+        required: true
+      Email:
+        type: string
+        required: true
+      Phone:
+        type: string
+      Address:
+        type: string
+      City:
+        type: string
+      State:
+        type: string
+      Country:
+        type: string
+      PostalCode:
+        type: string
+      CustomerType:
+        type: string
+
+  # ==================== 订单 ====================
+  Order:
+    table: "Order"
+    primary_key: OrderId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        en:
+          title: Orders
+          create_button: Create Order
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search orders...
+          OrderNumber: Order Number
+          CustomerId: Customer
+          OrderDate: Order Date
+          Status: Status
+          TotalAmount: Total Amount
+          PaymentStatus: Payment Status
+          Actions: Actions
+        zh:
+          title: 订单
+          create_button: 创建订单
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索订单...
+          OrderNumber: 订单号
+          CustomerId: 客户
+          OrderDate: 订单日期
+          Status: 状态
+          TotalAmount: 总金额
+          PaymentStatus: 支付状态
+          Actions: 操作
+      styles:
+        card_class: "card-order"
+        button_class: "btn btn-dark"
+
+    list:
+      columns:
+        - OrderId
+        - OrderNumber
+        - CustomerId
+        - OrderDate
+        - Status
+        - TotalAmount
+        - PaymentStatus
+
+      filters:
+        OrderNumber:
+          label: Order Number
+          type: like
+        CustomerId:
+          label: Customer
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+        PaymentStatus:
+          label: Payment
+          type: select
+          options:
+            Unpaid: Unpaid
+            Paid: Paid
+            Refunded: Refunded
+
+    form:
+      title: Order
+      fields:
+        OrderNumber:
+          label: Order Number
+          type: text
+          required: true
+          max_length: 50
+
+        CustomerId:
+          label: Customer
+          type: number
+          required: true
+
+        OrderDate:
+          label: Order Date
+          type: text
+          required: true
+
+        RequiredDate:
+          label: Required Date
+          type: text
+
+        ShippedDate:
+          label: Shipped Date
+          type: text
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+
+        ShippingAddress:
+          label: Shipping Address
+          type: textarea
+          max_length: 300
+
+        ShippingCity:
+          label: Shipping City
+          type: text
+          max_length: 100
+
+        ShippingCountry:
+          label: Shipping Country
+          type: text
+          max_length: 100
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          min: 0
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Tax:
+          label: Tax
+          type: number
+          min: 0
+
+        ShippingCost:
+          label: Shipping Cost
+          type: number
+          min: 0
+
+        TotalAmount:
+          label: Total Amount
+          type: number
+          required: true
+          min: 0
+
+        PaymentMethod:
+          label: Payment Method
+          type: select
+          options:
+            CreditCard: Credit Card
+            PayPal: PayPal
+            BankTransfer: Bank Transfer
+            COD: Cash on Delivery
+
+        PaymentStatus:
+          label: Payment Status
+          type: select
+          options:
+            Unpaid: Unpaid
+            Paid: Paid
+            Refunded: Refunded
+
+        Notes:
+          label: Notes
+          type: textarea
+          max_length: 1000
+
+    properties:
+      OrderId:
+        type: int
+      OrderNumber:
+        type: string
+        required: true
+      CustomerId:
+        type: int
+        required: true
+      OrderDate:
+        type: string
+        required: true
+      RequiredDate:
+        type: string
+      ShippedDate:
+        type: string
+      Status:
+        type: string
+      ShippingAddress:
+        type: string
+      ShippingCity:
+        type: string
+      ShippingCountry:
+        type: string
+      Subtotal:
+        type: decimal
+      Discount:
+        type: decimal
+      Tax:
+        type: decimal
+      ShippingCost:
+        type: decimal
+      TotalAmount:
+        type: decimal
+        required: true
+      PaymentMethod:
+        type: string
+      PaymentStatus:
+        type: string
+      Notes:
+        type: string
+
+  # ==================== 订单项 ====================
+  OrderItem:
+    table: OrderItem
+    primary_key: OrderItemId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        en:
+          title: Order Items
+          create_button: Add Item
+          edit_button: Edit
+          delete_button: Delete
+          OrderId: Order
+          ProductId: Product
+          UnitPrice: Unit Price
+          Quantity: Quantity
+          Discount: Discount
+          Subtotal: Subtotal
+          Actions: Actions
+        zh:
+          title: 订单项
+          create_button: 添加商品
+          edit_button: 编辑
+          delete_button: 删除
+          OrderId: 订单
+          ProductId: 产品
+          UnitPrice: 单价
+          Quantity: 数量
+          Discount: 折扣
+          Subtotal: 小计
+          Actions: 操作
+      styles:
+        card_class: "card-order-item"
+        button_class: "btn btn-light"
+
+    list:
+      columns:
+        - OrderItemId
+        - OrderId
+        - ProductId
+        - UnitPrice
+        - Quantity
+        - Subtotal
+
+      filters:
+        OrderId:
+          label: Order
+          type: like
+        ProductId:
+          label: Product
+          type: like
+
+    form:
+      title: Order Item
+      fields:
+        OrderId:
+          label: Order
+          type: number
+          required: true
+
+        ProductId:
+          label: Product
+          type: number
+          required: true
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+          min: 0
+
+        Quantity:
+          label: Quantity
+          type: number
+          required: true
+          min: 1
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          required: true
+          min: 0
+
+    properties:
+      OrderItemId:
+        type: int
+      OrderId:
+        type: int
+        required: true
+      ProductId:
+        type: int
+        required: true
+      UnitPrice:
+        type: decimal
+        required: true
+      Quantity:
+        type: int
+        required: true
+      Discount:
+        type: decimal
+      Subtotal:
+        type: decimal
+        required: true
+
+  # ==================== 库存日志（只读） ====================
+  InventoryLog:
+    table: InventoryLog
+    primary_key: LogId
+    read_only: true
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        en:
+          title: Inventory Logs
+          ProductId: Product
+          ChangeType: Change Type
+          Quantity: Quantity
+          PreviousStock: Previous Stock
+          NewStock: New Stock
+          ReferenceType: Reference Type
+          ReferenceId: Reference ID
+          Notes: Notes
+          CreatedAt: Date
+          Actions: Actions
+        zh:
+          title: 库存日志
+          ProductId: 产品
+          ChangeType: 变动类型
+          Quantity: 数量
+          PreviousStock: 原库存
+          NewStock: 新库存
+          ReferenceType: 参考类型
+          ReferenceId: 参考 ID
+          Notes: 备注
+          CreatedAt: 日期
+          Actions: 操作
+      styles:
+        card_class: "card-inventory-log"
+        button_class: "btn btn-outline"
+
+    list:
+      columns:
+        - LogId
+        - ProductId
+        - ChangeType
+        - Quantity
+        - PreviousStock
+        - NewStock
+        - ReferenceType
+        - ReferenceId
+        - CreatedAt
+
+      filters:
+        ProductId:
+          label: Product
+          type: like
+        ChangeType:
+          label: Type
+          type: select
+          options:
+            In: In
+            Out: Out
+            Adjustment: Adjustment
+        ReferenceType:
+          label: Reference
+          type: like
+
+    form:
+      title: Inventory Log
+      fields:
+        ProductId:
+          label: Product
+          type: number
+
+        ChangeType:
+          label: Change Type
+          type: text
+
+        Quantity:
+          label: Quantity
+          type: number
+
+        PreviousStock:
+          label: Previous Stock
+          type: number
+
+        NewStock:
+          label: New Stock
+          type: number
+
+        ReferenceType:
+          label: Reference Type
+          type: text
+
+        ReferenceId:
+          label: Reference ID
+          type: number
+
+        Notes:
+          label: Notes
+          type: textarea
+
+        CreatedBy:
+          label: Created By
+          type: text
+
+    properties:
+      LogId:
+        type: int
+      ProductId:
+        type: int
+      ChangeType:
+        type: string
+      Quantity:
+        type: int
+      PreviousStock:
+        type: int
+      NewStock:
+        type: int
+      ReferenceType:
+        type: string
+      ReferenceId:
+        type: int
+      Notes:
+        type: string
+      CreatedAt:
+        type: string
+      CreatedBy:
+        type: string
+
+  # ==================== 订单客户视图（只读） ====================
+  OrderWithCustomer:
+    query: |
+      SELECT
+        o.OrderId,
+        o.OrderNumber,
+        o.OrderDate,
+        o.Status,
+        o.TotalAmount,
+        o.PaymentStatus,
+        c.FirstName || ' ' || c.LastName AS CustomerName,
+        c.Email AS CustomerEmail,
+        c.City AS CustomerCity,
+        c.Country AS CustomerCountry
+      FROM "Order" o
+      JOIN Customer c ON c.CustomerId = o.CustomerId
+    primary_key: OrderId
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Orders with Customers
+          OrderNumber: Order Number
+          OrderDate: Order Date
+          Status: Status
+          TotalAmount: Total
+          PaymentStatus: Payment
+          CustomerName: Customer
+          CustomerEmail: Email
+          CustomerCity: City
+          CustomerCountry: Country
+        zh:
+          title: 订单客户视图
+          OrderNumber: 订单号
+          OrderDate: 订单日期
+          Status: 状态
+          TotalAmount: 总金额
+          PaymentStatus: 支付状态
+          CustomerName: 客户姓名
+          CustomerEmail: 邮箱
+          CustomerCity: 城市
+          CustomerCountry: 国家
+
+    list:
+      columns:
+        - OrderId
+        - OrderNumber
+        - OrderDate
+        - CustomerName
+        - Status
+        - TotalAmount
+        - PaymentStatus
+        - CustomerCountry
+
+      filters:
+        OrderNumber:
+          label: Order Number
+          type: like
+        CustomerName:
+          label: Customer
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+        CustomerCountry:
+          label: Country
+          type: like
+
+    properties:
+      OrderId:
+        type: int
+      OrderNumber:
+        type: string
+      OrderDate:
+        type: string
+      Status:
+        type: string
+      TotalAmount:
+        type: decimal
+      PaymentStatus:
+        type: string
+      CustomerName:
+        type: string
+      CustomerEmail:
+        type: string
+      CustomerCity:
+        type: string
+      CustomerCountry:
+        type: string
+
+  # ==================== 产品销售统计视图（只读） ====================
+  ProductSales:
+    query: |
+      SELECT
+        p.ProductId,
+        p.ProductName,
+        c.Name AS CategoryName,
+        p.UnitPrice,
+        p.StockQuantity,
+        COALESCE(SUM(oi.Quantity), 0) AS TotalSold,
+        COALESCE(SUM(oi.Subtotal), 0) AS TotalRevenue
+      FROM Product p
+      LEFT JOIN Category c ON c.CategoryId = p.CategoryId
+      LEFT JOIN OrderItem oi ON oi.ProductId = p.ProductId
+      GROUP BY p.ProductId, p.ProductName, c.Name, p.UnitPrice, p.StockQuantity
+    primary_key: ProductId
+    read_only: true
+
+    ui:
+      labels:
+        en:
+          title: Product Sales Report
+          ProductName: Product
+          CategoryName: Category
+          UnitPrice: Price
+          StockQuantity: Stock
+          TotalSold: Sold
+          TotalRevenue: Revenue
+        zh:
+          title: 产品销售报表
+          ProductName: 产品
+          CategoryName: 分类
+          UnitPrice: 单价
+          StockQuantity: 库存
+          TotalSold: 销量
+          TotalRevenue: 销售额
+
+    list:
+      columns:
+        - ProductId
+        - ProductName
+        - CategoryName
+        - UnitPrice
+        - StockQuantity
+        - TotalSold
+        - TotalRevenue
+
+      filters:
+        ProductName:
+          label: Product
+          type: like
+        CategoryName:
+          label: Category
+          type: like
+
+    properties:
+      ProductId:
+        type: int
+      ProductName:
+        type: string
+      CategoryName:
+        type: string
+      UnitPrice:
+        type: decimal
+      StockQuantity:
+        type: int
+      TotalSold:
+        type: int
+      TotalRevenue:
+        type: decimal

@@ -1,0 +1,126 @@
+# 订单管理页面 - 展示订单、客户和订单项的关联管理
+title: 订单管理
+description: 管理订单、客户和订单项数据
+
+# 主表（用于主要数据展示）
+main_table: Order
+
+# 页面区域定义
+sections:
+  # 订单列表区域
+  - id: orders
+    title: 订单列表
+    type: table
+    source_type: model
+    source: Order
+    columns:
+      - OrderId
+      - OrderNumber
+      - CustomerId
+      - OrderDate
+      - Status
+      - TotalAmount
+      - PaymentStatus
+    editable: true
+    page_size: 10
+    filters:
+      OrderNumber:
+        label: 订单号
+        type: like
+      Status:
+        label: 状态
+        type: select
+        options:
+          Pending: Pending
+          Confirmed: Confirmed
+          Processing: Processing
+          Shipped: Shipped
+          Delivered: Delivered
+          Cancelled: Cancelled
+
+  # 订单项区域 - 与订单关联
+  - id: order_items
+    title: 订单项
+    type: table
+    source_type: model
+    source: OrderItem
+    columns:
+      - OrderItemId
+      - ProductId
+      - UnitPrice
+      - Quantity
+      - Discount
+      - Subtotal
+    editable: true
+    page_size: 10
+    foreign_key: OrderId
+    local_foreign_key: OrderId
+
+  # 客户信息区域（表单类型）
+  - id: customer_info
+    title: 客户信息
+    type: form
+    source_type: model
+    source: Customer
+    editable: false
+    fields:
+      FirstName:
+        label: 姓名
+        type: text
+      LastName:
+        label: 姓氏
+        type: text
+      Email:
+        label: 邮箱
+        type: email
+      Phone:
+        label: 电话
+        type: text
+      City:
+        label: 城市
+        type: text
+      Country:
+        label: 国家
+        type: text
+      CustomerType:
+        label: 客户类型
+        type: select
+        options:
+          Retail: Retail
+          Wholesale: Wholesale
+          VIP: VIP
+
+# 页面操作定义
+actions:
+  - id: export_orders
+    title: 导出订单
+    type: submit
+    target: /api/export/orders
+    method: POST
+    button_class: btn btn-success
+    icon: fas fa-download
+    confirm_message: 确定要导出所有订单数据吗？
+    affects_sections:
+      - orders
+
+  - id: print_invoice
+    title: 打印发票
+    type: ajax
+    method: GET
+    button_class: btn btn-outline
+    icon: fas fa-print
+    target: /api/order/invoice/print
+
+# UI 定义
+ui:
+  theme: default
+  layout:
+    - section_id: orders
+      columns: 12
+      full_width: true
+    - section_id: order_items
+      columns: 8
+      full_width: false
+    - section_id: customer_info
+      columns: 4
+      full_width: false
