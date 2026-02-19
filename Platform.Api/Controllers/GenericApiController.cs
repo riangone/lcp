@@ -4,6 +4,7 @@ using Platform.Infrastructure;
 using Platform.Infrastructure.Repositories;
 using System;
 using System.Linq;
+using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
@@ -12,12 +13,12 @@ namespace Platform.Api.Controllers;
 public class GenericApiController : ControllerBase
 {
     private readonly DynamicRepository _repo;
-    private readonly AppDefinitions _defs;
+    private readonly ProjectScope _projectScope;
 
-    public GenericApiController(DynamicRepository repo, AppDefinitions defs)
+    public GenericApiController(DynamicRepository repo, ProjectScope projectScope)
     {
         _repo = repo;
-        _defs = defs;
+        _projectScope = projectScope;
     }
 
     [HttpGet]
@@ -101,14 +102,18 @@ public class GenericApiController : ControllerBase
 
     private ModelDefinition GetModel(string model)
     {
-        if (!_defs.AllowedModels.Contains(model))
+        var appDefs = _projectScope.CurrentProject?.AppDefinitions;
+        if (appDefs == null)
+            throw new Exception("No project selected");
+            
+        if (!appDefs.AllowedModels.Contains(model))
             throw new Exception($"Model '{model}' not defined");
 
         // Find the actual key (case-insensitive)
-        var actualKey = _defs.Models.Keys.First(k => 
+        var actualKey = appDefs.Models.Keys.First(k =>
             k.Equals(model, StringComparison.OrdinalIgnoreCase));
-        
-        return _defs.Models[actualKey];
+
+        return appDefs.Models[actualKey];
     }
 
     private static void EnsureWritable(ModelDefinition def)

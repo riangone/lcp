@@ -1,31 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
 using Platform.Infrastructure.Definitions;
+using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly AppDefinitions _defs;
+    private readonly ProjectScope _projectScope;
 
-    public HomeController(AppDefinitions defs)
+    public HomeController(ProjectScope projectScope)
     {
-        _defs = defs;
+        _projectScope = projectScope;
     }
 
     [HttpGet("/Home")]
     public IActionResult Index()
     {
-        ViewData["Title"] = "LowCode Platform - Home";
+        ViewData["Title"] = "LowCode Platform";
         ViewData["ActivePage"] = "Home";
-        ViewData["Models"] = _defs.Models;
-        ViewData["Pages"] = _defs.Pages;
-        ViewData["ProjectName"] = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "app";
+        ViewData["Models"] = _projectScope.CurrentProject?.AppDefinitions.Models;
+        ViewData["Pages"] = _projectScope.CurrentProject?.AppDefinitions.Pages;
+        ViewData["ProjectName"] = _projectScope.CurrentProject?.Name ?? "app";
+        ViewData["ProjectConfig"] = _projectScope.CurrentProject;
         
-        // 注入项目配置
-        if (HttpContext.Items.TryGetValue("ProjectConfig", out var projectConfig))
-        {
-            ViewData["ProjectConfig"] = projectConfig;
-        }
+        // 获取所有可用项目
+        ViewData["AvailableProjects"] = _projectScope.GetAvailableProjects();
 
         return View();
     }

@@ -80,23 +80,24 @@ var app = builder.Build();
 // 静态文件
 app.UseStaticFiles();
 
-// 中间件：从 URL 参数切换项目
+// 中间件：从 URL 参数切换项目（必须在所有控制器之前执行）
 app.Use(async (context, next) =>
 {
-    var projectScope = context.RequestServices.GetService<ProjectScope>();
+    var projectScope = context.RequestServices.GetRequiredService<ProjectScope>();
     var projectName = context.Request.Query["project"].FirstOrDefault() 
         ?? context.Request.Headers["X-Project"].FirstOrDefault();
     
-    if (!string.IsNullOrEmpty(projectName) && projectScope != null)
+    if (!string.IsNullOrEmpty(projectName))
     {
         if (projectScope.SwitchProject(projectName))
         {
-            context.Response.Headers["X-Project"] = projectName;
+            context.Response.Headers["X-Project-Switched"] = projectName;
+            Console.WriteLine($"[PROJECT] Switched to: {projectName}");
         }
     }
     
-    // 存储当前项目到 HttpContext
-    if (projectScope?.CurrentProject != null)
+    // 存储当前项目到 HttpContext 供视图使用
+    if (projectScope.CurrentProject != null)
     {
         context.Items["CurrentProject"] = projectScope.CurrentProject;
         context.Items["Models"] = projectScope.CurrentProject.AppDefinitions.Models;
@@ -112,8 +113,14 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-// 首页显示项目信息
-app.MapGet("/", () => Results.Redirect("/Home"));
+// 首页显示项目信息（保留 query 参数）
+app.MapGet("/", (HttpContext context) => 
+{
+    var project = context.Request.Query["project"].FirstOrDefault();
+    return string.IsNullOrEmpty(project) 
+        ? Results.Redirect("/Home") 
+        : Results.Redirect($"/Home?project={project}");
+});
 app.MapGet("/docs", () => Results.Redirect("/scalar/v1"));
 
 // 启用控制器
