@@ -42,10 +42,15 @@
                     var email = customer.ContainsKey("Email") ? customer["Email"]?.ToString() ?? "" : "";
                     var phone = customer.ContainsKey("Phone") ? customer["Phone"]?.ToString() ?? "" : "";
                     
+                    var avatarInitials = "";
+                    if (!string.IsNullOrEmpty(firstName) && firstName.Length > 0) avatarInitials += firstName[0];
+                    if (!string.IsNullOrEmpty(lastName) && lastName.Length > 0) avatarInitials += lastName[0];
+                    if (string.IsNullOrEmpty(avatarInitials)) avatarInitials = "?";
+                    
                     <tr class="customer-row" data-id="@id">
                         <td>
                             <div class="customer-info">
-                                <span class="avatar">@(firstName.Length > 0 ? firstName[0].ToString() : "?")@(lastName.Length > 0 ? lastName[0].ToString() : "")</span>
+                                <span class="avatar">@avatarInitials</span>
                                 <span class="name">@firstName @lastName</span>
                             </div>
                         </td>
