@@ -1,0 +1,72 @@
+# 发票管理页面 - 展示发票和客户关联
+title: 发票管理
+description: 管理发票记录和相关客户信息
+
+main_table: Invoice
+
+sections:
+  # 发票列表
+  - id: invoices
+    title: 发票列表
+    type: table
+    source_type: model
+    source: Invoice
+    columns:
+      - InvoiceId
+      - CustomerId
+      - InvoiceDate
+      - BillingCity
+      - BillingCountry
+      - Total
+    editable: true
+    page_size: 15
+    filters:
+      BillingCity:
+        label: 城市
+        type: like
+      BillingCountry:
+        label: 国家
+        type: like
+  
+  # 发票客户视图（只读）
+  - id: invoice_customer
+    title: 发票客户详情
+    type: card
+    source_type: query
+    source: InvoiceWithCustomer
+    columns:
+      - InvoiceId
+      - InvoiceDate
+      - CustomerName
+      - Country
+      - Total
+    editable: false
+    page_size: 10
+    foreign_key: InvoiceId
+    local_foreign_key: InvoiceId
+    filters:
+      CustomerName:
+        label: 客户名称
+        type: like
+      Country:
+        label: 国家
+        type: like
+
+actions:
+  - id: generate_report
+    title: 生成报表
+    type: submit
+    target: /api/report/invoices
+    method: POST
+    button_class: btn btn-primary
+    icon: fas fa-file-pdf
+    affects_sections:
+      - invoices
+
+ui:
+  theme: default
+  layout:
+    - section_id: invoices
+      columns: 8
+    - section_id: invoice_customer
+      columns: 4

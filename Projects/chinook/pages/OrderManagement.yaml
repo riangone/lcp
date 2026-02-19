@@ -1,0 +1,153 @@
+# 订单管理页面 - 使用多表 CRUD + steps 扩展
+title: 订单管理
+description: 管理订单及其明细数据
+
+main_table: Invoice
+
+# 多表 CRUD 配置 - 定义基本的数据结构
+multi_table_crud:
+  main_table:
+    table: Invoice
+    primary_key: InvoiceId
+
+  related_tables:
+    - table: InvoiceLine
+      foreign_key: InvoiceId
+      type: many
+
+  transaction:
+    enabled: true
+    isolation_level: ReadCommitted
+
+  form_mapping:
+    Invoice:
+      - field: CustomerId
+        label: 客户 ID
+        type: number
+        required: true
+      - field: InvoiceDate
+        label: 发票日期
+        type: date
+        required: true
+      - field: BillingAddress
+        label: 账单地址
+        type: text
+        max_length: 70
+      - field: BillingCity
+        label: 账单城市
+        type: text
+        max_length: 40
+      - field: BillingCountry
+        label: 账单国家
+        type: text
+        max_length: 40
+      - field: Total
+        label: 总计
+        type: decimal
+        required: true
+
+    InvoiceLine:
+      - field: TrackId
+        label: 音轨 ID
+        type: number
+        required: true
+      - field: Quantity
+        label: 数量
+        type: number
+        required: true
+        default: 1
+      - field: UnitPrice
+        label: 单价
+        type: decimal
+        required: true
+
+# 处理步骤配置 - 扩展验证、通知等功能
+steps:
+  # 步骤 1: 保存前验证
+  - id: validate_total
+    name: 验证订单总额
+    trigger: before_save
+    type: script
+    stop_on_error: true
+    script:
+      language: csharp
+      content: |
+        // 验证订单总额是否为正数
+        if (data.TryGetValue("Total", out var totalObj) &&
+            decimal.TryParse(totalObj?.ToString(), out var total))
+        {
+          if (total <= 0) {
+            throw new Exception("订单总额必须大于 0");
+          }
+        }
+        return true;
+
+  # 步骤 2: 保存后发送通知
+  - id: send_notification
+    name: 发送订单通知
+    trigger: after_save
+    type: notification
+    stop_on_error: false
+    notification:
+      type: email
+      recipients:
+        - admin@example.com
+      subject: "新订单通知 - {{LastInsertedId}}"
+      message_template: |
+        新订单已创建：
+        订单 ID: {{LastInsertedId}}
+        客户 ID: {{CustomerId}}
+        订单日期：{{InvoiceDate}}
+        订单总额：{{Total}}
+
+# 列表显示配置 - 使用 sections 格式
+sections:
+  # 订单列表
+  - id: orders
+    title: 订单列表
+    type: table
+    source_type: model
+    source: Invoice
+    columns:
+      - InvoiceId
+      - CustomerId
+      - InvoiceDate
+      - BillingCity
+      - BillingCountry
+      - Total
+    editable: true
+    page_size: 15
+    filters:
+      CustomerId:
+        label: 客户 ID
+        type: like
+      BillingCity:
+        label: 城市
+        type: like
+      BillingCountry:
+        label: 国家
+        type: like
+
+  # 订单明细视图（只读）
+  - id: order_lines
+    title: 订单明细
+    type: table
+    source_type: model
+    source: InvoiceLine
+    columns:
+      - InvoiceLineId
+      - InvoiceId
+      - TrackId
+      - Quantity
+      - UnitPrice
+    editable: false
+    page_size: 10
+    foreign_key: InvoiceId
+    local_foreign_key: InvoiceId
+
+ui:
+  layout:
+    - section_id: orders
+      columns: 12
+    - section_id: order_lines
+      columns: 12
