@@ -1,1 +1,262 @@
-../../../Projects/todo/views/task/Form.cshtml
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var isEdit = row != null;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "todo";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Task?project={currentProject}";
+
+    var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
+    var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+    
+    var titleValue = isEdit && row != null && row.ContainsKey("Title") ? row["Title"]?.ToString() ?? "" : "";
+    var descValue = isEdit && row != null && row.ContainsKey("Description") ? row["Description"]?.ToString() ?? "" : "";
+    var statusValue = isEdit && row != null && row.ContainsKey("Status") ? row["Status"]?.ToString() ?? "pending" : "pending";
+    var priorityValue = isEdit && row != null && row.ContainsKey("Priority") ? row["Priority"]?.ToString() ?? "medium" : "medium";
+    var dueDateValue = isEdit && row != null && row.ContainsKey("DueDate") ? row["DueDate"]?.ToString() ?? "" : DateTime.Now.ToString("yyyy-MM-dd");
+
+    var action = isEdit ? $"/api/{modelName}/{row![def.PrimaryKey]}" : $"/api/{modelName}";
+    var method = isEdit ? "put" : "post";
+}
+
+<div class="todo-form-overlay" id="todo-form-overlay">
+    <div class="todo-form-container">
+        <div class="form-header">
+            <h2 class="form-title">
+                <span class="form-icon">📋</span>
+                @(isEdit ? (currentLang == "zh" ? "编辑任务" : "Edit Task") : (currentLang == "zh" ? "新建任务" : "New Task"))
+            </h2>
+            <button class="btn-close" onclick="closeFormModal()">✕</button>
+        </div>
+
+        <form method="post" action="@action" class="todo-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="project" value="@currentProject" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <input type="hidden" name="@method" value="true" />
+
+            <div class="form-group">
+                <label class="form-label" for="Title">
+                    @(currentLang == "zh" ? "任务标题" : "Task Title") <span class="required">*</span>
+                </label>
+                <input type="text" id="Title" name="Title" value="@titleValue" 
+                       class="form-input" required maxlength="200" 
+                       placeholder="@(currentLang == "zh" ? "输入任务标题..." : "Enter task title...")" />
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="Description">
+                    @(currentLang == "zh" ? "任务描述" : "Description")
+                </label>
+                <textarea id="Description" name="Description" rows="4" 
+                          class="form-input" maxlength="1000"
+                          placeholder="@(currentLang == "zh" ? "描述任务详情..." : "Describe the task...")">@descValue</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="Status">
+                        @(currentLang == "zh" ? "状态" : "Status")
+                    </label>
+                    <select id="Status" name="Status" class="form-select">
+                        <option value="pending" selected="@(statusValue == "pending" ? "selected" : "")">⏳ @(currentLang == "zh" ? "待处理" : "Pending")</option>
+                        <option value="in_progress" selected="@(statusValue == "in_progress" ? "selected" : "")">🔄 @(currentLang == "zh" ? "进行中" : "In Progress")</option>
+                        <option value="completed" selected="@(statusValue == "completed" ? "selected" : "")">✅ @(currentLang == "zh" ? "已完成" : "Completed")</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="Priority">
+                        @(currentLang == "zh" ? "优先级" : "Priority")
+                    </label>
+                    <select id="Priority" name="Priority" class="form-select">
+                        <option value="low" selected="@(priorityValue == "low" ? "selected" : "")">🔵 @(currentLang == "zh" ? "低" : "Low")</option>
+                        <option value="medium" selected="@(priorityValue == "medium" ? "selected" : "")">🟡 @(currentLang == "zh" ? "中" : "Medium")</option>
+                        <option value="high" selected="@(priorityValue == "high" ? "selected" : "")">🔴 @(currentLang == "zh" ? "高" : "High")</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="DueDate">
+                    @(currentLang == "zh" ? "截止日期" : "Due Date")
+                </label>
+                <input type="date" id="DueDate" name="DueDate" value="@dueDateValue" class="form-input" />
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeFormModal()">
+                    @(currentLang == "zh" ? "取消" : "Cancel")
+                </button>
+                <button type="submit" class="btn btn-submit">
+                    @(isEdit ? (currentLang == "zh" ? "保存修改" : "Save Changes") : (currentLang == "zh" ? "创建任务" : "Create Task"))
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .todo-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .todo-form-container {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 600px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+    }
+
+    @@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .form-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .form-icon { font-size: 2rem; }
+
+    .btn-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        font-size: 1.25rem;
+        transition: all 0.2s;
+    }
+
+    .btn-close:hover { background: #ef4444; color: white; }
+
+    .todo-form { padding: 2rem; }
+
+    .form-group { margin-bottom: 1.5rem; }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .required { color: #ef4444; }
+
+    .form-input, .form-select {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .form-input:focus, .form-select:focus {
+        outline: none;
+        border-color: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+    }
+
+    textarea.form-input { resize: vertical; min-height: 100px; }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .btn-cancel:hover { background: #e5e7eb; }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+    }
+
+    @@media (max-width: 640px) {
+        .todo-form-container { width: 95%; }
+        .form-row { grid-template-columns: 1fr; }
+        .form-actions { flex-direction: column; }
+        .btn { width: 100%; text-align: center; }
+    }
+</style>
+
+<script>
+    function closeFormModal() {
+        const overlay = document.getElementById('todo-form-overlay');
+        if (overlay) {
+            overlay.style.animation = 'fadeIn 0.3s ease reverse';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeFormModal();
+    });
+
+    document.getElementById('todo-form-overlay')?.addEventListener('click', function(e) {
+        if (e.target === this) closeFormModal();
+    });
+</script>

@@ -12,6 +12,7 @@ models:
       type: custom
       default_ui_mode: custom
       list_template: "views/customer/List.cshtml"
+      form_template: "views/customer/Form.cshtml"
       style:
         layout: table
         theme_color: "#0284c7"

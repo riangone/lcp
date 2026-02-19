@@ -1,0 +1,255 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var isEdit = row != null;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "crm";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Customer?project={currentProject}";
+
+    var firstName = isEdit && row != null && row.ContainsKey("FirstName") ? row["FirstName"]?.ToString() ?? "" : "";
+    var lastName = isEdit && row != null && row.ContainsKey("LastName") ? row["LastName"]?.ToString() ?? "" : "";
+    var company = isEdit && row != null && row.ContainsKey("Company") ? row["Company"]?.ToString() ?? "" : "";
+    var email = isEdit && row != null && row.ContainsKey("Email") ? row["Email"]?.ToString() ?? "" : "";
+    var phone = isEdit && row != null && row.ContainsKey("Phone") ? row["Phone"]?.ToString() ?? "" : "";
+
+    var action = isEdit ? $"/api/{modelName}/{row![def.PrimaryKey]}" : $"/api/{modelName}";
+    var method = isEdit ? "put" : "post";
+}
+
+<div class="crm-form-overlay" id="crm-form-overlay">
+    <div class="crm-form-container">
+        <div class="form-header">
+            <h2 class="form-title">
+                <span class="form-icon">💼</span>
+                @(isEdit ? (currentLang == "zh" ? "编辑客户" : "Edit Customer") : (currentLang == "zh" ? "新建客户" : "New Customer"))
+            </h2>
+            <button class="btn-close" onclick="closeFormModal()">✕</button>
+        </div>
+
+        <form method="post" action="@action" class="crm-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="project" value="@currentProject" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <input type="hidden" name="@method" value="true" />
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="FirstName">
+                        @(currentLang == "zh" ? "名字" : "First Name")
+                    </label>
+                    <input type="text" id="FirstName" name="FirstName" value="@firstName" 
+                           class="form-input" maxlength="100" 
+                           placeholder="@(currentLang == "zh" ? "输入名字" : "Enter first name")" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="LastName">
+                        @(currentLang == "zh" ? "姓氏" : "Last Name")
+                    </label>
+                    <input type="text" id="LastName" name="LastName" value="@lastName" 
+                           class="form-input" maxlength="100" 
+                           placeholder="@(currentLang == "zh" ? "输入姓氏" : "Enter last name")" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="Company">
+                    @(currentLang == "zh" ? "公司" : "Company")
+                </label>
+                <input type="text" id="Company" name="Company" value="@company" 
+                       class="form-input" maxlength="200" 
+                       placeholder="@(currentLang == "zh" ? "输入公司名称" : "Enter company name")" />
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="Email">
+                        @(currentLang == "zh" ? "邮箱" : "Email")
+                    </label>
+                    <input type="email" id="Email" name="Email" value="@email" 
+                           class="form-input" maxlength="100" 
+                           placeholder="email@example.com" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="Phone">
+                        @(currentLang == "zh" ? "电话" : "Phone")
+                    </label>
+                    <input type="tel" id="Phone" name="Phone" value="@phone" 
+                           class="form-input" maxlength="50" 
+                           placeholder="@(currentLang == "zh" ? "输入电话号码" : "Enter phone number")" />
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeFormModal()">
+                    @(currentLang == "zh" ? "取消" : "Cancel")
+                </button>
+                <button type="submit" class="btn btn-submit">
+                    @(isEdit ? (currentLang == "zh" ? "保存修改" : "Save Changes") : (currentLang == "zh" ? "创建客户" : "Create Customer"))
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .crm-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .crm-form-container {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 650px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(2, 132, 199, 0.3);
+        animation: slideUp 0.3s ease;
+    }
+
+    @@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .form-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .form-icon { font-size: 2rem; }
+
+    .btn-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        font-size: 1.25rem;
+        transition: all 0.2s;
+    }
+
+    .btn-close:hover { background: #ef4444; color: white; }
+
+    .crm-form { padding: 2rem; }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.25rem;
+    }
+
+    .form-group { margin-bottom: 1.25rem; }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.1);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .btn-cancel:hover { background: #e5e7eb; }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #0284c7, #0369a1);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4);
+    }
+
+    @@media (max-width: 640px) {
+        .crm-form-container { width: 95%; }
+        .form-row { grid-template-columns: 1fr; }
+        .form-actions { flex-direction: column; }
+        .btn { width: 100%; text-align: center; }
+    }
+</style>
+
+<script>
+    function closeFormModal() {
+        const overlay = document.getElementById('crm-form-overlay');
+        if (overlay) {
+            overlay.style.animation = 'fadeIn 0.3s ease reverse';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeFormModal();
+    });
+
+    document.getElementById('crm-form-overlay')?.addEventListener('click', function(e) {
+        if (e.target === this) closeFormModal();
+    });
+</script>
