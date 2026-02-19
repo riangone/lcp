@@ -18,7 +18,14 @@ public class HomeController : Controller
         ViewData["Title"] = "LowCode Platform - Home";
         ViewData["ActivePage"] = "Home";
         ViewData["Models"] = _defs.Models;
+        ViewData["Pages"] = _defs.Pages;
         ViewData["ProjectName"] = Environment.GetEnvironmentVariable("LCP_PROJECT") ?? "app";
+        
+        // 注入项目配置
+        if (HttpContext.Items.TryGetValue("ProjectConfig", out var projectConfig))
+        {
+            ViewData["ProjectConfig"] = projectConfig;
+        }
 
         return View();
     }

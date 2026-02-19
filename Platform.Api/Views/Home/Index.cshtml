@@ -1,226 +1,140 @@
 @{
-    ViewData["Title"] = "Home - Low Code Platform";
+    ViewData["Title"] = "LowCode Platform";
     ViewData["ActivePage"] = "Home";
     var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
     var pages = ViewData["Pages"] as Dictionary<string, Platform.Infrastructure.Definitions.PageDefinition>;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var projectName = ViewData["ProjectName"] as string ?? "app";
+    
+    // 获取项目配置
+    var projectConfig = ViewData["ProjectConfig"] as dynamic;
+    var projectDisplayName = projectConfig?.DisplayName as string ?? projectName;
 }
 
-<div class="container mx-auto px-4 py-8">
-    <!-- 项目标题 -->
-    <div class="text-center mb-12">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-            @if (projectName == "todo")
-            {
-                <span>📋 TODO 项目管理</span>
-            }
-            else
-            {
-                <span>Welcome to Low Code Platform</span>
-            }
-        </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
-            @if (projectName == "todo")
-            {
-                <span>通过 YAML 定义驱动，无需编写代码即可管理任务和项目</span>
-            }
-            else
-            {
-                <span>A modern platform for building data-driven applications with AI-powered features</span>
-            }
-        </p>
-        
-        @if (projectName != "app")
-        {
-            <div class="inline-block bg-blue-100 text-blue-800 px-4 py-2 rounded-lg">
-                <span class="font-semibold">当前项目：</span>@projectName
-                <a href="/?LCP_PROJECT=app" class="ml-4 text-blue-600 underline">切换到默认项目</a>
-            </div>
-        }
+<style>
+    .project-card {
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+    .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        border-color: #3b82f6;
+    }
+    .project-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    .lang-switch {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+    }
+</style>
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+    <!-- 语言切换 -->
+    <div class="lang-switch">
+        <a href="?lang=@(currentLang == "zh" ? "en" : "zh")" 
+           class="inline-block px-4 py-2 bg-white rounded-lg shadow hover:shadow-md transition">
+            @(currentLang == "zh" ? "🇨🇳 中文" : "🇺🇸 English")
+        </a>
     </div>
-</div>
 
-    <!-- Feature Cards Section -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-        <div class="card dashboard-card text-white">
-            <div class="flex items-start">
-                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
-                    <i class="fas fa-database text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-2">Data Management</h3>
-                    <p class="text-blue-100">Create, read, update, and delete data with our intuitive CRUD interface.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card dashboard-card text-white">
-            <div class="flex items-start">
-                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
-                    <i class="fas fa-robot text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-2">AI-Powered Insights</h3>
-                    <p class="text-blue-100">Leverage artificial intelligence for smarter decision-making.</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="card dashboard-card text-white">
-            <div class="flex items-start">
-                <div class="bg-white bg-opacity-20 p-3 rounded-lg mr-4">
-                    <i class="fas fa-shield-alt text-2xl"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold mb-2">Secure Validation</h3>
-                    <p class="text-blue-100">Ensure data integrity with our three-layer architecture approach.</p>
-                </div>
-            </div>
+    <!-- 主标题 -->
+    <div class="container mx-auto px-4 pt-16 pb-8">
+        <div class="text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-4">
+                🚀 LowCode Platform
+            </h1>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                @(currentLang == "zh" ? "通过 YAML 定义驱动，快速创建应用程序" : "Build applications fast with YAML-driven low-code platform")
+            </p>
         </div>
     </div>
 
-    <!-- Data Models Section -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">Data Models</h2>
-        @if (models != null && models.Any())
-        {
+    <!-- 当前项目 -->
+    @if (!string.IsNullOrEmpty(projectName) && projectName != "app")
+    {
+        <div class="container mx-auto px-4 mb-8">
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-4 text-center">
+                <span class="text-blue-800 font-semibold">
+                    @(currentLang == "zh" ? "📌 当前项目：" : "📌 Current Project: ")
+                </span>
+                <span class="text-blue-600 font-bold text-lg">@projectDisplayName</span>
+                <a href="/" class="ml-4 text-blue-600 hover:underline">
+                    @(currentLang == "zh" ? "返回项目列表" : "Back to Projects")
+                </a>
+            </div>
+        </div>
+    }
+
+    <!-- 项目模型列表 -->
+    @if (models != null && models.Any())
+    {
+        <div class="container mx-auto px-4 pb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                @(currentLang == "zh" ? "数据模型" : "Data Models")
+            </h2>
+            
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 @foreach (var model in models)
                 {
-                    var modelKey = model.Key; // 避免Razor解析错误
-
-                    // 获取UI配置
+                    var modelKey = model.Key;
                     var uiLabels = model.Value.Ui?.Labels;
                     Dictionary<string, string>? localizedLabels = null;
 
                     if (uiLabels != null)
                     {
-                        if (currentLang == "zh" && uiLabels.Zh != null)
-                        {
-                            localizedLabels = uiLabels.Zh;
-                        }
-                        else if (currentLang == "en" && uiLabels.En != null)
-                        {
-                            localizedLabels = uiLabels.En;
-                        }
+                        localizedLabels = currentLang == "zh" && uiLabels.Zh != null 
+                            ? uiLabels.Zh 
+                            : uiLabels.En;
                     }
 
-                    if (localizedLabels == null)
-                    {
-                        localizedLabels = new Dictionary<string, string>();
-                    }
+                    var title = localizedLabels?.ContainsKey("title") == true 
+                        ? localizedLabels["title"] 
+                        : modelKey;
 
-                    var title = localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelKey;
-                    var description = localizedLabels.ContainsKey("description") ? localizedLabels["description"] : $"Manage {modelKey} records";
+                    var icon = GetIconForModel(modelKey);
+                    var color = GetColorForModel(modelKey);
 
-                    var cardClass = model.Value.Ui?.Styles?.CardClass ?? "card";
-                    var table = model.Value.Table;
-
-                    // 根据模型名称选择图标
-                    string iconClass = "fas fa-database";
-                    if (modelKey.ToLower().Contains("customer") || modelKey.ToLower().Contains("user"))
-                    {
-                        iconClass = "fas fa-user-friends";
-                    }
-                    else if (modelKey.ToLower().Contains("product"))
-                    {
-                        iconClass = "fas fa-box-open";
-                    }
-                    else if (modelKey.ToLower().Contains("order") || modelKey.ToLower().Contains("invoice"))
-                    {
-                        iconClass = "fas fa-file-invoice-dollar";
-                    }
-                    else if (modelKey.ToLower().Contains("artist"))
-                    {
-                        iconClass = "fas fa-music";
-                    }
-                    else if (modelKey.ToLower().Contains("album"))
-                    {
-                        iconClass = "fas fa-compact-disc";
-                    }
-                    else if (modelKey.ToLower().Contains("track"))
-                    {
-                        iconClass = "fas fa-music";
-                    }
-                    else if (modelKey.ToLower().Contains("employee"))
-                    {
-                        iconClass = "fas fa-user-tie";
-                    }
-                    else if (modelKey.ToLower().Contains("genre"))
-                    {
-                        iconClass = "fas fa-tags";
-                    }
-
-                    <a href="/ui/@modelKey?lang=@currentLang" class="@(cardClass) rounded-xl p-6 text-center transition-all duration-300 border border-gray-200 hover:border-blue-300 hover:shadow-md">
-                        <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <i class="@iconClass text-blue-600 text-xl"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
-                        <p class="text-gray-600 text-sm mb-3">@description</p>
-                        <div class="text-xs text-gray-500 mb-3">Table: @table</div>
-                        <div>
-                            <span class="inline-block px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-xs font-medium">
-                                Manage Data
+                    <a href="/ui/@(model.Key)" class="project-card bg-white rounded-xl p-6 shadow-md">
+                        <div class="text-center">
+                            <div class="project-icon">@icon</div>
+                            <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
+                            <p class="text-sm text-gray-500 mb-3">@(model.Value.Table)</p>
+                            <span class="inline-block px-3 py-1 @color rounded-full text-xs font-medium">
+                                @(currentLang == "zh" ? "管理数据" : "Manage Data")
                             </span>
                         </div>
                     </a>
                 }
             </div>
-        }
-        else
-        {
-            <div class="text-center py-12">
-                <div class="text-gray-400 mb-4">
-                    <i class="fas fa-database text-6xl"></i>
-                </div>
-                <h3 class="text-xl font-medium text-gray-900 mb-2">No Models Defined</h3>
-                <p class="text-gray-500">Configure your models in the app.yaml file</p>
-            </div>
-        }
-    </div>
+        </div>
+    }
 
-    <!-- Pages Section - 多表 CRUD 页面 -->
+    <!-- 多表页面 -->
     @if (pages != null && pages.Any())
     {
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6">
-                <i class="fas fa-th-large mr-2"></i>Pages (Multi-Table CRUD)
+        <div class="container mx-auto px-4 pb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                @(currentLang == "zh" ? "多表页面" : "Multi-Table Pages")
             </h2>
+            
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach (var page in pages)
+                @foreach (var pageItem in pages)
                 {
-                    var pageKey = page.Key;
-                    var pageTitle = page.Value.Title ?? pageKey;
-                    var pageDesc = page.Value.Description ?? "";
-                    var hasMultiTable = page.Value.MultiTableCrud != null;
-                    var hasDataLoading = page.Value.DataLoading != null;
+                    var pageKey = pageItem.Key;
+                    var pageTitle = pageItem.Value.Title ?? pageKey;
 
-                    <a href="/page/@pageKey?lang=@currentLang" class="card rounded-xl p-6 transition-all duration-300 border border-purple-200 hover:border-purple-400 hover:shadow-md">
-                        <div class="flex items-start">
-                            <div class="bg-purple-100 p-3 rounded-lg mr-4">
-                                <i class="fas fa-file-alt text-purple-600 text-xl"></i>
-                            </div>
-                            <div class="flex-1">
-                                <h3 class="text-lg font-semibold text-gray-800 mb-1">@pageTitle</h3>
-                                @if (!string.IsNullOrEmpty(pageDesc))
-                                {
-                                    <p class="text-gray-600 text-sm mb-2">@pageDesc</p>
-                                }
-                                <div class="flex flex-wrap gap-2 mt-2">
-                                    @if (hasMultiTable)
-                                    {
-                                        <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded">
-                                            <i class="fas fa-database mr-1"></i>多表 CRUD
-                                        </span>
-                                    }
-                                    @if (hasDataLoading)
-                                    {
-                                        <span class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
-                                            <i class="fas fa-sync mr-1"></i>数据加载
-                                        </span>
-                                    }
-                                </div>
+                    <a href="/page/@(pageItem.Key)" class="project-card bg-white rounded-xl p-6 shadow-md">
+                        <div class="flex items-center">
+                            <div class="text-3xl mr-4">📄</div>
+                            <div>
+                                <h3 class="text-lg font-semibold text-gray-800">@pageTitle</h3>
+                                <p class="text-sm text-gray-500">@pageItem.Value.Description</p>
                             </div>
                         </div>
                     </a>
@@ -229,116 +143,90 @@
         </div>
     }
 
-    <!-- Multi-Table Form Examples Section -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">
-            <i class="fas fa-flask mr-2"></i>Multi-Table Form Examples
+    <!-- 项目切换 -->
+    <div class="container mx-auto px-4 pb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            @(currentLang == "zh" ? "可用项目" : "Available Projects")
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a href="/page/OrderManagement?lang=@currentLang" class="card rounded-xl p-6 transition-all duration-300 border border-indigo-200 hover:border-indigo-400 hover:shadow-md">
-                <div class="flex items-start">
-                    <div class="bg-indigo-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-shopping-cart text-indigo-600 text-xl"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-1">订单管理</h3>
-                        <p class="text-gray-600 text-sm mb-2">订单 + 订单明细（一对多）</p>
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded">
-                                分页
-                            </span>
-                            <span class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
-                                编辑
-                            </span>
-                        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            <!-- TODO 项目 -->
+            <a href="/?LCP_PROJECT=todo" class="project-card bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">📋</div>
+                    <div>
+                        <h3 class="text-xl font-bold">TODO 项目管理</h3>
+                        <p class="text-blue-100 text-sm">任务和项目管理系统</p>
                     </div>
                 </div>
             </a>
 
-            <a href="/page/OrderCustomer?lang=@currentLang" class="card rounded-xl p-6 transition-all duration-300 border border-pink-200 hover:border-pink-400 hover:shadow-md">
-                <div class="flex items-start">
-                    <div class="bg-pink-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-users text-pink-600 text-xl"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-1">订单客户管理</h3>
-                        <p class="text-gray-600 text-sm mb-2">客户 + 订单 + 订单明细（多表关联）</p>
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="inline-block bg-purple-100 text-purple-700 text-xs px-2 py-1 rounded">
-                                并行加载
-                            </span>
-                            <span class="inline-block bg-yellow-100 text-yellow-700 text-xs px-2 py-1 rounded">
-                                事务保存
-                            </span>
-                            <span class="inline-block bg-red-100 text-red-700 text-xs px-2 py-1 rounded">
-                                字段映射
-                            </span>
-                        </div>
+            <!-- 日记本项目 -->
+            <a href="/?LCP_PROJECT=journal" class="project-card bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">📔</div>
+                    <div>
+                        <h3 class="text-xl font-bold">我的日记本</h3>
+                        <p class="text-purple-100 text-sm">个人日记管理系统</p>
                     </div>
                 </div>
             </a>
 
-            <a href="/Docs/MultiTableForm.md" target="_blank" class="card rounded-xl p-6 transition-all duration-300 border border-gray-200 hover:border-gray-400 hover:shadow-md">
-                <div class="flex items-start">
-                    <div class="bg-gray-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-book text-gray-600 text-xl"></i>
-                    </div>
-                    <div class="flex-1">
-                        <h3 class="text-lg font-semibold text-gray-800 mb-1">功能文档</h3>
-                        <p class="text-gray-600 text-sm mb-2">查看多表表单功能的完整文档</p>
-                        <div class="flex flex-wrap gap-2 mt-2">
-                            <span class="inline-block bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded">
-                                API
-                            </span>
-                            <span class="inline-block bg-green-100 text-green-700 text-xs px-2 py-1 rounded">
-                                示例
-                            </span>
-                        </div>
+            <!-- 默认项目 -->
+            <a href="/?LCP_PROJECT=app" class="project-card bg-gradient-to-br from-green-500 to-green-600 text-white rounded-xl p-6 shadow-md">
+                <div class="flex items-center">
+                    <div class="text-4xl mr-4">🎵</div>
+                    <div>
+                        <h3 class="text-xl font-bold">Chinook 音乐</h3>
+                        <p class="text-green-100 text-sm">音乐数据库示例</p>
                     </div>
                 </div>
             </a>
         </div>
     </div>
 
-    <!-- AI Features Section -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6">AI Features</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <a href="/InventoryAiPage" class="card ai-card hover:shadow-md transition-shadow">
-                <div class="flex items-start">
-                    <div class="bg-blue-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-chart-line text-blue-600 text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Inventory AI</h3>
-                        <p class="text-gray-600 text-sm">AI-powered inventory management with three-layer architecture</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="/ai-validation" class="card ai-card hover:shadow-md transition-shadow">
-                <div class="flex items-start">
-                    <div class="bg-green-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-shield-alt text-green-600 text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">AI Validation</h3>
-                        <p class="text-gray-600 text-sm">Validate and approve AI-generated suggestions</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="/ai-validation/snapshots" class="card ai-card hover:shadow-md transition-shadow">
-                <div class="flex items-start">
-                    <div class="bg-yellow-100 p-3 rounded-lg mr-4">
-                        <i class="fas fa-cogs text-yellow-600 text-xl"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Snapshots</h3>
-                        <p class="text-gray-600 text-sm">Review and manage AI decision snapshots</p>
-                    </div>
-                </div>
-            </a>
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-gray-400">
+                @(currentLang == "zh" ? "低代码平台 - 通过 YAML 定义驱动" : "LowCode Platform - YAML-Driven Development")
+            </p>
+            <p class="text-gray-500 text-sm mt-2">
+                Built with ASP.NET Core, Dapper, HTMX
+            </p>
         </div>
-    </div>
+    </footer>
 </div>
+
+@functions {
+    string GetIconForModel(string modelName)
+    {
+        return modelName.ToLower() switch
+        {
+            "task" => "✅",
+            "project" => "📁",
+            "entry" => "📔",
+            "category" => "🏷️",
+            "tag" => "🔖",
+            "artist" => "🎤",
+            "album" => "💿",
+            "track" => "🎵",
+            "employee" => "👤",
+            "invoice" => "📄",
+            _ => "📊"
+        };
+    }
+
+    string GetColorForModel(string modelName)
+    {
+        return modelName.ToLower() switch
+        {
+            "task" => "bg-blue-100 text-blue-700",
+            "project" => "bg-green-100 text-green-700",
+            "entry" => "bg-purple-100 text-purple-700",
+            "category" => "bg-orange-100 text-orange-700",
+            "tag" => "bg-pink-100 text-pink-700",
+            _ => "bg-gray-100 text-gray-700"
+        };
+    }
+}
