@@ -25,7 +25,24 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 });
 
 // ★ MVC - 支持 Views 和 Razor
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews()
+    .AddRazorOptions(options =>
+    {
+        // 添加项目视图目录
+        var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
+        if (Directory.Exists(projectsDir))
+        {
+            foreach (var projectDir in Directory.GetDirectories(projectsDir))
+            {
+                var viewsDir = Path.Combine(projectDir, "views");
+                if (Directory.Exists(viewsDir))
+                {
+                    options.ViewLocationFormats.Add(Path.Combine(viewsDir, "{1}/{0}.cshtml"));
+                    options.ViewLocationFormats.Add(Path.Combine(viewsDir, "{0}.cshtml"));
+                }
+            }
+        }
+    });
 builder.Services.AddOpenApi();
 
 // ★ JWT 认证配置

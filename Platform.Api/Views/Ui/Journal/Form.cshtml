@@ -1,0 +1,551 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var isEdit = row != null;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Entry?project={currentProject}&lang={currentLang}";
+
+    // 获取本地化标签
+    var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
+    var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+    var createButtonLabel = localizedLabels != null && localizedLabels.ContainsKey("create_button") ? localizedLabels["create_button"] : "New Entry";
+    var editButtonLabel = localizedLabels != null && localizedLabels.ContainsKey("edit_button") ? localizedLabels["edit_button"] : "Edit";
+    var saveButtonLabel = localizedLabels != null && localizedLabels.ContainsKey("save_button") ? localizedLabels["save_button"] : "Save";
+    var cancelButtonLabel = localizedLabels != null && localizedLabels.ContainsKey("cancel_button") ? localizedLabels["cancel_button"] : "Cancel";
+
+    // 心情选项
+    var moodOptions = new Dictionary<string, string>
+    {
+        { "happy", "😊 Happy" },
+        { "good", "🙂 Good" },
+        { "neutral", "😐 Neutral" },
+        { "bad", "😔 Bad" },
+        { "angry", "😠 Angry" }
+    };
+
+    // 获取现有值
+    var titleValue = isEdit && row != null && row.ContainsKey("Title") ? row["Title"]?.ToString() : "";
+    var contentValue = isEdit && row != null && row.ContainsKey("Content") ? row["Content"]?.ToString() : "";
+    var moodValue = isEdit && row != null && row.ContainsKey("Mood") ? row["Mood"]?.ToString() : "neutral";
+    var dateValue = isEdit && row != null && row.ContainsKey("Date") ? row["Date"]?.ToString() : DateTime.Now.ToString("yyyy-MM-dd");
+    var categoryIdValue = isEdit && row != null && row.ContainsKey("CategoryId") ? row["CategoryId"]?.ToString() : "";
+
+    var action = isEdit
+        ? $"/api/{modelName}/{row![def.PrimaryKey]}"
+        : $"/api/{modelName}";
+    var method = isEdit ? "put" : "post";
+}
+
+<div class="journal-form-overlay" id="journal-form-overlay">
+    <div class="journal-form-container">
+        <div class="form-header">
+            <div class="form-title">
+                <i class="fas fa-pen-fancy"></i>
+                <span>@(isEdit ? editButtonLabel : createButtonLabel)</span>
+            </div>
+            <button class="btn-close" onclick="closeFormModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <form method="post"
+              @($"hx-{method}")="@action"
+              hx-target="#journal-list"
+              hx-swap="innerHTML"
+              hx-on="htmx:afterRequest: handleFormResponse(event)"
+              class="journal-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="project" value="@currentProject" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+
+            <!-- 心情选择器 -->
+            <div class="form-section mood-section">
+                <label class="section-label">
+                    <i class="fas fa-face-smile"></i>
+                    @(currentLang == "zh" ? "今天感觉怎么样？" : "How are you feeling?")
+                </label>
+                <div class="mood-selector">
+                    @foreach (var mood in moodOptions)
+                    {
+                        <label class="mood-option @(moodValue == mood.Key ? "selected" : "")">
+                            <input type="radio" name="Mood" value="@mood.Key" @(moodValue == mood.Key ? "checked" : "") />
+                            <span class="mood-emoji">@mood.Value.Split(' ')[0]</span>
+                            <span class="mood-label">@mood.Value.Split(' ')[1]</span>
+                        </label>
+                    }
+                </div>
+            </div>
+
+            <!-- 标题 -->
+            <div class="form-section">
+                <label class="section-label" for="Title">
+                    <i class="fas fa-heading"></i>
+                    @(currentLang == "zh" ? "标题" : "Title") <span class="required">*</span>
+                </label>
+                <input type="text" 
+                       id="Title"
+                       name="Title" 
+                       value="@titleValue"
+                       placeholder="@(currentLang == "zh" ? "给日记一个标题..." : "Give your entry a title...")"
+                       class="form-input title-input"
+                       required
+                       maxlength="200" />
+            </div>
+
+            <!-- 日期 -->
+            <div class="form-section">
+                <label class="section-label" for="Date">
+                    <i class="far fa-calendar"></i>
+                    @(currentLang == "zh" ? "日期" : "Date")
+                </label>
+                <input type="date" 
+                       id="Date"
+                       name="Date" 
+                       value="@dateValue"
+                       class="form-input date-input" />
+            </div>
+
+            <!-- 内容 -->
+            <div class="form-section">
+                <label class="section-label" for="Content">
+                    <i class="fas fa-align-left"></i>
+                    @(currentLang == "zh" ? "内容" : "Content") <span class="required">*</span>
+                </label>
+                <div class="editor-toolbar">
+                    <button type="button" class="toolbar-btn" onclick="formatText('bold')">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" onclick="formatText('italic')">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" onclick="formatText('underline')">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <button type="button" class="toolbar-btn" onclick="insertEmoji('❤️')">
+                        ❤️
+                    </button>
+                    <button type="button" class="toolbar-btn" onclick="insertEmoji('✨')">
+                        ✨
+                    </button>
+                    <button type="button" class="toolbar-btn" onclick="insertEmoji('📝')">
+                        📝
+                    </button>
+                </div>
+                <textarea id="Content"
+                          name="Content" 
+                          rows="12"
+                          class="form-input content-editor"
+                          placeholder="@(currentLang == "zh" ? "今天发生了什么？" : "What happened today?")"
+                          required
+                          maxlength="10000">@contentValue</textarea>
+                <div class="char-counter">
+                    <span id="char-count">@contentValue.Length</span> / 10000
+                </div>
+            </div>
+
+            <!-- 分类 -->
+            <div class="form-section">
+                <label class="section-label" for="CategoryId">
+                    <i class="fas fa-folder"></i>
+                    @(currentLang == "zh" ? "分类" : "Category")
+                </label>
+                <select id="CategoryId"
+                        name="CategoryId"
+                        class="form-input category-select">
+                    <option value="">@(currentLang == "zh" ? "选择分类" : "Select category")</option>
+                    <option value="1" selected="@(categoryIdValue == "1" ? "selected" : "")">📔 Life</option>
+                    <option value="2" selected="@(categoryIdValue == "2" ? "selected" : "")">💼 Work</option>
+                    <option value="3" selected="@(categoryIdValue == "3" ? "selected" : "")">📚 Study</option>
+                    <option value="4" selected="@(categoryIdValue == "4" ? "selected" : "")">✈️ Travel</option>
+                    <option value="5" selected="@(categoryIdValue == "5" ? "selected" : "")">📁 Other</option>
+                </select>
+            </div>
+
+            <!-- 提交按钮 -->
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeFormModal()">
+                    <i class="fas fa-times"></i> @cancelButtonLabel
+                </button>
+                <button type="submit" class="btn btn-primary btn-save">
+                    <i class="fas fa-save"></i> @saveButtonLabel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    /* 表单覆盖层 */
+    .journal-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .journal-form-container {
+        background: white;
+        border-radius: 16px;
+        width: 90%;
+        max-width: 700px;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        animation: slideUp 0.3s ease;
+    }
+
+    @@keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        border-bottom: 1px solid #e5e7eb;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border-radius: 16px 16px 0 0;
+    }
+
+    .form-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+    }
+
+    .form-title i {
+        color: #3b82f6;
+    }
+
+    .btn-close {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        border: none;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .btn-close:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    .journal-form {
+        padding: 2rem;
+    }
+
+    .form-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .section-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.75rem;
+    }
+
+    .section-label i {
+        color: #3b82f6;
+    }
+
+    .required {
+        color: #ef4444;
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .title-input {
+        font-size: 1.25rem;
+        font-weight: 600;
+    }
+
+    .content-editor {
+        resize: vertical;
+        line-height: 1.8;
+        min-height: 200px;
+    }
+
+    .char-counter {
+        text-align: right;
+        font-size: 0.875rem;
+        color: #9ca3af;
+        margin-top: 0.5rem;
+    }
+
+    /* 心情选择器 */
+    .mood-selector {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .mood-option {
+        flex: 1;
+        min-width: 80px;
+        padding: 1rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .mood-option:hover {
+        border-color: #3b82f6;
+        background: #eff6ff;
+    }
+
+    .mood-option.selected {
+        border-color: #3b82f6;
+        background: linear-gradient(135deg, #dbeafe 0%, #eff6ff 100%);
+        transform: scale(1.05);
+    }
+
+    .mood-option input[type="radio"] {
+        display: none;
+    }
+
+    .mood-emoji {
+        display: block;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .mood-label {
+        display: block;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    /* 编辑器工具栏 */
+    .editor-toolbar {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        background: #f9fafb;
+        border-radius: 8px;
+        flex-wrap: wrap;
+    }
+
+    .toolbar-btn {
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 6px;
+        background: white;
+        color: #6b7280;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .toolbar-btn:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    /* 分类选择器 */
+    .category-select {
+        cursor: pointer;
+    }
+
+    /* 表单操作 */
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #e5e7eb;
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+    }
+
+    .btn-secondary {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .btn-secondary:hover {
+        background: #e5e7eb;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    @@media (max-width: 640px) {
+        .journal-form-container {
+            width: 95%;
+            max-height: 95vh;
+        }
+
+        .mood-selector {
+            justify-content: center;
+        }
+
+        .mood-option {
+            min-width: 70px;
+            padding: 0.75rem;
+        }
+
+        .form-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+        }
+    }
+</style>
+
+<script>
+    function closeFormModal() {
+        const overlay = document.getElementById('journal-form-overlay');
+        if (overlay) {
+            overlay.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    function handleFormResponse(event) {
+        if (event.detail.xhr.status >= 200 && event.detail.xhr.status < 300) {
+            closeFormModal();
+        }
+    }
+
+    function formatText(command) {
+        const textarea = document.getElementById('Content');
+        const start = textarea.selectionStart;
+        const end = textarea.selectionEnd;
+        const text = textarea.value;
+        const selectedText = text.substring(start, end);
+
+        let formatted = '';
+        switch (command) {
+            case 'bold':
+                formatted = `**${selectedText || '粗体文本'}**`;
+                break;
+            case 'italic':
+                formatted = `*${selectedText || '斜体文本'}*`;
+                break;
+            case 'underline':
+                formatted = `__${selectedText || '下划线文本'}__`;
+                break;
+        }
+
+        textarea.value = text.substring(0, start) + formatted + text.substring(end);
+        textarea.focus();
+        updateCharCount();
+    }
+
+    function insertEmoji(emoji) {
+        const textarea = document.getElementById('Content');
+        const start = textarea.selectionStart;
+        const text = textarea.value;
+        textarea.value = text.substring(0, start) + emoji + text.substring(start);
+        textarea.focus();
+        updateCharCount();
+    }
+
+    function updateCharCount() {
+        const textarea = document.getElementById('Content');
+        const count = document.getElementById('char-count');
+        if (count) {
+            count.textContent = textarea.value.length;
+        }
+    }
+
+    // ESC 键关闭表单
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeFormModal();
+        }
+    });
+
+    // 点击覆盖层外部关闭
+    document.getElementById('journal-form-overlay')?.addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeFormModal();
+        }
+    });
+
+    // 初始化字符计数
+    updateCharCount();
+
+    // 心情选择器样式更新
+    document.querySelectorAll('.mood-option input[type="radio"]').forEach(input => {
+        input.addEventListener('change', function() {
+            document.querySelectorAll('.mood-option').forEach(opt => opt.classList.remove('selected'));
+            this.closest('.mood-option').classList.add('selected');
+        });
+    });
+</script>

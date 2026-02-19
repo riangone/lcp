@@ -37,14 +37,14 @@ public class UiController : Controller
             size = 200;
 
         var def = GetModel(model);
+        var project = Request.Query["project"].FirstOrDefault() ?? "app";
 
         var filters = Request.Query
             .ToDictionary(k => k.Key, v => v.Value.ToString());
 
-        // 如果请求清除过滤器，则重定向到没有过滤参数的URL
+        // 如果请求清除过滤器，则重定向到没有过滤参数的 URL
         if (clear)
         {
-            var project = Request.Query["project"].FirstOrDefault() ?? "app";
             return RedirectToAction("Index", new { model = model, project = project, page = 1, size = size, lang = lang, sortBy = sortBy, sortDir = sortDir, editMode = editMode });
         }
 
@@ -59,13 +59,22 @@ public class UiController : Controller
         ViewData["SortBy"] = sortBy;
         ViewData["SortDir"] = sortDir;
         ViewData["EditMode"] = string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) ? "page" : "modal";
+        ViewData["Project"] = project;
 
-        // 检测是否为htmx请求，如果是则返回部分视图内容
+        // 检测是否为 htmx 请求，如果是则返回部分视图内容
         if (Request.Headers["HX-Request"] == "true")
         {
             return PartialView("_ListContent", rows);
         }
 
+        // 检查是否有专用 UI 视图定义
+        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate))
+        {
+            // 使用专用视图 - Journal 项目使用专用视图
+            return View("Journal/List", rows);
+        }
+
+        // 使用通用视图
         return View("List", rows);
     }
 
@@ -76,8 +85,21 @@ public class UiController : Controller
         if (def.IsReadOnly)
             return BadRequest("This model is read-only.");
 
+        var project = Request.Query["project"].FirstOrDefault() ?? "app";
         Prepare(model);
         ViewData["ReturnUrl"] = returnUrl;
+        ViewData["Project"] = project;
+
+        // 检查是否有专用表单视图
+        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate))
+        {
+            // Project dir from Razor options
+            return View("Journal/Form");
+            // Check view exists
+            {
+                return View("Journal/Form");
+            }
+        }
 
         if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
             Request.Headers["HX-Request"] != "true")
@@ -100,9 +122,22 @@ public class UiController : Controller
         if (row == null)
             return NotFound();
 
+        var project = Request.Query["project"].FirstOrDefault() ?? "app";
         Prepare(model);
         ViewData["Row"] = row;
         ViewData["ReturnUrl"] = returnUrl;
+        ViewData["Project"] = project;
+
+        // 检查是否有专用表单视图
+        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate))
+        {
+            // Project dir from Razor options
+            return View("Journal/Form");
+            // Check view exists
+            {
+                return View("Journal/Form");
+            }
+        }
 
         if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
             Request.Headers["HX-Request"] != "true")
@@ -122,9 +157,23 @@ public class UiController : Controller
         if (row == null)
             return NotFound();
 
+        var project = Request.Query["project"].FirstOrDefault() ?? "app";
         Prepare(model);
         ViewData["Row"] = row;
         ViewData["ReturnUrl"] = returnUrl;
+        ViewData["Project"] = project;
+
+        // 检查是否有专用详情视图
+        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.DetailsTemplate))
+        {
+            // Project dir from Razor options
+            var viewName = def.CustomView.DetailsTemplate.Replace("/", "_").Replace(".cshtml", "");
+            // Check view exists
+            {
+                return View("Journal/Form");
+            }
+        }
+
         return View("DetailsPage", row);
     }
 

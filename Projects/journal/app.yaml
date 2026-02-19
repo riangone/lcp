@@ -6,6 +6,22 @@ models:
     table: Entry
     primary_key: Id
 
+    # 专用 UI 视图定义
+    custom_view:
+      enabled: true
+      type: custom
+      list_template: "views/entry/List.cshtml"
+      form_template: "views/entry/Form.cshtml"
+      details_template: "views/entry/Details.cshtml"
+      style:
+        layout: timeline
+        theme_color: "#3b82f6"
+        custom_css: "css/custom.css"
+        custom_js: "js/custom.js"
+        page_size: 20
+        show_sidebar: true
+        show_stats: true
+
     ui:
       layout:
         theme: journal

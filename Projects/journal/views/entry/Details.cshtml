@@ -1,0 +1,358 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Entry?project={currentProject}&lang={currentLang}";
+
+    if (row == null)
+    {
+        return;
+    }
+
+    // 获取本地化标签
+    var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
+
+    // 心情表情映射
+    var moodEmojis = new Dictionary<string, string>
+    {
+        { "happy", "😊" },
+        { "good", "🙂" },
+        { "neutral", "😐" },
+        { "bad", "😔" },
+        { "angry", "😠" }
+    };
+
+    var moodColors = new Dictionary<string, string>
+    {
+        { "happy", "#fef3c7" },
+        { "good", "#d1fae5" },
+        { "neutral", "#f3f4f6" },
+        { "bad", "#fee2e2" },
+        { "angry", "#7f1d1d" }
+    };
+
+    var id = row[def.PrimaryKey]?.ToString() ?? "";
+    var title = row.ContainsKey("Title") ? row["Title"]?.ToString() ?? "" : "";
+    var content = row.ContainsKey("Content") ? row["Content"]?.ToString() ?? "" : "";
+    var mood = row.ContainsKey("Mood") ? row["Mood"]?.ToString() ?? "neutral" : "neutral";
+    var dateStr = row.ContainsKey("Date") ? row["Date"]?.ToString() ?? "" : "";
+    var createdAt = row.ContainsKey("CreatedAt") ? row["CreatedAt"]?.ToString() ?? "" : "";
+    var categoryId = row.ContainsKey("CategoryId") ? row["CategoryId"]?.ToString() ?? "" : "";
+
+    var moodEmoji = moodEmojis.ContainsKey(mood) ? moodEmojis[mood] : "😐";
+    var moodBgColor = moodColors.ContainsKey(mood) ? moodColors[mood] : "#f3f4f6";
+
+    // 格式化日期
+    string formattedDate = "";
+    string formattedCreatedAt = "";
+    if (DateTime.TryParse(dateStr, out var parsedDate))
+    {
+        formattedDate = currentLang == "zh"
+            ? parsedDate.ToString("yyyy 年 MM 月 dd 日 dddd")
+            : parsedDate.ToString("MMMM dd, yyyy dddd");
+    }
+    if (DateTime.TryParse(createdAt, out var parsedCreatedAt))
+    {
+        formattedCreatedAt = currentLang == "zh"
+            ? parsedCreatedAt.ToString("yyyy-MM-dd HH:mm")
+            : parsedCreatedAt.ToString("MM/dd/yyyy HH:mm");
+    }
+
+    // 分类名称
+    var categoryNames = new Dictionary<string, string>
+    {
+        { "1", "📔 Life" },
+        { "2", "💼 Work" },
+        { "3", "📚 Study" },
+        { "4", "✈️ Travel" },
+        { "5", "📁 Other" }
+    };
+    var categoryName = categoryId != "" && categoryNames.ContainsKey(categoryId) ? categoryNames[categoryId] : null;
+}
+
+<div class="journal-details-overlay" id="journal-details-overlay">
+    <div class="journal-details-container">
+        <article class="journal-article">
+            <!-- 头部 -->
+            <header class="article-header">
+                <div class="article-meta">
+                    <time class="article-date" datetime="@dateStr">
+                        <i class="far fa-calendar-alt"></i> @formattedDate
+                    </time>
+                    <span class="article-mood" style="background-color: @moodBgColor">
+                        @moodEmoji @mood
+                    </span>
+                    @if (categoryName != null)
+                    {
+                        <span class="article-category">
+                            <i class="fas fa-folder"></i> @categoryName
+                        </span>
+                    }
+                </div>
+                <h1 class="article-title">@title</h1>
+            </header>
+
+            <!-- 内容 -->
+            <div class="article-content">
+                @content.Replace("\n", "<br/>")
+            </div>
+
+            <!-- 底部 -->
+            <footer class="article-footer">
+                <div class="footer-info">
+                    <span class="created-at">
+                        <i class="fas fa-clock"></i>
+                        @(currentLang == "zh" ? "创建于：" : "Created: ") @formattedCreatedAt
+                    </span>
+                </div>
+                <div class="article-actions">
+                    <a href="@returnUrl" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        @(currentLang == "zh" ? "返回列表" : "Back to list")
+                    </a>
+                    <a href="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang" 
+                       class="btn btn-primary"
+                       hx-get="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang"
+                       hx-target="#modal"
+                       hx-swap="innerHTML">
+                        <i class="fas fa-edit"></i>
+                        @(currentLang == "zh" ? "编辑" : "Edit")
+                    </a>
+                </div>
+            </footer>
+        </article>
+    </div>
+</div>
+
+<style>
+    .journal-details-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        padding: 2rem;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .journal-details-container {
+        width: 100%;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .journal-article {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .article-header {
+        padding: 2.5rem 2.5rem 1.5rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .article-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .article-date {
+        color: #6b7280;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .article-mood {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .article-category {
+        color: #6b7280;
+        font-size: 0.875rem;
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+    }
+
+    .article-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+        line-height: 1.3;
+    }
+
+    .article-content {
+        padding: 2.5rem;
+        font-size: 1.125rem;
+        line-height: 1.8;
+        color: #374151;
+        min-height: 200px;
+    }
+
+    .article-footer {
+        padding: 1.5rem 2.5rem;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .footer-info {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+
+    .article-actions {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .btn {
+        padding: 0.75rem 1.25rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.2s;
+        border: none;
+        cursor: pointer;
+    }
+
+    .btn-secondary {
+        background: #f3f4f6;
+        color: #6b7280;
+    }
+
+    .btn-secondary:hover {
+        background: #e5e7eb;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    /* 滚动条样式 */
+    .journal-details-container::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .journal-details-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .journal-details-container::-webkit-scrollbar-thumb {
+        background: #3b82f6;
+        border-radius: 4px;
+    }
+
+    .journal-details-container::-webkit-scrollbar-thumb:hover {
+        background: #8b5cf6;
+    }
+
+    @media (max-width: 640px) {
+        .journal-details-overlay {
+            padding: 1rem;
+        }
+
+        .article-header {
+            padding: 1.5rem;
+        }
+
+        .article-content {
+            padding: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .article-footer {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .article-actions {
+            flex-direction: column;
+        }
+
+        .btn {
+            justify-content: center;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+<script>
+    // ESC 键关闭详情页
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const overlay = document.getElementById('journal-details-overlay');
+            if (overlay) {
+                overlay.style.animation = 'fadeOut 0.3s ease';
+                setTimeout(() => overlay.remove(), 300);
+            }
+        }
+    });
+
+    // 点击覆盖层外部关闭
+    document.getElementById('journal-details-overlay')?.addEventListener('click', function(event) {
+        if (event.target === this) {
+            this.style.animation = 'fadeOut 0.3s ease';
+            setTimeout(() => this.remove(), 300);
+        }
+    });
+</script>

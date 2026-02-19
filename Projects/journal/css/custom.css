@@ -1,6 +1,6 @@
 /* 日记本应用自定义样式 */
 
-/* 日记卡片样式 */
+/* ==================== 日记卡片样式 ==================== */
 .card-entry {
     border-left: 4px solid #3b82f6;
     background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
@@ -30,18 +30,18 @@
     opacity: 1;
 }
 
-/* 分类卡片样式 */
+/* ==================== 分类卡片样式 ==================== */
 .card-category {
     border-left: 4px solid var(--category-color, #3b82f6);
 }
 
-/* 标签卡片样式 */
+/* ==================== 标签卡片样式 ==================== */
 .card-tag {
     border-radius: 20px;
     background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
 }
 
-/* 心情标识 */
+/* ==================== 心情标识 ==================== */
 .mood-indicator {
     display: inline-block;
     padding: 4px 12px;
@@ -54,23 +54,23 @@
 .mood-good { background-color: #d1fae5; color: #065f46; }
 .mood-neutral { background-color: #f3f4f6; color: #374151; }
 .mood-bad { background-color: #fee2e2; color: #991b1b; }
-.mood-angry { background-color #7f1d1d; color: #fecaca; }
+.mood-angry { background-color: #7f1d1d; color: #fecaca; }
 
-/* 日记内容样式 */
+/* ==================== 日记内容样式 ==================== */
 .entry-content {
     line-height: 1.8;
     color: #374151;
     white-space: pre-wrap;
 }
 
-/* 日期样式 */
+/* ==================== 日期样式 ==================== */
 .entry-date {
     color: #6b7280;
     font-size: 14px;
     font-style: italic;
 }
 
-/* 统计卡片 */
+/* ==================== 统计卡片 ==================== */
 .stat-card {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -93,35 +93,104 @@
     letter-spacing: 1px;
 }
 
-/* 日记列表布局 */
+/* ==================== 日记列表布局 ==================== */
 .journal-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 1.5rem;
 }
 
-/* 响应式调整 */
+/* ==================== 时间线布局 ==================== */
+.journal-timeline {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.journal-timeline::before {
+    content: '';
+    position: absolute;
+    left: 1rem;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899);
+}
+
+.timeline-entry {
+    position: relative;
+    margin-bottom: 2rem;
+    animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.entry-marker {
+    position: absolute;
+    left: -3rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+}
+
+.entry-marker:hover {
+    transform: scale(1.1);
+}
+
+.mood-emoji {
+    font-size: 1.25rem;
+}
+
+/* ==================== 响应式调整 ==================== */
 @media (max-width: 768px) {
     .journal-list {
         grid-template-columns: 1fr;
     }
-    
+
+    .journal-timeline {
+        padding-left: 2rem;
+    }
+
+    .journal-timeline::before {
+        left: 0.75rem;
+    }
+
+    .entry-marker {
+        left: -2rem;
+        width: 2rem;
+        height: 2rem;
+    }
+
     .stat-card {
         padding: 1.5rem;
     }
-    
+
     .stat-card h3 {
         font-size: 2rem;
     }
 }
 
-/* 心情选择器样式 */
+/* ==================== 心情选择器样式 ==================== */
 select[name="Mood"] {
     background-image: linear-gradient(45deg, #fef3c7 25%, #d1fae5 25%, #d1fae5 50%, #f3f4f6 50%, #f3f4f6 75%, #fee2e2 75%);
     background-size: 20px 20px;
 }
 
-/* 分类颜色标记 */
+/* ==================== 分类颜色标记 ==================== */
 .category-badge {
     display: inline-block;
     padding: 2px 10px;
@@ -129,4 +198,101 @@ select[name="Mood"] {
     font-size: 12px;
     color: white;
     background-color: var(--category-color, #3b82f6);
+}
+
+/* ==================== 日记表单样式 ==================== */
+.journal-form-overlay {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.journal-form-container {
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==================== 日记详情样式 ==================== */
+.journal-details-overlay {
+    animation: fadeIn 0.3s ease;
+}
+
+.journal-article {
+    animation: slideUp 0.4s ease;
+}
+
+/* ==================== 工具栏样式 ==================== */
+.journal-toolbar {
+    background: white;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.btn-write {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-write:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+}
+
+/* ==================== 空状态样式 ==================== */
+.empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #9ca3af;
+}
+
+.empty-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+/* ==================== 分页样式 ==================== */
+.journal-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+}
+
+.pagination-btn {
+    padding: 0.5rem 1rem;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    color: #3b82f6;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+.pagination-btn:hover {
+    background: #3b82f6;
+    color: white;
+}
+
+.pagination-info {
+    padding: 0.5rem 1rem;
+    color: #6b7280;
 }

@@ -1,0 +1,519 @@
+@using Platform.Infrastructure.Definitions
+@model IEnumerable<Dictionary<string, object>>
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var pageNum = (int)ViewData["Page"]!;
+    var size = (int)ViewData["Size"]!;
+    var total = (int)ViewData["Total"]!;
+    var totalPages = (int)Math.Ceiling((double)total / size);
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
+    var currentSortBy = (ViewData["SortBy"] as string) ?? def.PrimaryKey;
+    var currentSortDir = string.Equals(ViewData["SortDir"] as string, "desc", StringComparison.OrdinalIgnoreCase) ? "desc" : "asc";
+    var currentEditMode = string.Equals(ViewData["EditMode"] as string, "page", StringComparison.OrdinalIgnoreCase) ? "page" : "modal";
+
+    // 获取本地化标签
+    var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
+    var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+
+    // 心情表情映射
+    var moodEmojis = new Dictionary<string, string>
+    {
+        { "happy", "😊" },
+        { "good", "🙂" },
+        { "neutral", "😐" },
+        { "bad", "😔" },
+        { "angry", "😠" }
+    };
+
+    var moodColors = new Dictionary<string, string>
+    {
+        { "happy", "#fef3c7" },
+        { "good", "#d1fae5" },
+        { "neutral", "#f3f4f6" },
+        { "bad", "#fee2e2" },
+        { "angry", "#7f1d1d" }
+    };
+
+    ViewData["Title"] = $"{title} - Low Code Platform";
+}
+
+<div class="journal-container">
+    <!-- 头部统计信息 -->
+    <div class="journal-header">
+        <div class="journal-stats">
+            <div class="stat-item">
+                <span class="stat-value">@total</span>
+                <span class="stat-label">@(currentLang == "zh" ? "篇日记" : "Entries")</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">@Model.Count()</span>
+                <span class="stat-label">@(currentLang == "zh" ? "当前显示" : "Showing")</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="journal-toolbar">
+        <div class="toolbar-left">
+            <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang&editMode=@currentEditMode" 
+               class="btn btn-primary btn-write">
+                <i class="fas fa-pen-fancy"></i>
+                @(currentLang == "zh" ? "写日记" : "Write")
+            </a>
+        </div>
+        <div class="toolbar-right">
+            <form class="search-form" hx-get="/ui/Entry?project=@currentProject" hx-target="#journal-list" hx-swap="innerHTML" hx-push-url="true">
+                <input type="text" name="Title" placeholder="@(currentLang == "zh" ? "搜索日记..." : "Search entries...")" 
+                       value="@(Context.Request.Query["Title"].FirstOrDefault() ?? "")"
+                       class="search-input" />
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            
+            <!-- 心情过滤器 -->
+            <select name="Mood" class="mood-filter" onchange="filterByMood(this.value)">
+                <option value="">@(currentLang == "zh" ? "所有心情" : "All Moods")</option>
+                @foreach (var mood in moodEmojis)
+                {
+                    <option value="@mood.Key" selected="@(Context.Request.Query["Mood"].FirstOrDefault() == mood.Key ? "selected" : null)">
+                        @mood.Value @mood.Key
+                    </option>
+                }
+            </select>
+        </div>
+    </div>
+
+    <!-- 日记列表（时间线风格） -->
+    <div id="journal-list" class="journal-timeline">
+        @foreach (var entry in Model)
+        {
+            var mood = entry.ContainsKey("Mood") ? entry["Mood"]?.ToString() ?? "neutral" : "neutral";
+            var moodEmoji = moodEmojis.ContainsKey(mood) ? moodEmojis[mood] : "😐";
+            var moodBgColor = moodColors.ContainsKey(mood) ? moodColors[mood] : "#f3f4f6";
+            var titleText = entry.ContainsKey("Title") ? entry["Title"]?.ToString() ?? "" : "";
+            var dateStr = entry.ContainsKey("Date") ? entry["Date"]?.ToString() ?? "" : "";
+            var content = entry.ContainsKey("Content") ? entry["Content"]?.ToString() ?? "" : "";
+            var id = entry[def.PrimaryKey]?.ToString() ?? "";
+
+            // 格式化日期显示
+            var displayDate = dateStr;
+            if (DateTime.TryParse(dateStr, out var parsedDate))
+            {
+                displayDate = currentLang == "zh" 
+                    ? parsedDate.ToString("yyyy 年 MM 月 dd 日 dddd") 
+                    : parsedDate.ToString("MMMM dd, yyyy dddd");
+            }
+
+            <article class="timeline-entry" data-mood="@mood" data-id="@id">
+                <div class="entry-marker" style="background-color: @moodBgColor">
+                    <span class="mood-emoji">@moodEmoji</span>
+                </div>
+                <div class="entry-content-wrapper">
+                    <header class="entry-header">
+                        <div class="entry-meta">
+                            <time class="entry-date" datetime="@dateStr">
+                                <i class="far fa-calendar-alt"></i> @displayDate
+                            </time>
+                            <span class="entry-mood" style="background-color: @moodBgColor">
+                                @moodEmoji @mood
+                            </span>
+                        </div>
+                        <div class="entry-actions">
+                            <a href="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode" 
+                               class="btn-icon btn-edit"
+                               hx-get="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
+                               hx-target="#modal"
+                               hx-swap="innerHTML">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <button class="btn-icon btn-delete" onclick="openDeleteDialog('@modelName', '@id')">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </header>
+                    <h3 class="entry-title">@titleText</h3>
+                    <div class="entry-excerpt">
+                        @(content.Length > 200 ? content.Substring(0, 200) + "..." : content)
+                    </div>
+                    <footer class="entry-footer">
+                        <a href="/ui/Entry/details/@id?project=@currentProject&lang=@currentLang" class="read-more">
+                            @(currentLang == "zh" ? "阅读全文" : "Read more") <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </footer>
+                </div>
+            </article>
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <i class="fas fa-book-open empty-icon"></i>
+                <h3>@(currentLang == "zh" ? "还没有日记" : "No entries yet")</h3>
+                <p>@(currentLang == "zh" ? "开始写下你的第一篇日记吧！" : "Start writing your first entry!")</p>
+                <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang" class="btn btn-primary">
+                    <i class="fas fa-pen-fancy"></i> @(currentLang == "zh" ? "写日记" : "Write now")
+                </a>
+            </div>
+        }
+    </div>
+
+    <!-- 分页 -->
+    @if (totalPages > 1)
+    {
+        <nav class="journal-pagination">
+            @if (pageNum > 1)
+            {
+                <a href="/ui/Entry?project=@currentProject&page=1&lang=@currentLang" class="pagination-btn">
+                    <i class="fas fa-angle-double-left"></i>
+                </a>
+                <a href="/ui/Entry?project=@currentProject&page=@(pageNum-1)&lang=@currentLang" class="pagination-btn">
+                    <i class="fas fa-angle-left"></i>
+                </a>
+            }
+
+            <span class="pagination-info">
+                @(currentLang == "zh" ? "第" : "Page") @pageNum @(currentLang == "zh" ? "页，共" : "of") @totalPages @(currentLang == "zh" ? "页" : "pages")
+            </span>
+
+            @if (pageNum < totalPages)
+            {
+                <a href="/ui/Entry?project=@currentProject&page=@(pageNum+1)&lang=@currentLang" class="pagination-btn">
+                    <i class="fas fa-angle-right"></i>
+                </a>
+                <a href="/ui/Entry?project=@currentProject&page=@totalPages&lang=@currentLang" class="pagination-btn">
+                    <i class="fas fa-angle-double-right"></i>
+                </a>
+            }
+        </nav>
+    }
+</div>
+
+<!-- 模态框容器 -->
+<div id="modal"></div>
+
+<style>
+    /* 日记专用样式 */
+    .journal-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .journal-header {
+        margin-bottom: 2rem;
+    }
+
+    .journal-stats {
+        display: flex;
+        gap: 2rem;
+        justify-content: center;
+    }
+
+    .stat-item {
+        text-align: center;
+    }
+
+    .stat-value {
+        display: block;
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #3b82f6;
+    }
+
+    .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+
+    .journal-toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding: 1rem;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .toolbar-right {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .btn-write {
+        background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: transform 0.2s;
+    }
+
+    .btn-write:hover {
+        transform: translateY(-2px);
+    }
+
+    .search-form {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .search-input {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        width: 250px;
+    }
+
+    .btn-search {
+        padding: 0.5rem 1rem;
+        background: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .mood-filter {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        background: white;
+        cursor: pointer;
+    }
+
+    /* 时间线样式 */
+    .journal-timeline {
+        position: relative;
+        padding-left: 3rem;
+    }
+
+    .journal-timeline::before {
+        content: '';
+        position: absolute;
+        left: 1rem;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: linear-gradient(to bottom, #3b82f6, #8b5cf6, #ec4899);
+    }
+
+    .timeline-entry {
+        position: relative;
+        margin-bottom: 2rem;
+        animation: slideIn 0.5s ease;
+    }
+
+    @keyframes slideIn {
+        from {
+            opacity: 0;
+            transform: translateX(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    .entry-marker {
+        position: absolute;
+        left: -3rem;
+        width: 2.5rem;
+        height: 2.5rem;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .mood-emoji {
+        font-size: 1.25rem;
+    }
+
+    .entry-content-wrapper {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .entry-content-wrapper:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .entry-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
+
+    .entry-meta {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .entry-date {
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
+    .entry-mood {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+
+    .entry-actions {
+        display: flex;
+        gap: 0.5rem;
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    .entry-content-wrapper:hover .entry-actions {
+        opacity: 1;
+    }
+
+    .btn-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: none;
+        background: #f3f4f6;
+        color: #6b7280;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s;
+    }
+
+    .btn-icon:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #ef4444;
+    }
+
+    .entry-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+    }
+
+    .entry-excerpt {
+        color: #4b5563;
+        line-height: 1.7;
+        margin-bottom: 1rem;
+    }
+
+    .entry-footer {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 0.75rem;
+    }
+
+    .read-more {
+        color: #3b82f6;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: color 0.2s;
+    }
+
+    .read-more:hover {
+        color: #8b5cf6;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 2rem;
+        color: #9ca3af;
+    }
+
+    .empty-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+    }
+
+    .pagination-btn {
+        padding: 0.5rem 1rem;
+        background: white;
+        border: 1px solid #e5e7eb;
+        border-radius: 8px;
+        color: #3b82f6;
+        text-decoration: none;
+        transition: all 0.2s;
+    }
+
+    .pagination-btn:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .pagination-info {
+        padding: 0.5rem 1rem;
+        color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+        .journal-toolbar {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .toolbar-right {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .journal-timeline {
+            padding-left: 2rem;
+        }
+
+        .entry-marker {
+            left: -2rem;
+            width: 2rem;
+            height: 2rem;
+        }
+    }
+</style>
+
+<script>
+    function filterByMood(mood) {
+        const entries = document.querySelectorAll('.timeline-entry');
+        entries.forEach(entry => {
+            if (mood === '' || entry.dataset.mood === mood) {
+                entry.style.display = '';
+            } else {
+                entry.style.display = 'none';
+            }
+        });
+    }
+</script>
