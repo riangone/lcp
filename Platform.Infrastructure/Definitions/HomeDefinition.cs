@@ -29,7 +29,7 @@ public class HomeComponentConfig
     public string Type { get; set; } = "";
 
     /// <summary>
-    /// 组件配置数据
+    /// 组件配置数据 - 包含除 Type 之外的所有 YAML 字段
     /// </summary>
     public Dictionary<string, object> Data { get; set; } = new();
 }

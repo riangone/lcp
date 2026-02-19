@@ -1,4 +1,5 @@
 @model Platform.Infrastructure.Definitions.HomeDefinition
+@using YamlDotNet.Serialization
 @{
     ViewData["Title"] = Model?.Title ?? "LowCode Platform";
     ViewData["ActivePage"] = "Home";
@@ -11,7 +12,7 @@
         var viewName = GetComponentViewName(component.Type);
         try
         {
-            // 将 Dictionary 转换为强类型对象
+            // 使用 YamlDotNet 将 Dictionary 转换为强类型对象
             var typedData = ConvertToTypedData(component.Data, component.Type);
             await Html.RenderPartialAsync(viewName, typedData);
         }
@@ -46,27 +47,39 @@ else
             _ => $"~/Views/Home/Components/_{type}.cshtml"
         };
     }
-    
+
     object? ConvertToTypedData(Dictionary<string, object> data, string type)
     {
         try
         {
-            var json = System.Text.Json.JsonSerializer.Serialize(data);
+            // 使用 YamlDotNet 序列化/反序列化，保持类型一致性
+            var serializer = new SerializerBuilder().Build();
+            var yaml = serializer.Serialize(data);
+            
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention.Instance)
+                .IgnoreUnmatchedProperties()
+                .Build();
+            
             return type switch
             {
-                "hero" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.HeroConfig>(json),
-                "quick_actions" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.QuickActionsConfig>(json),
-                "section_title" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.SectionTitleConfig>(json),
-                "card_grid" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.CardGridConfig>(json),
-                "stats_modern" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.StatsModernConfig>(json),
-                "footer" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.FooterConfig>(json),
-                "alert" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.AlertConfig>(json),
-                "stats" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.StatsConfig>(json),
+                "hero" => deserializer.Deserialize<Platform.Infrastructure.Definitions.HeroConfig>(yaml),
+                "quick_actions" => deserializer.Deserialize<Platform.Infrastructure.Definitions.QuickActionsConfig>(yaml),
+                "section_title" => deserializer.Deserialize<Platform.Infrastructure.Definitions.SectionTitleConfig>(yaml),
+                "card_grid" => deserializer.Deserialize<Platform.Infrastructure.Definitions.CardGridConfig>(yaml),
+                "stats_modern" => deserializer.Deserialize<Platform.Infrastructure.Definitions.StatsModernConfig>(yaml),
+                "footer" => deserializer.Deserialize<Platform.Infrastructure.Definitions.FooterConfig>(yaml),
+                "alert" => deserializer.Deserialize<Platform.Infrastructure.Definitions.AlertConfig>(yaml),
+                "stats" => deserializer.Deserialize<Platform.Infrastructure.Definitions.StatsConfig>(yaml),
                 _ => data
             };
         }
-        catch
+        catch (Exception ex)
         {
+            using (var writer = File.AppendText("/tmp/home_debug.log"))
+            {
+                writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ConvertToTypedData error for {type}: {ex.Message}");
+            }
             return data;
         }
     }

@@ -9,9 +9,12 @@
 @if (Model.Source == "models" && models != null && models.Any())
 {
     <div class="container mx-auto px-4 pb-12">
-        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-            @Model.Title.GetText(currentLang)
-        </h2>
+        @if (!string.IsNullOrEmpty(Model.Title.GetText(currentLang)))
+        {
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                @Model.Title.GetText(currentLang)
+            </h2>
+        }
 
         <div class="grid grid-cols-1 sm:grid-cols-@Model.Columns.Tablet lg:grid-cols-@Model.Columns.Desktop xl:grid-cols-@Model.Columns.Wide gap-6">
             @foreach (var model in models)
@@ -30,6 +33,37 @@
                         <p class="text-sm text-gray-500 mb-3">@((model.Value).Table)</p>
                         <span class="inline-block px-3 py-1 @color rounded-full text-xs font-medium">
                             @(currentLang == "zh" ? "管理数据" : "Manage Data")
+                        </span>
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+}
+else if (Model.Source == "pages" && pages != null && pages.Any())
+{
+    <div class="container mx-auto px-4 pb-12">
+        @if (!string.IsNullOrEmpty(Model.Title.GetText(currentLang)))
+        {
+            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+                @Model.Title.GetText(currentLang)
+            </h2>
+        }
+
+        <div class="grid grid-cols-1 sm:grid-cols-@Model.Columns.Tablet lg:grid-cols-@Model.Columns.Desktop gap-6">
+            @foreach (var page in pages)
+            {
+                var pageKey = page.Key;
+                var pageTitle = page.Value.Title ?? pageKey;
+                var icon = "🔗";
+
+                <a href="/page/@pageKey?project=@projectName" class="@Model.CardStyle.BaseClass @Model.CardStyle.HoverClass transition cursor-pointer">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">@icon</div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">@pageTitle</h3>
+                        <p class="text-sm text-gray-500 mb-3">多表页面</p>
+                        <span class="inline-block px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-xs font-medium">
+                            @(currentLang == "zh" ? "多表管理" : "Multi-Table")
                         </span>
                     </div>
                 </a>

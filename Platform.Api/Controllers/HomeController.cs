@@ -17,7 +17,7 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         var project = _projectScope.CurrentProject;
-        
+
         ViewData["Title"] = project?.HomeConfig?.Title ?? "LowCode Platform";
         ViewData["ActivePage"] = "Home";
         ViewData["Models"] = project?.AppDefinitions.Models;
