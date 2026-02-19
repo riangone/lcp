@@ -3,6 +3,9 @@
 }
 
 <script>
+    // 项目变量（从 Razor 传递）
+    const currentProjectName = "@projectName";
+    
     // 用户状态管理
     window.auth = {
         getToken: function() {
@@ -45,6 +48,7 @@
             const isLoggedIn = this.isLoggedIn();
             const currentLang = new URLSearchParams(window.location.search).get('lang') || 'en';
             const isZh = currentLang === 'zh';
+            const projName = currentProjectName || new URLSearchParams(window.location.search).get('project') || 'app';
             
             // 更新桌面版导航栏用户状态
             const userStatusEl = document.querySelector('.user-status-display');
@@ -61,7 +65,7 @@
                             </div>
                         </div>
                         <div class="user-actions">
-                            <a href="/?project=${projectName}" class="user-action-btn">
+                            <a href="/?project=${projName}" class="user-action-btn">
                                 <i class="fas fa-home"></i> ${isZh ? '首页' : 'Home'}
                             </a>
                             <button type="button" class="user-action-btn" onclick="auth.logout()">
@@ -75,10 +79,10 @@
                             <p>${isZh ? '访客模式（Guest）' : 'Guest Mode'}</p>
                             <p class="guest-hint">${isZh ? '登录以访问更多功能' : 'Login for more features'}</p>
                             <div class="guest-actions">
-                                <a href="/auth/login?project=${projectName}" class="btn btn-primary btn-sm">
+                                <a href="/auth/login?project=${projName}" class="btn btn-primary btn-sm">
                                     <i class="fas fa-sign-in-alt"></i> ${isZh ? '登录' : 'Login'}
                                 </a>
-                                <a href="/auth/register?project=${projectName}" class="btn btn-outline btn-sm">
+                                <a href="/auth/register?project=${projName}" class="btn btn-outline btn-sm">
                                     <i class="fas fa-user-plus"></i> ${isZh ? '注册' : 'Register'}
                                 </a>
                             </div>
@@ -101,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="mobile-user-actions" style="margin-top: 12px; display: flex; gap: 8px;">
-                                <a href="/?project=${projectName}" class="btn btn-sm btn-primary" style="flex: 1;">
+                                <a href="/?project=${projName}" class="btn btn-sm btn-primary" style="flex: 1;">
                                     <i class="fas fa-home"></i> ${isZh ? '首页' : 'Home'}
                                 </a>
                                 <button type="button" class="btn btn-sm btn-outline" onclick="auth.logout()" style="flex: 1;">
@@ -112,7 +116,7 @@
                     `;
                 } else {
                     mobileAuthEl.innerHTML = `
-                        <a href="/auth/login?project=${projectName}" class="nav-link mobile-close-on-click">
+                        <a href="/auth/login?project=${projName}" class="nav-link mobile-close-on-click">
                             <i class="fas fa-sign-in-alt"></i>
                             ${isZh ? '用户登录' : 'Login'}
                         </a>
