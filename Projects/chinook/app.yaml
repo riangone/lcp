@@ -13,6 +13,7 @@ models:
       type: custom
       default_ui_mode: custom
       list_template: "views/artist/List.cshtml"
+      form_template: "views/artist/Form.cshtml"
       style:
         layout: grid
         theme_color: "#e94560"

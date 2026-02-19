@@ -1,0 +1,212 @@
+@using Platform.Infrastructure.Definitions
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var row = ViewData["Row"] as Dictionary<string, object>;
+    var isEdit = row != null;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "chinook";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Artist?project={currentProject}";
+
+    var name = isEdit && row != null && row.ContainsKey("Name") ? row["Name"]?.ToString() ?? "" : "";
+
+    var action = isEdit ? $"/api/{modelName}/{row![def.PrimaryKey]}" : $"/api/{modelName}";
+    var method = isEdit ? "put" : "post";
+}
+
+<div class="chinook-form-overlay" id="chinook-form-overlay">
+    <div class="chinook-form-container">
+        <div class="form-header">
+            <h2 class="form-title">
+                <span class="form-icon">🎤</span>
+                @(isEdit ? (currentLang == "zh" ? "编辑艺术家" : "Edit Artist") : (currentLang == "zh" ? "新建艺术家" : "New Artist"))
+            </h2>
+            <button class="btn-close" onclick="closeFormModal()">✕</button>
+        </div>
+
+        <form method="post" action="@action" class="chinook-form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="project" value="@currentProject" />
+            <input type="hidden" name="returnUrl" value="@returnUrl" />
+            <input type="hidden" name="@method" value="true" />
+
+            <div class="form-group">
+                <label class="form-label" for="Name">
+                    @(currentLang == "zh" ? "艺术家姓名" : "Artist Name") <span class="required">*</span>
+                </label>
+                <input type="text" id="Name" name="Name" value="@name" 
+                       class="form-input" required maxlength="120" 
+                       placeholder="@(currentLang == "zh" ? "输入艺术家姓名" : "Enter artist name")" />
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" onclick="closeFormModal()">
+                    @(currentLang == "zh" ? "取消" : "Cancel")
+                </button>
+                <button type="submit" class="btn btn-submit">
+                    @(isEdit ? (currentLang == "zh" ? "保存修改" : "Save Changes") : (currentLang == "zh" ? "创建艺术家" : "Create Artist"))
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .chinook-form-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .chinook-form-container {
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        border-radius: 16px;
+        width: 90%;
+        max-width: 500px;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(233, 69, 96, 0.4);
+        animation: slideUp 0.3s ease;
+        border: 1px solid rgba(233, 69, 96, 0.3);
+    }
+
+    @@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+    .form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .form-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: white;
+    }
+
+    .form-icon { font-size: 2rem; }
+
+    .btn-close {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        cursor: pointer;
+        font-size: 1.25rem;
+        transition: all 0.2s;
+    }
+
+    .btn-close:hover { background: #e94560; }
+
+    .chinook-form { }
+
+    .form-group { margin-bottom: 1.5rem; }
+
+    .form-label {
+        display: block;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.9);
+        margin-bottom: 0.5rem;
+    }
+
+    .required { color: #e94560; }
+
+    .form-input {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        border-radius: 10px;
+        font-size: 1rem;
+        background: rgba(255, 255, 255, 0.05);
+        color: white;
+        transition: all 0.2s;
+        font-family: inherit;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: #e94560;
+        box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .form-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .btn-cancel {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .btn-cancel:hover { background: rgba(255, 255, 255, 0.2); }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #e94560, #c73659);
+        color: white;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(233, 69, 96, 0.4);
+    }
+
+    @@media (max-width: 640px) {
+        .chinook-form-container { padding: 1.5rem; }
+        .form-actions { flex-direction: column; }
+        .btn { width: 100%; text-align: center; }
+    }
+</style>
+
+<script>
+    function closeFormModal() {
+        const overlay = document.getElementById('chinook-form-overlay');
+        if (overlay) {
+            overlay.style.animation = 'fadeIn 0.3s ease reverse';
+            setTimeout(() => overlay.remove(), 300);
+        }
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeFormModal();
+    });
+
+    document.getElementById('chinook-form-overlay')?.addEventListener('click', function(e) {
+        if (e.target === this) closeFormModal();
+    });
+</script>
