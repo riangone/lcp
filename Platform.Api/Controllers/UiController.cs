@@ -86,10 +86,16 @@ public class UiController : Controller
         }
         else
         {
-            // 使用专用 UI - 从模板路径提取视图名称 (project/view)
+            // 使用专用 UI - 使用简单的视图名称 (task_List, artist_List 等)
             var templatePath = def.CustomView?.ListTemplate ?? "";
-            var viewName = templatePath.Replace("/", "_").Replace(".cshtml", "");
-            return View(viewName, rows);
+            if (!string.IsNullOrEmpty(templatePath))
+            {
+                // views/task/List.cshtml -> task_List
+                var viewName = templatePath.Replace("views/", "").Replace("/", "_").Replace(".cshtml", "");
+                return View(viewName, rows);
+            }
+            // 回退到通用视图
+            return View("List", rows);
         }
     }
 
@@ -127,7 +133,24 @@ public class UiController : Controller
         }
         else
         {
-            return View("Journal/Form");
+            // 使用专用表单视图 - 直接使用物理路径
+            var currentProject = _projectScope.CurrentProject;
+            var templatePath = def.CustomView?.FormTemplate ?? "";
+            if (!string.IsNullOrEmpty(templatePath) && currentProject != null)
+            {
+                var fullPath = Path.Combine(currentProject.Directory, templatePath);
+                if (System.IO.File.Exists(fullPath))
+                {
+                    return View(fullPath);
+                }
+            }
+            // 如果物理路径不存在，回退到通用视图
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+                Request.Headers["HX-Request"] != "true")
+            {
+                return View("CreatePage");
+            }
+            return PartialView("FormModal");
         }
     }
 

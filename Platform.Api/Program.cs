@@ -37,7 +37,7 @@ builder.Services.AddControllersWithViews()
                 var viewsDir = Path.Combine(projectDir, "views");
                 if (Directory.Exists(viewsDir))
                 {
-                    options.ViewLocationFormats.Add(Path.Combine(viewsDir, "{1}/{0}.cshtml"));
+                    // 支持 views/{viewName}.cshtml 格式
                     options.ViewLocationFormats.Add(Path.Combine(viewsDir, "{0}.cshtml"));
                 }
             }
