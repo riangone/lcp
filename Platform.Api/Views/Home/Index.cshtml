@@ -8,14 +8,19 @@
 {
     foreach (var component in Model.Layout)
     {
-        var viewName = $"~/Views/Home/Components/_{component.Type}.cshtml";
+        var viewName = GetComponentViewName(component.Type);
         try
         {
-            await Html.RenderPartialAsync(viewName, component.Data);
+            // 将 Dictionary 转换为强类型对象
+            var typedData = ConvertToTypedData(component.Data, component.Type);
+            await Html.RenderPartialAsync(viewName, typedData);
         }
-        catch
+        catch (Exception ex)
         {
-            <div class="text-red-500 p-4">Component '@component.Type' not found</div>
+            <div class="text-red-500 p-4 bg-red-50 rounded-lg mb-4">
+                <div class="font-bold">Component '@component.Type' not found or failed</div>
+                <div class="text-sm mt-2 font-mono">@ex.Message</div>
+            </div>
         }
     }
 }
@@ -24,3 +29,45 @@ else
     await Html.RenderPartialAsync("_DefaultHome");
 }
 </div>
+
+@functions {
+    string GetComponentViewName(string type)
+    {
+        return type switch
+        {
+            "hero" => "~/Views/Home/Components/_Hero.cshtml",
+            "quick_actions" => "~/Views/Home/Components/_QuickActions.cshtml",
+            "section_title" => "~/Views/Home/Components/_SectionTitle.cshtml",
+            "card_grid" => "~/Views/Home/Components/_CardGrid.cshtml",
+            "stats_modern" => "~/Views/Home/Components/_StatsModern.cshtml",
+            "footer" => "~/Views/Home/Components/_Footer.cshtml",
+            "alert" => "~/Views/Home/Components/_Alert.cshtml",
+            "stats" => "~/Views/Home/Components/_Stats.cshtml",
+            _ => $"~/Views/Home/Components/_{type}.cshtml"
+        };
+    }
+    
+    object? ConvertToTypedData(Dictionary<string, object> data, string type)
+    {
+        try
+        {
+            var json = System.Text.Json.JsonSerializer.Serialize(data);
+            return type switch
+            {
+                "hero" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.HeroConfig>(json),
+                "quick_actions" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.QuickActionsConfig>(json),
+                "section_title" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.SectionTitleConfig>(json),
+                "card_grid" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.CardGridConfig>(json),
+                "stats_modern" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.StatsModernConfig>(json),
+                "footer" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.FooterConfig>(json),
+                "alert" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.AlertConfig>(json),
+                "stats" => System.Text.Json.JsonSerializer.Deserialize<Platform.Infrastructure.Definitions.StatsConfig>(json),
+                _ => data
+            };
+        }
+        catch
+        {
+            return data;
+        }
+    }
+}
