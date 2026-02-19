@@ -133,18 +133,15 @@ public class UiController : Controller
         }
         else
         {
-            // 使用专用表单视图 - 直接使用物理路径
-            var currentProject = _projectScope.CurrentProject;
+            // 使用专用表单视图 - 使用符号链接方式
             var templatePath = def.CustomView?.FormTemplate ?? "";
-            if (!string.IsNullOrEmpty(templatePath) && currentProject != null)
+            if (!string.IsNullOrEmpty(templatePath))
             {
-                var fullPath = Path.Combine(currentProject.Directory, templatePath);
-                if (System.IO.File.Exists(fullPath))
-                {
-                    return View(fullPath);
-                }
+                // views/task/Form.cshtml -> task_Form
+                var viewName = templatePath.Replace("views/", "").Replace("/", "_").Replace(".cshtml", "");
+                return View(viewName);
             }
-            // 如果物理路径不存在，回退到通用视图
+            // 回退到通用视图
             if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
                 Request.Headers["HX-Request"] != "true")
             {

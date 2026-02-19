@@ -13,6 +13,7 @@ models:
       type: custom
       default_ui_mode: custom
       list_template: "views/task/List.cshtml"
+      form_template: "views/task/Form.cshtml"
       style:
         layout: kanban
         theme_color: "#10b981"
