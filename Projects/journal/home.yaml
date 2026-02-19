@@ -31,7 +31,7 @@ layout:
         label:
           zh: 写日记
           en: Write Entry
-        href: "/ui/Entry?project=journal"
+        href: "/ui/Entry?project=journal&ui=custom"
         color: "purple"
         description:
           zh: 记录今天的故事
