@@ -11,7 +11,7 @@ function openDeleteDialog(model, id) {
 
     const yes = document.getElementById('confirm-yes');
     yes.onclick = () => {
-        htmx.ajax('DELETE', `/api/data/${model}/${id}`, {
+        htmx.ajax('DELETE', `/api/${model}/${id}`, {
             target: `tr[data-id="${id}"]`,
             swap: 'outerHTML'
         });

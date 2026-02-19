@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Platform.Infrastructure;
 using Platform.Infrastructure.Definitions;
 using Platform.Infrastructure.Repositories;
+using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
@@ -9,12 +10,12 @@ namespace Platform.Api.Controllers;
 public class UiController : Controller
 {
     private readonly DynamicRepository _repo;
-    private readonly AppDefinitions _defs;
+    private readonly ProjectScope _projectScope;
 
-    public UiController(DynamicRepository repo, AppDefinitions defs)
+    public UiController(DynamicRepository repo, ProjectScope projectScope)
     {
         _repo = repo;
-        _defs = defs;
+        _projectScope = projectScope;
     }
 
     [HttpGet("")]
@@ -43,7 +44,8 @@ public class UiController : Controller
         // 如果请求清除过滤器，则重定向到没有过滤参数的URL
         if (clear)
         {
-            return RedirectToAction("Index", new { model = model, page = 1, size = size, lang = lang, sortBy = sortBy, sortDir = sortDir, editMode = editMode });
+            var project = Request.Query["project"].FirstOrDefault() ?? "app";
+            return RedirectToAction("Index", new { model = model, project = project, page = 1, size = size, lang = lang, sortBy = sortBy, sortDir = sortDir, editMode = editMode });
         }
 
         var (rows, total) = await _repo.GetPagedAsync(def, page, size, filters, sortBy, sortDir);
@@ -147,7 +149,8 @@ public class UiController : Controller
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
-            return RedirectToAction("Index", new { model = model });
+            var project = Request.Query["project"].FirstOrDefault() ?? "app";
+            return RedirectToAction("Index", new { model = model, project = project });
         }
         catch (Exception ex)
         {
@@ -184,7 +187,8 @@ public class UiController : Controller
             if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
-            return RedirectToAction("Index", new { model = model });
+            var project = Request.Query["project"].FirstOrDefault() ?? "app";
+            return RedirectToAction("Index", new { model = model, project = project });
         }
         catch (Exception ex)
         {
@@ -203,13 +207,17 @@ public class UiController : Controller
 
     private ModelDefinition GetModel(string model)
     {
-        if (!_defs.AllowedModels.Contains(model))
+        var appDefs = _projectScope.CurrentProject?.AppDefinitions;
+        if (appDefs == null)
+            throw new Exception("No project selected");
+
+        if (!appDefs.AllowedModels.Contains(model))
             throw new Exception($"Model '{model}' not defined");
 
         // Find the actual key (case-insensitive)
-        var actualKey = _defs.Models.Keys.First(k => 
+        var actualKey = appDefs.Models.Keys.First(k =>
             k.Equals(model, StringComparison.OrdinalIgnoreCase));
-        
-        return _defs.Models[actualKey];
+
+        return appDefs.Models[actualKey];
     }
 }

@@ -54,7 +54,8 @@ public class GenericApiController : ControllerBase
 
             await _repo.InsertAsync(def, objData);
 
-            Response.Headers["HX-Redirect"] = $"/ui/{model}";
+            var project = Request.Query["project"].FirstOrDefault() ?? "app";
+            Response.Headers["HX-Redirect"] = $"/ui/{model}?project={project}";
             return Ok();
         }
         catch (Exception ex)
@@ -80,7 +81,8 @@ public class GenericApiController : ControllerBase
 
             await _repo.UpdateAsync(def, id, objData);
 
-            Response.Headers["HX-Redirect"] = $"/ui/{model}";
+            var project = Request.Query["project"].FirstOrDefault() ?? "app";
+            Response.Headers["HX-Redirect"] = $"/ui/{model}?project={project}";
             return Ok();
         }
         catch (Exception ex)

@@ -16,6 +16,7 @@
     var currentEditMode = string.Equals(ViewData["EditMode"] as string, "page", StringComparison.OrdinalIgnoreCase)
         ? "page"
         : "modal";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "app";
     var currentFilterValues = (def.List?.Filters?.Keys ?? Enumerable.Empty<string>())
         .ToDictionary(k => k, k => Context.Request.Query[k].FirstOrDefault() ?? "");
 
@@ -42,6 +43,7 @@
         query["sortBy"] = sortBy ?? currentSortBy;
         query["sortDir"] = sortDir ?? currentSortDir;
         query["editMode"] = editMode ?? currentEditMode;
+        query["project"] = currentProject;
 
         var queryString = string.Join("&", query.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
@@ -105,7 +107,7 @@
   @if (def.List?.Filters != null && def.List.Filters.Any())
   {
     <div class="card mb-6">
-      <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" hx-push-url="true" class="space-y-4">
+      <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" hx-push-url="true" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           @foreach (var f in def.List.Filters)
           {
@@ -176,7 +178,7 @@
     }
     else if (!isReadOnly)
     {
-      <button hx-get="/ui/@modelName/create?lang=@currentLang&editMode=modal" hx-target="#modal" hx-swap="innerHTML"
+      <button hx-get="/ui/@modelName/create?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML"
               class="btn btn-success flex items-center">
         <i class="fas fa-plus mr-2"></i>
         @if (localizedLabels != null && localizedLabels.ContainsKey("new_button"))
@@ -198,7 +200,7 @@
   <div class="flex flex-wrap items-center justify-end gap-4 mb-4">
     @if (!isReadOnly)
     {
-    <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
+    <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="edit-mode-select">Edit mode:</label>
       <select id="edit-mode-select" name="editMode" class="border border-gray-300 rounded-lg px-2 py-1 text-sm"
               onchange="this.form.requestSubmit()">
@@ -220,7 +222,7 @@
     </form>
     }
 
-    <form hx-get="/ui/@modelName" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
+    <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="page-size-select">Rows per page:</label>
       <select id="page-size-select" name="size" class="border border-gray-300 rounded-lg px-2 py-1 text-sm"
               onchange="this.form.requestSubmit()">
@@ -331,7 +333,7 @@
                 else
                 {
                   <button class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
-                          hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang&editMode=modal" hx-target="#modal" hx-swap="innerHTML">
+                          hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML">
                     <i class="fas fa-edit mr-1"></i>
                     @if (localizedLabels != null && localizedLabels.ContainsKey("edit_button"))
                     {
