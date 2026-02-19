@@ -170,23 +170,43 @@ public class UiController : Controller
         ViewData["Project"] = project;
 
         // 检查是否有专用表单视图
-        if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate))
+        var hasCustomView = def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate);
+        
+        // 获取 UI 模式
+        var uiMode = Request.Query["ui"].FirstOrDefault();
+        if (string.IsNullOrEmpty(uiMode))
         {
-            // Project dir from Razor options
-            return View("Journal/Form");
-            // Check view exists
+            uiMode = hasCustomView ? def.CustomView?.DefaultUiMode : "generic";
+        }
+
+        // 根据 UI 模式决定使用哪个视图
+        if (uiMode == "generic" || !hasCustomView)
+        {
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+                Request.Headers["HX-Request"] != "true")
             {
-                return View("Journal/Form");
+                return View("EditPage", row);
             }
+            return PartialView("FormModal");
         }
-
-        if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-            Request.Headers["HX-Request"] != "true")
+        else
         {
-            return View("EditPage", row);
+            // 使用专用表单视图 - 使用符号链接方式
+            var templatePath = def.CustomView?.FormTemplate ?? "";
+            if (!string.IsNullOrEmpty(templatePath))
+            {
+                // views/customer/Form.cshtml -> customer_Form
+                var viewName = templatePath.Replace("views/", "").Replace("/", "_").Replace(".cshtml", "");
+                return View(viewName);
+            }
+            // 回退到通用视图
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
+                Request.Headers["HX-Request"] != "true")
+            {
+                return View("EditPage", row);
+            }
+            return PartialView("FormModal");
         }
-
-        return PartialView("FormModal");
     }
 
     [HttpGet("details/{id}")]
