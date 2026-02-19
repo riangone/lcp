@@ -30,7 +30,7 @@ public class AuthController : Controller
     [HttpGet("/auth/login")]
     public IActionResult LoginPage()
     {
-        return View();
+        return View("Login");
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public class AuthController : Controller
     [HttpGet("/auth/register")]
     public IActionResult RegisterPage()
     {
-        return View();
+        return View("Register");
     }
 
     /// <summary>
