@@ -2,38 +2,25 @@
 @{
     ViewData["Title"] = Model?.Title ?? "LowCode Platform";
     ViewData["ActivePage"] = "Home";
-    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
 }
-
 <div class="min-h-screen">
-    @if (Model?.Layout != null)
+@if (Model?.Layout != null)
+{
+    foreach (var component in Model.Layout)
     {
-        @foreach (var component in Model.Layout)
-        {
-            @await RenderComponentAsync(component.Type, component.Data)
-        }
-    }
-    else
-    {
-        <!-- 默认布局：当没有 home.yaml 时使用 -->
-        @await Html.PartialAsync("_DefaultHome")
-    }
-</div>
-
-@functions {
-    async Task RenderComponentAsync(string type, Dictionary<string, object> data)
-    {
-        var viewName = $"~/Views/Home/Components/_{type}.cshtml";
-        
+        var viewName = $"~/Views/Home/Components/_{component.Type}.cshtml";
         try
         {
-            @await Html.PartialAsync(viewName, data)
+            await Html.RenderPartialAsync(viewName, component.Data);
         }
-        catch (Exception ex)
+        catch
         {
-            <div class="text-red-500 p-4">
-                Component '@type' not found or failed to render: @ex.Message
-            </div>
+            <div class="text-red-500 p-4">Component '@component.Type' not found</div>
         }
     }
 }
+else
+{
+    await Html.RenderPartialAsync("_DefaultHome");
+}
+</div>

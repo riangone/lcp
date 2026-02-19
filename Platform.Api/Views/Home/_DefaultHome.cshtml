@@ -1,88 +1,17 @@
-@{
-    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
-    var projectName = ViewData["ProjectName"] as string ?? "app";
-    var projectDisplayName = ViewData["ProjectDisplayName"] as string ?? projectName;
-    var models = ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>;
-    var pages = ViewData["Pages"] as Dictionary<string, Platform.Infrastructure.Definitions.PageDefinition>;
-}
-
-<style>
-    .project-card { transition: all 0.3s ease; cursor: pointer; border: 2px solid transparent; }
-    .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-color: #3b82f6; }
-</style>
-
-<!-- Hero -->
 <div class="bg-gradient-to-br from-blue-50 via-white to-purple-50">
     <div class="container mx-auto px-4 pt-16 pb-8 text-center">
         <h1 class="text-5xl font-bold text-gray-800 mb-4">🚀 LowCode Platform</h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-            @(currentLang == "zh" ? "通过 YAML 定义驱动，快速创建应用程序" : "Build applications fast with YAML-driven low-code platform")
-        </p>
+        <p class="text-xl text-gray-600 max-w-2xl mx-auto">YAML-driven low-code platform</p>
     </div>
-
-    <!-- Alert -->
-    @if (!string.IsNullOrEmpty(projectName))
-    {
-        <div class="container mx-auto px-4 mb-8">
-            <div class="bg-green-50 border border-green-200 rounded-xl p-4 text-center">
-                <span class="text-green-800 font-semibold">
-                    @(currentLang == "zh" ? "✅ 当前项目：" : "✅ Current Project: ")
-                </span>
-                <span class="text-green-600 font-bold text-lg">@projectDisplayName</span>
-                <span class="text-green-600 mx-2">|</span>
-                <a href="/" class="text-green-600 hover:underline">
-                    @(currentLang == "zh" ? "切换其他项目" : "Switch Project")
+    <div class="container mx-auto px-4 pb-12">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Data Models</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var model in (ViewData["Models"] as Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>) ?? new Dictionary<string, Platform.Infrastructure.Definitions.ModelDefinition>())
+            {
+                <a href="/ui/@(model.Key)?project=@ViewData["ProjectName"]" class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
+                    <div class="text-center"><div class="text-3xl mb-2">📊</div><h3 class="text-xl font-semibold">@(model.Key)</h3></div>
                 </a>
-            </div>
+            }
         </div>
-    }
-
-    <!-- Models Grid -->
-    @if (models != null && models.Any())
-    {
-        <div class="container mx-auto px-4 pb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                @(currentLang == "zh" ? "数据模型" : "Data Models")
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                @foreach (var model in models)
-                {
-                    var uiLabels = model.Value.Ui?.Labels;
-                    var localizedLabels = currentLang == "zh" && uiLabels?.Zh != null ? uiLabels.Zh : uiLabels?.En;
-                    var title = localizedLabels?.ContainsKey("title") == true ? localizedLabels["title"] : model.Key;
-                    <a href="/ui/@model.Key?project=@projectName" class="project-card bg-white rounded-xl p-6 shadow-md">
-                        <div class="text-center">
-                            <div class="text-3xl mb-2">📊</div>
-                            <h3 class="text-xl font-semibold text-gray-800 mb-2">@title</h3>
-                            <p class="text-sm text-gray-500">@model.Value.Table</p>
-                        </div>
-                    </a>
-                }
-            </div>
-        </div>
-    }
-
-    <!-- Pages Grid -->
-    @if (pages != null && pages.Any())
-    {
-        <div class="container mx-auto px-4 pb-12">
-            <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
-                @(currentLang == "zh" ? "多表页面" : "Multi-Table Pages")
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                @foreach (var page in pages)
-                {
-                    <a href="/page/@page.Key?project=@projectName" class="project-card bg-white rounded-xl p-6 shadow-md">
-                        <div class="flex items-center">
-                            <div class="text-3xl mr-4">📄</div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800">@page.Value.Title</h3>
-                                <p class="text-sm text-gray-500">@page.Value.Description</p>
-                            </div>
-                        </div>
-                    </a>
-                }
-            </div>
-        </div>
-    }
+    </div>
 </div>
