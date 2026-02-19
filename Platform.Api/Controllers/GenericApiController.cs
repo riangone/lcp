@@ -29,6 +29,16 @@ public class GenericApiController : ControllerBase
         return Ok(rows);
     }
 
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(string model, string id)
+    {
+        var def = GetModel(model);
+        var row = await _repo.GetByIdAsync(def, id);
+        if (row == null)
+            return NotFound();
+        return Ok(row);
+    }
+
     [HttpPost]
     // 注意：CSRF 验证已禁用，通过认证和授权控制访问安全
     // [ValidateAntiForgeryToken]
