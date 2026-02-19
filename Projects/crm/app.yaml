@@ -1,0 +1,1555 @@
+# CRM 客户关系管理系统应用定义
+
+models:
+  # ==================== 客户管理 ====================
+  Customer:
+    table: Customer
+    primary_key: CustomerId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 客户管理
+          create_button: 添加客户
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索客户...
+          CompanyName: 公司名称
+          ContactPerson: 联系人
+          Industry: 行业
+          Level: 客户等级
+          Phone: 电话
+          Email: 邮箱
+          City: 城市
+          Status: 状态
+          OwnerId: 负责人
+        en:
+          title: Customers
+          create_button: Add Customer
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search customers...
+          CompanyName: Company Name
+          ContactPerson: Contact Person
+          Industry: Industry
+          Level: Level
+          Phone: Phone
+          Email: Email
+          City: City
+          Status: Status
+          OwnerId: Owner
+      styles:
+        card_class: "card-customer"
+        button_class: "btn btn-primary"
+
+    list:
+      columns:
+        - CustomerId
+        - CustomerNo
+        - CompanyName
+        - ContactPerson
+        - Industry
+        - Level
+        - Phone
+        - City
+        - Status
+
+      filters:
+        CompanyName:
+          label: Company Name
+          type: like
+        ContactPerson:
+          label: Contact Person
+          type: like
+        Industry:
+          label: Industry
+          type: select
+          options:
+            Technology: Technology
+            Finance: Finance
+            Healthcare: Healthcare
+            Retail: Retail
+            Manufacturing: Manufacturing
+        Level:
+          label: Level
+          type: select
+          options:
+            Hot: Hot
+            Warm: Warm
+            Cold: Cold
+        Status:
+          label: Status
+          type: select
+          options:
+            Active: Active
+            Inactive: Inactive
+            Lost: Lost
+
+    form:
+      title: Customer
+      fields:
+        CustomerNo:
+          label: Customer No
+          type: text
+          required: true
+          max_length: 50
+
+        CompanyName:
+          label: Company Name
+          type: text
+          required: true
+          max_length: 200
+
+        ContactPerson:
+          label: Contact Person
+          type: text
+          max_length: 100
+
+        Industry:
+          label: Industry
+          type: select
+          options:
+            Technology: Technology
+            Finance: Finance
+            Healthcare: Healthcare
+            Retail: Retail
+            Manufacturing: Manufacturing
+            Other: Other
+
+        Scale:
+          label: Scale
+          type: select
+          options:
+            Small: Small
+            Medium: Medium
+            Large: Large
+            Enterprise: Enterprise
+
+        Source:
+          label: Source
+          type: select
+          options:
+            Website: Website
+            Referral: Referral
+            TradeShow: Trade Show
+            ColdCall: Cold Call
+            SocialMedia: Social Media
+            Other: Other
+
+        Level:
+          label: Level
+          type: select
+          options:
+            Hot: Hot
+            Warm: Warm
+            Cold: Cold
+
+        Website:
+          label: Website
+          type: text
+          max_length: 200
+
+        Email:
+          label: Email
+          type: email
+          max_length: 100
+
+        Phone:
+          label: Phone
+          type: text
+          max_length: 30
+
+        Fax:
+          label: Fax
+          type: text
+          max_length: 30
+
+        Address:
+          label: Address
+          type: textarea
+          max_length: 500
+
+        City:
+          label: City
+          type: text
+          max_length: 100
+
+        State:
+          label: State
+          type: text
+          max_length: 100
+
+        Country:
+          label: Country
+          type: text
+          max_length: 100
+
+        PostalCode:
+          label: Postal Code
+          type: text
+          max_length: 20
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 1000
+
+        OwnerId:
+          label: Owner
+          type: number
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Active: Active
+            Inactive: Inactive
+            Lost: Lost
+
+    properties:
+      CustomerId:
+        type: int
+      CustomerNo:
+        type: string
+        required: true
+      CompanyName:
+        type: string
+        required: true
+      ContactPerson:
+        type: string
+      Industry:
+        type: string
+      Scale:
+        type: string
+      Source:
+        type: string
+      Level:
+        type: string
+      Website:
+        type: string
+      Email:
+        type: string
+      Phone:
+        type: string
+      Fax:
+        type: string
+      Address:
+        type: string
+      City:
+        type: string
+      State:
+        type: string
+      Country:
+        type: string
+      PostalCode:
+        type: string
+      Description:
+        type: string
+      OwnerId:
+        type: int
+      Status:
+        type: string
+
+  # ==================== 联系人管理 ====================
+  Contact:
+    table: Contact
+    primary_key: ContactId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 联系人管理
+          create_button: 添加联系人
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索联系人...
+          FirstName: 名
+          LastName: 姓
+          FullName: 姓名
+          Title: 职位
+          Department: 部门
+          Email: 邮箱
+          Phone: 电话
+          Mobile: 手机
+          CustomerId: 所属客户
+          IsPrimary: 主要联系人
+        en:
+          title: Contacts
+          create_button: Add Contact
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search contacts...
+          FirstName: First Name
+          LastName: Last Name
+          FullName: Full Name
+          Title: Title
+          Department: Department
+          Email: Email
+          Phone: Phone
+          Mobile: Mobile
+          CustomerId: Customer
+          IsPrimary: Primary
+
+    list:
+      columns:
+        - ContactId
+        - FirstName
+        - LastName
+        - Title
+        - Department
+        - Email
+        - Phone
+        - Mobile
+        - CustomerId
+        - IsPrimary
+
+      filters:
+        FirstName:
+          label: First Name
+          type: like
+        LastName:
+          label: Last Name
+          type: like
+        Email:
+          label: Email
+          type: like
+        CustomerId:
+          label: Customer
+          type: like
+
+    form:
+      title: Contact
+      fields:
+        CustomerId:
+          label: Customer
+          type: number
+          required: true
+
+        FirstName:
+          label: First Name
+          type: text
+          required: true
+          max_length: 50
+
+        LastName:
+          label: Last Name
+          type: text
+          required: true
+          max_length: 50
+
+        Title:
+          label: Title
+          type: text
+          max_length: 100
+
+        Department:
+          label: Department
+          type: text
+          max_length: 100
+
+        Email:
+          label: Email
+          type: email
+          max_length: 100
+
+        Phone:
+          label: Phone
+          type: text
+          max_length: 30
+
+        Mobile:
+          label: Mobile
+          type: text
+          max_length: 30
+
+        Fax:
+          label: Fax
+          type: text
+          max_length: 30
+
+        Address:
+          label: Address
+          type: textarea
+          max_length: 500
+
+        IsPrimary:
+          label: Primary Contact
+          type: checkbox
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 1000
+
+    properties:
+      ContactId:
+        type: int
+      CustomerId:
+        type: int
+        required: true
+      FirstName:
+        type: string
+        required: true
+      LastName:
+        type: string
+        required: true
+      Title:
+        type: string
+      Department:
+        type: string
+      Email:
+        type: string
+      Phone:
+        type: string
+      Mobile:
+        type: string
+      IsPrimary:
+        type: bool
+
+  # ==================== 销售机会 ====================
+  Opportunity:
+    table: Opportunity
+    primary_key: OpportunityId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 销售机会
+          create_button: 添加机会
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索机会...
+          Title: 机会名称
+          CustomerId: 客户
+          ContactId: 联系人
+          Stage: 阶段
+          Probability: 成功概率
+          Amount: 预计金额
+          ExpectedCloseDate: 预计成交日期
+          Status: 状态
+          Priority: 优先级
+          OwnerId: 负责人
+        en:
+          title: Opportunities
+          create_button: Add Opportunity
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search opportunities...
+          Title: Title
+          CustomerId: Customer
+          ContactId: Contact
+          Stage: Stage
+          Probability: Probability
+          Amount: Amount
+          ExpectedCloseDate: Expected Close Date
+          Status: Status
+          Priority: Priority
+          OwnerId: Owner
+
+    list:
+      columns:
+        - OpportunityId
+        - OpportunityNo
+        - Title
+        - CustomerId
+        - Stage
+        - Probability
+        - Amount
+        - ExpectedCloseDate
+        - Status
+        - Priority
+
+      filters:
+        Title:
+          label: Title
+          type: like
+        CustomerId:
+          label: Customer
+          type: like
+        Stage:
+          label: Stage
+          type: select
+          options:
+            Prospecting: Prospecting
+            Qualification: Qualification
+            Proposal: Proposal
+            Negotiation: Negotiation
+            ClosedWon: Closed Won
+            ClosedLost: Closed Lost
+        Status:
+          label: Status
+          type: select
+          options:
+            Open: Open
+            Won: Won
+            Lost: Lost
+            Closed: Closed
+        Priority:
+          label: Priority
+          type: select
+          options:
+            Low: Low
+            Medium: Medium
+            High: High
+            Urgent: Urgent
+
+    form:
+      title: Opportunity
+      fields:
+        OpportunityNo:
+          label: Opportunity No
+          type: text
+          required: true
+          max_length: 50
+
+        CustomerId:
+          label: Customer
+          type: number
+          required: true
+
+        ContactId:
+          label: Contact
+          type: number
+
+        Title:
+          label: Title
+          type: text
+          required: true
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 2000
+
+        Stage:
+          label: Stage
+          type: select
+          required: true
+          options:
+            Prospecting: Prospecting
+            Qualification: Qualification
+            Proposal: Proposal
+            Negotiation: Negotiation
+            ClosedWon: Closed Won
+            ClosedLost: Closed Lost
+
+        Probability:
+          label: Probability (%)
+          type: number
+          min: 0
+          max: 100
+
+        Amount:
+          label: Amount
+          type: number
+          min: 0
+
+        ExpectedCloseDate:
+          label: Expected Close Date
+          type: text
+
+        ActualCloseDate:
+          label: Actual Close Date
+          type: text
+
+        CloseReason:
+          label: Close Reason
+          type: textarea
+          max_length: 1000
+
+        Competitor:
+          label: Competitor
+          type: text
+          max_length: 200
+
+        NextStep:
+          label: Next Step
+          type: text
+          max_length: 500
+
+        NextStepDate:
+          label: Next Step Date
+          type: text
+
+        OwnerId:
+          label: Owner
+          type: number
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Open: Open
+            Won: Won
+            Lost: Lost
+            Closed: Closed
+
+        Priority:
+          label: Priority
+          type: select
+          options:
+            Low: Low
+            Medium: Medium
+            High: High
+            Urgent: Urgent
+
+    properties:
+      OpportunityId:
+        type: int
+      OpportunityNo:
+        type: string
+        required: true
+      CustomerId:
+        type: int
+        required: true
+      Title:
+        type: string
+        required: true
+      Stage:
+        type: string
+      Probability:
+        type: int
+      Amount:
+        type: decimal
+      Status:
+        type: string
+      Priority:
+        type: string
+
+  # ==================== 产品管理 ====================
+  Product:
+    table: Product
+    primary_key: ProductId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 产品管理
+          create_button: 添加产品
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索产品...
+          ProductName: 产品名称
+          Category: 分类
+          UnitPrice: 单价
+          StockQuantity: 库存
+          IsActive: 启用
+        en:
+          title: Products
+          create_button: Add Product
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search products...
+          ProductName: Product Name
+          Category: Category
+          UnitPrice: Unit Price
+          StockQuantity: Stock
+          IsActive: Active
+
+    list:
+      columns:
+        - ProductId
+        - ProductNo
+        - ProductName
+        - Category
+        - UnitPrice
+        - StockQuantity
+        - IsActive
+
+      filters:
+        ProductName:
+          label: Product Name
+          type: like
+        Category:
+          label: Category
+          type: like
+
+    form:
+      title: Product
+      fields:
+        ProductNo:
+          label: Product No
+          type: text
+          required: true
+          max_length: 50
+
+        ProductName:
+          label: Product Name
+          type: text
+          required: true
+          max_length: 200
+
+        Category:
+          label: Category
+          type: text
+          max_length: 100
+
+        Specification:
+          label: Specification
+          type: textarea
+          max_length: 1000
+
+        Unit:
+          label: Unit
+          type: text
+          max_length: 20
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+          min: 0
+
+        CostPrice:
+          label: Cost Price
+          type: number
+          min: 0
+
+        StockQuantity:
+          label: Stock Quantity
+          type: number
+          min: 0
+
+        ReorderLevel:
+          label: Reorder Level
+          type: number
+          min: 0
+
+        Supplier:
+          label: Supplier
+          type: text
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 1000
+
+        IsActive:
+          label: Active
+          type: checkbox
+
+    properties:
+      ProductId:
+        type: int
+      ProductNo:
+        type: string
+        required: true
+      ProductName:
+        type: string
+        required: true
+      UnitPrice:
+        type: decimal
+        required: true
+      StockQuantity:
+        type: int
+      IsActive:
+        type: bool
+
+  # ==================== 报价管理 ====================
+  Quote:
+    table: Quote
+    primary_key: QuoteId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 报价管理
+          create_button: 创建报价
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索报价...
+          QuoteNo: 报价单号
+          CustomerId: 客户
+          QuoteDate: 报价日期
+          TotalAmount: 总金额
+          Status: 状态
+          OwnerId: 负责人
+        en:
+          title: Quotes
+          create_button: Create Quote
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search quotes...
+          QuoteNo: Quote No
+          CustomerId: Customer
+          QuoteDate: Quote Date
+          TotalAmount: Total Amount
+          Status: Status
+          OwnerId: Owner
+
+    list:
+      columns:
+        - QuoteId
+        - QuoteNo
+        - CustomerId
+        - QuoteDate
+        - TotalAmount
+        - Status
+
+      filters:
+        QuoteNo:
+          label: Quote No
+          type: like
+        CustomerId:
+          label: Customer
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            Draft: Draft
+            Sent: Sent
+            Accepted: Accepted
+            Rejected: Rejected
+            Expired: Expired
+
+    form:
+      title: Quote
+      fields:
+        QuoteNo:
+          label: Quote No
+          type: text
+          required: true
+          max_length: 50
+
+        CustomerId:
+          label: Customer
+          type: number
+          required: true
+
+        ContactId:
+          label: Contact
+          type: number
+
+        OpportunityId:
+          label: Opportunity
+          type: number
+
+        QuoteDate:
+          label: Quote Date
+          type: text
+          required: true
+
+        ExpiryDate:
+          label: Expiry Date
+          type: text
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Draft: Draft
+            Sent: Sent
+            Accepted: Accepted
+            Rejected: Rejected
+            Expired: Expired
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          min: 0
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Tax:
+          label: Tax
+          type: number
+          min: 0
+
+        TotalAmount:
+          label: Total Amount
+          type: number
+          required: true
+          min: 0
+
+        Notes:
+          label: Notes
+          type: textarea
+          max_length: 1000
+
+        Terms:
+          label: Terms
+          type: textarea
+          max_length: 1000
+
+        OwnerId:
+          label: Owner
+          type: number
+
+    properties:
+      QuoteId:
+        type: int
+      QuoteNo:
+        type: string
+        required: true
+      CustomerId:
+        type: int
+        required: true
+      TotalAmount:
+        type: decimal
+        required: true
+      Status:
+        type: string
+
+  # ==================== 报价明细 ====================
+  QuoteItem:
+    table: QuoteItem
+    primary_key: QuoteItemId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 报价明细
+          QuoteId: 报价单
+          ProductId: 产品
+          Quantity: 数量
+          UnitPrice: 单价
+          Discount: 折扣
+          Subtotal: 小计
+        en:
+          title: Quote Items
+          QuoteId: Quote
+          ProductId: Product
+          Quantity: Quantity
+          UnitPrice: Unit Price
+          Discount: Discount
+          Subtotal: Subtotal
+
+    list:
+      columns:
+        - QuoteItemId
+        - QuoteId
+        - ProductId
+        - Quantity
+        - UnitPrice
+        - Discount
+        - Subtotal
+
+      filters:
+        QuoteId:
+          label: Quote
+          type: like
+        ProductId:
+          label: Product
+          type: like
+
+    form:
+      title: Quote Item
+      fields:
+        QuoteId:
+          label: Quote
+          type: number
+          required: true
+
+        ProductId:
+          label: Product
+          type: number
+          required: true
+
+        Quantity:
+          label: Quantity
+          type: number
+          required: true
+          min: 1
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+          min: 0
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          required: true
+          min: 0
+
+        Notes:
+          label: Notes
+          type: textarea
+          max_length: 500
+
+    properties:
+      QuoteItemId:
+        type: int
+      QuoteId:
+        type: int
+        required: true
+      ProductId:
+        type: int
+        required: true
+      Quantity:
+        type: int
+        required: true
+      UnitPrice:
+        type: decimal
+        required: true
+      Subtotal:
+        type: decimal
+        required: true
+
+  # ==================== 订单管理 ====================
+  Order:
+    table: '"Order"'
+    primary_key: OrderId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 订单管理
+          create_button: 创建订单
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索订单...
+          OrderNo: 订单号
+          CustomerId: 客户
+          OrderDate: 订单日期
+          TotalAmount: 总金额
+          PaymentStatus: 支付状态
+          Status: 状态
+        en:
+          title: Orders
+          create_button: Create Order
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search orders...
+          OrderNo: Order No
+          CustomerId: Customer
+          OrderDate: Order Date
+          TotalAmount: Total Amount
+          PaymentStatus: Payment Status
+          Status: Status
+
+    list:
+      columns:
+        - OrderId
+        - OrderNo
+        - CustomerId
+        - OrderDate
+        - TotalAmount
+        - PaymentStatus
+        - Status
+
+      filters:
+        OrderNo:
+          label: Order No
+          type: like
+        CustomerId:
+          label: Customer
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+        PaymentStatus:
+          label: Payment
+          type: select
+          options:
+            Unpaid: Unpaid
+            Partial: Partial
+            Paid: Paid
+            Refunded: Refunded
+
+    form:
+      title: Order
+      fields:
+        OrderNo:
+          label: Order No
+          type: text
+          required: true
+          max_length: 50
+
+        CustomerId:
+          label: Customer
+          type: number
+          required: true
+
+        ContactId:
+          label: Contact
+          type: number
+
+        QuoteId:
+          label: Quote
+          type: number
+
+        OpportunityId:
+          label: Opportunity
+          type: number
+
+        OrderDate:
+          label: Order Date
+          type: text
+          required: true
+
+        RequiredDate:
+          label: Required Date
+          type: text
+
+        ShippedDate:
+          label: Shipped Date
+          type: text
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          min: 0
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Tax:
+          label: Tax
+          type: number
+          min: 0
+
+        ShippingCost:
+          label: Shipping Cost
+          type: number
+          min: 0
+
+        TotalAmount:
+          label: Total Amount
+          type: number
+          required: true
+          min: 0
+
+        PaymentTerms:
+          label: Payment Terms
+          type: textarea
+          max_length: 500
+
+        PaymentStatus:
+          label: Payment Status
+          type: select
+          options:
+            Unpaid: Unpaid
+            Partial: Partial
+            Paid: Paid
+            Refunded: Refunded
+
+        ShippingAddress:
+          label: Shipping Address
+          type: textarea
+          max_length: 500
+
+        ShippingCity:
+          label: Shipping City
+          type: text
+          max_length: 100
+
+        ShippingCountry:
+          label: Shipping Country
+          type: text
+          max_length: 100
+
+        Notes:
+          label: Notes
+          type: textarea
+          max_length: 1000
+
+        OwnerId:
+          label: Owner
+          type: number
+
+    properties:
+      OrderId:
+        type: int
+      OrderNo:
+        type: string
+        required: true
+      CustomerId:
+        type: int
+        required: true
+      TotalAmount:
+        type: decimal
+        required: true
+      Status:
+        type: string
+      PaymentStatus:
+        type: string
+
+  # ==================== 订单明细 ====================
+  OrderItem:
+    table: OrderItem
+    primary_key: OrderItemId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 订单明细
+          OrderId: 订单
+          ProductId: 产品
+          Quantity: 数量
+          UnitPrice: 单价
+          Subtotal: 小计
+        en:
+          title: Order Items
+          OrderId: Order
+          ProductId: Product
+          Quantity: Quantity
+          UnitPrice: Unit Price
+          Subtotal: Subtotal
+
+    list:
+      columns:
+        - OrderItemId
+        - OrderId
+        - ProductId
+        - Quantity
+        - UnitPrice
+        - Discount
+        - Subtotal
+
+      filters:
+        OrderId:
+          label: Order
+          type: like
+        ProductId:
+          label: Product
+          type: like
+
+    form:
+      title: Order Item
+      fields:
+        OrderId:
+          label: Order
+          type: number
+          required: true
+
+        ProductId:
+          label: Product
+          type: number
+          required: true
+
+        Quantity:
+          label: Quantity
+          type: number
+          required: true
+          min: 1
+
+        UnitPrice:
+          label: Unit Price
+          type: number
+          required: true
+          min: 0
+
+        Discount:
+          label: Discount
+          type: number
+          min: 0
+
+        Subtotal:
+          label: Subtotal
+          type: number
+          required: true
+          min: 0
+
+        Notes:
+          label: Notes
+          type: textarea
+          max_length: 500
+
+    properties:
+      OrderItemId:
+        type: int
+      OrderId:
+        type: int
+        required: true
+      ProductId:
+        type: int
+        required: true
+      Quantity:
+        type: int
+        required: true
+      UnitPrice:
+        type: decimal
+        required: true
+      Subtotal:
+        type: decimal
+        required: true
+
+  # ==================== 活动管理 ====================
+  Activity:
+    table: Activity
+    primary_key: ActivityId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 活动管理
+          create_button: 添加活动
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索活动...
+          ActivityType: 类型
+          Subject: 主题
+          Status: 状态
+          Priority: 优先级
+          DueDate: 截止日期
+          OwnerId: 负责人
+        en:
+          title: Activities
+          create_button: Add Activity
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search activities...
+          ActivityType: Type
+          Subject: Subject
+          Status: Status
+          Priority: Priority
+          DueDate: Due Date
+          OwnerId: Owner
+
+    list:
+      columns:
+        - ActivityId
+        - ActivityType
+        - Subject
+        - Status
+        - Priority
+        - DueDate
+        - OwnerId
+
+      filters:
+        Subject:
+          label: Subject
+          type: like
+        ActivityType:
+          label: Type
+          type: select
+          options:
+            Call: Call
+            Meeting: Meeting
+            Email: Email
+            Task: Task
+            Note: Note
+            Other: Other
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Completed: Completed
+            Cancelled: Cancelled
+        Priority:
+          label: Priority
+          type: select
+          options:
+            Low: Low
+            Normal: Normal
+            High: High
+            Urgent: Urgent
+
+    form:
+      title: Activity
+      fields:
+        ActivityType:
+          label: Type
+          type: select
+          required: true
+          options:
+            Call: Call
+            Meeting: Meeting
+            Email: Email
+            Task: Task
+            Note: Note
+            Other: Other
+
+        Subject:
+          label: Subject
+          type: text
+          required: true
+          max_length: 200
+
+        Description:
+          label: Description
+          type: textarea
+          max_length: 2000
+
+        RelatedTo:
+          label: Related To
+          type: text
+          max_length: 50
+
+        RelatedId:
+          label: Related ID
+          type: number
+
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Completed: Completed
+            Cancelled: Cancelled
+
+        Priority:
+          label: Priority
+          type: select
+          options:
+            Low: Low
+            Normal: Normal
+            High: High
+            Urgent: Urgent
+
+        DueDate:
+          label: Due Date
+          type: text
+
+        CompletedDate:
+          label: Completed Date
+          type: text
+
+        OwnerId:
+          label: Owner
+          type: number
+
+    properties:
+      ActivityId:
+        type: int
+      ActivityType:
+        type: string
+        required: true
+      Subject:
+        type: string
+        required: true
+      Status:
+        type: string
+      Priority:
+        type: string
+
+  # ==================== 视图：订单客户视图（只读） ====================
+  OrderWithCustomer:
+    query: |
+      SELECT 
+        o.OrderId,
+        o.OrderNo,
+        o.OrderDate,
+        o.Status,
+        o.TotalAmount,
+        o.PaymentStatus,
+        c.CompanyName AS CustomerName,
+        c.ContactPerson,
+        c.Phone AS CustomerPhone,
+        c.Email AS CustomerEmail
+      FROM "Order" o
+      JOIN Customer c ON c.CustomerId = o.CustomerId
+    primary_key: OrderId
+    read_only: true
+
+    ui:
+      labels:
+        zh:
+          title: 订单客户视图
+          OrderNo: 订单号
+          OrderDate: 订单日期
+          CustomerName: 客户名称
+          TotalAmount: 总金额
+          PaymentStatus: 支付状态
+          Status: 状态
+        en:
+          title: Orders with Customers
+          OrderNo: Order No
+          OrderDate: Order Date
+          CustomerName: Customer Name
+          TotalAmount: Total Amount
+          PaymentStatus: Payment Status
+          Status: Status
+
+    list:
+      columns:
+        - OrderId
+        - OrderNo
+        - OrderDate
+        - CustomerName
+        - TotalAmount
+        - PaymentStatus
+        - Status
+
+      filters:
+        OrderNo:
+          label: Order No
+          type: like
+        CustomerName:
+          label: Customer Name
+          type: like
+        Status:
+          label: Status
+          type: select
+          options:
+            Pending: Pending
+            Confirmed: Confirmed
+            Processing: Processing
+            Shipped: Shipped
+            Delivered: Delivered
+            Cancelled: Cancelled
+
+    properties:
+      OrderId:
+        type: int
+      OrderNo:
+        type: string
+      CustomerName:
+        type: string
+      TotalAmount:
+        type: decimal
+      PaymentStatus:
+        type: string
+      Status:
+        type: string

@@ -1,0 +1,131 @@
+# CRM 销售机会管理页面
+title: 销售机会管理
+description: 管理销售机会，跟踪销售流程
+
+main_table: Opportunity
+
+sections:
+  # 销售机会列表
+  - id: opportunities
+    title: 销售机会列表
+    type: table
+    source_type: model
+    source: Opportunity
+    columns:
+      - OpportunityId
+      - OpportunityNo
+      - Title
+      - CustomerId
+      - Stage
+      - Probability
+      - Amount
+      - ExpectedCloseDate
+      - Status
+      - Priority
+    editable: true
+    page_size: 15
+    filters:
+      Title:
+        label: 机会名称
+        type: like
+      CustomerId:
+        label: 客户
+        type: like
+      Stage:
+        label: 阶段
+        type: select
+        options:
+          Prospecting: Prospecting
+          Qualification: Qualification
+          Proposal: Proposal
+          Negotiation: Negotiation
+      Status:
+        label: 状态
+        type: select
+        options:
+          Open: Open
+          Won: Won
+          Lost: Lost
+      Priority:
+        label: 优先级
+        type: select
+        options:
+          Low: Low
+          Medium: Medium
+          High: High
+          Urgent: Urgent
+
+  # 关联联系人
+  - id: contact_info
+    title: 联系人信息
+    type: form
+    source_type: model
+    source: Contact
+    editable: false
+    fields:
+      FirstName:
+        label: 名
+        type: text
+      LastName:
+        label: 姓
+        type: text
+      Title:
+        label: 职位
+        type: text
+      Email:
+        label: 邮箱
+        type: email
+      Phone:
+        label: 电话
+        type: text
+
+  # 关联活动
+  - id: activities
+    title: 相关活动
+    type: table
+    source_type: model
+    source: Activity
+    columns:
+      - ActivityId
+      - ActivityType
+      - Subject
+      - Status
+      - Priority
+      - DueDate
+    editable: true
+    page_size: 5
+    foreign_key: OpportunityId
+    local_foreign_key: RelatedId
+
+actions:
+  - id: export_opportunities
+    title: 导出机会
+    type: submit
+    target: /api/export/opportunities
+    method: POST
+    button_class: btn btn-success
+    icon: fas fa-download
+    confirm_message: 确定要导出所有销售机会数据吗？
+    affects_sections:
+      - opportunities
+
+  - id: funnel_report
+    title: 销售漏斗
+    type: ajax
+    method: GET
+    button_class: btn btn-info
+    icon: fas fa-chart-bar
+    target: /api/report/sales-funnel
+
+ui:
+  theme: default
+  layout:
+    - section_id: opportunities
+      columns: 12
+      full_width: true
+    - section_id: activities
+      columns: 8
+      full_width: false
+    - section_id: contact_info
+      columns: 4
+      full_width: false

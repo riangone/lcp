@@ -1,0 +1,35 @@
+# CRM 客户关系管理系统项目配置
+name: crm
+display_name: CRM 客户关系管理
+description: 完整的客户关系管理系统，包含客户、联系人、销售机会、产品、报价和订单管理
+version: 1.0.0
+author: LowCode Platform
+
+# 数据库配置
+database:
+  type: sqlite
+  path: crm.db
+  schema: schema.sql
+  seed_data: data.sql
+
+# 功能配置
+features:
+  multi_language: true      # 多语言支持
+  custom_pages: true        # 自定义页面
+  user_authentication: true # 用户认证
+
+# UI 配置
+ui:
+  theme: default
+  primary_color: "#3b82f6"  # 蓝色主题
+
+# 项目元数据
+metadata:
+  created: 2026-02-19
+  updated: 2026-02-19
+  tags:
+    - crm
+    - customer
+    - sales
+    - contact
+    - opportunity

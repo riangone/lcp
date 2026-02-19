@@ -1,0 +1,126 @@
+# CRM 客户 360 度视图页面
+title: 客户 360 度视图
+description: 完整展示客户信息，包括联系人、销售机会、订单历史
+
+main_table: Customer
+
+sections:
+  # 客户列表区域
+  - id: customers
+    title: 客户列表
+    type: table
+    source_type: model
+    source: Customer
+    columns:
+      - CustomerId
+      - CustomerNo
+      - CompanyName
+      - ContactPerson
+      - Industry
+      - Level
+      - Phone
+      - City
+      - Status
+    editable: true
+    page_size: 10
+    filters:
+      CompanyName:
+        label: 公司名称
+        type: like
+      Industry:
+        label: 行业
+        type: like
+      Level:
+        label: 等级
+        type: select
+        options:
+          Hot: Hot
+          Warm: Warm
+          Cold: Cold
+
+  # 联系人区域
+  - id: contacts
+    title: 联系人
+    type: table
+    source_type: model
+    source: Contact
+    columns:
+      - ContactId
+      - FirstName
+      - LastName
+      - Title
+      - Department
+      - Email
+      - Phone
+      - Mobile
+      - IsPrimary
+    editable: true
+    page_size: 5
+    foreign_key: CustomerId
+    local_foreign_key: CustomerId
+
+  # 销售机会区域
+  - id: opportunities
+    title: 销售机会
+    type: table
+    source_type: model
+    source: Opportunity
+    columns:
+      - OpportunityId
+      - OpportunityNo
+      - Title
+      - Stage
+      - Probability
+      - Amount
+      - ExpectedCloseDate
+      - Status
+    editable: true
+    page_size: 5
+    foreign_key: CustomerId
+    local_foreign_key: CustomerId
+
+  # 订单历史区域
+  - id: orders
+    title: 订单历史
+    type: table
+    source_type: model
+    source: Order
+    columns:
+      - OrderId
+      - OrderNo
+      - OrderDate
+      - TotalAmount
+      - PaymentStatus
+      - Status
+    editable: false
+    page_size: 5
+    foreign_key: CustomerId
+    local_foreign_key: CustomerId
+
+actions:
+  - id: export_customer
+    title: 导出客户
+    type: submit
+    target: /api/export/customers
+    method: POST
+    button_class: btn btn-success
+    icon: fas fa-download
+    confirm_message: 确定要导出所有客户数据吗？
+    affects_sections:
+      - customers
+
+ui:
+  theme: default
+  layout:
+    - section_id: customers
+      columns: 12
+      full_width: true
+    - section_id: contacts
+      columns: 6
+      full_width: false
+    - section_id: opportunities
+      columns: 6
+      full_width: false
+    - section_id: orders
+      columns: 12
+      full_width: true
