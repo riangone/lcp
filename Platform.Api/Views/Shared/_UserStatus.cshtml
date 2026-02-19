@@ -43,8 +43,10 @@
         updateUI: function() {
             const user = this.getUser();
             const isLoggedIn = this.isLoggedIn();
+            const currentLang = new URLSearchParams(window.location.search).get('lang') || 'en';
+            const isZh = currentLang === 'zh';
             
-            // 更新导航栏用户状态
+            // 更新桌面版导航栏用户状态
             const userStatusEl = document.querySelector('.user-status-display');
             if (userStatusEl) {
                 if (isLoggedIn && user) {
@@ -55,32 +57,65 @@
                             </div>
                             <div class="user-details">
                                 <div class="user-name">${user.displayName || user.username}</div>
-                                <div class="user-role">${user.role === 'Admin' ? '👑 管理员' : '👤 用户'}</div>
+                                <div class="user-role">${user.role === 'Admin' ? (isZh ? '👑 管理员' : '👑 Admin') : (isZh ? '👤 用户' : '👤 User')}</div>
                             </div>
                         </div>
                         <div class="user-actions">
                             <a href="/?project=${projectName}" class="user-action-btn">
-                                <i class="fas fa-home"></i> 首页
+                                <i class="fas fa-home"></i> ${isZh ? '首页' : 'Home'}
                             </a>
                             <button type="button" class="user-action-btn" onclick="auth.logout()">
-                                <i class="fas fa-sign-out-alt"></i> 登出
+                                <i class="fas fa-sign-out-alt"></i> ${isZh ? '登出' : 'Logout'}
                             </button>
                         </div>
                     `;
                 } else {
                     userStatusEl.innerHTML = `
                         <div class="guest-user">
-                            <p>访客模式（Guest）</p>
-                            <p class="guest-hint">登录以访问更多功能</p>
+                            <p>${isZh ? '访客模式（Guest）' : 'Guest Mode'}</p>
+                            <p class="guest-hint">${isZh ? '登录以访问更多功能' : 'Login for more features'}</p>
                             <div class="guest-actions">
                                 <a href="/auth/login?project=${projectName}" class="btn btn-primary btn-sm">
-                                    <i class="fas fa-sign-in-alt"></i> 登录
+                                    <i class="fas fa-sign-in-alt"></i> ${isZh ? '登录' : 'Login'}
                                 </a>
                                 <a href="/auth/register?project=${projectName}" class="btn btn-outline btn-sm">
-                                    <i class="fas fa-user-plus"></i> 注册
+                                    <i class="fas fa-user-plus"></i> ${isZh ? '注册' : 'Register'}
                                 </a>
                             </div>
                         </div>
+                    `;
+                }
+            }
+            
+            // 更新移动版导航栏用户菜单
+            const mobileAuthEl = document.getElementById('mobile-auth-menu');
+            if (mobileAuthEl) {
+                if (isLoggedIn && user) {
+                    mobileAuthEl.innerHTML = `
+                        <div class="mobile-user-logged-in">
+                            <div class="mobile-user-info">
+                                <i class="fas fa-user-circle fa-2x" style="color: #667eea; margin-right: 12px;"></i>
+                                <div>
+                                    <div style="font-weight: 600; color: #333;">${user.displayName || user.username}</div>
+                                    <div style="font-size: 12px; color: #666;">${user.role === 'Admin' ? (isZh ? '👑 管理员' : '👑 Admin') : (isZh ? '👤 用户' : '👤 User')}</div>
+                                </div>
+                            </div>
+                            <div class="mobile-user-actions" style="margin-top: 12px; display: flex; gap: 8px;">
+                                <a href="/?project=${projectName}" class="btn btn-sm btn-primary" style="flex: 1;">
+                                    <i class="fas fa-home"></i> ${isZh ? '首页' : 'Home'}
+                                </a>
+                                <button type="button" class="btn btn-sm btn-outline" onclick="auth.logout()" style="flex: 1;">
+                                    <i class="fas fa-sign-out-alt"></i> ${isZh ? '登出' : 'Logout'}
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    mobileAuthEl.innerHTML = `
+                        <a href="/auth/login?project=${projectName}" class="nav-link mobile-close-on-click">
+                            <i class="fas fa-sign-in-alt"></i>
+                            ${isZh ? '用户登录' : 'Login'}
+                        </a>
                     `;
                 }
             }
@@ -179,5 +214,26 @@
         font-size: 13px;
         flex: 1;
         text-align: center;
+    }
+    
+    /* 移动端用户登录样式 */
+    .mobile-user-logged-in {
+        padding: 16px;
+        border-top: 1px solid #eee;
+        background: #f8f9ff;
+    }
+    
+    .mobile-user-info {
+        display: flex;
+        align-items: center;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e0e4ff;
+    }
+    
+    .mobile-user-actions .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
     }
 </style>
