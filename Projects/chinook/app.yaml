@@ -7,6 +7,16 @@ models:
     table: Artist
     primary_key: ArtistId
 
+    # 专用 UI 视图定义 - 音乐紫色艺术风格
+    custom_view:
+      enabled: true
+      type: custom
+      default_ui_mode: custom
+      list_template: "views/artist/List.cshtml"
+      style:
+        layout: grid
+        theme_color: "#e94560"
+
     ui:
       layout:
         theme: default

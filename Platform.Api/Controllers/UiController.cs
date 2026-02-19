@@ -86,8 +86,10 @@ public class UiController : Controller
         }
         else
         {
-            // 使用专用 UI
-            return View("Journal/List", rows);
+            // 使用专用 UI - 从模板路径提取视图名称 (project/view)
+            var templatePath = def.CustomView?.ListTemplate ?? "";
+            var viewName = templatePath.Replace("/", "_").Replace(".cshtml", "");
+            return View(viewName, rows);
         }
     }
 

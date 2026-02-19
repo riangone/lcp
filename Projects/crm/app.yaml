@@ -6,6 +6,16 @@ models:
     table: Customer
     primary_key: CustomerId
 
+    # 专用 UI 视图定义 - 商务蓝色专业风格
+    custom_view:
+      enabled: true
+      type: custom
+      default_ui_mode: custom
+      list_template: "views/customer/List.cshtml"
+      style:
+        layout: table
+        theme_color: "#0284c7"
+
     ui:
       layout:
         theme: default

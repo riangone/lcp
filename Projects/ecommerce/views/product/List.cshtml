@@ -1,0 +1,153 @@
+@using Platform.Infrastructure.Definitions
+@model IEnumerable<Dictionary<string, object>>
+@{
+    var def = (ModelDefinition)ViewData["ModelDef"]!;
+    var modelName = (string)ViewData["ModelName"]!;
+    var total = (int)ViewData["Total"]!;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "ecommerce";
+    var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
+    var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+}
+
+<div class="ecommerce-shop">
+    <div class="shop-header">
+        <h1><span>🛒</span> @title</h1>
+        <span class="product-count">@total @(currentLang == "zh" ? "个产品" : "Products")</span>
+    </div>
+
+    <div class="product-grid">
+        @foreach (var product in Model)
+        {
+            var id = product[def.PrimaryKey]?.ToString() ?? "";
+            var name = product.ContainsKey("Name") ? product["Name"]?.ToString() ?? "" : "";
+            var price = product.ContainsKey("Price") ? product["Price"]?.ToString() ?? "0" : "0";
+            
+            <div class="product-card" data-id="@id">
+                <div class="product-image">📦</div>
+                <h3 class="product-name">@name</h3>
+                <div class="product-price">$@price</div>
+                <div class="product-actions">
+                    <a href="/ui/Product/edit/@id?project=@currentProject" class="btn-edit">✏️</a>
+                    <button class="btn-delete" onclick="openDeleteDialog('@modelName', '@id')">🗑️</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .ecommerce-shop {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
+        min-height: 100vh;
+    }
+
+    .shop-header {
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        border-radius: 16px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 10px 40px rgba(249, 115, 22, 0.3);
+    }
+
+    .shop-header h1 {
+        color: white;
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .product-count {
+        color: white;
+        font-size: 1.25rem;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.2);
+        padding: 0.5rem 1.25rem;
+        border-radius: 20px;
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .product-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s;
+        border: 2px solid transparent;
+    }
+
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 35px rgba(249, 115, 22, 0.25);
+        border-color: #f97316;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 180px;
+        background: linear-gradient(135deg, #fed7aa, #fdba74);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .product-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+    }
+
+    .product-price {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #f97316;
+        margin-bottom: 1rem;
+    }
+
+    .product-actions {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-edit, .btn-delete {
+        flex: 1;
+        padding: 0.625rem;
+        border-radius: 8px;
+        border: none;
+        font-size: 1.25rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .btn-edit {
+        background: #dbeafe;
+    }
+
+    .btn-edit:hover {
+        background: #3b82f6;
+    }
+
+    .btn-delete {
+        background: #fee2e2;
+    }
+
+    .btn-delete:hover {
+        background: #ef4444;
+    }
+</style>

@@ -199,6 +199,16 @@ models:
     table: Product
     primary_key: ProductId
 
+    # 专用 UI 视图定义 - 电商橙色购物风格
+    custom_view:
+      enabled: true
+      type: custom
+      default_ui_mode: custom
+      list_template: "views/product/List.cshtml"
+      style:
+        layout: grid
+        theme_color: "#f97316"
+
     ui:
       layout:
         theme: default

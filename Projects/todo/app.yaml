@@ -7,6 +7,17 @@ models:
     table: Task
     primary_key: Id
 
+    # 专用 UI 视图定义 - 清新绿色任务管理风格
+    custom_view:
+      enabled: true
+      type: custom
+      default_ui_mode: custom
+      list_template: "views/task/List.cshtml"
+      style:
+        layout: kanban
+        theme_color: "#10b981"
+        show_stats: true
+
     # UI 配置
     ui:
       layout:
