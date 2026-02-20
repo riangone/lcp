@@ -175,12 +175,19 @@ if (app.Environment.IsDevelopment())
 }
 
 // 首页显示项目信息（保留 query 参数）
-app.MapGet("/", (HttpContext context) => 
+app.MapGet("/", (HttpContext context) =>
 {
     var project = context.Request.Query["project"].FirstOrDefault();
-    return string.IsNullOrEmpty(project) 
-        ? Results.Redirect("/Home") 
-        : Results.Redirect($"/Home?project={project}");
+    if (string.IsNullOrEmpty(project))
+    {
+        return Results.Redirect("/Home");
+    }
+    // 天气应用重定向到专用 UI
+    if (project == "weather")
+    {
+        return Results.Redirect($"/ui/weather?project={project}");
+    }
+    return Results.Redirect($"/Home?project={project}");
 });
 app.MapGet("/docs", () => Results.Redirect("/scalar/v1"));
 

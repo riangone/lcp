@@ -4,11 +4,11 @@ using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
-public class WeatherUiController : Controller
+public class WeatherPageController : Controller
 {
     private readonly ProjectScope _projectScope;
 
-    public WeatherUiController(ProjectScope projectScope)
+    public WeatherPageController(ProjectScope projectScope)
     {
         _projectScope = projectScope;
     }

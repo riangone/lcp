@@ -18,6 +18,12 @@ public class HomeController : Controller
     {
         var project = _projectScope.CurrentProject;
 
+        // 天气应用使用专用 UI
+        if (project?.Name == "weather")
+        {
+            return RedirectToAction("Index", "WeatherPage");
+        }
+
         ViewData["Title"] = project?.HomeConfig?.Title ?? "LowCode Platform";
         ViewData["ActivePage"] = "Home";
         ViewData["Models"] = project?.AppDefinitions.Models;
