@@ -8,9 +8,17 @@ layout:
     title:
       zh: Chinook 音乐商店
       en: Chinook Music Store
+      ja: Chinook ミュージックストア
+      ko: Chinook 음악 상점
+      ja: Chinook ミュージックストア
+      ko: Chinook 음악 상점
     subtitle:
       zh: 探索音乐世界，管理艺术家、专辑和音轨
       en: Explore the world of music - artists, albums, and tracks
+      ja: 音楽の世界を探検、アーティスト、アルバム、トラックを管理
+      ko: 음악 세계 탐험, 아티스트, 앨범, 트랙 관리
+      ja: 音楽の世界を探検 - アーティスト、アルバム、音軌
+      ko: 음악 세계 탐험 - 아티스트, 앨범, 트랙
     style:
       background: "bg-gradient-to-br from-green-600 via-emerald-600 to-teal-600"
       title_size: "text-7xl"
@@ -26,52 +34,96 @@ layout:
     title:
       zh: 音乐导航
       en: Music Navigation
+      ja: ミュージックナビゲーション
+      ko: 음악 탐색
+      ja: 音楽ナビゲーション
+      ko: 음악 네비게이션
     actions:
       - icon: 🎤
         label:
           zh: 艺术家
           en: Artists
+          ja: アーティスト
+          ko: 아티스트
+          ja: アーティスト
+          ko: 아티스트
         href: "/ui/Artist?project=chinook"
         color: "green"
         description:
           zh: 管理艺术家信息
           en: Manage artist info
+          ja: アーティスト情報を管理
+          ko: 아티스트 정보 관리
+          ja: アーティスト情報を管理
+          ko: 아티스트 정보 관리
       - icon: 💿
         label:
           zh: 专辑
           en: Albums
+          ja: アルバム
+          ko: 앨범
+          ja: アルバム
+          ko: 앨범
         href: "/ui/Album?project=chinook"
         color: "emerald"
         description:
           zh: 浏览专辑收藏
           en: Browse album collection
+          ja: アルバムコレクションを閲覧
+          ko: 앨범 컬렉션 탐색
+          ja: アルバムコレクションを閲覧
+          ko: 앨범 컬렉션 탐색
       - icon: 🎶
         label:
           zh: 音轨
           en: Tracks
+          ja: トラック
+          ko: 트랙
+          ja: トラック
+          ko: 트랙
         href: "/ui/Track?project=chinook"
         color: "teal"
         description:
           zh: 管理音乐音轨
           en: Manage music tracks
+          ja: 音楽トラックを管理
+          ko: 음악 트랙 관리
+          ja: 音楽音軌を管理
+          ko: 음악 트랙 관리
       - icon: 🎧
         label:
           zh: 媒体类型
           en: Media Types
+          ja: メディアタイプ
+          ko: 미디어 유형
+          ja: メディアタイプ
+          ko: 미디어 유형
         href: "/ui/MediaType?project=chinook"
         color: "cyan"
         description:
           zh: 查看媒体格式
           en: View media formats
+          ja: メディアフォーマットを表示
+          ko: 미디어 형식 보기
+          ja: メディアフォーマットを表示
+          ko: 미디어 형식 보기
 
   # 音乐库管理
   - type: section_title
     title:
       zh: 音乐库管理
       en: Music Library
+      ja: ミュージックライブラリ管理
+      ko: 음악 라이브러리 관리
+      ja: 音楽ライブラリ
+      ko: 음악 라이브러리
     subtitle:
       zh: 管理您的音乐收藏
       en: Manage your music collection
+      ja: 音楽コレクションを管理
+      ko: 음악 컬렉션 관리
+      ja: 音楽コレクションを管理
+      ko: 음악 컬렉션 관리
     style:
       icon: "💎"
       align: "center"
@@ -80,6 +132,10 @@ layout:
     title:
       zh: 数据模型
       en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+      ja: データモデル
+      ko: 데이터 모델
     source: models
     card_style:
       base_class: "bg-gradient-to-br from-white via-green-50 to-emerald-50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border border-green-100"
@@ -95,9 +151,17 @@ layout:
     title:
       zh: 高级管理
       en: Advanced Management
+      ja: 高度な管理
+      ko: 고급 관리
+      ja: 高度な管理
+      ko: 고급 관리
     subtitle:
       zh: 多表关联视图
       en: Multi-table views
+      ja: マルチテーブル関連ビュー
+      ko: 다중 테이블 관련 뷰
+      ja: マルチテーブルビュー
+      ko: 멀티테이블 뷰
     style:
       icon: "🎼"
       align: "center"
@@ -106,6 +170,10 @@ layout:
     title:
       zh: 多表页面
       en: Multi-Table Pages
+      ja: マルチテーブルページ
+      ko: 다중 테이블 페이지
+      ja: マルチテーブルページ
+      ko: 다중 테이블 페이지
     source: pages
     card_style:
       base_class: "bg-gradient-to-br from-emerald-50 via-green-50 to-teal-50 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all duration-300 border-2 border-emerald-200"
@@ -120,6 +188,10 @@ layout:
     title:
       zh: 音乐库统计
       en: Library Statistics
+      ja: ミュージックライブラリ統計
+      ko: 음악 라이브러리 통계
+      ja: ライブラリ統計
+      ko: 라이브러리 통계
     background: "bg-gradient-to-r from-green-50 via-emerald-50 to-teal-50"
     items:
       - value: "8"
@@ -127,6 +199,10 @@ layout:
         label:
           zh: 数据模型
           en: Data Models
+          ja: データモデル
+          ko: 데이터 모델
+          ja: データモデル
+          ko: 데이터 모델
         color: "from-green-500 to-emerald-500"
         icon: "🎵"
       - value: "4"
@@ -134,6 +210,10 @@ layout:
         label:
           zh: 多表页面
           en: Multi-Table Pages
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
         color: "from-emerald-500 to-teal-500"
         icon: "📀"
       - value: "5"
@@ -141,6 +221,10 @@ layout:
         label:
           zh: 可用项目
           en: Projects
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
         color: "from-teal-500 to-cyan-500"
         icon: "📁"
       - value: "100"
@@ -148,6 +232,10 @@ layout:
         label:
           zh: 低代码
           en: Low-Code
+          ja: ローコード
+          ko: 로우코드
+          ja: ローコード
+          ko: 로우코드
         color: "from-lime-500 to-green-500"
         icon: "⚡"
 
@@ -156,9 +244,17 @@ layout:
     title:
       zh: 更多项目
       en: More Projects
+      ja: その他のプロジェクト
+      ko: 더 많은 프로젝트
+      ja: その他のプロジェクト
+      ko: 더 많은 프로젝트
     subtitle:
       zh: 探索其他功能
       en: Explore other features
+      ja: その他の機能を探検
+      ko: 다른 기능 탐색
+      ja: その他の機能を探検
+      ko: 다른 기능 탐색
     style:
       icon: "🎹"
       align: "center"
@@ -167,6 +263,10 @@ layout:
     title:
       zh: 可用项目
       en: Available Projects
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
     source: projects
     card_style:
       base_class: "rounded-2xl p-8 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 overflow-hidden"
@@ -181,9 +281,17 @@ layout:
         name:
           zh: TODO 项目管理
           en: TODO Project
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
         description:
           zh: 任务和项目管理系统
           en: Task and Project Management
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
         gradient: "from-blue-500 to-cyan-500"
         features:
           - "任务管理"
@@ -194,9 +302,17 @@ layout:
         name:
           zh: 我的日记本
           en: My Journal
+          ja: マイジャーナル
+          ko: 내 일기장
+          ja: マイジャーナル
+          ko: 내 일기장
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
         gradient: "from-purple-500 to-purple-600"
         features:
           - "日记记录"
@@ -207,9 +323,17 @@ layout:
         name:
           zh: Chinook 音乐商店
           en: Chinook Music Store
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
         description:
           zh: 艺术家、专辑、音轨管理
           en: Artist, Album, Track Management
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
         gradient: "from-green-500 to-emerald-600"
         features:
           - "音乐库管理"
@@ -221,9 +345,17 @@ layout:
         name:
           zh: 电商订单系统
           en: E-commerce Order System
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
         description:
           zh: 产品、订单、客户管理
           en: Product, Order, Customer
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
         gradient: "from-orange-500 to-red-500"
         features:
           - "产品管理"
@@ -234,9 +366,17 @@ layout:
         name:
           zh: CRM 客户管理
           en: CRM
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
         description:
           zh: 客户、销售机会、订单管理
           en: Customer, Opportunity, Order
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
         gradient: "from-indigo-500 to-pink-500"
         features:
           - "客户 360°视图"
@@ -250,15 +390,31 @@ layout:
       - text:
           zh: 音乐文档
           en: Music Docs
+          ja: ミュージックドキュメント
+          ko: 음악 문서
+          ja: 音楽ドキュメント
+          ko: 음악 문서
         href: "/docs"
       - text:
           zh: API
           en: API
+          ja: API
+          ko: API
+          ja: API
+          ko: API
         href: "/docs"
       - text:
           zh: 关于
           en: About
+          ja: について
+          ko: 정보
+          ja: について
+          ko: 정보
         href: "/docs"
     copyright:
       zh: "© 2026 Chinook Music Store. All rights reserved."
       en: "© 2026 Chinook Music Store. All rights reserved."
+      ja: "© 2026 Chinook Music Store. All rights reserved."
+      ko: "© 2026 Chinook Music Store. All rights reserved."
+      ja: "© 2026 Chinook Music Store. All rights reserved."
+      ko: "© 2026 Chinook Music Store. All rights reserved."

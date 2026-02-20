@@ -8,9 +8,17 @@ layout:
     title:
       zh: CRM 客户关系管理
       en: CRM Customer Relationship Management
+      ja: CRM 顧客関係管理
+      ko: CRM 고객 관계 관리
+      ja: CRM 顧客関係管理
+      ko: CRM 고객 관계 관리
     subtitle:
       zh: 完整的客户 360°视图，销售漏斗管理，报价订单跟踪，助力业务增长
       en: Complete 360° customer view, sales pipeline, quote and order tracking
+      ja: 完全な顧客 360°ビュー、販売ファネル管理、見積もり注文追跡でビジネス成長を支援
+      ko: 완전한 고객 360° 뷰, 판매 퍼널 관리, 견적 주문 추적으로 비즈니스 성장 지원
+      ja: 完全な顧客 360°ビュー、販売ファネル管理、見積もり注文追跡でビジネス成長を支援
+      ko: 완전한 고객 360° 뷰, 판매 퍼널 관리, 견적 주문 추적으로 비즈니스 성장 지원
     style:
       background: "bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600"
       title_size: "text-6xl"
@@ -25,6 +33,10 @@ layout:
     title:
       zh: 今日业务概览
       en: Today's Business Overview
+      ja: 今日のビジネス概要
+      ko: 오늘의 비즈니스 개요
+      ja: 今日のビジネス概要
+      ko: 오늘의 비즈니스 개요
     background: "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50"
     items:
       - value: "128"
@@ -32,6 +44,10 @@ layout:
         label:
           zh: 总客户数
           en: Total Customers
+          ja: 総顧客数
+          ko: 총 고객 수
+          ja: 総顧客数
+          ko: 총 고객 수
         icon: "👥"
         trend: "+12%"
       - value: "45"
@@ -39,6 +55,10 @@ layout:
         label:
           zh: 进行中商机
           en: Active Opportunities
+          ja: 進行中の商談
+          ko: 진행 중인 기회
+          ja: 進行中の商談
+          ko: 진행 중인 기회
         icon: "💰"
         trend: "+5%"
       - value: "23"
@@ -46,6 +66,10 @@ layout:
         label:
           zh: 待跟进
           en: To Follow Up
+          ja: フォローアップ待ち
+          ko: 팔로우업 대기
+          ja: フォローアップ待ち
+          ko: 팔로우업 대기
         icon: "📞"
         trend: "-3%"
       - value: "85"
@@ -53,6 +77,10 @@ layout:
         label:
           zh: 成交率
           en: Win Rate
+          ja: 成約率
+          ko: 성공률
+          ja: 成約率
+          ko: 성공률
         icon: "🎯"
         trend: "+2%"
 
@@ -61,9 +89,17 @@ layout:
     title:
       zh: 销售漏斗
       en: Sales Funnel
+      ja: 販売ファネル
+      ko: 판매 퍼널
+      ja: 販売ファネル
+      ko: 판매 퍼널
     subtitle:
       zh: 实时跟踪销售机会各阶段转化情况
       en: Track opportunity conversion at each stage
+      ja: 販売機会の各段階の転換状況をリアルタイムで追跡
+      ko: 판매 기회 각 단계 전환 상황 실시간 추적
+      ja: 販売機会の各段階の転換状況をリアルタイムで追跡
+      ko: 판매 기회 각 단계 전환 상황 실시간 추적
     style:
       icon: "📊"
       align: "center"
@@ -72,33 +108,61 @@ layout:
     title:
       zh: 销售机会漏斗
       en: Opportunity Funnel
+      ja: 販売機会ファネル
+      ko: 판매 기회 퍼널
+      ja: 販売機会ファネル
+      ko: 판매 기회 퍼널
     subtitle:
       zh: 从潜在客户到成交的完整转化路径
       en: Complete conversion path from lead to close
+      ja: 潜在顧客から成約までの完全な転換パス
+      ko: 잠재 고객에서 성사까지 완전한 전환 경로
+      ja: 潜在顧客から成約までの完全な転換パス
+      ko: 잠재 고객에서 성사까지 완전한 전환 경로
     stages:
       - name:
           zh: 初步接洽
           en: Prospecting
+          ja: 初步接触
+          ko: 초기 접촉
+          ja: 初步接触
+          ko: 초기 접촉
         value: 120
         color: "bg-blue-500"
       - name:
           zh: 需求确认
           en: Qualification
+          ja: ニーズ確認
+          ko: 요구 사항 확인
+          ja: ニーズ確認
+          ko: 요구 사항 확인
         value: 85
         color: "bg-indigo-500"
       - name:
           zh: 方案报价
           en: Proposal
+          ja: 提案見積もり
+          ko: 제안 견적
+          ja: 提案見積もり
+          ko: 제안 견적
         value: 62
         color: "bg-purple-500"
       - name:
           zh: 商务谈判
           en: Negotiation
+          ja: 商務交渉
+          ko: 비즈니스 협상
+          ja: 商務交渉
+          ko: 비즈니스 협상
         value: 38
         color: "bg-pink-500"
       - name:
           zh: 成交赢单
           en: Closed Won
+          ja: 成約
+          ko: 성공
+          ja: 成約
+          ko: 성공
         value: 24
         color: "bg-green-500"
 
@@ -107,18 +171,30 @@ layout:
     title:
       zh: 快捷操作
       en: Quick Actions
+      ja: クイック操作
+      ko: 빠른 작업
+      ja: クイック操作
+      ko: 빠른 작업
     roles:
       sales:
         - icon: "👥"
           label:
             zh: 我的客户
             en: My Customers
+            ja: 私の顧客
+            ko: 내 고객
+            ja: 私の顧客
+            ko: 내 고객
           href: "/ui/Customer?project=crm"
           color: "blue"
         - icon: "💰"
           label:
             zh: 我的商机
             en: My Opportunities
+            ja: 私の商談
+            ko: 내 기회
+            ja: 私の商談
+            ko: 내 기회
           href: "/ui/Opportunity?project=crm"
           color: "green"
           badge: "5"
@@ -126,12 +202,20 @@ layout:
           label:
             zh: 创建报价
             en: Create Quote
+            ja: 見積もり作成
+            ko: 견적 생성
+            ja: 見積もり作成
+            ko: 견적 생성
           href: "/ui/Quote?project=crm"
           color: "purple"
         - icon: "📞"
           label:
             zh: 待跟进
             en: Follow Ups
+            ja: フォローアップ待ち
+            ko: 팔로우업 대기
+            ja: フォローアップ待ち
+            ko: 팔로우업 대기
           href: "/ui/Contact?project=crm"
           color: "orange"
           badge: "12"
@@ -140,24 +224,40 @@ layout:
           label:
             zh: 销售报表
             en: Sales Report
+            ja: 販売レポート
+            ko: 판매 보고서
+            ja: 販売レポート
+            ko: 판매 보고서
           href: "/ui/Opportunity?project=crm&view=report"
           color: "blue"
         - icon: "👥"
           label:
             zh: 团队管理
             en: Team Management
+            ja: チーム管理
+            ko: 팀 관리
+            ja: チーム管理
+            ko: 팀 관리
           href: "/ui/Employee?project=crm"
           color: "green"
         - icon: "🎯"
           label:
             zh: 目标设定
             en: Targets
+            ja: 目標設定
+            ko: 목표 설정
+            ja: 目標設定
+            ko: 목표 설정
           href: "/ui/Opportunity?project=crm&view=targets"
           color: "purple"
         - icon: "📈"
           label:
             zh: 业绩分析
             en: Performance
+            ja: 業績分析
+            ko: 실적 분석
+            ja: 業績分析
+            ko: 실적 분석
           href: "/ui/Order?project=crm&view=analytics"
           color: "orange"
 
@@ -166,9 +266,17 @@ layout:
     title:
       zh: 业务模块
       en: Business Modules
+      ja: ビジネスモジュール
+      ko: 비즈니스 모듈
+      ja: ビジネスモジュール
+      ko: 비즈니스 모듈
     subtitle:
       zh: 客户管理、销售机会、报价订单全流程管理
       en: Customer, opportunity, quote and order management
+      ja: 顧客管理、販売機会、見積もり注文のフルプロセス管理
+      ko: 고객 관리, 판매 기회, 견적 주문 전 과정 관리
+      ja: 顧客管理、販売機会、見積もり注文のフルプロセス管理
+      ko: 고객 관리, 판매 기회, 견적 주문 전 과정 관리
     style:
       icon: "🗂️"
       align: "center"
@@ -184,9 +292,17 @@ layout:
         title:
           zh: 客户管理
           en: Customer Management
+          ja: 顧客管理
+          ko: 고객 관리
+          ja: 顧客管理
+          ko: 고객 관리
         description:
           zh: 360°客户视图，完整客户信息
           en: 360° customer view with complete info
+          ja: 360°顧客ビュー、完全な顧客情報
+          ko: 360° 고객 뷰, 완전한 고객 정보
+          ja: 360°顧客ビュー、完全な顧客情報
+          ko: 360° 고객 뷰, 완전한 고객 정보
         href: "/ui/Customer?project=crm"
         gradient: "from-blue-500 to-cyan-500"
         stats:
@@ -198,9 +314,17 @@ layout:
         title:
           zh: 联系人管理
           en: Contact Management
+          ja: 連絡先管理
+          ko: 연락처 관리
+          ja: 連絡先管理
+          ko: 연락처 관리
         description:
           zh: 客户联系人，决策链管理
           en: Customer contacts and decision makers
+          ja: 顧客連絡先、意思決定チェーン管理
+          ko: 고객 연락처, 의사 결정 체인 관리
+          ja: 顧客連絡先、意思決定チェーン管理
+          ko: 고객 연락처, 의사 결정 체인 관리
         href: "/ui/Contact?project=crm"
         gradient: "from-indigo-500 to-purple-500"
         stats:
@@ -212,9 +336,17 @@ layout:
         title:
           zh: 销售机会
           en: Opportunities
+          ja: 販売機会
+          ko: 판매 기회
+          ja: 販売機会
+          ko: 판매 기회
         description:
           zh: 销售漏斗，商机阶段跟踪
           en: Sales pipeline and opportunity tracking
+          ja: 販売ファネル、商談段階追跡
+          ko: 판매 퍼널, 기회 단계 추적
+          ja: 販売ファネル、商談段階追跡
+          ko: 판매 퍼널, 기회 단계 추적
         href: "/ui/Opportunity?project=crm"
         gradient: "from-amber-500 to-orange-500"
         stats:
@@ -226,9 +358,17 @@ layout:
         title:
           zh: 报价管理
           en: Quote Management
+          ja: 見積もり管理
+          ko: 견적 관리
+          ja: 見積もり管理
+          ko: 견적 관리
         description:
           zh: 快速报价，价格审批流程
           en: Quick quotes and price approval
+          ja: クイック見積もり、価格承認フロー
+          ko: 빠른 견적, 가격 승인 프로세스
+          ja: クイック見積もり、価格承認フロー
+          ko: 빠른 견적, 가격 승인 프로세스
         href: "/ui/Quote?project=crm"
         gradient: "from-green-500 to-emerald-500"
         stats:
@@ -240,9 +380,17 @@ layout:
         title:
           zh: 订单管理
           en: Order Management
+          ja: 注文管理
+          ko: 주문 관리
+          ja: 注文管理
+          ko: 주문 관리
         description:
           zh: 销售订单，合同执行跟踪
           en: Sales orders and contract tracking
+          ja: 販売注文、契約履行追跡
+          ko: 판매 주문, 계약 이행 추적
+          ja: 販売注文、契約履行追跡
+          ko: 판매 주문, 계약 이행 추적
         href: "/ui/Order?project=crm"
         gradient: "from-pink-500 to-rose-500"
         stats:
@@ -254,9 +402,17 @@ layout:
         title:
           zh: 产品管理
           en: Product Management
+          ja: 製品管理
+          ko: 제품 관리
+          ja: 製品管理
+          ko: 제품 관리
         description:
           zh: 产品目录，价格库存管理
           en: Product catalog, price and inventory
+          ja: 製品カタログ、価格在庫管理
+          ko: 제품 카탈로그, 가격 재고 관리
+          ja: 製品カタログ、価格在庫管理
+          ko: 제품 카탈로그, 가격 재고 관리
         href: "/ui/Product?project=crm"
         gradient: "from-teal-500 to-cyan-500"
         stats:
@@ -270,9 +426,17 @@ layout:
     title:
       zh: 待办事项
       en: Tasks & Reminders
+      ja: やるべきこと
+      ko: 할 일
+      ja: やるべきこと
+      ko: 할 일
     subtitle:
       zh: 重要待跟进事项，不错过任何商机
       en: Important follow-ups, never miss an opportunity
+      ja: 重要なフォローアップ事項、どんな商機も逃さない
+      ko: 중요한 팔로우업 사항, 어떤 기회도 놓치지 않음
+      ja: 重要なフォローアップ事項、どんな商機も逃さない
+      ko: 중요한 팔로우업 사항, 어떤 기회도 놓치지 않음
     style:
       icon: "⏰"
       align: "center"
@@ -281,35 +445,59 @@ layout:
     title:
       zh: 今日待办
       en: Today's Tasks
+      ja: 今日のやるべきこと
+      ko: 오늘의 할 일
+      ja: 今日のやるべきこと
+      ko: 오늘의 할 일
     items:
       - icon: "📞"
         text:
           zh: 回访 ABC 科技公司 - 张总
           en: Follow up with ABC Tech - Mr. Zhang
+          ja: 回访 ABC 科技公司 - 张总
+          ko: 回访 ABC 科技公司 - 张总
+          ja: ABC テック社 - 張様へフォローアップ
+          ko: ABC 테크 - 장 사장님 팔로우업
         time: "上午 10:00"
         priority: "high"
       - icon: "📧"
         text:
           zh: 发送 XYZ 集团报价方案
           en: Send quote to XYZ Group
+          ja: 发送 XYZ 集团报价方案
+          ko: 发送 XYZ 集团报价方案
+          ja: XYZ グループに見積もりを送付
+          ko: XYZ 그룹에 견적서 발송
         time: "下午 2:00"
         priority: "high"
       - icon: "🤝"
         text:
           zh: 与 LMN 公司合同谈判
           en: Contract negotiation with LMN Corp
+          ja: 与 LMN 公司合同谈判
+          ko: 与 LMN 公司合同谈判
+          ja: LMN 社と契約交渉
+          ko: LMN 과 계약 협상
         time: "下午 4:00"
         priority: "medium"
       - icon: "📝"
         text:
           zh: 更新 Q1 销售预测报告
           en: Update Q1 sales forecast report
+          ja: 更新 Q1 销售预测报告
+          ko: 更新 Q1 销售预测报告
+          ja: Q1 販売予測レポートを更新
+          ko: Q1 판매 예측 보고서 업데이트
         time: "下班前"
         priority: "medium"
       - icon: "👥"
         text:
           zh: 新客户入职培训准备
           en: Prepare new customer onboarding
+          ja: 新客户入职培训准备
+          ko: 新客户入职培训准备
+          ja: 新規顧客オンボーディングを準備
+          ko: 신규 고객 온보딩 준비
         time: "本周内"
         priority: "low"
 
@@ -318,9 +506,17 @@ layout:
     title:
       zh: 最近活动
       en: Recent Activities
+      ja: 最近のアクティビティ
+      ko: 최근 활동
+      ja: 最近のアクティビティ
+      ko: 최근 활동
     subtitle:
       zh: 团队最新动态，业务进展一目了然
       en: Latest team activities and business progress
+      ja: チームの最新動向、ビジネス進捗が一目でわかる
+      ko: 팀 최신 동향, 비즈니스 진행 상황 한눈에 확인
+      ja: チームの最新動向、ビジネス進捗が一目でわかる
+      ko: 팀 최신 동향, 비즈니스 진행 상황 한눈에 확인
     style:
       icon: "📅"
       align: "center"
@@ -329,9 +525,17 @@ layout:
     title:
       zh: 活动记录
       en: Activity Log
+      ja: アクティビティ記録
+      ko: 활동 기록
+      ja: アクティビティ記録
+      ko: 활동 기록
     subtitle:
       zh: 最近 30 天的业务活动
       en: Business activities in last 30 days
+      ja: 過去 30 日間のビジネスアクティビティ
+      ko: 지난 30 일 동안의 비즈니스 활동
+      ja: 過去 30 日間のビジネスアクティビティ
+      ko: 지난 30 일 동안의 비즈니스 활동
     limit: 8
 
   # ==================== 数据模型快速访问 ====================
@@ -339,9 +543,17 @@ layout:
     title:
       zh: 数据管理
       en: Data Management
+      ja: データ管理
+      ko: 데이터 관리
+      ja: データ管理
+      ko: 데이터 관리
     subtitle:
       zh: 管理所有业务数据模型
       en: Manage all business data models
+      ja: すべてのビジネスデータモデルを管理
+      ko: 모든 비즈니스 데이터 모델 관리
+      ja: すべてのビジネスデータモデルを管理
+      ko: 모든 비즈니스 데이터 모델 관리
     style:
       icon: "🗄️"
       align: "left"
@@ -350,6 +562,10 @@ layout:
     title:
       zh: 数据模型
       en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+      ja: データモデル
+      ko: 데이터 모델
     source: models
     card_style:
       base_class: "bg-gradient-to-br from-white via-blue-50 to-indigo-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-blue-400"
@@ -367,19 +583,39 @@ layout:
       - text:
           zh: CRM 文档
           en: CRM Documentation
+          ja: CRM ドキュメント
+          ko: CRM 문서
+          ja: CRM ドキュメント
+          ko: CRM 문서
         href: "/docs"
       - text:
           zh: API 参考
           en: API Reference
+          ja: API リファレンス
+          ko: API 참조
+          ja: API リファレンス
+          ko: API 참조
         href: "/docs"
       - text:
           zh: 用户手册
           en: User Manual
+          ja: ユーザーマニュアル
+          ko: 사용자 매뉴얼
+          ja: ユーザーマニュアル
+          ko: 사용자 매뉴얼
         href: "/docs"
       - text:
           zh: 关于系统
           en: About
+          ja: システムについて
+          ko: 시스템 정보
+          ja: システムについて
+          ko: 시스템 정보
         href: "/docs"
     copyright:
       zh: "© 2026 CRM 客户关系管理系统。All rights reserved."
       en: "© 2026 CRM Customer Relationship Management. All rights reserved."
+      ja: "© 2026 CRM 客户关系管理系统。All rights reserved."
+      ko: "© 2026 CRM 客户关系管理系统。All rights reserved."
+      ja: "© 2026 CRM 顧客関係管理システム。All rights reserved."
+      ko: "© 2026 CRM 고객 관계 관리 시스템. All rights reserved."

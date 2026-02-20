@@ -8,9 +8,17 @@ layout:
     title:
       zh: 我的日记本
       en: My Journal
+      ja: マイジャーナル
+      ko: 내 일기장
+      ja: マイジャーナル
+      ko: 내 일기장
     subtitle:
       zh: 记录生活点滴，珍藏美好回忆
       en: Record life's moments, cherish beautiful memories
+      ja: 记录生活点滴，珍藏美好回忆
+      ko: 记录生活点滴，珍藏美好回忆
+      ja: 人生の瞬間を記録し、美しい思い出を大切に
+      ko: 인생의 순간 기록, 아름다운 추억 간직
     style:
       background: "bg-gradient-to-br from-purple-600 via-violet-600 to-fuchsia-600"
       title_size: "text-6xl"
@@ -26,52 +34,96 @@ layout:
     title:
       zh: 开始记录
       en: Start Writing
+      ja: 开始记录
+      ko: 开始记录
+      ja: 執筆開始
+      ko: 쓰기 시작
     actions:
       - icon: ✍️
         label:
           zh: 写日记
           en: Write Entry
+          ja: 写日记
+          ko: 写日记
+          ja: エントリー作成
+          ko: 일기 작성
         href: "/ui/Entry?project=journal&ui=custom"
         color: "purple"
         description:
           zh: 记录今天的故事
           en: Write today's story
+          ja: 记录今天的故事
+          ko: 记录今天的故事
+          ja: 今日の物語を書く
+          ko: 오늘의 이야기 작성
       - icon: 🏷️
         label:
           zh: 分类管理
           en: Categories
+          ja: カテゴリ管理
+          ko: 카테고리 관리
+          ja: カテゴリ
+          ko: 카테고리
         href: "/ui/Category?project=journal"
         color: "violet"
         description:
           zh: 管理日记分类
           en: Manage categories
+          ja: 管理日记分类
+          ko: 管理日记分类
+          ja: カテゴリを管理
+          ko: 카테고리 관리
       - icon: 🎨
         label:
           zh: 标签管理
           en: Tags
+          ja: 标签管理
+          ko: 标签管理
+          ja: タグ
+          ko: 태그
         href: "/ui/Tag?project=journal"
         color: "fuchsia"
         description:
           zh: 管理标签
           en: Manage tags
+          ja: 管理标签
+          ko: 管理标签
+          ja: タグを管理
+          ko: 태그 관리
       - icon: 😊
         label:
           zh: 心情追踪
           en: Mood Tracker
+          ja: 気分トラッキング
+          ko: 기분 추적
+          ja: 気分トラッカー
+          ko: 기분 추적기
         href: "/ui/EntryWithCategory?project=journal"
         color: "pink"
         description:
           zh: 查看心情记录
           en: View mood entries
+          ja: 查看心情记录
+          ko: 查看心情记录
+          ja: 気分エントリーを表示
+          ko: 기분 항목 보기
 
   # 日记数据管理
   - type: section_title
     title:
       zh: 日记管理
       en: Journal Management
+      ja: 日记管理
+      ko: 日记管理
+      ja: ジャーナル管理
+      ko: 일기장 관리
     subtitle:
       zh: 管理您的日记和分类
       en: Manage your entries and categories
+      ja: 管理您的日记和分类
+      ko: 管理您的日记和分类
+      ja: エントリーとカテゴリを管理
+      ko: 항목 및 카테고리 관리
     style:
       icon: "📖"
       align: "center"
@@ -80,6 +132,10 @@ layout:
     title:
       zh: 数据模型
       en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+      ja: データモデル
+      ko: 데이터 모델
     source: models
     card_style:
       base_class: "bg-gradient-to-br from-white via-purple-50 to-pink-50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-purple-400"
@@ -95,9 +151,17 @@ layout:
     title:
       zh: 统计视图
       en: Statistics Views
+      ja: 统计视图
+      ko: 统计视图
+      ja: 統計ビュー
+      ko: 통계 뷰
     subtitle:
       zh: 查看日记统计数据
       en: View journal statistics
+      ja: 查看日记统计数据
+      ko: 查看日记统计数据
+      ja: ジャーナル統計を表示
+      ko: 일기장 통계 보기
     style:
       icon: "📊"
       align: "center"
@@ -106,6 +170,10 @@ layout:
     title:
       zh: 统计与视图
       en: Stats & Views
+      ja: 统计与视图
+      ko: 统计与视图
+      ja: 統計とビュー
+      ko: 통계 및 뷰
     source: models
     card_style:
       base_class: "bg-gradient-to-br from-violet-50 to-purple-50 rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-2 border-violet-200"
@@ -120,6 +188,10 @@ layout:
     title:
       zh: 日记概览
       en: Journal Overview
+      ja: 日记概览
+      ko: 日记概览
+      ja: ジャーナル概要
+      ko: 일기장 개요
     background: "bg-gradient-to-r from-purple-50 via-pink-50 to-violet-50"
     items:
       - value: "6"
@@ -127,6 +199,10 @@ layout:
         label:
           zh: 数据模型
           en: Data Models
+          ja: データモデル
+          ko: 데이터 모델
+          ja: データモデル
+          ko: 데이터 모델
         color: "from-purple-500 to-pink-500"
         icon: "📝"
       - value: "5"
@@ -134,6 +210,10 @@ layout:
         label:
           zh: 可用项目
           en: Projects
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
         color: "from-violet-500 to-fuchsia-500"
         icon: "📁"
       - value: "40"
@@ -141,6 +221,10 @@ layout:
         label:
           zh: 总模型数
           en: Total Models
+          ja: 总模型数
+          ko: 总模型数
+          ja: 総モデル数
+          ko: 총 모델 수
         color: "from-pink-500 to-rose-500"
         icon: "🗄️"
       - value: "100"
@@ -148,6 +232,10 @@ layout:
         label:
           zh: 低代码
           en: Low-Code
+          ja: ローコード
+          ko: 로우코드
+          ja: ローコード
+          ko: 로우코드
         color: "from-green-500 to-emerald-500"
         icon: "⚡"
 
@@ -156,9 +244,17 @@ layout:
     title:
       zh: 其他项目
       en: Other Projects
+      ja: 其他项目
+      ko: 其他项目
+      ja: 他のプロジェクト
+      ko: 다른 프로젝트
     subtitle:
       zh: 探索更多功能
       en: Explore more features
+      ja: 探索更多功能
+      ko: 探索更多功能
+      ja: さらに機能を探検
+      ko: 더 많은 기능 탐색
     style:
       icon: "🌈"
       align: "center"
@@ -167,6 +263,10 @@ layout:
     title:
       zh: 可用项目
       en: Available Projects
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
     source: projects
     card_style:
       base_class: "rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
@@ -181,9 +281,17 @@ layout:
         name:
           zh: TODO 项目管理
           en: TODO Project
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
         description:
           zh: 任务和项目管理系统
           en: Task and Project Management
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
         gradient: "from-blue-500 to-cyan-500"
         features:
           - "任务管理"
@@ -194,9 +302,17 @@ layout:
         name:
           zh: 我的日记本
           en: My Journal
+          ja: マイジャーナル
+          ko: 내 일기장
+          ja: マイジャーナル
+          ko: 내 일기장
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
         gradient: "from-purple-500 to-pink-500"
         features:
           - "日记记录"
@@ -208,9 +324,17 @@ layout:
         name:
           zh: Chinook 音乐商店
           en: Chinook Music Store
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
         description:
           zh: 艺术家、专辑、音轨管理
           en: Artist, Album, Track Management
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
         gradient: "from-green-500 to-emerald-600"
         features:
           - "音乐库管理"
@@ -221,9 +345,17 @@ layout:
         name:
           zh: 电商订单系统
           en: E-commerce Order System
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
         description:
           zh: 产品、订单、客户管理
           en: Product, Order, Customer
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
         gradient: "from-orange-500 to-red-500"
         features:
           - "产品管理"
@@ -234,9 +366,17 @@ layout:
         name:
           zh: CRM 客户管理
           en: CRM
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
         description:
           zh: 客户、销售机会、订单管理
           en: Customer, Opportunity, Order
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
         gradient: "from-indigo-500 to-pink-500"
         features:
           - "客户 360°视图"
@@ -250,15 +390,31 @@ layout:
       - text:
           zh: 日记文档
           en: Journal Docs
+          ja: 日记文档
+          ko: 日记文档
+          ja: ジャーナルドキュメント
+          ko: 일기장 문서
         href: "/docs"
       - text:
           zh: API
           en: API
+          ja: API
+          ko: API
+          ja: API
+          ko: API
         href: "/docs"
       - text:
           zh: 关于
           en: About
+          ja: について
+          ko: 정보
+          ja: について
+          ko: 정보
         href: "/docs"
     copyright:
       zh: "© 2026 我的日记本。All rights reserved."
       en: "© 2026 My Journal. All rights reserved."
+      ja: "© 2026 我的日记本。All rights reserved."
+      ko: "© 2026 我的日记本。All rights reserved."
+      ja: "© 2026 我的日记本。All rights reserved."
+      ko: "© 2026 我的日记本。All rights reserved."

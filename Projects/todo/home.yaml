@@ -8,9 +8,17 @@ layout:
     title:
       zh: TODO 项目管理
       en: TODO Project Management
+      ja: TODO プロジェクト管理
+      ko: TODO 프로젝트 관리
+      ja: TODO プロジェクト管理
+      ko: TODO 프로젝트 관리
     subtitle:
       zh: 高效的任务和项目管理系统，让工作更有序
       en: Efficient task and project management system
+      ja: 高效的任务和项目管理系统，让工作更有序
+      ko: 高效的任务和项目管理系统，让工作更有序
+      ja: 効率的なタスクとプロジェクト管理システム
+      ko: 효율적인 작업 및 프로젝트 관리 시스템
     style:
       background: "bg-gradient-to-br from-blue-600 via-blue-700 to-cyan-600"
       title_size: "text-6xl"
@@ -26,43 +34,79 @@ layout:
     title:
       zh: 快速开始
       en: Quick Start
+      ja: 快速开始
+      ko: 快速开始
+      ja: クイックスタート
+      ko: 빠른 시작
     actions:
       - icon: 📝
         label:
           zh: 创建任务
           en: New Task
+          ja: 创建任务
+          ko: 创建任务
+          ja: 新規タスク
+          ko: 새 작업
         href: "/ui/Task?project=todo"
         color: "blue"
         description:
           zh: 快速添加新任务
           en: Add a new task
+          ja: 快速添加新任务
+          ko: 快速添加新任务
+          ja: 新しいタスクを追加
+          ko: 새 작업 추가
       - icon: 📁
         label:
           zh: 项目管理
           en: Projects
+          ja: プロジェクト
+          ko: 프로젝트
+          ja: プロジェクト
+          ko: 프로젝트
         href: "/ui/Project?project=todo"
         color: "indigo"
         description:
           zh: 管理项目信息
           en: Manage projects
+          ja: 管理项目信息
+          ko: 管理项目信息
+          ja: プロジェクトを管理
+          ko: 프로젝트 관리
       - icon: 📊
         label:
           zh: 任务统计
           en: Task Stats
+          ja: 任务统计
+          ko: 任务统计
+          ja: タスク統計
+          ko: 작업 통계
         href: "/ui/TaskWithProject?project=todo"
         color: "cyan"
         description:
           zh: 查看任务详情
           en: View task details
+          ja: 查看任务详情
+          ko: 查看任务详情
+          ja: タスクの詳細を表示
+          ko: 작업 세부 정보 보기
 
   # 数据模型网格
   - type: section_title
     title:
       zh: 数据管理
       en: Data Management
+      ja: データ管理
+      ko: 데이터 관리
+      ja: データ管理
+      ko: 데이터 관리
     subtitle:
       zh: 管理您的任务数据
       en: Manage your task data
+      ja: 管理您的任务数据
+      ko: 管理您的任务数据
+      ja: タスクデータを管理
+      ko: 작업 데이터 관리
     style:
       icon: "📊"
       align: "center"
@@ -71,6 +115,10 @@ layout:
     title:
       zh: 数据模型
       en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+      ja: データモデル
+      ko: 데이터 모델
     source: models
     card_style:
       base_class: "bg-white rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border-l-4 border-blue-500"
@@ -86,6 +134,10 @@ layout:
     title:
       zh: 平台概览
       en: Platform Overview
+      ja: 平台概览
+      ko: 平台概览
+      ja: プラットフォーム概要
+      ko: 플랫폼 개요
     background: "bg-gradient-to-r from-blue-50 to-cyan-50"
     items:
       - value: "5"
@@ -93,6 +145,10 @@ layout:
         label:
           zh: 可用项目
           en: Projects
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
         color: "from-blue-500 to-cyan-500"
         icon: "📁"
       - value: "40"
@@ -100,6 +156,10 @@ layout:
         label:
           zh: 数据模型
           en: Data Models
+          ja: データモデル
+          ko: 데이터 모델
+          ja: データモデル
+          ko: 데이터 모델
         color: "from-indigo-500 to-purple-500"
         icon: "🗄️"
       - value: "12"
@@ -107,6 +167,10 @@ layout:
         label:
           zh: 多表页面
           en: Multi-Table Pages
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
         color: "from-orange-500 to-red-500"
         icon: "📄"
       - value: "100"
@@ -114,6 +178,10 @@ layout:
         label:
           zh: YAML 驱动
           en: YAML-Driven
+          ja: YAML 驱动
+          ko: YAML 驱动
+          ja: YAML 駆動
+          ko: YAML 기반
         color: "from-green-500 to-emerald-500"
         icon: "⚡"
 
@@ -122,9 +190,17 @@ layout:
     title:
       zh: 切换项目
       en: Switch Project
+      ja: 切换项目
+      ko: 切换项目
+      ja: プロジェクト切替
+      ko: 프로젝트 전환
     subtitle:
       zh: 选择其他项目
       en: Select another project
+      ja: 选择其他项目
+      ko: 选择其他项目
+      ja: 別のプロジェクトを選択
+      ko: 다른 프로젝트 선택
     style:
       icon: "🔄"
       align: "center"
@@ -133,6 +209,10 @@ layout:
     title:
       zh: 可用项目
       en: Available Projects
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
     source: projects
     card_style:
       base_class: "rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
@@ -147,9 +227,17 @@ layout:
         name:
           zh: TODO 项目管理
           en: TODO Project
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
         description:
           zh: 任务和项目管理系统
           en: Task and Project Management
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
         gradient: "from-blue-500 to-cyan-500"
         features:
           - "任务管理"
@@ -161,9 +249,17 @@ layout:
         name:
           zh: 我的日记本
           en: My Journal
+          ja: マイジャーナル
+          ko: 내 일기장
+          ja: マイジャーナル
+          ko: 내 일기장
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
         gradient: "from-purple-500 to-purple-600"
         features:
           - "日记记录"
@@ -174,9 +270,17 @@ layout:
         name:
           zh: Chinook 音乐商店
           en: Chinook Music Store
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
         description:
           zh: 艺术家、专辑、音轨管理
           en: Artist, Album, Track Management
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
         gradient: "from-green-500 to-emerald-600"
         features:
           - "音乐库管理"
@@ -187,9 +291,17 @@ layout:
         name:
           zh: 电商订单系统
           en: E-commerce Order System
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
         description:
           zh: 产品、订单、客户管理
           en: Product, Order, Customer
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
         gradient: "from-orange-500 to-red-500"
         features:
           - "产品管理"
@@ -200,9 +312,17 @@ layout:
         name:
           zh: CRM 客户管理
           en: CRM
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
         description:
           zh: 客户、销售机会、订单管理
           en: Customer, Opportunity, Order
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
         gradient: "from-indigo-500 to-pink-500"
         features:
           - "客户 360°视图"
@@ -216,15 +336,31 @@ layout:
       - text:
           zh: 文档
           en: Documentation
+          ja: 文档
+          ko: 文档
+          ja: ドキュメント
+          ko: 문서
         href: "/docs"
       - text:
           zh: API
           en: API
+          ja: API
+          ko: API
+          ja: API
+          ko: API
         href: "/docs"
       - text:
           zh: GitHub
           en: GitHub
+          ja: GitHub
+          ko: GitHub
+          ja: GitHub
+          ko: GitHub
         href: "https://github.com"
     copyright:
       zh: "© 2026 TODO Project. All rights reserved."
       en: "© 2026 TODO Project. All rights reserved."
+      ja: "© 2026 TODO Project. All rights reserved."
+      ko: "© 2026 TODO Project. All rights reserved."
+      ja: "© 2026 TODO Project. All rights reserved."
+      ko: "© 2026 TODO Project. All rights reserved."

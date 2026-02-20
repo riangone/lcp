@@ -8,9 +8,17 @@ layout:
     title:
       zh: 电商订单系统
       en: E-commerce Order System
+      ja: E コマース注文システム
+      ko: 이커머스 주문 시스템
+      ja: E コマース注文システム
+      ko: 이커머스 주문 시스템
     subtitle:
       zh: 一站式产品、订单、客户管理平台
       en: All-in-one product, order, and customer management
+      ja: 一站式产品、订单、客户管理平台
+      ko: 一站式产品、订单、客户管理平台
+      ja: 製品、注文、顧客のオールインワン管理
+      ko: 원스톱 제품, 주문, 고객 관리
     style:
       background: "bg-gradient-to-br from-orange-500 via-amber-500 to-red-500"
       title_size: "text-6xl"
@@ -26,52 +34,96 @@ layout:
     title:
       zh: 快捷操作
       en: Quick Actions
+      ja: クイック操作
+      ko: 빠른 작업
+      ja: クイック操作
+      ko: 빠른 작업
     actions:
       - icon: 📦
         label:
           zh: 产品管理
           en: Products
+          ja: 製品管理
+          ko: 제품 관리
+          ja: 製品管理
+          ko: 제품 관리
         href: "/ui/Product?project=ecommerce"
         color: "orange"
         description:
           zh: 管理产品目录
           en: Manage product catalog
+          ja: 管理产品目录
+          ko: 管理产品目录
+          ja: 製品カタログを管理
+          ko: 제품 카탈로그 관리
       - icon: 🛍️
         label:
           zh: 订单处理
           en: Orders
+          ja: 注文処理
+          ko: 주문 처리
+          ja: 注文処理
+          ko: 주문 처리
         href: "/ui/Order?project=ecommerce"
         color: "red"
         description:
           zh: 处理客户订单
           en: Process customer orders
+          ja: 处理客户订单
+          ko: 处理客户订单
+          ja: 顧客注文を処理
+          ko: 고객 주문 처리
       - icon: 👥
         label:
           zh: 客户管理
           en: Customers
+          ja: 顧客管理
+          ko: 고객 관리
+          ja: 顧客管理
+          ko: 고객 관리
         href: "/ui/Customer?project=ecommerce"
         color: "amber"
         description:
           zh: 管理客户信息
           en: Manage customer info
+          ja: 管理客户信息
+          ko: 管理客户信息
+          ja: 顧客情報を管理
+          ko: 고객 정보 관리
       - icon: 📊
         label:
           zh: 销售分析
           en: Sales Analytics
+          ja: 销售分析
+          ko: 销售分析
+          ja: 販売分析
+          ko: 판매 분석
         href: "/ui/ProductSales?project=ecommerce"
         color: "yellow"
         description:
           zh: 查看销售数据
           en: View sales data
+          ja: 查看销售数据
+          ko: 查看销售数据
+          ja: 販売データを表示
+          ko: 판매 데이터 보기
 
   # 电商数据管理
   - type: section_title
     title:
       zh: 电商数据
       en: E-commerce Data
+      ja: 电商数据
+      ko: 电商数据
+      ja: E コマースデータ
+      ko: 이커머스 데이터
     subtitle:
       zh: 管理您的电商业务数据
       en: Manage your e-commerce business
+      ja: 管理您的电商业务数据
+      ko: 管理您的电商业务数据
+      ja: E コマースビジネスを管理
+      ko: 이커머스 비즈니스 관리
     style:
       icon: "🏪"
       align: "center"
@@ -80,6 +132,10 @@ layout:
     title:
       zh: 数据模型
       en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+      ja: データモデル
+      ko: 데이터 모델
     source: models
     card_style:
       base_class: "bg-gradient-to-br from-white to-orange-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-orange-100"
@@ -95,9 +151,17 @@ layout:
     title:
       zh: 高级功能
       en: Advanced Features
+      ja: 高级功能
+      ko: 高级功能
+      ja: 高度な機能
+      ko: 고급 기능
     subtitle:
       zh: 多表关联管理
       en: Multi-table management
+      ja: 多表关联管理
+      ko: 多表关联管理
+      ja: マルチテーブル管理
+      ko: 멀티테이블 관리
     style:
       icon: "🔗"
       align: "center"
@@ -106,6 +170,10 @@ layout:
     title:
       zh: 多表页面
       en: Multi-Table Pages
+      ja: マルチテーブルページ
+      ko: 다중 테이블 페이지
+      ja: マルチテーブルページ
+      ko: 다중 테이블 페이지
     source: pages
     card_style:
       base_class: "bg-gradient-to-br from-orange-50 to-amber-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border border-orange-200"
@@ -120,6 +188,10 @@ layout:
     title:
       zh: 业务概览
       en: Business Overview
+      ja: 业务概览
+      ko: 业务概览
+      ja: ビジネス概要
+      ko: 비즈니스 개요
     background: "bg-gradient-to-r from-orange-50 via-amber-50 to-red-50"
     items:
       - value: "8"
@@ -127,6 +199,10 @@ layout:
         label:
           zh: 数据模型
           en: Data Models
+          ja: データモデル
+          ko: 데이터 모델
+          ja: データモデル
+          ko: 데이터 모델
         color: "from-orange-500 to-red-500"
         icon: "📦"
       - value: "2"
@@ -134,6 +210,10 @@ layout:
         label:
           zh: 多表页面
           en: Multi-Table Pages
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
+          ja: マルチテーブルページ
+          ko: 다중 테이블 페이지
         color: "from-amber-500 to-yellow-500"
         icon: "📄"
       - value: "5"
@@ -141,6 +221,10 @@ layout:
         label:
           zh: 可用项目
           en: Projects
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
+          ja: 利用可能なプロジェクト
+          ko: 사용 가능한 프로젝트
         color: "from-red-500 to-pink-500"
         icon: "📁"
       - value: "100"
@@ -148,6 +232,10 @@ layout:
         label:
           zh: 低代码驱动
           en: Low-Code
+          ja: ローコード
+          ko: 로우코드
+          ja: ローコード
+          ko: 로우코드
         color: "from-green-500 to-emerald-500"
         icon: "⚡"
 
@@ -156,9 +244,17 @@ layout:
     title:
       zh: 其他项目
       en: Other Projects
+      ja: 其他项目
+      ko: 其他项目
+      ja: 其他项目
+      ko: 其他项目
     subtitle:
       zh: 探索更多功能
       en: Explore more features
+      ja: 探索更多功能
+      ko: 探索更多功能
+      ja: 探索更多功能
+      ko: 探索更多功能
     style:
       icon: "🌟"
       align: "center"
@@ -167,6 +263,10 @@ layout:
     title:
       zh: 可用项目
       en: Available Projects
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
     source: projects
     card_style:
       base_class: "rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
@@ -181,9 +281,17 @@ layout:
         name:
           zh: TODO 项目管理
           en: TODO Project
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
+          ja: TODO プロジェクト管理
+          ko: TODO 프로젝트 관리
         description:
           zh: 任务和项目管理系统
           en: Task and Project Management
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
+          ja: タスクとプロジェクト管理システム
+          ko: 작업 및 프로젝트 관리 시스템
         gradient: "from-blue-500 to-cyan-500"
         features:
           - "任务管理"
@@ -194,9 +302,17 @@ layout:
         name:
           zh: 我的日记本
           en: My Journal
+          ja: マイジャーナル
+          ko: 내 일기장
+          ja: マイジャーナル
+          ko: 내 일기장
         description:
           zh: 个人日记管理系统
           en: Personal Journal System
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
+          ja: パーソナルジャーナル管理システム
+          ko: 개인 일기장 관리 시스템
         gradient: "from-purple-500 to-purple-600"
         features:
           - "日记记录"
@@ -207,9 +323,17 @@ layout:
         name:
           zh: Chinook 音乐商店
           en: Chinook Music Store
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
+          ja: Chinook ミュージックストア
+          ko: Chinook 음악 상점
         description:
           zh: 艺术家、专辑、音轨管理
           en: Artist, Album, Track Management
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
+          ja: 艺术家、专辑、音轨管理
+          ko: 艺术家、专辑、音轨管理
         gradient: "from-green-500 to-emerald-600"
         features:
           - "音乐库管理"
@@ -220,9 +344,17 @@ layout:
         name:
           zh: 电商订单系统
           en: E-commerce Order System
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
+          ja: E コマース注文システム
+          ko: 이커머스 주문 시스템
         description:
           zh: 产品、订单、客户管理
           en: Product, Order, Customer
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
         gradient: "from-orange-500 to-red-500"
         features:
           - "产品管理"
@@ -234,9 +366,17 @@ layout:
         name:
           zh: CRM 客户管理
           en: CRM
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
         description:
           zh: 客户、销售机会、订单管理
           en: Customer, Opportunity, Order
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
         gradient: "from-indigo-500 to-pink-500"
         features:
           - "客户 360°视图"
@@ -250,15 +390,31 @@ layout:
       - text:
           zh: 电商文档
           en: E-commerce Docs
+          ja: 电商文档
+          ko: 电商文档
+          ja: E コマースドキュメント
+          ko: 이커머스 문서
         href: "/docs"
       - text:
           zh: API
           en: API
+          ja: API
+          ko: API
+          ja: API
+          ko: API
         href: "/docs"
       - text:
           zh: 支持
           en: Support
+          ja: 支持
+          ko: 支持
+          ja: サポート
+          ko: 지원
         href: "/docs"
     copyright:
       zh: "© 2026 E-commerce Platform. All rights reserved."
       en: "© 2026 E-commerce Platform. All rights reserved."
+      ja: "© 2026 E-commerce Platform. All rights reserved."
+      ko: "© 2026 E-commerce Platform. All rights reserved."
+      ja: "© 2026 E-commerce Platform. All rights reserved."
+      ko: "© 2026 E-commerce Platform. All rights reserved."
