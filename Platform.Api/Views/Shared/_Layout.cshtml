@@ -93,10 +93,12 @@
                 <div id="desktop-lang-menu" class="desktop-menu-panel">
                     <div class="desktop-menu-panel-inner">
                         <div class="desktop-menu-section">
-                            <h4>选择语言</h4>
+                            <h4>选择语言 / Select Language</h4>
                             <div class="desktop-menu-links">
                                 <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('en')">🇺🇸 English</button>
                                 <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('zh')">🇨🇳 中文</button>
+                                <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('ja')">🇯🇵 日本語</button>
+                                <button type="button" class="desktop-menu-link-btn" onclick="changeLanguage('ko')">🇰🇷 한국어</button>
                             </div>
                         </div>
                     </div>
@@ -248,6 +250,8 @@
                     <select onchange="changeLanguage(this.value)" class="bg-transparent border-none focus:ring-0">
                         <option value="en" @(currentLang == "en" ? "selected" : "")>🇺🇸 EN</option>
                         <option value="zh" @(currentLang == "zh" ? "selected" : "")>🇨🇳 中文</option>
+                        <option value="ja" @(currentLang == "ja" ? "selected" : "")>🇯🇵 日本語</option>
+                        <option value="ko" @(currentLang == "ko" ? "selected" : "")>🇰🇷 한국어</option>
                     </select>
                 </div>
             </li>

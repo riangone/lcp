@@ -41,10 +41,19 @@ public class LocalizedText
 {
     public string? Zh { get; set; }
     public string? En { get; set; }
+    public string? Ja { get; set; }
+    public string? Ko { get; set; }
 
     public string GetText(string lang)
     {
-        return lang == "zh" ? (Zh ?? En ?? "") : (En ?? Zh ?? "");
+        // 按优先级返回：请求的语言 → 英文 → 中文 → 日文 → 韩文
+        return lang switch
+        {
+            "zh" => Zh ?? En ?? Ja ?? Ko ?? "",
+            "ja" => Ja ?? En ?? Zh ?? Ko ?? "",
+            "ko" => Ko ?? En ?? Ja ?? Zh ?? "",
+            _ => En ?? Zh ?? Ja ?? Ko ?? ""
+        };
     }
 }
 
