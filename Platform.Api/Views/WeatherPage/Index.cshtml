@@ -4,430 +4,499 @@
     var project = "weather";
 }
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-indigo-50">
-    <!-- 顶部天气卡片 -->
-    <div class="container mx-auto px-4 pt-8">
-        <!-- 本地天气卡片 -->
-        <div class="max-w-2xl mx-auto">
-            <div class="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl shadow-2xl p-8 text-white mb-8">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h2 class="text-3xl font-bold" id="current-city">Loading...</h2>
-                        <p class="text-blue-100" id="current-date">--</p>
-                    </div>
-                    <div class="text-6xl" id="current-icon">🌤️</div>
-                </div>
-                <div class="flex items-end justify-between">
-                    <div>
-                        <div class="text-7xl font-bold" id="current-temp">--°</div>
-                        <div class="text-xl text-blue-100" id="current-condition">--</div>
-                    </div>
-                    <div class="text-right space-y-2">
-                        <div class="flex items-center space-x-2">
-                            <span>💧</span>
-                            <span id="current-humidity">--%</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span>💨</span>
-                            <span id="current-wind">-- km/h</span>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <span>🌡️</span>
-                            <span id="current-feels">--°</span>
-                        </div>
-                    </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🌤️ Weather - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* 动态天空背景 */
+        @keyframes skyGradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .sky-background {
+            background: linear-gradient(-45deg, #1e3c72, #2a5298, #7e22ce, #0891b2, #1e3c72);
+            background-size: 400% 400%;
+            animation: skyGradient 15s ease infinite;
+        }
+        
+        /* 玻璃态效果 */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* 天气图标动画 */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .weather-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+            50% { box-shadow: 0 0 40px rgba(255,255,255,0.5); }
+        }
+        
+        .temp-display {
+            text-shadow: 0 0 30px rgba(255,255,255,0.5);
+        }
+        
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* 加载动画 */
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
+        }
+        
+        .loading {
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 100%);
+            background-size: 1000px 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        /* 城市选择器 */
+        .city-option {
+            transition: all 0.3s ease;
+        }
+        
+        .city-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            padding-left: 1.5rem;
+        }
+        
+        /* 预报卡片悬停效果 */
+        .forecast-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .forecast-card:hover {
+            transform: scale(1.05) translateY(-8px);
+        }
+    </style>
+</head>
+<body class="sky-background min-h-screen text-white">
+    <!-- 导航栏 -->
+    <nav class="glass sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center space-x-2 text-lg font-semibold hover:opacity-80 transition">
+                    <span>🏠</span>
+                    <span>LowCode Platform</span>
+                </a>
+                <div class="flex items-center space-x-4">
+                    <a href="/ui/City?project=weather" class="glass-card px-4 py-2 rounded-full text-sm hover:bg-white/20 transition">
+                        🏙️ 城市管理
+                    </a>
+                    <select id="city-selector" onchange="loadCityWeather(this.value, this.options[this.selectedIndex].text)" 
+                            class="glass-card px-4 py-2 rounded-full text-sm bg-transparent cursor-pointer outline-none">
+                        <option value="">选择城市...</option>
+                    </select>
                 </div>
             </div>
         </div>
+    </nav>
 
-        <!-- 搜索栏 -->
-        <div class="max-w-xl mx-auto mb-8">
-            <div class="bg-white rounded-2xl shadow-lg p-2 flex items-center space-x-2">
-                <input type="text" id="city-search" 
-                       placeholder="Search city..." 
-                       class="flex-1 px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none"
-                       list="city-list">
-                <datalist id="city-list"></datalist>
-                <button onclick="searchCity()" 
-                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition">
-                    🔍 Search
-                </button>
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 当前天气卡片 -->
+        <div class="glass-card rounded-3xl p-8 mb-8 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10">
+                <div class="flex flex-col md:flex-row items-center justify-between">
+                    <div class="text-center md:text-left mb-6 md:mb-0">
+                        <h1 id="current-city" class="text-4xl font-bold mb-2">
+                            <span class="loading">Loading...</span>
+                        </h1>
+                        <p id="current-date" class="text-white/70 text-lg"></p>
+                        <div id="weather-status" class="mt-4 text-xl text-white/80"></div>
+                    </div>
+                    <div class="text-center">
+                        <div id="current-icon" class="text-9xl weather-icon mb-4">🌤️</div>
+                        <div id="current-temp" class="text-8xl font-bold temp-display">
+                            <span class="loading">--</span>°C
+                        </div>
+                        <div id="current-condition" class="text-2xl text-white/80 mt-2">--</div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 mt-6 md:mt-0">
+                        <div class="glass-card rounded-2xl p-4 text-center">
+                            <div class="text-3xl mb-1">💧</div>
+                            <div id="current-humidity" class="text-xl font-semibold">--%</div>
+                            <div class="text-sm text-white/60">湿度</div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 text-center">
+                            <div class="text-3xl mb-1">💨</div>
+                            <div id="current-wind" class="text-xl font-semibold">-- km/h</div>
+                            <div class="text-sm text-white/60">风速</div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 text-center">
+                            <div class="text-3xl mb-1">🌡️</div>
+                            <div id="current-feels" class="text-xl font-semibold">--°C</div>
+                            <div class="text-sm text-white/60">体感</div>
+                        </div>
+                        <div class="glass-card rounded-2xl p-4 text-center">
+                            <div class="text-3xl mb-1">🔵</div>
+                            <div id="current-pressure" class="text-xl font-semibold">-- hPa</div>
+                            <div class="text-sm text-white/60">气压</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <!-- 7 天预报 -->
-        <div class="max-w-5xl mx-auto mb-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">📅 7-Day Forecast</h3>
-            <div class="grid grid-cols-7 gap-3" id="forecast-grid">
-                <!-- 由 JavaScript 动态生成 -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <span class="text-3xl mr-2">📅</span>
+                7 天预报
+            </h2>
+            <div id="forecast-grid" class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
+                <!-- 动态生成 -->
             </div>
         </div>
 
-        <!-- 天气详情卡片 -->
-        <div class="max-w-5xl mx-auto mb-8">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">📊 Weather Details</h3>
+        <!-- 天气详情 -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <span class="text-3xl mr-2">📊</span>
+                天气详情
+            </h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div class="text-3xl mb-2">☀️</div>
-                    <div class="text-sm text-gray-500">UV Index</div>
-                    <div class="text-2xl font-bold text-gray-800" id="detail-uv">--</div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-2">☀️</div>
+                    <div class="text-sm text-white/60 mb-1">紫外线指数</div>
+                    <div id="detail-uv" class="text-2xl font-bold">--</div>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div class="text-3xl mb-2">🌫️</div>
-                    <div class="text-sm text-gray-500">Visibility</div>
-                    <div class="text-2xl font-bold text-gray-800" id="detail-visibility">-- km</div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-2">🌫️</div>
+                    <div class="text-sm text-white/60 mb-1">能见度</div>
+                    <div id="detail-visibility" class="text-2xl font-bold">-- km</div>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div class="text-3xl mb-2">🔵</div>
-                    <div class="text-sm text-gray-500">Pressure</div>
-                    <div class="text-2xl font-bold text-gray-800" id="detail-pressure">-- hPa</div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-2">🌅</div>
+                    <div class="text-sm text-white/60 mb-1">日出</div>
+                    <div id="detail-sunrise" class="text-2xl font-bold">--:--</div>
                 </div>
-                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
-                    <div class="text-3xl mb-2">🌅</div>
-                    <div class="text-sm text-gray-500">Sunrise</div>
-                    <div class="text-2xl font-bold text-gray-800" id="detail-sunrise">--:--</div>
+                <div class="glass-card rounded-2xl p-6 text-center">
+                    <div class="text-4xl mb-2">🌇</div>
+                    <div class="text-sm text-white/60 mb-1">日落</div>
+                    <div id="detail-sunset" class="text-2xl font-bold">--:--</div>
                 </div>
-            </div>
-        </div>
-
-        <!-- 城市列表 -->
-        <div class="max-w-5xl mx-auto mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-800">🏙️ Managed Cities</h3>
-                <a href="/ui/City?project=weather" class="text-blue-500 hover:underline">Manage →</a>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="cities-list">
-                <!-- 由 JavaScript 动态生成 -->
             </div>
         </div>
 
         <!-- 最近记录 -->
-        <div class="max-w-5xl mx-auto mb-8">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-800">📝 Recent Weather Records</h3>
-                <a href="/ui/WeatherRecord?project=weather" class="text-blue-500 hover:underline">View All →</a>
-            </div>
-            <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="records-list">
-                <!-- 由 JavaScript 动态生成 -->
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <span class="text-3xl mr-2">📝</span>
+                最近天气记录
+            </h2>
+            <div id="records-list" class="glass-card rounded-2xl overflow-hidden">
+                <!-- 动态生成 -->
             </div>
         </div>
 
         <!-- 快捷操作 -->
-        <div class="max-w-5xl mx-auto">
-            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">⚡ Quick Actions</h3>
+        <div>
+            <h2 class="text-2xl font-bold mb-4 flex items-center">
+                <span class="text-3xl mr-2">⚡</span>
+                快捷操作
+            </h2>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <a href="/ui/City?project=weather" 
-                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
-                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🏙️</div>
-                    <div class="font-medium text-gray-700">Add City</div>
+                   class="glass-card rounded-2xl p-6 text-center group">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🏙️</div>
+                    <div class="font-semibold">添加城市</div>
+                    <div class="text-sm text-white/60 mt-1">管理城市信息</div>
                 </a>
                 <a href="/ui/WeatherRecord?project=weather" 
-                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
-                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🌡️</div>
-                    <div class="font-medium text-gray-700">Record Weather</div>
+                   class="glass-card rounded-2xl p-6 text-center group">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🌡️</div>
+                    <div class="font-semibold">记录天气</div>
+                    <div class="text-sm text-white/60 mt-1">手动录入数据</div>
                 </a>
                 <a href="/ui/WeatherForecast?project=weather" 
-                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
-                    <div class="text-4xl mb-2 group-hover:scale-110 transition">📅</div>
-                    <div class="font-medium text-gray-700">View Forecast</div>
+                   class="glass-card rounded-2xl p-6 text-center group">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">📅</div>
+                    <div class="font-semibold">查看预报</div>
+                    <div class="text-sm text-white/60 mt-1">管理预报数据</div>
                 </a>
                 <a href="/ui/WeatherCondition?project=weather" 
-                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
-                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🌦️</div>
-                    <div class="font-medium text-gray-700">Weather Codes</div>
+                   class="glass-card rounded-2xl p-6 text-center group">
+                    <div class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🌦️</div>
+                    <div class="font-semibold">天气代码</div>
+                    <div class="text-sm text-white/60 mt-1">查看代码定义</div>
                 </a>
             </div>
         </div>
-    </div>
-</div>
+    </main>
 
-<script>
-    const API_BASE = '/api';
-    let allCities = [];
-    let currentCityId = null;
+    <!-- 页脚 -->
+    <footer class="glass mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-white/60">
+            <p>🌤️ Weather App - Powered by OpenWeatherMap</p>
+            <p class="text-sm mt-2">实时天气数据 · 7 天预报 · 20 个城市</p>
+        </div>
+    </footer>
 
-    // 页面加载时获取数据
-    document.addEventListener('DOMContentLoaded', function() {
-        loadCities();
-        loadWeatherConditions();
-    });
+    <script>
+        const API_BASE = '/api';
+        let allCities = [];
+        let currentCityId = null;
 
-    // 加载城市列表
-    async function loadCities() {
-        try {
-            const response = await fetch(`${API_BASE}/City?project=weather`);
-            const cities = await response.json();
-            allCities = cities;
-            
-            // 填充 datalist
-            const datalist = document.getElementById('city-list');
-            datalist.innerHTML = cities.map(c => 
-                `<option value="${c.CityId}">${c.CityName} (${c.Country})</option>`
-            ).join('');
-            
-            // 显示城市列表
-            renderCitiesList(cities.slice(0, 10));
-            
-            // 加载第一个城市的天气
-            if (cities.length > 0) {
-                loadCityWeather(cities[0].CityId, cities[0].CityName);
-            }
-        } catch (error) {
-            console.error('Error loading cities:', error);
-        }
-    }
-
-    // 渲染城市列表
-    function renderCitiesList(cities) {
-        const container = document.getElementById('cities-list');
-        container.innerHTML = `
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Province</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timezone</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        ${cities.map(c => `
-                            <tr class="hover:bg-gray-50 cursor-pointer" onclick="loadCityWeather(${c.CityId}, '${c.CityName}')">
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${c.CityName}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.Country}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.Province || '-'}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.TimeZone || '-'}</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-    // 搜索城市
-    function searchCity() {
-        const input = document.getElementById('city-search');
-        const cityId = parseInt(input.value);
-        
-        if (cityId) {
-            const city = allCities.find(c => c.CityId === cityId);
-            if (city) {
-                loadCityWeather(city.CityId, city.CityName);
-            }
-        } else {
-            const cityName = input.value.toLowerCase();
-            const city = allCities.find(c => c.CityName.toLowerCase().includes(cityName));
-            if (city) {
-                loadCityWeather(city.CityId, city.CityName);
-            }
-        }
-    }
-
-    // 加载城市天气
-    async function loadCityWeather(cityId, cityName) {
-        currentCityId = cityId;
-        
-        // 更新当前城市显示
-        document.getElementById('current-city').textContent = cityName;
-        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { 
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCities();
+            loadWeatherConditions();
         });
-        
-        // 加载天气记录
-        await loadCurrentWeather(cityId);
-        
-        // 加载天气预报
-        await loadForecast(cityId);
-        
-        // 加载最近记录
-        await loadRecentRecords(cityId);
-    }
 
-    // 加载当前天气
-    async function loadCurrentWeather(cityId) {
-        try {
-            // 使用实时天气 API
-            const response = await fetch(`${API_BASE}/weather/current/${cityId}?project=weather`);
-            const data = await response.json();
-            
-            // 支持大小写两种字段格式
-            if (data && (data.temperature !== undefined || data.Temperature !== undefined)) {
-                updateWeatherDisplay(data);
+        // 加载城市列表
+        async function loadCities() {
+            try {
+                const response = await fetch(`${API_BASE}/weather/cities?project=weather`);
+                const cities = await response.json();
+                allCities = cities;
+                
+                // 填充选择器
+                const selector = document.getElementById('city-selector');
+                selector.innerHTML = '<option value="">选择城市...</option>' + 
+                    cities.map(c => `<option value="${c.CityId}">${c.CityName} (${c.Country})</option>`).join('');
+                
+                // 默认加载第一个城市
+                if (cities.length > 0) {
+                    loadCityWeather(cities[0].CityId, cities[0].CityName);
+                }
+            } catch (error) {
+                console.error('Error loading cities:', error);
             }
-        } catch (error) {
-            console.error('Error loading weather:', error);
         }
-    }
 
-    // 更新天气显示
-    function updateWeatherDisplay(record) {
-        // 支持大小写两种字段格式
-        const temp = record.temperature || record.Temperature;
-        const feels = record.feelsLike || record.FeelsLike;
-        const humidity = record.humidity || record.Humidity;
-        const wind = record.windSpeed || record.WindSpeed;
-        const condition = record.weatherCondition || record.WeatherCondition;
-        const code = record.weatherCode || record.WeatherCode;
-        const uv = record.uvIndex || record.UVIndex;
-        const visibility = record.visibility || record.Visibility;
-        const pressure = record.pressure || record.Pressure;
-        const sunrise = record.sunrise || record.Sunrise;
-        const sunset = record.sunset || record.Sunset;
-        
-        document.getElementById('current-temp').textContent = `${temp}°C`;
-        document.getElementById('current-condition').textContent = condition || '--';
-        document.getElementById('current-humidity').textContent = `${humidity}%`;
-        document.getElementById('current-wind').textContent = `${wind || 0} km/h`;
-        document.getElementById('current-feels').textContent = `${feels || temp}°C`;
-        
-        // 设置天气图标
-        const icon = getWeatherIcon(code || condition);
-        document.getElementById('current-icon').textContent = icon;
-        
-        // 更新详情
-        document.getElementById('detail-uv').textContent = uv || '--';
-        document.getElementById('detail-visibility').textContent = `${visibility || '--'} km`;
-        document.getElementById('detail-pressure').textContent = `${pressure || '--'} hPa`;
-        document.getElementById('detail-sunrise').textContent = sunrise || '--:--';
-        document.getElementById('detail-sunset').textContent = sunset || '--:--';
-    }
-
-    // 加载天气预报
-    async function loadForecast(cityId) {
-        try {
-            // 使用实时天气预报 API
-            const response = await fetch(`${API_BASE}/weather/forecast/${cityId}?project=weather`);
-            const forecasts = await response.json();
+        // 加载城市天气
+        async function loadCityWeather(cityId, cityName) {
+            currentCityId = cityId;
             
-            if (forecasts && forecasts.length > 0) {
-                renderForecast(forecasts);
+            document.getElementById('current-city').textContent = cityName;
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('zh-CN', { 
+                year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' 
+            });
+            
+            await loadCurrentWeather(cityId);
+            await loadForecast(cityId);
+            await loadRecentRecords(cityId);
+        }
+
+        // 加载当前天气
+        async function loadCurrentWeather(cityId) {
+            try {
+                const response = await fetch(`${API_BASE}/weather/current/${cityId}?project=weather`);
+                const data = await response.json();
+                
+                if (data && (data.temperature !== undefined || data.Temperature !== undefined)) {
+                    updateWeatherDisplay(data);
+                }
+            } catch (error) {
+                console.error('Error loading weather:', error);
             }
-        } catch (error) {
-            console.error('Error loading forecast:', error);
         }
-    }
 
-    // 渲染天气预报
-    function renderForecast(forecasts) {
-        const container = document.getElementById('forecast-grid');
-        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-        
-        container.innerHTML = forecasts.map(f => {
-            // 支持大小写两种字段格式
-            const forecastDate = f.forecastDate || f.ForecastDate || f.date || f.Date;
-            const tempMax = f.tempMax ?? f.TempMax ?? f.maxTemp ?? f.Tempmax;
-            const tempMin = f.tempMin ?? f.TempMin ?? f.minTemp ?? f.Tempmin;
-            const condition = f.weatherCondition ?? f.WeatherCondition ?? f.description ?? f.Description;
-            const code = f.weatherCode ?? f.WeatherCode ?? f.code ?? f.Code;
-            const precipProb = f.precipitationProbability ?? f.PrecipitationProbability ?? f.precipProb ?? 0;
+        // 更新天气显示
+        function updateWeatherDisplay(record) {
+            const temp = record.temperature || record.Temperature;
+            const feels = record.feelsLike || record.FeelsLike;
+            const humidity = record.humidity || record.Humidity;
+            const wind = record.windSpeed || record.WindSpeed;
+            const condition = record.weatherCondition || record.WeatherCondition;
+            const code = record.weatherCode || record.WeatherCode;
+            const uv = record.uvIndex || record.UVIndex;
+            const visibility = record.visibility || record.Visibility;
+            const pressure = record.pressure || record.Pressure;
+            const sunrise = record.sunrise || record.Sunrise;
+            const sunset = record.sunset || record.Sunset;
             
-            const date = forecastDate ? new Date(forecastDate) : new Date();
-            const dayName = date.getDate() === new Date().getDate() ? 'Today' : days[date.getDay()];
+            document.getElementById('current-temp').textContent = `${Math.round(temp)}°C`;
+            document.getElementById('current-condition').textContent = condition || '--';
+            document.getElementById('current-humidity').textContent = `${humidity}%`;
+            document.getElementById('current-wind').textContent = `${Math.round(wind)} km/h`;
+            document.getElementById('current-feels').textContent = `${Math.round(feels || temp)}°C`;
+            document.getElementById('current-pressure').textContent = `${Math.round(pressure)} hPa`;
+            
             const icon = getWeatherIcon(code || condition);
+            document.getElementById('current-icon').textContent = icon;
+            document.getElementById('weather-status').textContent = `实时数据 · 更新于 ${record.updatedAt || '刚刚'}`;
             
-            return `
-                <div class="bg-white rounded-2xl p-4 shadow-lg text-center hover:shadow-xl transition">
-                    <div class="font-medium text-gray-700 mb-2">${dayName}</div>
-                    <div class="text-3xl mb-2">${icon}</div>
-                    <div class="text-sm text-gray-500">${condition || '--'}</div>
-                    <div class="flex justify-center space-x-2 mt-2">
-                        <span class="text-red-500 font-bold">${tempMax !== undefined ? Math.round(tempMax) : '--'}°</span>
-                        <span class="text-blue-500">${tempMin !== undefined ? Math.round(tempMin) : '--'}°</span>
+            document.getElementById('detail-uv').textContent = uv !== undefined ? uv : '--';
+            document.getElementById('detail-visibility').textContent = `${visibility || '--'} km`;
+            document.getElementById('detail-sunrise').textContent = sunrise || '--:--';
+            document.getElementById('detail-sunset').textContent = sunset || '--:--';
+        }
+
+        // 加载天气预报
+        async function loadForecast(cityId) {
+            try {
+                const response = await fetch(`${API_BASE}/weather/forecast/${cityId}?project=weather`);
+                const forecasts = await response.json();
+                
+                if (forecasts && forecasts.length > 0) {
+                    renderForecast(forecasts);
+                }
+            } catch (error) {
+                console.error('Error loading forecast:', error);
+            }
+        }
+
+        // 渲染天气预报
+        function renderForecast(forecasts) {
+            const container = document.getElementById('forecast-grid');
+            const days = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+            const today = new Date();
+            
+            container.innerHTML = forecasts.map((f, i) => {
+                const forecastDate = f.forecastDate || f.ForecastDate || f.date || f.Date;
+                const tempMax = f.tempMax ?? f.TempMax ?? f.maxTemp;
+                const tempMin = f.tempMin ?? f.TempMin ?? f.minTemp;
+                const condition = f.weatherCondition ?? f.WeatherCondition ?? f.description;
+                const code = f.weatherCode ?? f.WeatherCode ?? f.code;
+                
+                const date = forecastDate ? new Date(forecastDate) : new Date(today.getTime() + i * 86400000);
+                const dayName = i === 0 ? '今天' : days[date.getDay()];
+                const icon = getWeatherIcon(code || condition);
+                
+                return `
+                    <div class="forecast-card glass-card rounded-2xl p-4 text-center cursor-pointer">
+                        <div class="font-medium text-white/80 mb-2">${dayName}</div>
+                        <div class="text-4xl mb-2">${icon}</div>
+                        <div class="text-xs text-white/60 mb-2">${condition || '--'}</div>
+                        <div class="flex justify-center space-x-2">
+                            <span class="text-red-300 font-bold">${tempMax !== undefined ? Math.round(tempMax) : '--'}°</span>
+                            <span class="text-blue-300">${tempMin !== undefined ? Math.round(tempMin) : '--'}°</span>
+                        </div>
                     </div>
-                    ${precipProb ? `
-                        <div class="text-xs text-blue-400 mt-1">💧 ${precipProb}%</div>
-                    ` : ''}
+                `;
+            }).join('');
+        }
+
+        // 加载最近记录
+        async function loadRecentRecords(cityId) {
+            try {
+                const response = await fetch(`${API_BASE}/weather/records/${cityId}?project=weather&limit=5`);
+                const records = await response.json();
+                
+                if (Array.isArray(records) && records.length > 0) {
+                    renderRecordsList(records);
+                }
+            } catch (error) {
+                console.error('Error loading records:', error);
+            }
+        }
+
+        // 渲染记录列表
+        function renderRecordsList(records) {
+            const container = document.getElementById('records-list');
+            container.innerHTML = `
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead class="bg-white/10">
+                            <tr>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">日期</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">天气</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">温度</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">湿度</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-white/60 uppercase tracking-wider">风速</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/10">
+                            ${records.map(r => {
+                                const date = r.RecordDate || r.recordDate;
+                                const temp = r.Temperature ?? r.temperature;
+                                const humidity = r.Humidity ?? r.humidity;
+                                const wind = r.WindSpeed ?? r.windSpeed;
+                                const condition = r.WeatherCondition ?? r.weatherCondition;
+                                const code = r.WeatherCode ?? r.weatherCode;
+                                
+                                return `
+                                    <tr class="hover:bg-white/5 transition">
+                                        <td class="px-6 py-4 whitespace-nowrap text-white/80">${date}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <span class="text-xl mr-2">${getWeatherIcon(code || condition)}</span>
+                                            ${condition || '--'}
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap font-semibold">${temp !== undefined ? Math.round(temp) : '--'}°C</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${humidity !== undefined ? humidity : '--'}%</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${wind !== undefined ? Math.round(wind) : '--'} km/h</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
                 </div>
             `;
-        }).join('');
-    }
-
-    // 加载最近记录
-    async function loadRecentRecords(cityId) {
-        try {
-            const response = await fetch(`${API_BASE}/weather/records/${cityId}?project=weather&limit=5`);
-            const records = await response.json();
-            
-            if (Array.isArray(records) && records.length > 0) {
-                const cityRecords = records
-                    .sort((a, b) => new Date(b.RecordDate || b.recordDate) - new Date(a.RecordDate || a.recordDate))
-                    .slice(0, 5);
-                renderRecordsList(cityRecords);
-            }
-        } catch (error) {
-            console.error('Error loading records:', error);
         }
-    }
 
-    // 渲染记录列表
-    function renderRecordsList(records) {
-        const container = document.getElementById('records-list');
-        container.innerHTML = `
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Temp</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Humidity</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wind</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200">
-                        ${records.map(r => `
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-900">${r.RecordDate}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">${getWeatherIcon(r.WeatherCode || r.WeatherCondition)} ${r.WeatherCondition}</td>
-                                <td class="px-6 py-4 whitespace-nowrap font-medium">${r.Temperature}°C</td>
-                                <td class="px-6 py-4 whitespace-nowrap">${r.Humidity}%</td>
-                                <td class="px-6 py-4 whitespace-nowrap">${r.WindSpeed || 0} km/h</td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-    // 加载天气条件
-    async function loadWeatherConditions() {
-        // 预加载天气条件用于图标映射
-    }
-
-    // 获取天气图标
-    function getWeatherIcon(condition) {
-        const icons = {
-            'clear': '☀️',
-            '晴朗': '☀️',
-            'cloudy': '☁️',
-            '多云': '☁️',
-            'partly_cloudy': '⛅',
-            '晴间多云': '⛅',
-            'overcast': '🌥️',
-            '阴天': '🌥️',
-            'rainy': '🌧️',
-            '下雨': '🌧️',
-            'stormy': '⛈️',
-            '雷雨': '⛈️',
-            'snowy': '❄️',
-            '下雪': '❄️',
-            'foggy': '🌫️',
-            '有雾': '🌫️',
-            'windy': '💨',
-            '有风': '💨',
-            'hail': '🌨️',
-            '冰雹': '🌨️'
-        };
-        return icons[condition] || '🌤️';
-    }
-
-    // 回车搜索
-    document.getElementById('city-search').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            searchCity();
+        // 获取天气图标
+        function getWeatherIcon(condition) {
+            const icons = {
+                'clear': '☀️', 'Clear': '☀️', '晴': '☀️',
+                'cloudy': '☁️', 'Clouds': '☁️', '多云': '☁️',
+                'partly_cloudy': '⛅', 'partly cloudy': '⛅', '晴间多云': '⛅',
+                'overcast': '🌥️', '阴天': '🌥️',
+                'rainy': '🌧️', 'Rain': '🌧️', '下雨': '🌧️',
+                'stormy': '⛈️', 'Thunderstorm': '⛈️', '雷雨': '⛈️',
+                'snowy': '❄️', 'Snow': '❄️', '下雪': '❄️',
+                'foggy': '🌫️', 'Mist': '🌫️', '有雾': '🌫️',
+                'windy': '💨', 'Wind': '💨', '有风': '💨',
+                'hail': '🌨️', 'Hail': '🌨️', '冰雹': '🌨️'
+            };
+            return icons[condition] || '🌤️';
         }
-    });
-</script>
+
+        // 加载天气条件（预加载图标映射）
+        async function loadWeatherConditions() {
+            // 预留扩展功能
+        }
+    </script>
+</body>
+</html>
