@@ -3,7 +3,7 @@
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var title = Model?.Title?.GetText(currentLang) ?? "";
     var subtitle = Model?.Subtitle?.GetText(currentLang) ?? "";
-    var limit = Model?.Limit?.ToString() ?? "10";
+    var limit = Model?.Limit ?? 10;
     
     // 模拟活动数据（实际应从数据库获取）
     var activities = new List<dynamic>

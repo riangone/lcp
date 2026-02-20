@@ -60,25 +60,26 @@ else
     {
         try
         {
-            // 使用 YamlDotNet 序列化/反序列化，保持类型一致性
-            var serializer = new SerializerBuilder().Build();
-            var yaml = serializer.Serialize(data);
-            
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention.Instance)
-                .IgnoreUnmatchedProperties()
-                .Build();
-            
+            // CRM 新增组件 - 直接传递 Dictionary，组件内部使用 dynamic 访问
+            // 原有组件使用强类型转换
             return type switch
             {
-                "hero" => deserializer.Deserialize<Platform.Infrastructure.Definitions.HeroConfig>(yaml),
-                "quick_actions" => deserializer.Deserialize<Platform.Infrastructure.Definitions.QuickActionsConfig>(yaml),
-                "section_title" => deserializer.Deserialize<Platform.Infrastructure.Definitions.SectionTitleConfig>(yaml),
-                "card_grid" => deserializer.Deserialize<Platform.Infrastructure.Definitions.CardGridConfig>(yaml),
-                "stats_modern" => deserializer.Deserialize<Platform.Infrastructure.Definitions.StatsModernConfig>(yaml),
-                "footer" => deserializer.Deserialize<Platform.Infrastructure.Definitions.FooterConfig>(yaml),
-                "alert" => deserializer.Deserialize<Platform.Infrastructure.Definitions.AlertConfig>(yaml),
-                "stats" => deserializer.Deserialize<Platform.Infrastructure.Definitions.StatsConfig>(yaml),
+                "nav_pipeline" => data,
+                "stats_row" => data,
+                "role_based_actions" => data,
+                "card_grid_modern" => data,
+                "funnel_chart" => data,
+                "activity_timeline" => data,
+                "reminders" => data,
+                // 原有组件使用强类型转换
+                "hero" => ConvertToStrongType<Platform.Infrastructure.Definitions.HeroConfig>(data),
+                "quick_actions" => ConvertToStrongType<Platform.Infrastructure.Definitions.QuickActionsConfig>(data),
+                "section_title" => ConvertToStrongType<Platform.Infrastructure.Definitions.SectionTitleConfig>(data),
+                "card_grid" => ConvertToStrongType<Platform.Infrastructure.Definitions.CardGridConfig>(data),
+                "stats_modern" => ConvertToStrongType<Platform.Infrastructure.Definitions.StatsModernConfig>(data),
+                "footer" => ConvertToStrongType<Platform.Infrastructure.Definitions.FooterConfig>(data),
+                "alert" => ConvertToStrongType<Platform.Infrastructure.Definitions.AlertConfig>(data),
+                "stats" => ConvertToStrongType<Platform.Infrastructure.Definitions.StatsConfig>(data),
                 _ => data
             };
         }
@@ -89,6 +90,26 @@ else
                 writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ConvertToTypedData error for {type}: {ex.Message}");
             }
             return data;
+        }
+    }
+    
+    T? ConvertToStrongType<T>(Dictionary<string, object> data) where T : class
+    {
+        try
+        {
+            var serializer = new SerializerBuilder().Build();
+            var yaml = serializer.Serialize(data);
+
+            var deserializer = new DeserializerBuilder()
+                .WithNamingConvention(YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention.Instance)
+                .IgnoreUnmatchedProperties()
+                .Build();
+
+            return deserializer.Deserialize<T>(yaml);
+        }
+        catch
+        {
+            return null;
         }
     }
 }

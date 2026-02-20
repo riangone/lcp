@@ -5,7 +5,7 @@
     var mobileCols = columns?.Mobile ?? 1;
     var tabletCols = columns?.Tablet ?? 2;
     var desktopCols = columns?.Desktop ?? 3;
-    var cards = Model?.Cards as List<dynamic> ?? new List<dynamic>();
+    var cards = Model?.Cards ?? [];
 }
 
 <div class="bg-white py-8">

@@ -2,8 +2,8 @@
 @{
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var title = Model?.Title?.GetText(currentLang) ?? "";
-    var items = Model?.Items as List<dynamic> ?? new List<dynamic>();
-    var background = Model?.Background?.ToString() ?? "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50";
+    var items = Model?.Items ?? [];
+    var background = Model?.Background ?? "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50";
 }
 
 <div class="@background py-8">

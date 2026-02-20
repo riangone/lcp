@@ -3,7 +3,7 @@
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var title = Model?.Title?.GetText(currentLang) ?? "";
     var subtitle = Model?.Subtitle?.GetText(currentLang) ?? "";
-    var stages = Model?.Stages as List<dynamic> ?? new List<dynamic>();
+    var stages = Model?.Stages ?? [];
 }
 
 <div class="bg-white py-8">

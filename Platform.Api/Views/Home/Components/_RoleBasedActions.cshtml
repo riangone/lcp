@@ -2,7 +2,7 @@
 @{
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var title = Model?.Title?.GetText(currentLang) ?? "";
-    var roles = Model?.Roles as Dictionary<string, dynamic> ?? new Dictionary<string, dynamic>();
+    var roles = Model?.Roles ?? new Dictionary<string, List<RoleActionConfig>>();
     
     // 模拟当前用户角色（实际应从认证系统获取）
     var currentRole = "sales_rep"; // 可以是 sales_rep, sales_manager, service_rep
@@ -28,18 +28,18 @@
         @foreach (var roleEntry in roles)
         {
             var roleKey = roleEntry.Key;
-            var actions = roleEntry.Value as List<dynamic> ?? new List<dynamic>();
+            var actions = roleEntry.Value ?? [];
             var displayStyle = roleKey == currentRole ? "block" : "none";
             
             <div class="role-content @(roleKey == currentRole ? "active" : "")" data-role="@roleKey" style="display: @displayStyle">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     @foreach (var action in actions)
                     {
-                        var icon = action.Icon?.ToString() ?? "📋";
+                        var icon = action.Icon ?? "📋";
                         var label = action.Label.GetText(currentLang);
-                        var href = action.Href?.ToString() ?? "#";
-                        var badge = action.Badge?.ToString() ?? "";
-                        var color = action.Color?.ToString() ?? "blue";
+                        var href = action.Href ?? "#";
+                        var badge = action.Badge ?? "";
+                        var color = action.Color ?? "blue";
                         
                         var colorClasses = color switch
                         {
