@@ -130,6 +130,9 @@ builder.Services.AddScoped<IAiSuggestionService, MockAISuggestionService>();
 builder.Services.AddScoped<AiIntegrationService>();
 builder.Services.AddScoped<AiArchitectureTestScenario>();
 
+// 天气服务（OpenWeatherMap）
+builder.Services.AddHttpClient<IWeatherService, OpenWeatherMapService>();
+
 // CSRF 保护
 builder.Services.AddAntiforgery(options =>
 {
