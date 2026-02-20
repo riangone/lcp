@@ -1,5 +1,6 @@
 @model Platform.Infrastructure.Definitions.HomeDefinition
 @using YamlDotNet.Serialization
+@using Platform.Infrastructure.Definitions
 @{
     ViewData["Title"] = Model?.Title ?? "LowCode Platform";
     ViewData["ActivePage"] = "Home";
@@ -60,18 +61,18 @@ else
     {
         try
         {
-            // CRM 新增组件 - 直接传递 Dictionary，组件内部使用 dynamic 访问
-            // 原有组件使用强类型转换
+            // 所有组件都使用强类型转换
             return type switch
             {
-                "nav_pipeline" => data,
-                "stats_row" => data,
-                "role_based_actions" => data,
-                "card_grid_modern" => data,
-                "funnel_chart" => data,
-                "activity_timeline" => data,
-                "reminders" => data,
-                // 原有组件使用强类型转换
+                // CRM 新增组件
+                "nav_pipeline" => ConvertToStrongType<NavPipelineConfig>(data),
+                "stats_row" => ConvertToStrongType<StatsRowConfig>(data),
+                "role_based_actions" => ConvertToStrongType<RoleBasedActionsConfig>(data),
+                "card_grid_modern" => ConvertToStrongType<CardGridModernConfig>(data),
+                "funnel_chart" => ConvertToStrongType<FunnelChartConfig>(data),
+                "activity_timeline" => ConvertToStrongType<ActivityTimelineConfig>(data),
+                "reminders" => ConvertToStrongType<RemindersConfig>(data),
+                // 原有组件
                 "hero" => ConvertToStrongType<Platform.Infrastructure.Definitions.HeroConfig>(data),
                 "quick_actions" => ConvertToStrongType<Platform.Infrastructure.Definitions.QuickActionsConfig>(data),
                 "section_title" => ConvertToStrongType<Platform.Infrastructure.Definitions.SectionTitleConfig>(data),

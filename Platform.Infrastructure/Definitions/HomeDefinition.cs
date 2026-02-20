@@ -122,8 +122,11 @@ public class StatsConfig
 public class StatItemConfig
 {
     public string Value { get; set; } = "";
+    public string Suffix { get; set; } = "";
     public LocalizedText Label { get; set; } = new();
+    public string Icon { get; set; } = "📊";
     public string Color { get; set; } = "blue";
+    public string Trend { get; set; } = "";
 }
 
 /// <summary>

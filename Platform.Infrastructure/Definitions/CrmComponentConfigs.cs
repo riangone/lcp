@@ -5,8 +5,8 @@ namespace Platform.Infrastructure.Definitions;
 /// </summary>
 public class NavPipelineConfig
 {
-    public dynamic? Title { get; set; }
-    public List<NavStageConfig>? Stages { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public List<NavStageConfig> Stages { get; set; } = new();
 }
 
 /// <summary>
@@ -14,10 +14,10 @@ public class NavPipelineConfig
 /// </summary>
 public class NavStageConfig
 {
-    public string? Icon { get; set; }
-    public dynamic? Label { get; set; }
-    public string? Href { get; set; }
-    public string? Color { get; set; }
+    public string Icon { get; set; } = "📍";
+    public LocalizedText Label { get; set; } = new();
+    public string Href { get; set; } = "#";
+    public string Color { get; set; } = "from-gray-500 to-gray-600";
 }
 
 /// <summary>
@@ -25,9 +25,9 @@ public class NavStageConfig
 /// </summary>
 public class StatsRowConfig
 {
-    public dynamic? Title { get; set; }
-    public string? Background { get; set; }
-    public List<StatItemConfig>? Items { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public string Background { get; set; } = "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50";
+    public List<StatItemConfig> Items { get; set; } = new();
 }
 
 /// <summary>
@@ -35,8 +35,8 @@ public class StatsRowConfig
 /// </summary>
 public class RoleBasedActionsConfig
 {
-    public dynamic? Title { get; set; }
-    public Dictionary<string, List<RoleActionConfig>>? Roles { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public Dictionary<string, List<RoleActionConfig>> Roles { get; set; } = new();
 }
 
 /// <summary>
@@ -44,11 +44,11 @@ public class RoleBasedActionsConfig
 /// </summary>
 public class RoleActionConfig
 {
-    public string? Icon { get; set; }
-    public dynamic? Label { get; set; }
-    public string? Href { get; set; }
-    public string? Badge { get; set; }
-    public string? Color { get; set; }
+    public string Icon { get; set; } = "📋";
+    public LocalizedText Label { get; set; } = new();
+    public string Href { get; set; } = "#";
+    public string Badge { get; set; } = "";
+    public string Color { get; set; } = "blue";
 }
 
 /// <summary>
@@ -56,21 +56,21 @@ public class RoleActionConfig
 /// </summary>
 public class CardGridModernConfig
 {
-    public GridColumnsConfig? Columns { get; set; }
-    public List<CardConfig>? Cards { get; set; }
+    public GridColumnsConfig Columns { get; set; } = new();
+    public List<CardModernConfig> Cards { get; set; } = new();
 }
 
 /// <summary>
 /// 卡片配置
 /// </summary>
-public class CardConfig
+public class CardModernConfig
 {
-    public string? Icon { get; set; }
-    public dynamic? Title { get; set; }
-    public dynamic? Description { get; set; }
-    public string? Href { get; set; }
-    public string? Gradient { get; set; }
-    public List<CardStatConfig>? Stats { get; set; }
+    public string Icon { get; set; } = "📊";
+    public LocalizedText Title { get; set; } = new();
+    public LocalizedText Description { get; set; } = new();
+    public string Href { get; set; } = "#";
+    public string Gradient { get; set; } = "from-gray-500 to-gray-600";
+    public List<CardStatConfig> Stats { get; set; } = new();
 }
 
 /// <summary>
@@ -78,8 +78,8 @@ public class CardConfig
 /// </summary>
 public class CardStatConfig
 {
-    public string? Label { get; set; }
-    public string? Value { get; set; }
+    public string Label { get; set; } = "";
+    public string Value { get; set; } = "";
 }
 
 /// <summary>
@@ -87,9 +87,9 @@ public class CardStatConfig
 /// </summary>
 public class FunnelChartConfig
 {
-    public dynamic? Title { get; set; }
-    public dynamic? Subtitle { get; set; }
-    public List<FunnelStageConfig>? Stages { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public LocalizedText Subtitle { get; set; } = new();
+    public List<FunnelStageConfig> Stages { get; set; } = new();
 }
 
 /// <summary>
@@ -97,9 +97,9 @@ public class FunnelChartConfig
 /// </summary>
 public class FunnelStageConfig
 {
-    public dynamic? Name { get; set; }
+    public LocalizedText Name { get; set; } = new();
     public int Value { get; set; }
-    public string? Color { get; set; }
+    public string Color { get; set; } = "bg-blue-500";
 }
 
 /// <summary>
@@ -107,9 +107,9 @@ public class FunnelStageConfig
 /// </summary>
 public class ActivityTimelineConfig
 {
-    public dynamic? Title { get; set; }
-    public dynamic? Subtitle { get; set; }
-    public int? Limit { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public LocalizedText Subtitle { get; set; } = new();
+    public int Limit { get; set; } = 10;
 }
 
 /// <summary>
@@ -117,8 +117,8 @@ public class ActivityTimelineConfig
 /// </summary>
 public class RemindersConfig
 {
-    public dynamic? Title { get; set; }
-    public List<ReminderItemConfig>? Items { get; set; }
+    public LocalizedText Title { get; set; } = new();
+    public List<ReminderItemConfig> Items { get; set; } = new();
 }
 
 /// <summary>
@@ -126,8 +126,8 @@ public class RemindersConfig
 /// </summary>
 public class ReminderItemConfig
 {
-    public string? Icon { get; set; }
-    public dynamic? Text { get; set; }
-    public string? Time { get; set; }
-    public string? Priority { get; set; }
+    public string Icon { get; set; } = "📋";
+    public LocalizedText Text { get; set; } = new();
+    public string Time { get; set; } = "";
+    public string Priority { get; set; } = "medium";
 }
