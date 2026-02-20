@@ -21,11 +21,25 @@ public class OpenWeatherMapService : IWeatherService
     public OpenWeatherMapService(HttpClient httpClient, IConfiguration config)
     {
         _httpClient = httpClient;
-        // 从配置或环境变量读取 API Key
-        // 使用方式：export OPENWEATHER_API_KEY=your_api_key
-        _apiKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY") 
-                  ?? config["OpenWeather:ApiKey"] 
-                  ?? "demo"; // 演示用 API Key
+        // 优先从环境变量读取 API Key
+        var envKey = Environment.GetEnvironmentVariable("OPENWEATHER_API_KEY");
+        var configKey = config["OpenWeather:ApiKey"];
+        
+        if (!string.IsNullOrEmpty(envKey))
+        {
+            _apiKey = envKey;
+            Console.WriteLine($"[Weather] Using API Key from environment: {envKey.Substring(0, Math.Min(8, envKey.Length))}...");
+        }
+        else if (!string.IsNullOrEmpty(configKey))
+        {
+            _apiKey = configKey;
+            Console.WriteLine($"[Weather] Using API Key from config: {configKey.Substring(0, Math.Min(8, configKey.Length))}...");
+        }
+        else
+        {
+            _apiKey = "demo";
+            Console.WriteLine("[Weather] Warning: No API Key configured, using demo mode");
+        }
     }
 
     /// <summary>
