@@ -262,21 +262,35 @@
 
     // 更新天气显示
     function updateWeatherDisplay(record) {
-        document.getElementById('current-temp').textContent = `${record.Temperature}°C`;
-        document.getElementById('current-condition').textContent = record.WeatherCondition || '--';
-        document.getElementById('current-humidity').textContent = `${record.Humidity}%`;
-        document.getElementById('current-wind').textContent = `${record.WindSpeed || 0} km/h`;
-        document.getElementById('current-feels').textContent = `${record.FeelsLike || record.Temperature}°C`;
+        // 支持大小写两种字段格式
+        const temp = record.temperature || record.Temperature;
+        const feels = record.feelsLike || record.FeelsLike;
+        const humidity = record.humidity || record.Humidity;
+        const wind = record.windSpeed || record.WindSpeed;
+        const condition = record.weatherCondition || record.WeatherCondition;
+        const code = record.weatherCode || record.WeatherCode;
+        const uv = record.uvIndex || record.UVIndex;
+        const visibility = record.visibility || record.Visibility;
+        const pressure = record.pressure || record.Pressure;
+        const sunrise = record.sunrise || record.Sunrise;
+        const sunset = record.sunset || record.Sunset;
+        
+        document.getElementById('current-temp').textContent = `${temp}°C`;
+        document.getElementById('current-condition').textContent = condition || '--';
+        document.getElementById('current-humidity').textContent = `${humidity}%`;
+        document.getElementById('current-wind').textContent = `${wind || 0} km/h`;
+        document.getElementById('current-feels').textContent = `${feels || temp}°C`;
         
         // 设置天气图标
-        const icon = getWeatherIcon(record.WeatherCode || record.WeatherCondition);
+        const icon = getWeatherIcon(code || condition);
         document.getElementById('current-icon').textContent = icon;
         
         // 更新详情
-        document.getElementById('detail-uv').textContent = record.UVIndex || '--';
-        document.getElementById('detail-visibility').textContent = `${record.Visibility || '--'} km`;
-        document.getElementById('detail-pressure').textContent = `${record.Pressure || '--'} hPa`;
-        document.getElementById('detail-sunrise').textContent = record.Sunrise || '--:--';
+        document.getElementById('detail-uv').textContent = uv || '--';
+        document.getElementById('detail-visibility').textContent = `${visibility || '--'} km`;
+        document.getElementById('detail-pressure').textContent = `${pressure || '--'} hPa`;
+        document.getElementById('detail-sunrise').textContent = sunrise || '--:--';
+        document.getElementById('detail-sunset').textContent = sunset || '--:--';
     }
 
     // 加载天气预报
@@ -300,13 +314,13 @@
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         
         container.innerHTML = forecasts.map(f => {
-            // 支持新旧两种数据格式
-            const forecastDate = f.ForecastDate || f.Date || f.forecastDate;
-            const tempMax = f.TempMax || f.tempMax || f.MaxTemp;
-            const tempMin = f.TempMin || f.tempMin || f.MinTemp;
-            const condition = f.WeatherCondition || f.weatherCondition || f.Description;
-            const code = f.WeatherCode || f.weatherCode || f.Code;
-            const precipProb = f.PrecipitationProbability || f.precipitationProbability || 0;
+            // 支持大小写两种字段格式
+            const forecastDate = f.forecastDate || f.ForecastDate || f.date || f.Date;
+            const tempMax = f.tempMax ?? f.TempMax ?? f.maxTemp ?? f.Tempmax;
+            const tempMin = f.tempMin ?? f.TempMin ?? f.minTemp ?? f.Tempmin;
+            const condition = f.weatherCondition ?? f.WeatherCondition ?? f.description ?? f.Description;
+            const code = f.weatherCode ?? f.WeatherCode ?? f.code ?? f.Code;
+            const precipProb = f.precipitationProbability ?? f.PrecipitationProbability ?? f.precipProb ?? 0;
             
             const date = forecastDate ? new Date(forecastDate) : new Date();
             const dayName = date.getDate() === new Date().getDate() ? 'Today' : days[date.getDay()];
