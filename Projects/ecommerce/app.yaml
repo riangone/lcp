@@ -1154,28 +1154,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          CustomerCity: 都市
-          CustomerCountry: 국
-          CustomerEmail: メール
-          CustomerName: 顧客
-          OrderDate: 注文日
-          OrderNumber: 注文番号
-          PaymentStatus: Payment
-          Status: ステータ스
-          TotalAmount: 合計金額
-          title: Orders with Customers
-        ko:
-          CustomerCity: 도시
-          CustomerCountry: 국가
-          CustomerEmail: 이메일
-          CustomerName: 고객
-          OrderDate: 주문 날짜
-          OrderNumber: 주문 번호
-          PaymentStatus: Payment
-          Status: 상태
-          TotalAmount: 총 금액
-          title: Orders with Customers
       labels:
         en:
           title: Orders with Customers
@@ -1199,6 +1177,28 @@ models:
           CustomerEmail: 邮箱
           CustomerCity: 城市
           CustomerCountry: 国家
+        ja:
+          title: 注文顧客
+          OrderNumber: 注文番号
+          OrderDate: 注文日
+          Status: ステータス
+          TotalAmount: 合計
+          PaymentStatus: 支払い
+          CustomerName: 顧客
+          CustomerEmail: メール
+          CustomerCity: 都市
+          CustomerCountry: 国
+        ko:
+          title: 주문 고객
+          OrderNumber: 주문 번호
+          OrderDate: 주문 날짜
+          Status: 상태
+          TotalAmount: 총액
+          PaymentStatus: 결제
+          CustomerName: 고객
+          CustomerEmail: 이메일
+          CustomerCity: 도시
+          CustomerCountry: 국가
 
     list:
       columns:
@@ -1273,22 +1273,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          CategoryName: カテゴリ
-          ProductName: Product
-          StockQuantity: 在庫
-          TotalRevenue: Revenue
-          TotalSold: Sold
-          UnitPrice: 単価
-          title: Product Sales Report
-        ko:
-          CategoryName: 분류
-          ProductName: Product
-          StockQuantity: 재고
-          TotalRevenue: Revenue
-          TotalSold: Sold
-          UnitPrice: 단가
-          title: Product Sales Report
       labels:
         en:
           title: Product Sales Report
@@ -1306,6 +1290,22 @@ models:
           StockQuantity: 库存
           TotalSold: 销量
           TotalRevenue: 销售额
+        ja:
+          title: 製品販売レポート
+          ProductName: 製品
+          CategoryName: カテゴリ
+          UnitPrice: 単価
+          StockQuantity: 在庫
+          TotalSold: 販売数
+          TotalRevenue: 収益
+        ko:
+          title: 제품 판매 보고서
+          ProductName: 제품
+          CategoryName: 분류
+          UnitPrice: 단가
+          StockQuantity: 재고
+          TotalSold: 판매량
+          TotalRevenue: 수익
 
     list:
       columns:

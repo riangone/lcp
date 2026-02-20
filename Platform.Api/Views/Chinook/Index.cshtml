@@ -1,0 +1,537 @@
+@{
+    ViewData["Title"] = "🎵 Chinook 音乐商店";
+    ViewData["ActivePage"] = "Chinook";
+    var project = "chinook";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🎵 Chinook 音乐商店 - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Chinook 应用主题色 */
+        :root {
+            --chinook-primary: #10b981;
+            --chinook-primary-dark: #059669;
+            --chinook-primary-light: #34d399;
+            --chinook-accent: #8b5cf6;
+            --chinook-warning: #f59e0b;
+            --chinook-info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            min-height: 100vh;
+        }
+
+        /* 统计卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(30, 41, 59, 0.6));
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #6ee7b7, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 导航栏 */
+        .chinook-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .chinook-nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .chinook-nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .chinook-nav-link.active {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        /* 按钮 */
+        .chinook-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chinook-btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .chinook-btn-primary:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .chinook-btn-secondary {
+            background: rgba(16, 185, 129, 0.15);
+            color: #6ee7b7;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .chinook-btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        /* 快捷操作卡片 */
+        .music-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .music-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .music-card .icon-wrapper {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .music-card .icon-artist { background: linear-gradient(135deg, #064e3b, #047857); }
+        .music-card .icon-album { background: linear-gradient(135deg, #4c1d95, #7c3aed); }
+        .music-card .icon-track { background: linear-gradient(135deg, #0c4a6e, #0284c7); }
+        .music-card .icon-genre { background: linear-gradient(135deg, #7c2d12, #ea580c); }
+
+        /* 动画 */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.6);
+        }
+
+        /* 专辑封面风格 */
+        .album-cover {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(16, 185, 129, 0.3));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        /* 艺术家头像 */
+        .artist-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+    </style>
+</head>
+<body class="text-slate-100">
+    <!-- 导航栏 -->
+    <nav class="chinook-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=chinook" class="chinook-nav-link active">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Artist?project=chinook" class="chinook-nav-link">
+                            <i class="fas fa-microphone mr-1"></i> 艺术家
+                        </a>
+                        <a href="/ui/Album?project=chinook" class="chinook-nav-link">
+                            <i class="fas fa-compact-disc mr-1"></i> 专辑
+                        </a>
+                        <a href="/ui/Track?project=chinook" class="chinook-nav-link">
+                            <i class="fas fa-music mr-1"></i> 音轨
+                        </a>
+                        <a href="/ui/Genre?project=chinook" class="chinook-nav-link">
+                            <i class="fas fa-tags mr-1"></i> 流派
+                        </a>
+                        <a href="/ui/MediaType?project=chinook" class="chinook-nav-link">
+                            <i class="fas fa-file-audio mr-1"></i> 媒体类型
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="chinook-btn chinook-btn-secondary text-sm">
+                        <option value="chinook">🎵 Chinook</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="journal">📔 Journal</option>
+                        <option value="ecommerce">🛒 Ecommerce</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 页面标题 -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2">
+                <span class="text-4xl mr-3">🎵</span>
+                Chinook 音乐商店
+            </h1>
+            <p class="text-slate-400">探索音乐世界，管理艺术家、专辑和音轨</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">艺术家</span>
+                    <span class="text-2xl">🎤</span>
+                </div>
+                <div class="stat-value" id="stat-artists">0</div>
+                <div class="text-xs text-slate-500 mt-2">音乐艺术家</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">专辑</span>
+                    <span class="text-2xl">💿</span>
+                </div>
+                <div class="stat-value" id="stat-albums">0</div>
+                <div class="text-xs text-slate-500 mt-2">音乐专辑</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-2">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">音轨</span>
+                    <span class="text-2xl">🎶</span>
+                </div>
+                <div class="stat-value" id="stat-tracks">0</div>
+                <div class="text-xs text-slate-500 mt-2">音乐曲目</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">流派</span>
+                    <span class="text-2xl">🎧</span>
+                </div>
+                <div class="stat-value" id="stat-genres">0</div>
+                <div class="text-xs text-slate-500 mt-2">音乐流派</div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <a href="/ui/Artist/create?project=chinook" class="music-card animate-fade-in">
+                <div class="icon-wrapper icon-artist">
+                    🎤
+                </div>
+                <h3 class="font-semibold text-lg mb-1">添加艺术家</h3>
+                <p class="text-sm text-slate-400">注册新艺术家</p>
+            </a>
+
+            <a href="/ui/Album/create?project=chinook" class="music-card animate-fade-in animate-delay-1">
+                <div class="icon-wrapper icon-album">
+                    💿
+                </div>
+                <h3 class="font-semibold text-lg mb-1">添加专辑</h3>
+                <p class="text-sm text-slate-400">发行新专辑</p>
+            </a>
+
+            <a href="/ui/Track/create?project=chinook" class="music-card animate-fade-in animate-delay-2">
+                <div class="icon-wrapper icon-track">
+                    🎶
+                </div>
+                <h3 class="font-semibold text-lg mb-1">添加音轨</h3>
+                <p class="text-sm text-slate-400">上传新音乐</p>
+            </a>
+
+            <a href="/ui/Genre?project=chinook" class="music-card animate-fade-in animate-delay-3">
+                <div class="icon-wrapper icon-genre">
+                    🎧
+                </div>
+                <h3 class="font-semibold text-lg mb-1">浏览流派</h3>
+                <p class="text-sm text-slate-400">探索音乐类型</p>
+            </a>
+        </div>
+
+        <!-- 热门艺术家 -->
+        <div class="stat-card animate-fade-in animate-delay-2 mb-8">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-star text-emerald-400 mr-2"></i>
+                        热门艺术家
+                    </h3>
+                    <a href="/ui/Artist?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                        查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="top-artists">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近专辑 -->
+        <div class="stat-card animate-fade-in animate-delay-3 mb-8">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-compact-disc text-violet-400 mr-2"></i>
+                        最近专辑
+                    </h3>
+                    <a href="/ui/Album?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                        查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4" id="recent-albums">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 音乐流派 -->
+        <div class="stat-card animate-fade-in animate-delay-3">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-tags text-amber-400 mr-2"></i>
+                        音乐流派
+                    </h3>
+                    <a href="/ui/Genre?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                        管理流派 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="genre-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-slate-700 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400">
+            <p>🎵 Chinook 音乐商店 - 探索音乐世界</p>
+            <p class="text-sm mt-2">艺术家管理 · 专辑收藏 · 音轨库 · 流派分类</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        const currentProject = 'chinook';
+        const currentLang = 'zh';
+
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            loadTopArtists();
+            loadRecentAlbums();
+            loadGenres();
+            setupProjectSelector();
+        });
+
+        // 项目切换
+        function setupProjectSelector() {
+            document.getElementById('project-selector').addEventListener('change', function() {
+                window.location.href = `/?project=${this.value}`;
+            });
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                const [artistsRes, albumsRes, tracksRes, genresRes] = await Promise.all([
+                    fetch(`${API_BASE}/Artist?project=${currentProject}`),
+                    fetch(`${API_BASE}/Album?project=${currentProject}`),
+                    fetch(`${API_BASE}/Track?project=${currentProject}`),
+                    fetch(`${API_BASE}/Genre?project=${currentProject}`)
+                ]);
+
+                const artists = await artistsRes.json();
+                const albums = await albumsRes.json();
+                const tracks = await tracksRes.json();
+                const genres = await genresRes.json();
+
+                document.getElementById('stat-artists').textContent = artists.length;
+                document.getElementById('stat-albums').textContent = albums.length;
+                document.getElementById('stat-tracks').textContent = tracks.length;
+                document.getElementById('stat-genres').textContent = genres.length;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // 加载热门艺术家
+        async function loadTopArtists() {
+            try {
+                const response = await fetch(`${API_BASE}/Artist?project=${currentProject}`);
+                const artists = await response.json();
+
+                const container = document.getElementById('top-artists');
+                const topArtists = artists.slice(0, 6);
+
+                container.innerHTML = topArtists.map(artist => `
+                    <div class="text-center cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/ui/Artist/edit/${artist.ArtistId}?project=${currentProject}'">
+                        <div class="artist-avatar">
+                            🎤
+                        </div>
+                        <h4 class="font-medium text-sm text-slate-200 truncate">${artist.Name || '未知艺术家'}</h4>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading artists:', error);
+            }
+        }
+
+        // 加载最近专辑
+        async function loadRecentAlbums() {
+            try {
+                const response = await fetch(`${API_BASE}/Album?project=${currentProject}`);
+                const albums = await response.json();
+
+                const container = document.getElementById('recent-albums');
+                const recentAlbums = albums.slice(0, 6);
+
+                container.innerHTML = recentAlbums.map(album => `
+                    <div class="cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/ui/Album/edit/${album.AlbumId}?project=${currentProject}'">
+                        <div class="album-cover">
+                            💿
+                        </div>
+                        <h4 class="font-medium text-sm text-slate-200 truncate">${album.Title || '未知专辑'}</h4>
+                        <p class="text-xs text-slate-500">艺术家 #${album.ArtistId}</p>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading albums:', error);
+            }
+        }
+
+        // 加载流派
+        async function loadGenres() {
+            try {
+                const response = await fetch(`${API_BASE}/Genre?project=${currentProject}`);
+                const genres = await response.json();
+
+                const container = document.getElementById('genre-list');
+
+                container.innerHTML = genres.map(genre => `
+                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Genre?project=${currentProject}'">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-xl">
+                                🎧
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-200">${genre.Name || '未知流派'}</div>
+                                <div class="text-xs text-slate-500">音乐类型</div>
+                            </div>
+                        </div>
+                    </div>
+                `).slice(0, 8).join('');
+            } catch (error) {
+                console.error('Error loading genres:', error);
+            }
+        }
+    </script>
+</body>
+</html>

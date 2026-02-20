@@ -8,199 +8,400 @@
     var total = (int)ViewData["Total"]!;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "chinook";
-    
+
     var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
     var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
 }
 
-<div class="chinook-music-app">
-    <!-- 音乐主题头部 -->
-    <div class="music-header">
-        <div class="header-content">
-            <h1 class="music-title">
-                <span class="music-icon">🎵</span>
-                @title
-            </h1>
-            <div class="music-stats">
-                <span class="stat-item">
-                    <span class="stat-num">@total</span>
-                    <span class="stat-text">@(currentLang == "zh" ? "位艺术家" : "Artists")</span>
-                </span>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title - Chinook</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/chinook.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            min-height: 100vh;
+        }
+        .artist-list-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(5, 150, 105, 0.3);
+        }
+        .page-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: white;
+        }
+        .toolbar {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .btn-add-artist {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-add-artist:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #f1f5f9;
+            width: 250px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        .btn-search {
+            padding: 0.5rem 1rem;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-search:hover {
+            background: #059669;
+        }
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .artist-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .artist-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+            transform: translateY(-4px);
+        }
+        .artist-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+        }
+        .artist-name {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 1rem;
+        }
+        .artist-actions {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+        .action-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .action-btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            color: #6ee7b7;
+        }
+        .action-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+        }
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .nav-bar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            margin-bottom: 2rem;
+        }
+        .nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.15);
+        }
+        .nav-link.active {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.2);
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 8px;
+            color: #6ee7b7;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .pagination-btn:hover {
+            background: #10b981;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-bar sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=chinook" class="nav-link">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Artist?project=chinook" class="nav-link active">
+                            <i class="fas fa-microphone mr-1"></i> 艺术家
+                        </a>
+                        <a href="/ui/Album?project=chinook" class="nav-link">
+                            <i class="fas fa-compact-disc mr-1"></i> 专辑
+                        </a>
+                        <a href="/ui/Track?project=chinook" class="nav-link">
+                            <i class="fas fa-music mr-1"></i> 音轨
+                        </a>
+                        <a href="/ui/Genre?project=chinook" class="nav-link">
+                            <i class="fas fa-tags mr-1"></i> 流派
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="chinook-btn chinook-btn-secondary text-sm">
+                        <option value="chinook">🎵 Chinook</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="journal">📔 Journal</option>
+                        <option value="ecommerce">🛒 Ecommerce</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                    </select>
+                </div>
             </div>
         </div>
-    </div>
+    </nav>
 
-    <!-- 艺术家网格 -->
-    <div class="artist-grid">
-        @foreach (var artist in Model)
-        {
-            var id = artist[def.PrimaryKey]?.ToString() ?? "";
-            var name = artist.ContainsKey("Name") ? artist["Name"]?.ToString() ?? "" : "";
-            
-            <div class="artist-card" data-id="@id">
-                <div class="artist-avatar">
-                    <span class="avatar-icon">🎤</span>
-                </div>
-                <h3 class="artist-name">@name</h3>
-                <div class="artist-actions">
-                    <a href="/ui/Artist/edit/@id?project=@currentProject" class="btn-action btn-edit">✏️</a>
-                    <button class="btn-action btn-delete" onclick="openDeleteDialog('@modelName', '@id')">🗑️</button>
+    <div class="artist-list-container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <span class="text-4xl">🎤</span>
+                @title
+            </h1>
+            <div class="stats-bar">
+                <div class="stat-badge">
+                    <span class="font-bold">@total</span> @(currentLang == "zh" ? "位艺术家" : "Artists")
                 </div>
             </div>
-        }
+        </div>
 
-        @if (!Model.Any())
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <a href="/ui/Artist/create?project=@currentProject" class="btn-add-artist">
+                <i class="fas fa-plus"></i>
+                @(currentLang == "zh" ? "添加艺术家" : "Add Artist")
+            </a>
+            <form class="search-form" method="get" action="/ui/Artist?project=@currentProject">
+                <input type="text" name="Name" placeholder="@(currentLang == "zh" ? "搜索艺术家..." : "Search artists...")"
+                       value="@(Context.Request.Query["Name"].FirstOrDefault() ?? "")"
+                       class="search-input" />
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- 艺术家网格 -->
+        <div class="artist-grid" id="artist-list">
+            @foreach (var artist in Model)
+            {
+                var id = artist[def.PrimaryKey]?.ToString() ?? "";
+                var name = artist.ContainsKey("Name") ? artist["Name"]?.ToString() ?? "" : "";
+
+                <div class="artist-card" data-id="@id" onclick="editArtist('@id')">
+                    <div class="artist-avatar">🎤</div>
+                    <h3 class="artist-name">@name</h3>
+                    <div class="artist-actions">
+                        <button class="action-btn" onclick="event.stopPropagation(); editArtist('@id')" title="@(currentLang == "zh" ? "编辑" : "Edit")">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn delete" onclick="event.stopPropagation(); openDeleteDialog('@modelName', '@id')" title="@(currentLang == "zh" ? "删除" : "Delete")">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            }
+            @if (!Model.Any())
+            {
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-icon">🎤</div>
+                    <h3>@(currentLang == "zh" ? "暂无艺术家" : "No artists yet")</h3>
+                    <p>@(currentLang == "zh" ? "点击\"添加艺术家\"开始创建第一个艺术家" : "Click \"Add Artist\" to create your first artist")</p>
+                </div>
+            }
+        </div>
+
+        <!-- 分页 -->
+        @{
+            var totalPages = (int)Math.Ceiling((double)total / size);
+        }
+        @if (totalPages > 1)
         {
-            <div class="empty-music">
-                <span class="empty-icon">🎵</span>
-                <h3>@(currentLang == "zh" ? "暂无艺术家" : "No artists yet")</h3>
-            </div>
+            <nav class="pagination">
+                @if (pageNum > 1)
+                {
+                    <a href="/ui/Artist?project=@currentProject&page=1" class="pagination-btn">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="/ui/Artist?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                }
+
+                <span class="pagination-btn" style="cursor: default;">
+                    @(currentLang == "zh" ? "第" : "Page") @pageNum @(currentLang == "zh" ? "页，共" : "of") @totalPages @(currentLang == "zh" ? "页" : "pages")
+                </span>
+
+                @if (pageNum < totalPages)
+                {
+                    <a href="/ui/Artist?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="/ui/Artist?project=@currentProject&page=@totalPages" class="pagination-btn">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                }
+            </nav>
         }
     </div>
-</div>
 
-<style>
-    .chinook-music-app {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-        min-height: 100vh;
-    }
+    <script>
+        const API_BASE = '/api';
+        const currentProject = '@currentProject';
+        const currentLang = '@currentLang';
 
-    .music-header {
-        background: linear-gradient(135deg, #e94560, #c73659);
-        border-radius: 20px;
-        padding: 2.5rem;
-        margin-bottom: 2rem;
-        box-shadow: 0 15px 50px rgba(233, 69, 96, 0.4);
-    }
+        // 编辑艺术家
+        function editArtist(id) {
+            window.location.href = `/ui/Artist/edit/${id}?project=${currentProject}`;
+        }
 
-    .header-content {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+        // 打开删除对话框
+        function openDeleteDialog(model, id) {
+            if (confirm(currentLang === 'zh' ? '确定要删除此艺术家吗？' : 'Are you sure you want to delete this artist?')) {
+                fetch(`${API_BASE}/${model}/${id}?project=${currentProject}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert(currentLang === 'zh' ? '删除失败' : 'Delete failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(currentLang === 'zh' ? '删除失败' : 'Delete failed');
+                });
+            }
+        }
 
-    .music-title {
-        color: white;
-        font-size: 2.5rem;
-        font-weight: 700;
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-    }
-
-    .music-icon {
-        font-size: 3rem;
-        animation: pulse 2s infinite;
-    }
-
-    @@keyframes pulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-
-    .music-stats {
-        display: flex;
-        gap: 2rem;
-    }
-
-    .stat-item {
-        text-align: center;
-        color: white;
-    }
-
-    .stat-num {
-        display: block;
-        font-size: 2.5rem;
-        font-weight: 700;
-    }
-
-    .stat-text {
-        font-size: 0.875rem;
-        opacity: 0.9;
-    }
-
-    .artist-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 2rem;
-    }
-
-    .artist-card {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 20px;
-        padding: 2rem;
-        text-align: center;
-        transition: all 0.3s;
-    }
-
-    .artist-card:hover {
-        background: rgba(255, 255, 255, 0.1);
-        transform: translateY(-8px);
-        border-color: #e94560;
-    }
-
-    .artist-avatar {
-        width: 100px;
-        height: 100px;
-        margin: 0 auto 1.5rem;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #e94560, #e94560);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        box-shadow: 0 8px 30px rgba(233, 69, 96, 0.4);
-    }
-
-    .avatar-icon {
-        font-size: 3rem;
-    }
-
-    .artist-name {
-        color: white;
-        font-size: 1.125rem;
-        font-weight: 600;
-        margin-bottom: 1rem;
-    }
-
-    .artist-actions {
-        display: flex;
-        justify-content: center;
-        gap: 0.75rem;
-    }
-
-    .btn-action {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: none;
-        background: rgba(255, 255, 255, 0.1);
-        color: white;
-        cursor: pointer;
-        font-size: 1rem;
-        transition: all 0.2s;
-    }
-
-    .btn-action:hover {
-        background: #e94560;
-        transform: scale(1.1);
-    }
-
-    .empty-music {
-        text-align: center;
-        padding: 4rem;
-        color: rgba(255, 255, 255, 0.5);
-        grid-column: 1 / -1;
-    }
-
-    .empty-icon {
-        font-size: 5rem;
-        display: block;
-        margin-bottom: 1rem;
-        opacity: 0.5;
-    }
-</style>
+        // 项目切换
+        document.getElementById('project-selector')?.addEventListener('change', function() {
+            window.location.href = `/?project=${this.value}`;
+        });
+    </script>
+</body>
+</html>

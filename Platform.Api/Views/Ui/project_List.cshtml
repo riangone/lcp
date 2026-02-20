@@ -14,26 +14,12 @@
 
     var statusConfig = new Dictionary<string, (string color, string icon, string label)>
     {
-        { "pending", ("status-pending", "⏳", currentLang == "zh" ? "待处理" : "Pending") },
-        { "in_progress", ("status-in-progress", "🔄", currentLang == "zh" ? "进行中" : "In Progress") },
-        { "completed", ("status-completed", "✅", currentLang == "zh" ? "已完成" : "Completed") },
-        { "cancelled", ("status-cancelled", "❌", currentLang == "zh" ? "已取消" : "Cancelled") }
+        { "planning", ("bg-blue-500/20 text-blue-400 border-blue-500/30", "📋", currentLang == "zh" ? "规划中" : "Planning") },
+        { "active", ("bg-green-500/20 text-green-400 border-green-500/30", "🚀", currentLang == "zh" ? "进行中" : "Active") },
+        { "on_hold", ("bg-yellow-500/20 text-yellow-400 border-yellow-500/30", "⏸️", currentLang == "zh" ? "已暂停" : "On Hold") },
+        { "completed", ("bg-slate-500/20 text-slate-400 border-slate-500/30", "✅", currentLang == "zh" ? "已完成" : "Completed") },
+        { "cancelled", ("bg-red-500/20 text-red-400 border-red-500/30", "❌", currentLang == "zh" ? "已取消" : "Cancelled") }
     };
-
-    var priorityConfig = new Dictionary<string, (string badge, string icon, string label)>
-    {
-        { "urgent", ("priority-urgent-badge", "🔥", currentLang == "zh" ? "紧急" : "Urgent") },
-        { "high", ("priority-high-badge", "🔴", currentLang == "zh" ? "高" : "High") },
-        { "medium", ("priority-medium-badge", "🟡", currentLang == "zh" ? "中" : "Medium") },
-        { "low", ("priority-low-badge", "🔵", currentLang == "zh" ? "低" : "Low") }
-    };
-
-    var stats = Model.GroupBy(t => t.ContainsKey("Status") ? t["Status"]?.ToString() : "pending")
-        .ToDictionary(g => g.Key, g => g.Count());
-    var totalTasks = Model.Count();
-    var pendingCount = stats.GetValueOrDefault("pending", 0);
-    var inProgressCount = stats.GetValueOrDefault("in_progress", 0);
-    var completedCount = stats.GetValueOrDefault("completed", 0);
 }
 
 <!DOCTYPE html>
@@ -47,20 +33,20 @@
     <link rel="stylesheet" href="/css/todo.css" />
     <style>
         body {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #4c1d95 100%);
             min-height: 100vh;
         }
-        .task-list-container {
+        .project-list-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
         }
         .page-header {
-            background: linear-gradient(135deg, #10b981, #059669);
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
             border-radius: 16px;
             padding: 2rem;
             margin-bottom: 2rem;
-            box-shadow: 0 10px 40px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 10px 40px rgba(124, 58, 237, 0.3);
         }
         .page-title {
             color: white;
@@ -69,155 +55,6 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-        }
-        .toolbar {
-            background: rgba(30, 41, 59, 0.8);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-bottom: 1.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(16, 185, 129, 0.2);
-        }
-        .btn-new-task {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.2s;
-        }
-        .btn-new-task:hover {
-            background: linear-gradient(135deg, #059669, #047857);
-            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
-            transform: translateY(-1px);
-        }
-        .view-toggle {
-            display: flex;
-            gap: 0.5rem;
-            background: rgba(107, 114, 128, 0.2);
-            padding: 0.375rem;
-            border-radius: 8px;
-        }
-        .view-btn {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            border: none;
-            background: transparent;
-            color: #94a3b8;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        .view-btn.active {
-            background: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-        }
-        .task-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 1.5rem;
-        }
-        .task-card {
-            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
-            border: 1px solid rgba(16, 185, 129, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-        .task-card:hover {
-            border-color: rgba(16, 185, 129, 0.4);
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
-            transform: translateY(-4px);
-        }
-        .task-card.priority-urgent { border-left: 4px solid #ef4444; }
-        .task-card.priority-high { border-left: 4px solid #f59e0b; }
-        .task-card.priority-medium { border-left: 4px solid #3b82f6; }
-        .task-card.priority-low { border-left: 4px solid #10b981; }
-        .task-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-        .task-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #f1f5f9;
-            flex: 1;
-        }
-        .task-badges {
-            display: flex;
-            gap: 0.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-        }
-        .task-description {
-            color: #94a3b8;
-            font-size: 0.875rem;
-            margin-bottom: 1rem;
-            line-height: 1.6;
-        }
-        .task-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(148, 163, 184, 0.1);
-        }
-        .task-due-date {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.375rem;
-            font-size: 0.75rem;
-            color: #94a3b8;
-            padding: 0.25rem 0.5rem;
-            background: rgba(107, 114, 128, 0.15);
-            border-radius: 6px;
-        }
-        .task-due-date.overdue {
-            background: rgba(239, 68, 68, 0.15);
-            color: #f87171;
-        }
-        .task-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .task-action-btn {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(148, 163, 184, 0.1);
-            color: #94a3b8;
-            cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.2s;
-        }
-        .task-action-btn:hover {
-            background: rgba(16, 185, 129, 0.2);
-            color: #34d399;
-        }
-        .task-action-btn.delete:hover {
-            background: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 4rem;
-            color: #94a3b8;
-        }
-        .empty-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
         }
         .stats-bar {
             display: flex;
@@ -231,10 +68,125 @@
             font-size: 0.875rem;
             color: white;
         }
+        .toolbar {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .btn-new-project {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-new-project:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+            transform: translateY(-1px);
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        .project-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .project-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+            transform: translateY(-4px);
+        }
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            flex: 1;
+        }
+        .project-description {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .project-dates {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+        .project-date {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+        .project-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .project-action-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(148, 163, 184, 0.1);
+            color: #94a3b8;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        .project-action-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+        }
+        .project-action-btn.delete:hover {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+        }
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
         .nav-bar {
             background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
             margin-bottom: 2rem;
         }
         .nav-link {
@@ -246,11 +198,20 @@
         }
         .nav-link:hover {
             color: #f1f5f9;
-            background: rgba(16, 185, 129, 0.15);
+            background: rgba(139, 92, 246, 0.15);
         }
         .nav-link.active {
             color: #f1f5f9;
-            background: rgba(16, 185, 129, 0.2);
+            background: rgba(139, 92, 246, 0.2);
+        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
         }
     </style>
 </head>
@@ -268,10 +229,10 @@
                         <a href="/?project=todo" class="nav-link">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Task?project=todo" class="nav-link active">
+                        <a href="/ui/Task?project=todo" class="nav-link">
                             <i class="fas fa-check-square mr-1"></i> 任务
                         </a>
-                        <a href="/ui/Project?project=todo" class="nav-link">
+                        <a href="/ui/Project?project=todo" class="nav-link active">
                             <i class="fas fa-folder mr-1"></i> 项目
                         </a>
                         <a href="/ui/TaskWithProject?project=todo" class="nav-link">
@@ -293,22 +254,23 @@
         </div>
     </nav>
 
-    <div class="task-list-container">
+    <div class="project-list-container">
         <!-- 页面标题 -->
         <div class="page-header">
             <h1 class="page-title">
-                <span class="text-4xl">📝</span>
+                <span class="text-4xl">📁</span>
                 @title
             </h1>
             <div class="stats-bar">
                 <div class="stat-badge">
-                    <span class="font-bold">@totalTasks</span> @(currentLang == "zh" ? "总任务" : "Total")
+                    <span class="font-bold">@total</span> @(currentLang == "zh" ? "总项目" : "Total Projects")
                 </div>
+                @{
+                    var activeCount = Model.Count(p => p.ContainsKey("Status") && p["Status"]?.ToString() == "active");
+                    var completedCount = Model.Count(p => p.ContainsKey("Status") && p["Status"]?.ToString() == "completed");
+                }
                 <div class="stat-badge">
-                    <span class="font-bold">@pendingCount</span> @(currentLang == "zh" ? "待处理" : "Pending")
-                </div>
-                <div class="stat-badge">
-                    <span class="font-bold">@inProgressCount</span> @(currentLang == "zh" ? "进行中" : "In Progress")
+                    <span class="font-bold">@activeCount</span> @(currentLang == "zh" ? "进行中" : "Active")
                 </div>
                 <div class="stat-badge">
                     <span class="font-bold">@completedCount</span> @(currentLang == "zh" ? "已完成" : "Completed")
@@ -318,62 +280,59 @@
 
         <!-- 工具栏 -->
         <div class="toolbar">
-            <a href="/ui/Task/create?project=@currentProject" class="btn-new-task">
+            <a href="/ui/Project/create?project=@currentProject" class="btn-new-project">
                 <i class="fas fa-plus"></i>
-                @(currentLang == "zh" ? "新建任务" : "New Task")
+                @(currentLang == "zh" ? "新建项目" : "New Project")
             </a>
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="setView('grid')">
-                    <i class="fas fa-th-large"></i> @(currentLang == "zh" ? "网格" : "Grid")
-                </button>
-                <button class="view-btn" onclick="setView('list')">
-                    <i class="fas fa-list"></i> @(currentLang == "zh" ? "列表" : "List")
-                </button>
-            </div>
         </div>
 
-        <!-- 任务网格 -->
-        <div id="task-grid" class="task-grid">
-            @foreach (var task in Model)
+        <!-- 项目网格 -->
+        <div id="project-grid" class="project-grid">
+            @foreach (var project in Model)
             {
-                var id = task[def.PrimaryKey]?.ToString() ?? "";
-                var titleText = task.ContainsKey("Title") ? task["Title"]?.ToString() ?? "" : "";
-                var description = task.ContainsKey("Description") ? task["Description"]?.ToString() ?? "" : "";
-                var status = task.ContainsKey("Status") ? task["Status"]?.ToString() ?? "pending" : "pending";
-                var priority = task.ContainsKey("Priority") ? task["Priority"]?.ToString() ?? "medium" : "medium";
-                var dueDate = task.ContainsKey("DueDate") ? task["DueDate"]?.ToString() ?? "" : "";
+                var id = project[def.PrimaryKey]?.ToString() ?? "";
+                var name = project.ContainsKey("Name") ? project["Name"]?.ToString() ?? "" : "";
+                var description = project.ContainsKey("Description") ? project["Description"]?.ToString() ?? "" : "";
+                var status = project.ContainsKey("Status") ? project["Status"]?.ToString() ?? "planning" : "planning";
+                var startDate = project.ContainsKey("StartDate") ? project["StartDate"]?.ToString() ?? "" : "";
+                var endDate = project.ContainsKey("EndDate") ? project["EndDate"]?.ToString() ?? "" : "";
 
-                var statusInfo = statusConfig.ContainsKey(status) ? statusConfig[status] : statusConfig["pending"];
-                var priorityInfo = priorityConfig.ContainsKey(priority) ? priorityConfig[priority] : priorityConfig["medium"];
+                var statusInfo = statusConfig.ContainsKey(status) ? statusConfig[status] : statusConfig["planning"];
 
-                var priorityClass = $"priority-{priority}";
-                var isOverdue = !string.IsNullOrEmpty(dueDate) && DateTime.Parse(dueDate) < DateTime.Now && status != "completed";
-
-                <div class="task-card @priorityClass" data-id="@id" data-status="@status" onclick="editTask('@id')">
-                    <div class="task-header">
-                        <h3 class="task-title">@titleText</h3>
-                    </div>
-                    <div class="task-badges">
-                        <span class="priority-badge @priorityInfo.badge">@priorityInfo.icon @priorityInfo.label</span>
+                <div class="project-card" data-id="@id" onclick="editProject('@id')">
+                    <div class="project-header">
+                        <h3 class="project-title">@name</h3>
                         <span class="status-badge @statusInfo.color">@statusInfo.icon @statusInfo.label</span>
                     </div>
                     @if (!string.IsNullOrEmpty(description))
                     {
-                        <p class="task-description">@description</p>
+                        <p class="project-description">@description</p>
                     }
-                    <div class="task-meta">
-                        @if (!string.IsNullOrEmpty(dueDate))
+                    <div class="project-meta">
+                        @if (!string.IsNullOrEmpty(startDate) || !string.IsNullOrEmpty(endDate))
                         {
-                            <div class="task-due-date @(isOverdue ? "overdue" : "")">
-                                <i class="fas fa-calendar"></i>
-                                <span>@dueDate</span>
+                            <div class="project-dates">
+                                @if (!string.IsNullOrEmpty(startDate))
+                                {
+                                    <span class="project-date">
+                                        <i class="fas fa-calendar"></i>
+                                        <span>@startDate</span>
+                                    </span>
+                                }
+                                @if (!string.IsNullOrEmpty(endDate))
+                                {
+                                    <span class="project-date">
+                                        <i class="fas fa-flag"></i>
+                                        <span>@endDate</span>
+                                    </span>
+                                }
                             </div>
                         }
-                        <div class="task-actions">
-                            <button class="task-action-btn" onclick="event.stopPropagation(); editTask('@id')" title="@(currentLang == "zh" ? "编辑" : "Edit")">
+                        <div class="project-actions">
+                            <button class="project-action-btn" onclick="event.stopPropagation(); editProject('@id')" title="@(currentLang == "zh" ? "编辑" : "Edit")">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button class="task-action-btn delete" onclick="event.stopPropagation(); openDeleteDialog('@modelName', '@id')" title="@(currentLang == "zh" ? "删除" : "Delete")">
+                            <button class="project-action-btn delete" onclick="event.stopPropagation(); openDeleteDialog('@modelName', '@id')" title="@(currentLang == "zh" ? "删除" : "Delete")">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -383,9 +342,9 @@
             @if (!Model.Any())
             {
                 <div class="empty-state" style="grid-column: 1 / -1;">
-                    <div class="empty-icon">📝</div>
-                    <h3>@(currentLang == "zh" ? "暂无任务" : "No tasks yet")</h3>
-                    <p>@(currentLang == "zh" ? "点击\"新建任务\"开始创建第一个任务" : "Click \"New Task\" to create your first task")</p>
+                    <div class="empty-icon">📁</div>
+                    <h3>@(currentLang == "zh" ? "暂无项目" : "No projects yet")</h3>
+                    <p>@(currentLang == "zh" ? "点击\"新建项目\"开始创建第一个项目" : "Click \"New Project\" to create your first project")</p>
                 </div>
             }
         </div>
@@ -396,30 +355,14 @@
         const currentProject = '@currentProject';
         const currentLang = '@currentLang';
 
-        // 切换视图
-        function setView(view) {
-            const grid = document.getElementById('task-grid');
-            const btns = document.querySelectorAll('.view-btn');
-            
-            if (view === 'grid') {
-                grid.style.display = 'grid';
-                btns[0].classList.add('active');
-                btns[1].classList.remove('active');
-            } else {
-                grid.style.display = 'block';
-                btns[0].classList.remove('active');
-                btns[1].classList.add('active');
-            }
-        }
-
-        // 编辑任务
-        function editTask(id) {
-            window.location.href = `/ui/Task/edit/${id}?project=${currentProject}`;
+        // 编辑项目
+        function editProject(id) {
+            window.location.href = `/ui/Project/edit/${id}?project=${currentProject}`;
         }
 
         // 打开删除对话框
         function openDeleteDialog(model, id) {
-            if (confirm(currentLang === 'zh' ? '确定要删除此任务吗？' : 'Are you sure you want to delete this task?')) {
+            if (confirm(currentLang === 'zh' ? '确定要删除此项目吗？' : 'Are you sure you want to delete this project?')) {
                 fetch(`${API_BASE}/${model}/${id}?project=${currentProject}`, {
                     method: 'DELETE',
                     headers: {

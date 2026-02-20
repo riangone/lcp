@@ -1,0 +1,716 @@
+@{
+    ViewData["Title"] = "📔 Journal 日记本";
+    ViewData["ActivePage"] = "Journal";
+    var project = "journal";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📔 Journal 日记本 - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Journal 应用主题色 */
+        :root {
+            --journal-primary: #8b5cf6;
+            --journal-primary-dark: #7c3aed;
+            --journal-primary-light: #a78bfa;
+            --journal-accent: #ec4899;
+            --journal-warning: #f59e0b;
+            --journal-success: #10b981;
+            --journal-info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #4c1d95 100%);
+            min-height: 100vh;
+        }
+
+        /* 日记卡片 */
+        .journal-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .journal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--journal-primary), var(--journal-accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .journal-card:hover {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 8px 32px rgba(139, 92, 246, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .journal-card:hover::before {
+            opacity: 1;
+        }
+
+        /* 统计卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(139, 92, 246, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(30, 41, 59, 0.6));
+            border-color: rgba(139, 92, 246, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #c4b5fd, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 心情徽章 */
+        .mood-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .mood-happy { background: rgba(251, 191, 36, 0.15); color: #fbbf24; }
+        .mood-good { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .mood-neutral { background: rgba(148, 163, 184, 0.15); color: #9ca3af; }
+        .mood-bad { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+        .mood-angry { background: rgba(127, 29, 29, 0.5); color: #fca5a5; }
+
+        /* 导航栏 */
+        .journal-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .journal-nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .journal-nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(139, 92, 246, 0.15);
+        }
+
+        .journal-nav-link.active {
+            color: #f1f5f9;
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        /* 按钮 */
+        .journal-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .journal-btn-primary {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+
+        .journal-btn-primary:hover {
+            background: linear-gradient(135deg, #7c3aed, #6d28d9);
+            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .journal-btn-secondary {
+            background: rgba(139, 92, 246, 0.15);
+            color: #c4b5fd;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .journal-btn-secondary:hover {
+            background: rgba(139, 92, 246, 0.25);
+        }
+
+        /* 动画 */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.6);
+        }
+
+        /* 时间线 */
+        .timeline-item {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.5rem;
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: var(--journal-primary);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: calc(0.375rem - 1px);
+            top: 1.5rem;
+            bottom: -1rem;
+            width: 2px;
+            background: linear-gradient(to bottom, rgba(139, 92, 246, 0.5), transparent);
+        }
+
+        .timeline-item:last-child::after {
+            display: none;
+        }
+
+        /* 分类标签 */
+        .category-tag {
+            padding: 0.25rem 0.625rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .category-life { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .category-work { background: rgba(139, 92, 246, 0.2); color: #a78bfa; }
+        .category-study { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+        .category-travel { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .category-other { background: rgba(107, 114, 128, 0.2); color: #9ca3af; }
+    </style>
+</head>
+<body class="text-slate-100">
+    <!-- 导航栏 -->
+    <nav class="journal-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=journal" class="journal-nav-link active">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Entry?project=journal" class="journal-nav-link">
+                            <i class="fas fa-book-open mr-1"></i> 日记
+                        </a>
+                        <a href="/ui/Category?project=journal" class="journal-nav-link">
+                            <i class="fas fa-folder mr-1"></i> 分类
+                        </a>
+                        <a href="/ui/Tag?project=journal" class="journal-nav-link">
+                            <i class="fas fa-tags mr-1"></i> 标签
+                        </a>
+                        <a href="/ui/EntryWithCategory?project=journal" class="journal-nav-link">
+                            <i class="fas fa-chart-pie mr-1"></i> 视图
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="journal-btn journal-btn-secondary text-sm">
+                        <option value="journal">📔 Journal</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                        <option value="ecommerce">🛒 电商</option>
+                        <option value="chinook">🎵 音乐</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 页面标题 -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2">
+                <span class="text-4xl mr-3">📔</span>
+                Journal 日记本
+            </h1>
+            <p class="text-slate-400">记录生活点滴，珍藏美好回忆</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">总日记数</span>
+                    <span class="text-2xl">📝</span>
+                </div>
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="text-xs text-slate-500 mt-2">所有日记</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">本月日记</span>
+                    <span class="text-2xl">📅</span>
+                </div>
+                <div class="stat-value" id="stat-month">0</div>
+                <div class="text-xs text-slate-500 mt-2">本月记录</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-2">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">分类数</span>
+                    <span class="text-2xl">🏷️</span>
+                </div>
+                <div class="stat-value" id="stat-categories">0</div>
+                <div class="text-xs text-slate-500 mt-2">日记分类</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">标签数</span>
+                    <span class="text-2xl">🔖</span>
+                </div>
+                <div class="stat-value" id="stat-tags">0</div>
+                <div class="text-xs text-slate-500 mt-2">心情标签</div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="/ui/Entry/create?project=journal" class="stat-card group animate-fade-in">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        ✍️
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">写日记</h3>
+                        <p class="text-sm text-slate-400">记录今天的故事</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/ui/Category?project=journal" class="stat-card group animate-fade-in animate-delay-1">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        📁
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">分类管理</h3>
+                        <p class="text-sm text-slate-400">管理日记分类</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/ui/EntryWithCategory?project=journal" class="stat-card group animate-fade-in animate-delay-2">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        😊
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">心情追踪</h3>
+                        <p class="text-sm text-slate-400">查看心情记录</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 心情分布 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="journal-card animate-fade-in animate-delay-3">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-face-smile text-violet-400 mr-2"></i>
+                        心情分布
+                    </h3>
+                    <div class="space-y-3" id="mood-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="journal-card animate-fade-in animate-delay-3">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-folder text-fuchsia-400 mr-2"></i>
+                        分类统计
+                    </h3>
+                    <div class="space-y-3" id="category-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近日记 -->
+        <div class="journal-card animate-fade-in animate-delay-2 mb-8">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-clock text-violet-400 mr-2"></i>
+                        最近日记
+                    </h3>
+                    <a href="/ui/Entry?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                        查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="space-y-4" id="recent-entries">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 分类列表 -->
+        <div class="journal-card animate-fade-in animate-delay-3">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-tags text-pink-400 mr-2"></i>
+                        分类与标签
+                    </h3>
+                    <div class="flex gap-2">
+                        <a href="/ui/Category?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                            管理分类 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                        <a href="/ui/Tag?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                            管理标签 <i class="fas fa-arrow-right ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 class="text-sm font-semibold text-slate-400 mb-3">分类</h4>
+                        <div class="space-y-2" id="category-list">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-sm font-semibold text-slate-400 mb-3">标签</h4>
+                        <div class="space-y-2" id="tag-list">
+                            <!-- 动态生成 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-slate-700 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400">
+            <p>📔 Journal 日记本 - 记录生活点滴</p>
+            <p class="text-sm mt-2">日记记录 · 分类管理 · 心情追踪 · 标签管理</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        const currentProject = 'journal';
+        const currentLang = 'zh';
+
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            loadMoodDistribution();
+            loadCategoryDistribution();
+            loadRecentEntries();
+            loadCategories();
+            loadTags();
+            setupProjectSelector();
+        });
+
+        // 项目切换
+        function setupProjectSelector() {
+            document.getElementById('project-selector').addEventListener('change', function() {
+                window.location.href = `/?project=${this.value}`;
+            });
+        }
+
+        // 心情配置
+        const moodConfig = {
+            happy: { emoji: '😊', label: '开心', color: 'mood-happy' },
+            good: { emoji: '🙂', label: '不错', color: 'mood-good' },
+            neutral: { emoji: '😐', label: '平静', color: 'mood-neutral' },
+            bad: { emoji: '😔', label: '糟糕', color: 'mood-bad' },
+            angry: { emoji: '😠', label: '生气', color: 'mood-angry' }
+        };
+
+        // 分类配置
+        const categoryConfig = {
+            life: { emoji: '📔', label: '生活', color: 'category-life' },
+            work: { emoji: '💼', label: '工作', color: 'category-work' },
+            study: { emoji: '📚', label: '学习', color: 'category-study' },
+            travel: { emoji: '✈️', label: '旅行', color: 'category-travel' },
+            other: { emoji: '📁', label: '其他', color: 'category-other' }
+        };
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                const [entriesRes, categoriesRes, tagsRes] = await Promise.all([
+                    fetch(`${API_BASE}/Entry?project=${currentProject}`),
+                    fetch(`${API_BASE}/Category?project=${currentProject}`),
+                    fetch(`${API_BASE}/Tag?project=${currentProject}`)
+                ]);
+
+                const entries = await entriesRes.json();
+                const categories = await categoriesRes.json();
+                const tags = await tagsRes.json();
+
+                // 计算本月日记数
+                const now = new Date();
+                const currentMonth = now.toISOString().slice(0, 7);
+                const monthCount = entries.filter(e => {
+                    const date = e.Date ? new Date(e.Date) : null;
+                    return date && date.toISOString().slice(0, 7) === currentMonth;
+                }).length;
+
+                document.getElementById('stat-total').textContent = entries.length;
+                document.getElementById('stat-month').textContent = monthCount;
+                document.getElementById('stat-categories').textContent = categories.length;
+                document.getElementById('stat-tags').textContent = tags.length;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // 加载心情分布
+        async function loadMoodDistribution() {
+            try {
+                const response = await fetch(`${API_BASE}/Entry?project=${currentProject}`);
+                const entries = await response.json();
+
+                const moodCounts = {};
+                Object.keys(moodConfig).forEach(m => moodCounts[m] = 0);
+                entries.forEach(e => {
+                    const mood = e.Mood || 'neutral';
+                    moodCounts[mood] = (moodCounts[mood] || 0) + 1;
+                });
+
+                const total = entries.length || 1;
+                const container = document.getElementById('mood-distribution');
+
+                container.innerHTML = Object.entries(moodConfig).map(([key, config]) => {
+                    const count = moodCounts[key] || 0;
+                    const percent = Math.round((count / total) * 100);
+                    return `
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-300">${config.emoji} ${config.label}</span>
+                                <span class="text-slate-400">${count} (${percent}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-violet-500 to-fuchsia-500 h-2.5 rounded-full" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading mood distribution:', error);
+            }
+        }
+
+        // 加载分类分布
+        async function loadCategoryDistribution() {
+            try {
+                const response = await fetch(`${API_BASE}/Entry?project=${currentProject}`);
+                const entries = await response.json();
+
+                const categoryCounts = {};
+                entries.forEach(e => {
+                    const catId = e.CategoryId || 'other';
+                    categoryCounts[catId] = (categoryCounts[catId] || 0) + 1;
+                });
+
+                const total = entries.length || 1;
+                const container = document.getElementById('category-distribution');
+
+                const categories = [
+                    { id: '1', key: 'life', name: '生活' },
+                    { id: '2', key: 'work', name: '工作' },
+                    { id: '3', key: 'study', name: '学习' },
+                    { id: '4', key: 'travel', name: '旅行' },
+                    { id: '5', key: 'other', name: '其他' }
+                ];
+
+                container.innerHTML = categories.map(cat => {
+                    const count = categoryCounts[cat.id] || 0;
+                    const percent = Math.round((count / total) * 100);
+                    return `
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-300">${categoryConfig[cat.key].emoji} ${cat.name}</span>
+                                <span class="text-slate-400">${count} (${percent}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-fuchsia-500 to-pink-500 h-2.5 rounded-full" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading category distribution:', error);
+            }
+        }
+
+        // 加载最近日记
+        async function loadRecentEntries() {
+            try {
+                const response = await fetch(`${API_BASE}/Entry?project=${currentProject}&sortBy=Date&sortDir=desc`);
+                const entries = await response.json();
+
+                const container = document.getElementById('recent-entries');
+                const recentEntries = entries.slice(0, 5);
+
+                container.innerHTML = recentEntries.map(entry => {
+                    const mood = moodConfig[entry.Mood] || moodConfig.neutral;
+                    const date = entry.Date ? new Date(entry.Date).toLocaleDateString('zh-CN') : '';
+                    const excerpt = entry.Content ? (entry.Content.substring(0, 100) + '...') : '';
+
+                    return `
+                        <div class="timeline-item pb-4">
+                            <div class="flex items-start justify-between mb-2">
+                                <h4 class="font-semibold text-slate-200">${entry.Title || '无标题'}</h4>
+                                <span class="mood-badge ${mood.color}">${mood.emoji} ${mood.label}</span>
+                            </div>
+                            <p class="text-sm text-slate-400 mb-2">${excerpt}</p>
+                            <div class="flex items-center justify-between text-xs text-slate-500">
+                                <span><i class="far fa-calendar mr-1"></i>${date}</span>
+                                <a href="/ui/Entry/edit/${entry.Id}?project=${currentProject}" class="text-violet-400 hover:text-violet-300">
+                                    <i class="fas fa-arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading recent entries:', error);
+            }
+        }
+
+        // 加载分类
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE}/Category?project=${currentProject}`);
+                const categories = await response.json();
+
+                const container = document.getElementById('category-list');
+
+                container.innerHTML = categories.map(cat => {
+                    const catConfig = Object.values(categoryConfig).find(c => c.label === (cat.Name || '')) || categoryConfig.other;
+                    return `
+                        <div class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50">
+                            <div class="flex items-center gap-2">
+                                <span class="category-tag ${catConfig.color}">${catConfig.emoji} ${cat.Name || '未分类'}</span>
+                            </div>
+                            <span class="text-xs text-slate-500">${cat.Description || ''}</span>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+
+        // 加载标签
+        async function loadTags() {
+            try {
+                const response = await fetch(`${API_BASE}/Tag?project=${currentProject}`);
+                const tags = await response.json();
+
+                const container = document.getElementById('tag-list');
+
+                container.innerHTML = tags.map(tag => `
+                    <div class="flex items-center justify-between p-2 rounded-lg bg-slate-800/50">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full" style="background-color: ${tag.Color || '#10b981'}"></span>
+                            <span class="text-sm text-slate-300">${tag.Name || '未命名'}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading tags:', error);
+            }
+        }
+    </script>
+</body>
+</html>

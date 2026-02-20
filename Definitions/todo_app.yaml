@@ -10,15 +10,23 @@ models:
     # UI 配置
     ui:
       layout:
-        theme: default
+        theme: todo
         grid_columns: 2
       labels:
         en:
           title: Tasks
           create_button: Add Task
+          create_form_title: Create Task
+          edit_form_title: Edit Task
           edit_button: Edit
           delete_button: Delete
+          details_button: Details
           search_placeholder: Search tasks...
+          filter_button: Filter
+          clear_button: Clear
+          new_button: New Task
+          save_button: Save
+          cancel_button: Cancel
           Id: ID
           Title: Title
           Description: Description
@@ -27,16 +35,22 @@ models:
           DueDate: Due Date
           CreatedAt: Created At
           CompletedAt: Completed At
+          ProjectId: Project
           Actions: Actions
-          new_button: New
-          save_button: Save
-          cancel_button: Cancel
         zh:
           title: 任务管理
           create_button: 添加任务
+          create_form_title: 创建任务
+          edit_form_title: 编辑任务
           edit_button: 编辑
           delete_button: 删除
+          details_button: 详情
           search_placeholder: 搜索任务...
+          filter_button: 筛选
+          clear_button: 清除
+          new_button: 新建任务
+          save_button: 保存
+          cancel_button: 取消
           Id: 编号
           Title: 标题
           Description: 描述
@@ -45,10 +59,8 @@ models:
           DueDate: 截止日期
           CreatedAt: 创建时间
           CompletedAt: 完成时间
+          ProjectId: 所属项目
           Actions: 操作
-          new_button: 新增
-          save_button: 保存
-          cancel_button: 取消
       styles:
         card_class: "card-task"
         button_class: "btn btn-primary"
@@ -153,34 +165,52 @@ models:
 
     ui:
       layout:
-        theme: default
+        theme: todo
         grid_columns: 2
       labels:
         en:
           title: Projects
           create_button: Add Project
+          create_form_title: Create Project
+          edit_form_title: Edit Project
           edit_button: Edit
           delete_button: Delete
+          details_button: Details
           search_placeholder: Search projects...
+          filter_button: Filter
+          clear_button: Clear
+          new_button: New Project
+          save_button: Save
+          cancel_button: Cancel
           Id: ID
           Name: Project Name
           Description: Description
           Status: Status
           StartDate: Start Date
           EndDate: End Date
+          CreatedAt: Created At
           Actions: Actions
         zh:
           title: 项目管理
           create_button: 添加项目
+          create_form_title: 创建项目
+          edit_form_title: 编辑项目
           edit_button: 编辑
           delete_button: 删除
+          details_button: 详情
           search_placeholder: 搜索项目...
+          filter_button: 筛选
+          clear_button: 清除
+          new_button: 新建项目
+          save_button: 保存
+          cancel_button: 取消
           Id: 编号
           Name: 项目名称
           Description: 描述
           Status: 状态
           StartDate: 开始日期
           EndDate: 结束日期
+          CreatedAt: 创建时间
           Actions: 操作
       styles:
         card_class: "card-project"

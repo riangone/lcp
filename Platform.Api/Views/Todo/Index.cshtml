@@ -1,0 +1,770 @@
+@{
+    ViewData["Title"] = "✅ TODO 任务管理";
+    ViewData["ActivePage"] = "TODO";
+    var project = "todo";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>✅ TODO 任务管理 - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* TODO 应用主题色 */
+        :root {
+            --todo-primary: #10b981;
+            --todo-primary-dark: #059669;
+            --todo-primary-light: #34d399;
+            --todo-accent: #8b5cf6;
+            --todo-warning: #f59e0b;
+            --todo-danger: #ef4444;
+            --todo-info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            min-height: 100vh;
+        }
+
+        /* 任务卡片 */
+        .task-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--todo-primary), var(--todo-accent));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .task-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .task-card:hover::before {
+            opacity: 1;
+        }
+
+        .task-card.priority-urgent {
+            border-left: 4px solid var(--todo-danger);
+        }
+
+        .task-card.priority-high {
+            border-left: 4px solid var(--todo-warning);
+        }
+
+        .task-card.priority-medium {
+            border-left: 4px solid var(--todo-info);
+        }
+
+        .task-card.priority-low {
+            border-left: 4px solid var(--todo-primary);
+        }
+
+        /* 状态徽章 */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+        }
+
+        .status-pending {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-in-progress {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .status-completed {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .status-cancelled {
+            background: rgba(107, 114, 128, 0.15);
+            color: #9ca3af;
+            border: 1px solid rgba(107, 114, 128, 0.3);
+        }
+
+        /* 统计卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(16, 185, 129, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(30, 41, 59, 0.6));
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #34d399, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.urgent {
+            background: linear-gradient(135deg, #f87171, #ef4444);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.high {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 导航栏 */
+        .todo-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .todo-nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .todo-nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.15);
+        }
+
+        .todo-nav-link.active {
+            color: #f1f5f9;
+            background: rgba(16, 185, 129, 0.2);
+        }
+
+        /* 按钮 */
+        .todo-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .todo-btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+
+        .todo-btn-primary:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .todo-btn-secondary {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .todo-btn-secondary:hover {
+            background: rgba(16, 185, 129, 0.25);
+        }
+
+        /* 进度条 */
+        .progress-bar {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 9999px;
+            overflow: hidden;
+            height: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.pending { background: #fbbf24; }
+        .progress-fill.in-progress { background: #60a5fa; }
+        .progress-fill.completed { background: #34d399; }
+
+        /* 优先级标签 */
+        .priority-badge {
+            padding: 0.25rem 0.625rem;
+            border-radius: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .priority-urgent-badge {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .priority-high-badge {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .priority-medium-badge {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .priority-low-badge {
+            background: rgba(16, 185, 129, 0.2);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        /* 动画 */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 185, 129, 0.6);
+        }
+
+        /* 任务看板列 */
+        .kanban-column {
+            background: rgba(30, 41, 59, 0.5);
+            border-radius: 12px;
+            padding: 1rem;
+            min-height: 400px;
+        }
+
+        .kanban-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* 日期徽章 */
+        .date-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            font-size: 0.75rem;
+            color: #94a3b8;
+            padding: 0.25rem 0.5rem;
+            background: rgba(107, 114, 128, 0.15);
+            border-radius: 6px;
+        }
+
+        .date-badge.overdue {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .date-badge.today {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body class="text-slate-100">
+    <!-- 导航栏 -->
+    <nav class="todo-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=todo" class="todo-nav-link active">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Task?project=todo" class="todo-nav-link">
+                            <i class="fas fa-check-square mr-1"></i> 任务
+                        </a>
+                        <a href="/ui/Project?project=todo" class="todo-nav-link">
+                            <i class="fas fa-folder mr-1"></i> 项目
+                        </a>
+                        <a href="/ui/TaskWithProject?project=todo" class="todo-nav-link">
+                            <i class="fas fa-chart-pie mr-1"></i> 项目任务
+                        </a>
+                        <a href="/ui/ProjectStats?project=todo" class="todo-nav-link">
+                            <i class="fas fa-chart-bar mr-1"></i> 统计
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="todo-btn todo-btn-secondary text-sm">
+                        <option value="todo">✅ TODO</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                        <option value="journal">📔 日记</option>
+                        <option value="ecommerce">🛒 电商</option>
+                        <option value="chinook">🎵 音乐</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 页面标题 -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2">
+                <span class="text-4xl mr-3">✅</span>
+                TODO 任务管理
+            </h1>
+            <p class="text-slate-400">高效管理任务和项目，提升工作效率</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+            <div class="stat-card animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">总任务数</span>
+                    <span class="text-2xl">📊</span>
+                </div>
+                <div class="stat-value" id="stat-total">0</div>
+                <div class="text-xs text-slate-500 mt-2">所有任务</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">待处理</span>
+                    <span class="text-2xl">⏳</span>
+                </div>
+                <div class="stat-value" id="stat-pending">0</div>
+                <div class="text-xs text-yellow-500 mt-2">等待开始</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-2">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">进行中</span>
+                    <span class="text-2xl">🔄</span>
+                </div>
+                <div class="stat-value" id="stat-in-progress">0</div>
+                <div class="text-xs text-blue-500 mt-2">正在执行</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">已完成</span>
+                    <span class="text-2xl">✅</span>
+                </div>
+                <div class="stat-value" id="stat-completed">0</div>
+                <div class="text-xs text-green-500 mt-2">已完成任务</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-4">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">紧急任务</span>
+                    <span class="text-2xl">🔥</span>
+                </div>
+                <div class="stat-value urgent" id="stat-urgent">0</div>
+                <div class="text-xs text-red-500 mt-2">需要立即处理</div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <a href="/ui/Task/create?project=todo" class="stat-card group animate-fade-in">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        📝
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">创建任务</h3>
+                        <p class="text-sm text-slate-400">快速添加新任务</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/ui/Project/create?project=todo" class="stat-card group animate-fade-in animate-delay-1">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        📁
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">创建项目</h3>
+                        <p class="text-sm text-slate-400">管理项目集合</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/ui/TaskWithProject?project=todo" class="stat-card group animate-fade-in animate-delay-2">
+                <div class="flex items-center space-x-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
+                        📊
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-lg">项目任务视图</h3>
+                        <p class="text-sm text-slate-400">按项目查看任务</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- 任务进度概览 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <!-- 任务状态分布 -->
+            <div class="todo-card animate-fade-in animate-delay-3">
+                <div class="bg-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-chart-pie text-emerald-400 mr-2"></i>
+                        任务状态分布
+                    </h3>
+                    <div class="space-y-4" id="status-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 优先级分布 -->
+            <div class="todo-card animate-fade-in animate-delay-3">
+                <div class="bg-card rounded-xl p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-flag text-yellow-400 mr-2"></i>
+                        优先级分布
+                    </h3>
+                    <div class="space-y-4" id="priority-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近任务 -->
+        <div class="bg-card rounded-xl p-6 mb-8 animate-fade-in animate-delay-2">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-clock text-blue-400 mr-2"></i>
+                    最近任务
+                </h3>
+                <a href="/ui/Task?project=todo" class="todo-btn todo-btn-secondary text-sm">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="space-y-3" id="recent-tasks">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 项目列表 -->
+        <div class="bg-card rounded-xl p-6 animate-fade-in animate-delay-3">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-semibold flex items-center">
+                    <i class="fas fa-folder text-violet-400 mr-2"></i>
+                    项目列表
+                </h3>
+                <a href="/ui/Project?project=todo" class="todo-btn todo-btn-secondary text-sm">
+                    管理项目 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="project-list">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-slate-700 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400">
+            <p>✅ TODO 任务管理 - 让工作更高效</p>
+            <p class="text-sm mt-2">任务管理 · 项目管理 · 进度跟踪 · 优先级排序</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            loadRecentTasks();
+            loadProjects();
+            setupProjectSelector();
+        });
+
+        // 项目切换
+        function setupProjectSelector() {
+            document.getElementById('project-selector').addEventListener('change', function() {
+                window.location.href = `/?project=${this.value}`;
+            });
+        }
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_BASE}/Task?project=todo`);
+                const tasks = await response.json();
+
+                const stats = {
+                    total: tasks.length,
+                    pending: tasks.filter(t => t.Status === 'pending').length,
+                    inProgress: tasks.filter(t => t.Status === 'in_progress').length,
+                    completed: tasks.filter(t => t.Status === 'completed').length,
+                    urgent: tasks.filter(t => t.Priority === 'urgent' && t.Status !== 'completed').length
+                };
+
+                document.getElementById('stat-total').textContent = stats.total;
+                document.getElementById('stat-pending').textContent = stats.pending;
+                document.getElementById('stat-in-progress').textContent = stats.inProgress;
+                document.getElementById('stat-completed').textContent = stats.completed;
+                document.getElementById('stat-urgent').textContent = stats.urgent;
+
+                // 更新状态分布
+                updateStatusDistribution(stats, tasks.length);
+                updatePriorityDistribution(tasks);
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // 更新状态分布
+        function updateStatusDistribution(stats, total) {
+            const container = document.getElementById('status-distribution');
+            const statuses = [
+                { key: 'pending', label: '待处理', icon: '⏳', color: 'pending' },
+                { key: 'inProgress', label: '进行中', icon: '🔄', color: 'in-progress' },
+                { key: 'completed', label: '已完成', icon: '✅', color: 'completed' }
+            ];
+
+            container.innerHTML = statuses.map(s => {
+                const count = stats[s.key];
+                const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+                return `
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">${s.icon} ${s.label}</span>
+                            <span class="text-slate-400">${count} (${percent}%)</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill ${s.color}" style="width: ${percent}%"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 更新优先级分布
+        function updatePriorityDistribution(tasks) {
+            const container = document.getElementById('priority-distribution');
+            const priorities = [
+                { key: 'urgent', label: '紧急', icon: '🔥', badge: 'priority-urgent-badge' },
+                { key: 'high', label: '高', icon: '🔴', badge: 'priority-high-badge' },
+                { key: 'medium', label: '中', icon: '🟡', badge: 'priority-medium-badge' },
+                { key: 'low', label: '低', icon: '🔵', badge: 'priority-low-badge' }
+            ];
+
+            container.innerHTML = priorities.map(p => {
+                const count = tasks.filter(t => t.Priority === p.key).length;
+                return `
+                    <div class="flex items-center justify-between p-3 rounded-lg bg-slate-800/50">
+                        <div class="flex items-center gap-3">
+                            <span class="text-xl">${p.icon}</span>
+                            <span class="text-slate-300">${p.label}优先级</span>
+                        </div>
+                        <span class="text-lg font-semibold text-slate-200">${count}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 加载最近任务
+        async function loadRecentTasks() {
+            try {
+                const response = await fetch(`${API_BASE}/Task?project=todo&sortBy=CreatedAt&sortDir=desc`);
+                const tasks = await response.json();
+
+                const container = document.getElementById('recent-tasks');
+                const recentTasks = tasks.slice(0, 8);
+
+                const statusConfig = {
+                    pending: { class: 'status-pending', label: '待处理', icon: '⏳' },
+                    in_progress: { class: 'status-in-progress', label: '进行中', icon: '🔄' },
+                    completed: { class: 'status-completed', label: '已完成', icon: '✅' },
+                    cancelled: { class: 'status-cancelled', label: '已取消', icon: '❌' }
+                };
+
+                const priorityConfig = {
+                    urgent: { class: 'priority-urgent-badge', label: '紧急' },
+                    high: { class: 'priority-high-badge', label: '高' },
+                    medium: { class: 'priority-medium-badge', label: '中' },
+                    low: { class: 'priority-low-badge', label: '低' }
+                };
+
+                container.innerHTML = recentTasks.map(t => {
+                    const status = statusConfig[t.Status] || statusConfig.pending;
+                    const priority = priorityConfig[t.Priority] || priorityConfig.medium;
+                    return `
+                        <div class="task-card p-4 cursor-pointer hover:bg-slate-800/50 transition" onclick="window.location.href='/ui/Task/edit/${t.Id}?project=todo'">
+                            <div class="flex items-center justify-between">
+                                <div class="flex-1">
+                                    <div class="flex items-center gap-3 mb-2">
+                                        <span class="priority-badge ${priority.class}">${priority.label}</span>
+                                        <span class="status-badge ${status.class}">${status.icon} ${status.label}</span>
+                                    </div>
+                                    <h4 class="font-medium text-slate-200">${t.Title || '无标题'}</h4>
+                                    ${t.Description ? `<p class="text-sm text-slate-400 mt-1 line-clamp-1">${t.Description}</p>` : ''}
+                                </div>
+                                <div class="flex items-center gap-4">
+                                    ${t.DueDate ? `
+                                        <div class="date-badge">
+                                            <i class="fas fa-calendar"></i>
+                                            <span>${formatDate(t.DueDate)}</span>
+                                        </div>
+                                    ` : ''}
+                                    <i class="fas fa-chevron-right text-slate-500"></i>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading recent tasks:', error);
+            }
+        }
+
+        // 加载项目列表
+        async function loadProjects() {
+            try {
+                const response = await fetch(`${API_BASE}/Project?project=todo`);
+                const projects = await response.json();
+
+                const container = document.getElementById('project-list');
+                const recentProjects = projects.slice(0, 6);
+
+                const statusConfig = {
+                    planning: { label: '规划中', color: 'text-blue-400' },
+                    active: { label: '进行中', color: 'text-green-400' },
+                    on_hold: { label: '已暂停', color: 'text-yellow-400' },
+                    completed: { label: '已完成', color: 'text-slate-400' },
+                    cancelled: { label: '已取消', color: 'text-red-400' }
+                };
+
+                container.innerHTML = recentProjects.map(p => {
+                    const status = statusConfig[p.Status] || statusConfig.planning;
+                    return `
+                        <div class="bg-slate-800/50 rounded-xl p-5 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Project/edit/${p.Id}?project=todo'">
+                            <div class="flex items-start justify-between mb-3">
+                                <h4 class="font-semibold text-slate-200">${p.Name || '无名称'}</h4>
+                                <span class="text-xs ${status.color}">${status.label}</span>
+                            </div>
+                            ${p.Description ? `<p class="text-sm text-slate-400 mb-3 line-clamp-2">${p.Description}</p>` : ''}
+                            <div class="flex items-center gap-4 text-xs text-slate-500">
+                                ${p.StartDate ? `<span><i class="fas fa-calendar mr-1"></i>${p.StartDate}</span>` : ''}
+                                ${p.EndDate ? `<span><i class="fas fa-flag mr-1"></i>${p.EndDate}</span>` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+
+        // 格式化日期
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffTime = date - now;
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays < 0) return `<span class="text-red-400">已过期 ${Math.abs(diffDays)} 天</span>`;
+            if (diffDays === 0) return '<span class="text-yellow-400">今天到期</span>';
+            if (diffDays === 1) return '<span class="text-yellow-400">明天到期</span>';
+            if (diffDays <= 7) return `<span class="text-orange-400">${diffDays} 天后到期</span>`;
+            return date.toLocaleDateString('zh-CN');
+        }
+    </script>
+</body>
+</html>

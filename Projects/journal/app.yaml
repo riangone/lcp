@@ -276,16 +276,9 @@ models:
     primary_key: Id
 
     ui:
-        ja:
-          Color: 色
-          Name: Name
-          create_button: Add Tag
-          title: タグ
-        ko:
-          Color: 색상
-          Name: Name
-          create_button: Add Tag
-          title: 태그
+      layout:
+        theme: default
+        grid_columns: 3
       labels:
         en:
           title: Tags
@@ -297,6 +290,16 @@ models:
           create_button: 添加标签
           Name: 名称
           Color: 颜色
+        ja:
+          title: タグ
+          create_button: タグを追加
+          Name: 名前
+          Color: 色
+        ko:
+          title: 태그
+          create_button: 태그 추가
+          Name: 이름
+          Color: 색상
       styles:
         card_class: "card-tag"
         button_class: "btn btn-info"
@@ -332,15 +335,18 @@ models:
     primary_key: Id
 
     ui:
-        ja:
-          title: Entry Tags
-        ko:
-          title: Entry Tags
+      layout:
+        theme: default
+        grid_columns: 2
       labels:
         en:
           title: Entry Tags
         zh:
           title: 日记标签
+        ja:
+          title: エントリータグ
+        ko:
+          title: 엔트리 태그
 
     list:
       columns: [Id, EntryId, TagId]
@@ -380,14 +386,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          CategoryColor: 色
-          CategoryName: カテゴリ
-          title: Journal with Category
-        ko:
-          CategoryColor: 색상
-          CategoryName: 카테고리
-          title: Journal with Category
       labels:
         en:
           title: Journal with Category
@@ -397,6 +395,14 @@ models:
           title: 日记分类视图
           CategoryName: 分类
           CategoryColor: 颜色
+        ja:
+          title: ジャーナルカテゴリ
+          CategoryName: カテゴリ
+          CategoryColor: 色
+        ko:
+          title: 저널 카테고리
+          CategoryName: 카테고리
+          CategoryColor: 색상
 
     list:
       columns:
@@ -455,14 +461,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          StatName: Statistic
-          StatValue: Value
-          title: Statistics
-        ko:
-          StatName: Statistic
-          StatValue: Value
-          title: Statistics
       labels:
         en:
           title: Statistics
@@ -472,6 +470,14 @@ models:
           title: 统计信息
           StatName: 统计项
           StatValue: 数值
+        ja:
+          title: 統計
+          StatName: 統計
+          StatValue: 値
+        ko:
+          title: 통계
+          StatName: 통계
+          StatValue: 값
 
     list:
       columns: [StatName, StatValue]

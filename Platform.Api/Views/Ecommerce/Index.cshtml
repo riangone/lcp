@@ -1,0 +1,635 @@
+@{
+    ViewData["Title"] = "🛒 Ecommerce 电商管理";
+    ViewData["ActivePage"] = "Ecommerce";
+    var project = "ecommerce";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🛒 Ecommerce 电商管理 - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* Ecommerce 应用主题色 */
+        :root {
+            --ecommerce-primary: #f97316;
+            --ecommerce-primary-dark: #ea580c;
+            --ecommerce-primary-light: #fb923c;
+            --ecommerce-accent: #dc2626;
+            --ecommerce-warning: #f59e0b;
+            --ecommerce-success: #10b981;
+            --ecommerce-info: #3b82f6;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #7c2d12 100%);
+            min-height: 100vh;
+        }
+
+        /* 统计卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.1), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(249, 115, 22, 0.25);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.15), rgba(30, 41, 59, 0.6));
+            border-color: rgba(249, 115, 22, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fdba74, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.red {
+            background: linear-gradient(135deg, #fca5a5, #dc2626);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.green {
+            background: linear-gradient(135deg, #6ee7b7, #10b981);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* 导航栏 */
+        .ecommerce-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+        }
+
+        .ecommerce-nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+
+        .ecommerce-nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(249, 115, 22, 0.15);
+        }
+
+        .ecommerce-nav-link.active {
+            color: #f1f5f9;
+            background: rgba(249, 115, 22, 0.2);
+        }
+
+        /* 按钮 */
+        .ecommerce-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ecommerce-btn-primary {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+        }
+
+        .ecommerce-btn-primary:hover {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .ecommerce-btn-secondary {
+            background: rgba(249, 115, 22, 0.15);
+            color: #fdba74;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+
+        .ecommerce-btn-secondary:hover {
+            background: rgba(249, 115, 22, 0.25);
+        }
+
+        /* 快捷操作卡片 */
+        .action-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+        }
+
+        .action-card:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            box-shadow: 0 8px 32px rgba(249, 115, 22, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .action-card .icon-wrapper {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .action-card .icon-orange { background: linear-gradient(135deg, #fed7aa, #fdba74); }
+        .action-card .icon-red { background: linear-gradient(135deg, #fecaca, #fca5a5); }
+        .action-card .icon-amber { background: linear-gradient(135deg, #fef3c7, #fde68a); }
+        .action-card .icon-blue { background: linear-gradient(135deg, #dbeafe, #93c5fd); }
+
+        /* 动画 */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+        .animate-delay-4 { animation-delay: 0.4s; }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(249, 115, 22, 0.4);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(249, 115, 22, 0.6);
+        }
+
+        /* 订单状态徽章 */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+        .status-processing { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+        .status-shipped { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+        .status-delivered { background: rgba(107, 114, 128, 0.15); color: #9ca3af; }
+        .status-cancelled { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+    </style>
+</head>
+<body class="text-slate-100">
+    <!-- 导航栏 -->
+    <nav class="ecommerce-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=ecommerce" class="ecommerce-nav-link active">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Product?project=ecommerce" class="ecommerce-nav-link">
+                            <i class="fas fa-box mr-1"></i> 产品
+                        </a>
+                        <a href="/ui/Order?project=ecommerce" class="ecommerce-nav-link">
+                            <i class="fas fa-shopping-cart mr-1"></i> 订单
+                        </a>
+                        <a href="/ui/Customer?project=ecommerce" class="ecommerce-nav-link">
+                            <i class="fas fa-users mr-1"></i> 客户
+                        </a>
+                        <a href="/ui/Category?project=ecommerce" class="ecommerce-nav-link">
+                            <i class="fas fa-tags mr-1"></i> 分类
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                        <option value="ecommerce">🛒 Ecommerce</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="journal">📔 Journal</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                        <option value="chinook">🎵 音乐</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 页面标题 -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2">
+                <span class="text-4xl mr-3">🛒</span>
+                Ecommerce 电商管理
+            </h1>
+            <p class="text-slate-400">一站式产品、订单、客户管理平台</p>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">总产品数</span>
+                    <span class="text-2xl">📦</span>
+                </div>
+                <div class="stat-value" id="stat-products">0</div>
+                <div class="text-xs text-slate-500 mt-2">产品目录</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">总订单数</span>
+                    <span class="text-2xl">🛍️</span>
+                </div>
+                <div class="stat-value" id="stat-orders">0</div>
+                <div class="text-xs text-slate-500 mt-2">所有订单</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-2">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">客户总数</span>
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="stat-value" id="stat-customers">0</div>
+                <div class="text-xs text-slate-500 mt-2">注册用户</div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">待处理订单</span>
+                    <span class="text-2xl">⏳</span>
+                </div>
+                <div class="stat-value red" id="stat-pending">0</div>
+                <div class="text-xs text-slate-500 mt-2">需要处理</div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+            <a href="/ui/Product/create?project=ecommerce" class="action-card animate-fade-in">
+                <div class="icon-wrapper icon-orange">
+                    📦
+                </div>
+                <h3 class="font-semibold text-lg mb-1">添加产品</h3>
+                <p class="text-sm text-slate-400">上架新产品</p>
+            </a>
+
+            <a href="/ui/Order/create?project=ecommerce" class="action-card animate-fade-in animate-delay-1">
+                <div class="icon-wrapper icon-red">
+                    🛍️
+                </div>
+                <h3 class="font-semibold text-lg mb-1">创建订单</h3>
+                <p class="text-sm text-slate-400">处理客户订单</p>
+            </a>
+
+            <a href="/ui/Customer/create?project=ecommerce" class="action-card animate-fade-in animate-delay-2">
+                <div class="icon-wrapper icon-amber">
+                    👥
+                </div>
+                <h3 class="font-semibold text-lg mb-1">添加客户</h3>
+                <p class="text-sm text-slate-400">管理客户信息</p>
+            </a>
+
+            <a href="/ui/Category?project=ecommerce" class="action-card animate-fade-in animate-delay-3">
+                <div class="icon-wrapper icon-blue">
+                    🏷️
+                </div>
+                <h3 class="font-semibold text-lg mb-1">分类管理</h3>
+                <p class="text-sm text-slate-400">管理产品分类</p>
+            </a>
+        </div>
+
+        <!-- 订单状态分布 -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-chart-pie text-orange-400 mr-2"></i>
+                        订单状态分布
+                    </h3>
+                    <div class="space-y-3" id="order-status-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-wallet text-green-400 mr-2"></i>
+                        支付状态统计
+                    </h3>
+                    <div class="space-y-3" id="payment-status-distribution">
+                        <!-- 动态生成 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近订单 -->
+        <div class="stat-card animate-fade-in animate-delay-2 mb-8">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-clock text-orange-400 mr-2"></i>
+                        最近订单
+                    </h3>
+                    <a href="/ui/Order?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                        查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-sm text-slate-400 border-b border-slate-700">
+                                <th class="pb-3 font-medium">订单号</th>
+                                <th class="pb-3 font-medium">客户</th>
+                                <th class="pb-3 font-medium">日期</th>
+                                <th class="pb-3 font-medium">状态</th>
+                                <th class="pb-3 font-medium">金额</th>
+                                <th class="pb-3 font-medium">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-orders">
+                            <!-- 动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 产品分类 -->
+        <div class="stat-card animate-fade-in animate-delay-3">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <h3 class="text-lg font-semibold flex items-center">
+                        <i class="fas fa-tags text-amber-400 mr-2"></i>
+                        产品分类
+                    </h3>
+                    <a href="/ui/Category?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                        管理分类 <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="category-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-slate-700 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400">
+            <p>🛒 Ecommerce 电商管理 - 一站式电商解决方案</p>
+            <p class="text-sm mt-2">产品管理 · 订单处理 · 客户管理 · 库存跟踪</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        const currentProject = 'ecommerce';
+        const currentLang = 'zh';
+
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadStatistics();
+            loadOrderStatusDistribution();
+            loadPaymentStatusDistribution();
+            loadRecentOrders();
+            loadCategories();
+            setupProjectSelector();
+        });
+
+        // 项目切换
+        function setupProjectSelector() {
+            document.getElementById('project-selector').addEventListener('change', function() {
+                window.location.href = `/?project=${this.value}`;
+            });
+        }
+
+        // 订单状态配置
+        const orderStatusConfig = {
+            Pending: { label: '待处理', color: 'status-pending' },
+            Confirmed: { label: '已确认', color: 'status-processing' },
+            Processing: { label: '处理中', color: 'status-processing' },
+            Shipped: { label: '已发货', color: 'status-shipped' },
+            Delivered: { label: '已送达', color: 'status-delivered' },
+            Cancelled: { label: '已取消', color: 'status-cancelled' }
+        };
+
+        // 支付状态配置
+        const paymentStatusConfig = {
+            Unpaid: { label: '未支付', color: 'bg-red-500' },
+            Paid: { label: '已支付', color: 'bg-green-500' },
+            Refunded: { label: '已退款', color: 'bg-gray-500' }
+        };
+
+        // 加载统计数据
+        async function loadStatistics() {
+            try {
+                const [productsRes, ordersRes, customersRes] = await Promise.all([
+                    fetch(`${API_BASE}/Product?project=${currentProject}`),
+                    fetch(`${API_BASE}/Order?project=${currentProject}`),
+                    fetch(`${API_BASE}/Customer?project=${currentProject}`)
+                ]);
+
+                const products = await productsRes.json();
+                const orders = await ordersRes.json();
+                const customers = await customersRes.json();
+
+                // 计算待处理订单数
+                const pendingCount = orders.filter(o => o.Status === 'Pending').length;
+
+                document.getElementById('stat-products').textContent = products.length;
+                document.getElementById('stat-orders').textContent = orders.length;
+                document.getElementById('stat-customers').textContent = customers.length;
+                document.getElementById('stat-pending').textContent = pendingCount;
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+
+        // 加载订单状态分布
+        async function loadOrderStatusDistribution() {
+            try {
+                const response = await fetch(`${API_BASE}/Order?project=${currentProject}`);
+                const orders = await response.json();
+
+                const statusCounts = {};
+                orders.forEach(o => {
+                    const status = o.Status || 'Pending';
+                    statusCounts[status] = (statusCounts[status] || 0) + 1;
+                });
+
+                const total = orders.length || 1;
+                const container = document.getElementById('order-status-distribution');
+
+                container.innerHTML = Object.entries(orderStatusConfig).map(([key, config]) => {
+                    const count = statusCounts[key] || 0;
+                    const percent = Math.round((count / total) * 100);
+                    return `
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-300">${config.label}</span>
+                                <span class="text-slate-400">${count} (${percent}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-orange-500 to-amber-500 h-2.5 rounded-full" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).filter((_, i, arr) => i < 6).join('');
+            } catch (error) {
+                console.error('Error loading order status:', error);
+            }
+        }
+
+        // 加载支付状态统计
+        async function loadPaymentStatusDistribution() {
+            try {
+                const response = await fetch(`${API_BASE}/Order?project=${currentProject}`);
+                const orders = await response.json();
+
+                const paymentCounts = {};
+                orders.forEach(o => {
+                    const payment = o.PaymentStatus || 'Unpaid';
+                    paymentCounts[payment] = (paymentCounts[payment] || 0) + 1;
+                });
+
+                const total = orders.length || 1;
+                const container = document.getElementById('payment-status-distribution');
+
+                container.innerHTML = Object.entries(paymentStatusConfig).map(([key, config]) => {
+                    const count = paymentCounts[key] || 0;
+                    const percent = Math.round((count / total) * 100);
+                    return `
+                        <div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-slate-300">${config.label}</span>
+                                <span class="text-slate-400">${count} (${percent}%)</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-2.5">
+                                <div class="${config.color} h-2.5 rounded-full" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading payment status:', error);
+            }
+        }
+
+        // 加载最近订单
+        async function loadRecentOrders() {
+            try {
+                const response = await fetch(`${API_BASE}/Order?project=${currentProject}`);
+                const orders = await response.json();
+
+                const container = document.getElementById('recent-orders');
+                const recentOrders = orders.slice(-5).reverse();
+
+                container.innerHTML = recentOrders.map(order => {
+                    const statusConfig = orderStatusConfig[order.Status] || orderStatusConfig.Pending;
+                    const date = order.OrderDate ? new Date(order.OrderDate).toLocaleDateString('zh-CN') : '';
+                    return `
+                        <tr class="border-b border-slate-700/50 hover:bg-slate-800/50">
+                            <td class="py-3 text-slate-300">${order.OrderNumber || `ORD-${order.OrderId}`}</td>
+                            <td class="py-3 text-slate-400">客户 #${order.CustomerId}</td>
+                            <td class="py-3 text-slate-400">${date}</td>
+                            <td class="py-3"><span class="status-badge ${statusConfig.color}">${statusConfig.label}</span></td>
+                            <td class="py-3 text-orange-400 font-semibold">$${order.TotalAmount || '0.00'}</td>
+                            <td class="py-3">
+                                <a href="/ui/Order/edit/${order.OrderId}?project=${currentProject}" class="text-orange-400 hover:text-orange-300">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Error loading recent orders:', error);
+            }
+        }
+
+        // 加载分类
+        async function loadCategories() {
+            try {
+                const response = await fetch(`${API_BASE}/Category?project=${currentProject}`);
+                const categories = await response.json();
+
+                const container = document.getElementById('category-list');
+
+                container.innerHTML = categories.map(cat => `
+                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Category?project=${currentProject}'">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-xl">
+                                🏷️
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-200">${cat.Name || '未命名'}</div>
+                                <div class="text-xs text-slate-500">${cat.Description || '暂无描述'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `).slice(0, 8).join('');
+            } catch (error) {
+                console.error('Error loading categories:', error);
+            }
+        }
+    </script>
+</body>
+</html>

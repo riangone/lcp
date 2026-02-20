@@ -15,7 +15,6 @@ using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 {
@@ -31,7 +30,11 @@ builder.Services.AddControllersWithViews()
         // 添加标准视图搜索路径
         options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
-        
+        options.ViewLocationFormats.Add("/Views/Todo/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Journal/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Ecommerce/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Chinook/{0}.cshtml");
+
         // 添加项目视图目录
         var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
         if (Directory.Exists(projectsDir))
@@ -193,6 +196,26 @@ app.MapGet("/", (HttpContext context) =>
     if (project == "weather")
     {
         return Results.Redirect($"/ui/weather?project={project}");
+    }
+    // TODO 应用重定向到专用首页
+    if (project == "todo")
+    {
+        return Results.Redirect($"/todo?project={project}");
+    }
+    // Journal 应用重定向到专用首页
+    if (project == "journal")
+    {
+        return Results.Redirect($"/journal?project={project}");
+    }
+    // Ecommerce 应用重定向到专用首页
+    if (project == "ecommerce")
+    {
+        return Results.Redirect($"/ecommerce?project={project}");
+    }
+    // Chinook 应用重定向到专用首页
+    if (project == "chinook")
+    {
+        return Results.Redirect($"/chinook?project={project}");
     }
     return Results.Redirect($"/Home?project={project}");
 });

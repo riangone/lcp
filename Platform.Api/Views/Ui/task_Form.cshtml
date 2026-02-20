@@ -10,28 +10,203 @@
 
     var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
     var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
-    
+
     var titleValue = isEdit && row != null && row.ContainsKey("Title") ? row["Title"]?.ToString() ?? "" : "";
     var descValue = isEdit && row != null && row.ContainsKey("Description") ? row["Description"]?.ToString() ?? "" : "";
     var statusValue = isEdit && row != null && row.ContainsKey("Status") ? row["Status"]?.ToString() ?? "pending" : "pending";
     var priorityValue = isEdit && row != null && row.ContainsKey("Priority") ? row["Priority"]?.ToString() ?? "medium" : "medium";
-    var dueDateValue = isEdit && row != null && row.ContainsKey("DueDate") ? row["DueDate"]?.ToString() ?? "" : DateTime.Now.ToString("yyyy-MM-dd");
+    var dueDateValue = isEdit && row != null && row.ContainsKey("DueDate") ? row["DueDate"]?.ToString() ?? "" : "";
+    var projectIdValue = isEdit && row != null && row.ContainsKey("ProjectId") ? row["ProjectId"]?.ToString() ?? "" : "";
 
     var action = isEdit ? $"/api/{modelName}/{row![def.PrimaryKey]}" : $"/api/{modelName}";
     var method = isEdit ? "put" : "post";
 }
 
-<div class="todo-form-overlay" id="todo-form-overlay">
-    <div class="todo-form-container">
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@(isEdit ? (currentLang == "zh" ? "编辑任务" : "Edit Task") : (currentLang == "zh" ? "新建任务" : "New Task"))</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/todo.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #064e3b 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        .form-container {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.98), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 16px;
+            width: 100%;
+            max-width: 650px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .form-header {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 16px 16px 0 0;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .form-title {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .btn-close {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: all 0.2s;
+        }
+        .btn-close:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        .form-body {
+            padding: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        .required {
+            color: #f87171;
+            margin-left: 0.25rem;
+        }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid rgba(148, 163, 184, 0.2);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.2s;
+            font-family: inherit;
+            background: rgba(15, 23, 42, 0.6);
+            color: #f1f5f9;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+        .form-input::placeholder {
+            color: #64748b;
+        }
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(148, 163, 184, 0.1);
+        }
+        .btn {
+            padding: 0.875rem 1.75rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-cancel {
+            background: rgba(107, 114, 128, 0.2);
+            color: #94a3b8;
+        }
+        .btn-cancel:hover {
+            background: rgba(107, 114, 128, 0.3);
+            color: #e2e8f0;
+        }
+        .btn-submit {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .btn-submit:hover {
+            background: linear-gradient(135deg, #059669, #047857);
+            box-shadow: 0 4px 16px rgba(16, 185, 129, 0.4);
+            transform: translateY(-1px);
+        }
+        .select-wrapper {
+            position: relative;
+        }
+        .select-wrapper::after {
+            content: '▼';
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+            pointer-events: none;
+            font-size: 0.75rem;
+        }
+        .form-select {
+            appearance: none;
+            padding-right: 2.5rem;
+        }
+        @@media (max-width: 640px) {
+            body {
+                padding: 1rem;
+                align-items: flex-start;
+            }
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            .form-actions {
+                flex-direction: column;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
         <div class="form-header">
             <h2 class="form-title">
-                <span class="form-icon">📋</span>
+                <span class="text-2xl">📋</span>
                 @(isEdit ? (currentLang == "zh" ? "编辑任务" : "Edit Task") : (currentLang == "zh" ? "新建任务" : "New Task"))
             </h2>
-            <button class="btn-close" onclick="closeFormModal()">✕</button>
+            <button class="btn-close" onclick="closeForm()" title="@(currentLang == "zh" ? "关闭" : "Close")">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
-        <form method="post" action="@action" class="todo-form">
+        <form method="post" action="@action" class="form-body">
             @Html.AntiForgeryToken()
             <input type="hidden" name="project" value="@currentProject" />
             <input type="hidden" name="returnUrl" value="@returnUrl" />
@@ -41,8 +216,8 @@
                 <label class="form-label" for="Title">
                     @(currentLang == "zh" ? "任务标题" : "Task Title") <span class="required">*</span>
                 </label>
-                <input type="text" id="Title" name="Title" value="@titleValue" 
-                       class="form-input" required maxlength="200" 
+                <input type="text" id="Title" name="Title" value="@titleValue"
+                       class="form-input" required maxlength="200"
                        placeholder="@(currentLang == "zh" ? "输入任务标题..." : "Enter task title...")" />
             </div>
 
@@ -50,213 +225,124 @@
                 <label class="form-label" for="Description">
                     @(currentLang == "zh" ? "任务描述" : "Description")
                 </label>
-                <textarea id="Description" name="Description" rows="4" 
-                          class="form-input" maxlength="1000"
-                          placeholder="@(currentLang == "zh" ? "描述任务详情..." : "Describe the task...")">@descValue</textarea>
+                <textarea id="Description" name="Description" rows="4"
+                          class="form-textarea" maxlength="2000"
+                          placeholder="@(currentLang == "zh" ? "描述任务详情（可选）..." : "Describe the task (optional)...")">@descValue</textarea>
             </div>
 
             <div class="form-row">
                 <div class="form-group">
                     <label class="form-label" for="Status">
-                        @(currentLang == "zh" ? "状态" : "Status")
+                        @(currentLang == "zh" ? "状态" : "Status") <span class="required">*</span>
                     </label>
-                    <select id="Status" name="Status" class="form-select">
-                        <option value="pending" selected="@(statusValue == "pending" ? "selected" : "")">⏳ @(currentLang == "zh" ? "待处理" : "Pending")</option>
-                        <option value="in_progress" selected="@(statusValue == "in_progress" ? "selected" : "")">🔄 @(currentLang == "zh" ? "进行中" : "In Progress")</option>
-                        <option value="completed" selected="@(statusValue == "completed" ? "selected" : "")">✅ @(currentLang == "zh" ? "已完成" : "Completed")</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select id="Status" name="Status" class="form-select">
+                            <option value="pending" selected="@(statusValue == "pending")">⏳ @(currentLang == "zh" ? "待处理" : "Pending")</option>
+                            <option value="in_progress" selected="@(statusValue == "in_progress")">🔄 @(currentLang == "zh" ? "进行中" : "In Progress")</option>
+                            <option value="completed" selected="@(statusValue == "completed")">✅ @(currentLang == "zh" ? "已完成" : "Completed")</option>
+                            <option value="cancelled" selected="@(statusValue == "cancelled")">❌ @(currentLang == "zh" ? "已取消" : "Cancelled")</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="Priority">
-                        @(currentLang == "zh" ? "优先级" : "Priority")
+                        @(currentLang == "zh" ? "优先级" : "Priority") <span class="required">*</span>
                     </label>
-                    <select id="Priority" name="Priority" class="form-select">
-                        <option value="low" selected="@(priorityValue == "low" ? "selected" : "")">🔵 @(currentLang == "zh" ? "低" : "Low")</option>
-                        <option value="medium" selected="@(priorityValue == "medium" ? "selected" : "")">🟡 @(currentLang == "zh" ? "中" : "Medium")</option>
-                        <option value="high" selected="@(priorityValue == "high" ? "selected" : "")">🔴 @(currentLang == "zh" ? "高" : "High")</option>
-                    </select>
+                    <div class="select-wrapper">
+                        <select id="Priority" name="Priority" class="form-select">
+                            <option value="low" selected="@(priorityValue == "low")">🔵 @(currentLang == "zh" ? "低" : "Low")</option>
+                            <option value="medium" selected="@(priorityValue == "medium")">🟡 @(currentLang == "zh" ? "中" : "Medium")</option>
+                            <option value="high" selected="@(priorityValue == "high")">🔴 @(currentLang == "zh" ? "高" : "High")</option>
+                            <option value="urgent" selected="@(priorityValue == "urgent")">🔥 @(currentLang == "zh" ? "紧急" : "Urgent")</option>
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="DueDate">
-                    @(currentLang == "zh" ? "截止日期" : "Due Date")
-                </label>
-                <input type="date" id="DueDate" name="DueDate" value="@dueDateValue" class="form-input" />
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label" for="DueDate">
+                        @(currentLang == "zh" ? "截止日期" : "Due Date")
+                    </label>
+                    <input type="date" id="DueDate" name="DueDate" value="@dueDateValue" class="form-input" />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="ProjectId">
+                        @(currentLang == "zh" ? "所属项目" : "Project")
+                    </label>
+                    <div class="select-wrapper">
+                        <select id="ProjectId" name="ProjectId" class="form-select">
+                            <option value="">@(currentLang == "zh" ? "无" : "None")</option>
+                            <!-- 项目选项将通过 JS 动态加载 -->
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn btn-cancel" onclick="closeFormModal()">
+                <button type="button" class="btn btn-cancel" onclick="closeForm()">
+                    <i class="fas fa-times"></i>
                     @(currentLang == "zh" ? "取消" : "Cancel")
                 </button>
                 <button type="submit" class="btn btn-submit">
+                    <i class="fas fa-save"></i>
                     @(isEdit ? (currentLang == "zh" ? "保存修改" : "Save Changes") : (currentLang == "zh" ? "创建任务" : "Create Task"))
                 </button>
             </div>
         </form>
     </div>
-</div>
 
-<style>
-    .todo-form-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        backdrop-filter: blur(4px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        animation: fadeIn 0.3s ease;
-    }
+    <script>
+        const currentProject = '@currentProject';
+        const isEdit = @(isEdit ? "true" : "false");
+        const currentProjectId = '@projectIdValue';
 
-    @@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .todo-form-container {
-        background: white;
-        border-radius: 16px;
-        width: 90%;
-        max-width: 600px;
-        max-height: 90vh;
-        overflow-y: auto;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        animation: slideUp 0.3s ease;
-    }
-
-    @@keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-    .form-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 1.5rem 2rem;
-        border-bottom: 1px solid #e5e7eb;
-        background: linear-gradient(135deg, #f0fdf4, #ecfdf5);
-        border-radius: 16px 16px 0 0;
-    }
-
-    .form-title {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #1f2937;
-    }
-
-    .form-icon { font-size: 2rem; }
-
-    .btn-close {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        border: none;
-        background: #f3f4f6;
-        color: #6b7280;
-        cursor: pointer;
-        font-size: 1.25rem;
-        transition: all 0.2s;
-    }
-
-    .btn-close:hover { background: #ef4444; color: white; }
-
-    .todo-form { padding: 2rem; }
-
-    .form-group { margin-bottom: 1.5rem; }
-
-    .form-row {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-    }
-
-    .form-label {
-        display: block;
-        font-weight: 600;
-        color: #374151;
-        margin-bottom: 0.5rem;
-    }
-
-    .required { color: #ef4444; }
-
-    .form-input, .form-select {
-        width: 100%;
-        padding: 0.75rem 1rem;
-        border: 2px solid #e5e7eb;
-        border-radius: 10px;
-        font-size: 1rem;
-        transition: all 0.2s;
-        font-family: inherit;
-    }
-
-    .form-input:focus, .form-select:focus {
-        outline: none;
-        border-color: #10b981;
-        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-    }
-
-    textarea.form-input { resize: vertical; min-height: 100px; }
-
-    .form-actions {
-        display: flex;
-        justify-content: flex-end;
-        gap: 1rem;
-        padding-top: 1.5rem;
-        border-top: 1px solid #e5e7eb;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        border-radius: 10px;
-        font-weight: 600;
-        cursor: pointer;
-        border: none;
-        transition: all 0.2s;
-    }
-
-    .btn-cancel {
-        background: #f3f4f6;
-        color: #6b7280;
-    }
-
-    .btn-cancel:hover { background: #e5e7eb; }
-
-    .btn-submit {
-        background: linear-gradient(135deg, #10b981, #059669);
-        color: white;
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-    }
-
-    @@media (max-width: 640px) {
-        .todo-form-container { width: 95%; }
-        .form-row { grid-template-columns: 1fr; }
-        .form-actions { flex-direction: column; }
-        .btn { width: 100%; text-align: center; }
-    }
-</style>
-
-<script>
-    function closeFormModal() {
-        const overlay = document.getElementById('todo-form-overlay');
-        if (overlay) {
-            overlay.style.animation = 'fadeIn 0.3s ease reverse';
-            setTimeout(() => overlay.remove(), 300);
+        // 关闭表单
+        function closeForm() {
+            window.location.href = '@returnUrl';
         }
-    }
 
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') closeFormModal();
-    });
+        // ESC 键关闭
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeForm();
+        });
 
-    document.getElementById('todo-form-overlay')?.addEventListener('click', function(e) {
-        if (e.target === this) closeFormModal();
-    });
-</script>
+        // 加载项目列表
+        async function loadProjects() {
+            try {
+                const response = await fetch(`/api/Project?project=${currentProject}`);
+                const projects = await response.json();
+
+                const select = document.getElementById('ProjectId');
+                projects.forEach(p => {
+                    const option = document.createElement('option');
+                    option.value = p.Id;
+                    option.textContent = p.Name || `Project ${p.Id}`;
+                    if (p.Id.toString() === currentProjectId) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading projects:', error);
+            }
+        }
+
+        // 页面加载时加载项目列表
+        if (!isEdit) {
+            loadProjects();
+        } else if (currentProjectId) {
+            loadProjects();
+        }
+
+        // 表单提交处理
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.btn-submit');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> @(currentLang == "zh" ? "保存中..." : "Saving...")';
+        });
+    </script>
+</body>
+</html>

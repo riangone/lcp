@@ -3,151 +3,463 @@
 @{
     var def = (ModelDefinition)ViewData["ModelDef"]!;
     var modelName = (string)ViewData["ModelName"]!;
+    var pageNum = (int)ViewData["Page"]!;
+    var size = (int)ViewData["Size"]!;
     var total = (int)ViewData["Total"]!;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "ecommerce";
+
     var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
     var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;
+
+    // 统计
+    var stats = Model.GroupBy(p => p.ContainsKey("Discontinued") ? p["Discontinued"]?.ToString() : "false")
+        .ToDictionary(g => g.Key, g => g.Count());
+    var activeCount = stats.GetValueOrDefault("false", 0);
+    var discontinuedCount = stats.GetValueOrDefault("true", 0);
 }
 
-<div class="ecommerce-shop">
-    <div class="shop-header">
-        <h1><span>🛒</span> @title</h1>
-        <span class="product-count">@total @(currentLang == "zh" ? "个产品" : "Products")</span>
-    </div>
-
-    <div class="product-grid">
-        @foreach (var product in Model)
-        {
-            var id = product[def.PrimaryKey]?.ToString() ?? "";
-            var name = product.ContainsKey("Name") ? product["Name"]?.ToString() ?? "" : "";
-            var price = product.ContainsKey("Price") ? product["Price"]?.ToString() ?? "0" : "0";
-            
-            <div class="product-card" data-id="@id">
-                <div class="product-image">📦</div>
-                <h3 class="product-name">@name</h3>
-                <div class="product-price">$@price</div>
-                <div class="product-actions">
-                    <a href="/ui/Product/edit/@id?project=@currentProject" class="btn-edit">✏️</a>
-                    <button class="btn-delete" onclick="openDeleteDialog('@modelName', '@id')">🗑️</button>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@title - Ecommerce</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="/css/ecommerce.css" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #7c2d12 100%);
+            min-height: 100vh;
+        }
+        .product-list-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        .page-header {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 40px rgba(249, 115, 22, 0.3);
+        }
+        .page-title {
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .stat-badge {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            color: white;
+        }
+        .toolbar {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(249, 115, 22, 0.2);
+        }
+        .btn-add-product {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s;
+        }
+        .btn-add-product:hover {
+            background: linear-gradient(135deg, #ea580c, #c2410c);
+            box-shadow: 0 4px 16px rgba(249, 115, 22, 0.4);
+            transform: translateY(-1px);
+        }
+        .search-form {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .search-input {
+            padding: 0.5rem 1rem;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.6);
+            color: #f1f5f9;
+            width: 250px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #f97316;
+            box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+        }
+        .btn-search {
+            padding: 0.5rem 1rem;
+            background: #f97316;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-search:hover {
+            background: #ea580c;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .product-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.98));
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        .product-card:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            box-shadow: 0 8px 32px rgba(249, 115, 22, 0.15);
+            transform: translateY(-4px);
+        }
+        .product-image {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(234, 88, 12, 0.2));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+        .product-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #f1f5f9;
+            margin-bottom: 0.5rem;
+        }
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f97316;
+            margin-bottom: 0.5rem;
+        }
+        .product-stock {
+            font-size: 0.875rem;
+            color: #94a3b8;
+            margin-bottom: 1rem;
+        }
+        .product-stock.in-stock {
+            color: #10b981;
+        }
+        .product-stock.out-of-stock {
+            color: #ef4444;
+        }
+        .product-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .action-btn {
+            flex: 1;
+            padding: 0.625rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .btn-edit {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+        .btn-edit:hover {
+            background: rgba(59, 130, 246, 0.3);
+        }
+        .btn-delete {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+        .btn-delete:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 4rem;
+            color: #94a3b8;
+        }
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+        .nav-bar {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(249, 115, 22, 0.2);
+            margin-bottom: 2rem;
+        }
+        .nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(249, 115, 22, 0.15);
+        }
+        .nav-link.active {
+            color: #f1f5f9;
+            background: rgba(249, 115, 22, 0.2);
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 2rem;
+        }
+        .pagination-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            border-radius: 8px;
+            color: #fdba74;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .pagination-btn:hover {
+            background: #f97316;
+            color: white;
+        }
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-active {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+        .status-discontinued {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9ca3af;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="nav-bar sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>📋</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=ecommerce" class="nav-link">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Product?project=ecommerce" class="nav-link active">
+                            <i class="fas fa-box mr-1"></i> 产品
+                        </a>
+                        <a href="/ui/Order?project=ecommerce" class="nav-link">
+                            <i class="fas fa-shopping-cart mr-1"></i> 订单
+                        </a>
+                        <a href="/ui/Customer?project=ecommerce" class="nav-link">
+                            <i class="fas fa-users mr-1"></i> 客户
+                        </a>
+                        <a href="/ui/Category?project=ecommerce" class="nav-link">
+                            <i class="fas fa-tags mr-1"></i> 分类
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                        <option value="ecommerce">🛒 Ecommerce</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="journal">📔 Journal</option>
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                        <option value="chinook">🎵 音乐</option>
+                    </select>
                 </div>
             </div>
+        </div>
+    </nav>
+
+    <div class="product-list-container">
+        <!-- 页面标题 -->
+        <div class="page-header">
+            <h1 class="page-title">
+                <span class="text-4xl">📦</span>
+                @title
+            </h1>
+            <div class="stats-bar">
+                <div class="stat-badge">
+                    <span class="font-bold">@total</span> @(currentLang == "zh" ? "个产品" : "Products")
+                </div>
+                <div class="stat-badge">
+                    <span class="font-bold">@activeCount</span> @(currentLang == "zh" ? "在售" : "Active")
+                </div>
+                <div class="stat-badge">
+                    <span class="font-bold">@discontinuedCount</span> @(currentLang == "zh" ? "停售" : "Discontinued")
+                </div>
+            </div>
+        </div>
+
+        <!-- 工具栏 -->
+        <div class="toolbar">
+            <a href="/ui/Product/create?project=@currentProject" class="btn-add-product">
+                <i class="fas fa-plus"></i>
+                @(currentLang == "zh" ? "添加产品" : "Add Product")
+            </a>
+            <form class="search-form" method="get" action="/ui/Product?project=@currentProject">
+                <input type="text" name="ProductName" placeholder="@(currentLang == "zh" ? "搜索产品..." : "Search products...")"
+                       value="@(Context.Request.Query["ProductName"].FirstOrDefault() ?? "")"
+                       class="search-input" />
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- 产品网格 -->
+        <div class="product-grid" id="product-list">
+            @foreach (var product in Model)
+            {
+                var id = product[def.PrimaryKey]?.ToString() ?? "";
+                var name = product.ContainsKey("ProductName") ? product["ProductName"]?.ToString() ?? "" : "";
+                var price = product.ContainsKey("UnitPrice") ? product["UnitPrice"]?.ToString() ?? "0" : "0";
+                var stock = product.ContainsKey("StockQuantity") ? product["StockQuantity"]?.ToString() ?? "0" : "0";
+                var discontinued = product.ContainsKey("Discontinued") ? product["Discontinued"]?.ToString() == "True" : false;
+
+                var stockClass = (int.Parse(stock) > 0 && !discontinued) ? "in-stock" : "out-of-stock";
+                var stockText = discontinued ? (currentLang == "zh" ? "已停售" : "Discontinued") :
+                               int.Parse(stock) > 0 ? (currentLang == "zh" ? $"库存：{stock}" : $"Stock: {stock}") :
+                               (currentLang == "zh" ? "缺货" : "Out of stock");
+
+                <div class="product-card" data-id="@id" onclick="editProduct('@id')">
+                    <div class="product-image">📦</div>
+                    <h3 class="product-name">@name</h3>
+                    <div class="product-price">$@price</div>
+                    <div class="product-stock @stockClass">@stockText</div>
+                    <div class="product-actions">
+                        <button class="action-btn btn-edit" onclick="event.stopPropagation(); editProduct('@id')">
+                            <i class="fas fa-edit"></i> @(currentLang == "zh" ? "编辑" : "Edit")
+                        </button>
+                        <button class="action-btn btn-delete" onclick="event.stopPropagation(); openDeleteDialog('@modelName', '@id')">
+                            <i class="fas fa-trash"></i> @(currentLang == "zh" ? "删除" : "Delete")
+                        </button>
+                    </div>
+                </div>
+            }
+            @if (!Model.Any())
+            {
+                <div class="empty-state" style="grid-column: 1 / -1;">
+                    <div class="empty-icon">📦</div>
+                    <h3>@(currentLang == "zh" ? "暂无产品" : "No products yet")</h3>
+                    <p>@(currentLang == "zh" ? "点击\"添加产品\"开始创建第一个产品" : "Click \"Add Product\" to create your first product")</p>
+                </div>
+            }
+        </div>
+
+        <!-- 分页 -->
+        @{
+            var totalPages = (int)Math.Ceiling((double)total / size);
+        }
+        @if (totalPages > 1)
+        {
+            <nav class="pagination">
+                @if (pageNum > 1)
+                {
+                    <a href="/ui/Product?project=@currentProject&page=1" class="pagination-btn">
+                        <i class="fas fa-angle-double-left"></i>
+                    </a>
+                    <a href="/ui/Product?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
+                        <i class="fas fa-angle-left"></i>
+                    </a>
+                }
+
+                <span class="pagination-btn" style="cursor: default;">
+                    @(currentLang == "zh" ? "第" : "Page") @pageNum @(currentLang == "zh" ? "页，共" : "of") @totalPages @(currentLang == "zh" ? "页" : "pages")
+                </span>
+
+                @if (pageNum < totalPages)
+                {
+                    <a href="/ui/Product?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
+                        <i class="fas fa-angle-right"></i>
+                    </a>
+                    <a href="/ui/Product?project=@currentProject&page=@totalPages" class="pagination-btn">
+                        <i class="fas fa-angle-double-right"></i>
+                    </a>
+                }
+            </nav>
         }
     </div>
-</div>
 
-<style>
-    .ecommerce-shop {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 2rem;
-        background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 50%, #fed7aa 100%);
-        min-height: 100vh;
-    }
+    <script>
+        const API_BASE = '/api';
+        const currentProject = '@currentProject';
+        const currentLang = '@currentLang';
 
-    .shop-header {
-        background: linear-gradient(135deg, #f97316, #ea580c);
-        border-radius: 16px;
-        padding: 2rem;
-        margin-bottom: 2rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: 0 10px 40px rgba(249, 115, 22, 0.3);
-    }
+        // 编辑产品
+        function editProduct(id) {
+            window.location.href = `/ui/Product/edit/${id}?project=${currentProject}`;
+        }
 
-    .shop-header h1 {
-        color: white;
-        font-size: 2rem;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
+        // 打开删除对话框
+        function openDeleteDialog(model, id) {
+            if (confirm(currentLang === 'zh' ? '确定要删除此产品吗？' : 'Are you sure you want to delete this product?')) {
+                fetch(`${API_BASE}/${model}/${id}?project=${currentProject}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        alert(currentLang === 'zh' ? '删除失败' : 'Delete failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(currentLang === 'zh' ? '删除失败' : 'Delete failed');
+                });
+            }
+        }
 
-    .product-count {
-        color: white;
-        font-size: 1.25rem;
-        font-weight: 600;
-        background: rgba(255, 255, 255, 0.2);
-        padding: 0.5rem 1.25rem;
-        border-radius: 20px;
-    }
-
-    .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-        gap: 1.5rem;
-    }
-
-    .product-card {
-        background: white;
-        border-radius: 16px;
-        padding: 1.5rem;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s;
-        border: 2px solid transparent;
-    }
-
-    .product-card:hover {
-        transform: translateY(-6px);
-        box-shadow: 0 12px 35px rgba(249, 115, 22, 0.25);
-        border-color: #f97316;
-    }
-
-    .product-image {
-        width: 100%;
-        height: 180px;
-        background: linear-gradient(135deg, #fed7aa, #fdba74);
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 4rem;
-        margin-bottom: 1rem;
-    }
-
-    .product-name {
-        font-size: 1.125rem;
-        font-weight: 600;
-        color: #1f2937;
-        margin-bottom: 0.75rem;
-    }
-
-    .product-price {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #f97316;
-        margin-bottom: 1rem;
-    }
-
-    .product-actions {
-        display: flex;
-        gap: 0.5rem;
-    }
-
-    .btn-edit, .btn-delete {
-        flex: 1;
-        padding: 0.625rem;
-        border-radius: 8px;
-        border: none;
-        font-size: 1.25rem;
-        cursor: pointer;
-        transition: all 0.2s;
-    }
-
-    .btn-edit {
-        background: #dbeafe;
-    }
-
-    .btn-edit:hover {
-        background: #3b82f6;
-    }
-
-    .btn-delete {
-        background: #fee2e2;
-    }
-
-    .btn-delete:hover {
-        background: #ef4444;
-    }
-</style>
+        // 项目切换
+        document.getElementById('project-selector')?.addEventListener('change', function() {
+            window.location.href = `/?project=${this.value}`;
+        });
+    </script>
+</body>
+</html>

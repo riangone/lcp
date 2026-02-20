@@ -352,14 +352,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          ProjectName: Project
-          ProjectStatus: Project Status
-          title: Tasks by Project
-        ko:
-          ProjectName: Project
-          ProjectStatus: Project Status
-          title: Tasks by Project
       labels:
         en:
           title: Tasks by Project
@@ -425,20 +417,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          CompletedTasks: 完了
-          InProgressTasks: 進行中
-          PendingTasks: 保留中
-          TotalTasks: Total Tasks
-          UrgentTasks: Urgent
-          title: Project Statistics
-        ko:
-          CompletedTasks: 완료
-          InProgressTasks: 진행 중
-          PendingTasks: 보류 중
-          TotalTasks: Total Tasks
-          UrgentTasks: Urgent
-          title: Project Statistics
       labels:
         en:
           title: Project Statistics

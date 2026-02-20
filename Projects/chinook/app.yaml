@@ -976,18 +976,6 @@ models:
     read_only: true
 
     ui:
-        ja:
-          Country: Country
-          CustomerName: Customer
-          InvoiceDate: 請求書日付
-          Total: 合計
-          title: Invoice With Customer
-        ko:
-          Country: Country
-          CustomerName: Customer
-          InvoiceDate: 송장 날짜
-          Total: 총계
-          title: Invoice With Customer
       labels:
         en:
           title: Invoice With Customer
@@ -1001,6 +989,18 @@ models:
           InvoiceDate: 发票日期
           Country: 国家
           Total: 总计
+        ja:
+          title: 請求書顧客
+          CustomerName: 顧客
+          InvoiceDate: 請求書日付
+          Country: 国
+          Total: 合計
+        ko:
+          title: 송장 고객
+          CustomerName: 고객
+          InvoiceDate: 송장 날짜
+          Country: 국가
+          Total: 총계
 
     list:
       columns:

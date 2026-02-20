@@ -1,6 +1,17 @@
 -- TODO 项目数据库表结构
 -- 只需定义 YAML 和 SQL，即可创建完整的低代码应用
 
+-- ==================== 项目表 ====================
+CREATE TABLE IF NOT EXISTS Project (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name TEXT NOT NULL,
+    Description TEXT,
+    Status TEXT NOT NULL DEFAULT 'planning',
+    StartDate TEXT,
+    EndDate TEXT,
+    CreatedAt TEXT DEFAULT (datetime('now'))
+);
+
 -- ==================== 任务表 ====================
 CREATE TABLE IF NOT EXISTS Task (
     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -13,17 +24,6 @@ CREATE TABLE IF NOT EXISTS Task (
     CreatedAt TEXT DEFAULT (datetime('now')),
     CompletedAt TEXT,
     FOREIGN KEY (ProjectId) REFERENCES Project(Id)
-);
-
--- ==================== 项目表 ====================
-CREATE TABLE IF NOT EXISTS Project (
-    Id INTEGER PRIMARY KEY AUTOINCREMENT,
-    Name TEXT NOT NULL,
-    Description TEXT,
-    Status TEXT NOT NULL DEFAULT 'planning',
-    StartDate TEXT,
-    EndDate TEXT,
-    CreatedAt TEXT DEFAULT (datetime('now'))
 );
 
 -- ==================== 创建索引 ====================
