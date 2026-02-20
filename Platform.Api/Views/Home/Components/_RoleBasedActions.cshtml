@@ -1,0 +1,52 @@
+@model Platform.Infrastructure.Definitions.RoleBasedActionsConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var userRole = Context.Request.Cookies["user_role"] ?? "admin";
+    
+    var actions = Model.Roles.ContainsKey(userRole) ? Model.Roles[userRole] : Model.Roles.Values.FirstOrDefault() ?? new List<Platform.Infrastructure.Definitions.RoleActionConfig>();
+}
+
+<div class="container mx-auto px-4 py-8">
+    @if (!string.IsNullOrEmpty(Model.Title?.GetText(currentLang)))
+    {
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">@Model.Title.GetText(currentLang)</h2>
+            <div class="w-16 h-1 bg-gradient-to-r from-green-500 to-teal-500 mx-auto mt-2 rounded-full"></div>
+        </div>
+    }
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        @foreach (var action in actions)
+        {
+            var colorClass = action.Color switch
+            {
+                "blue" => "bg-blue-500",
+                "green" => "bg-green-500",
+                "purple" => "bg-purple-500",
+                "orange" => "bg-orange-500",
+                "red" => "bg-red-500",
+                "teal" => "bg-teal-500",
+                _ => "bg-gray-500"
+            };
+
+            <a href="@action.Href" class="group bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-all hover:-translate-y-1 border border-gray-100">
+                <div class="flex items-center space-x-3">
+                    <div class="@colorClass w-12 h-12 rounded-xl flex items-center justify-center text-xl text-white flex-shrink-0 group-hover:scale-110 transition-transform">
+                        @action.Icon
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                            @action.Label.GetText(currentLang)
+                        </div>
+                        @if (!string.IsNullOrEmpty(action.Badge))
+                        {
+                            <span class="inline-block bg-red-500 text-white text-xs font-bold px-2 py-0.5 rounded-full mt-1">
+                                @action.Badge
+                            </span>
+                        }
+                    </div>
+                </div>
+            </a>
+        }
+    </div>
+</div>

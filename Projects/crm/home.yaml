@@ -1,78 +1,351 @@
-# CRM 客户关系管理系统首页 - 稳定版本
+# CRM 客户关系管理系统首页 - 专业业务驱动版本
 title: CRM 客户关系管理
 
 layout:
-  # Hero 区域
+  # ==================== Hero 区域 ====================
   - type: hero
     icon: 💼
     title:
       zh: CRM 客户关系管理
       en: CRM Customer Relationship Management
     subtitle:
-      zh: 完整的客户、销售机会、订单管理系统，助力业务增长
-      en: Complete customer, opportunity, and order management system
+      zh: 完整的客户 360°视图，销售漏斗管理，报价订单跟踪，助力业务增长
+      en: Complete 360° customer view, sales pipeline, quote and order tracking
     style:
-      background: "bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500"
+      background: "bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600"
       title_size: "text-6xl"
-      height: "h-96"
-      show_wave: true
+      title_class: "font-bold"
+      subtitle_class: "text-xl text-white text-opacity-90"
+      icon_size: "text-8xl"
+      height: "h-80"
+      show_wave: false
 
-  # 快捷操作区
-  - type: quick_actions
+  # ==================== 核心业务统计 ====================
+  - type: stats_row
     title:
-      zh: 快速开始
-      en: Quick Start
-    actions:
-      - icon: 👥
+      zh: 今日业务概览
+      en: Today's Business Overview
+    background: "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50"
+    items:
+      - value: "128"
+        suffix: ""
         label:
+          zh: 总客户数
+          en: Total Customers
+        icon: "👥"
+        trend: "+12%"
+      - value: "45"
+        suffix: "个"
+        label:
+          zh: 进行中商机
+          en: Active Opportunities
+        icon: "💰"
+        trend: "+5%"
+      - value: "23"
+        suffix: "个"
+        label:
+          zh: 待跟进
+          en: To Follow Up
+        icon: "📞"
+        trend: "-3%"
+      - value: "85"
+        suffix: "%"
+        label:
+          zh: 成交率
+          en: Win Rate
+        icon: "🎯"
+        trend: "+2%"
+
+  # ==================== 销售漏斗可视化 ====================
+  - type: section_title
+    title:
+      zh: 销售漏斗
+      en: Sales Funnel
+    subtitle:
+      zh: 实时跟踪销售机会各阶段转化情况
+      en: Track opportunity conversion at each stage
+    style:
+      icon: "📊"
+      align: "center"
+
+  - type: funnel_chart
+    title:
+      zh: 销售机会漏斗
+      en: Opportunity Funnel
+    subtitle:
+      zh: 从潜在客户到成交的完整转化路径
+      en: Complete conversion path from lead to close
+    stages:
+      - name:
+          zh: 初步接洽
+          en: Prospecting
+        value: 120
+        color: "bg-blue-500"
+      - name:
+          zh: 需求确认
+          en: Qualification
+        value: 85
+        color: "bg-indigo-500"
+      - name:
+          zh: 方案报价
+          en: Proposal
+        value: 62
+        color: "bg-purple-500"
+      - name:
+          zh: 商务谈判
+          en: Negotiation
+        value: 38
+        color: "bg-pink-500"
+      - name:
+          zh: 成交赢单
+          en: Closed Won
+        value: 24
+        color: "bg-green-500"
+
+  # ==================== 快捷导航 - 按业务角色 ====================
+  - type: role_based_actions
+    title:
+      zh: 快捷操作
+      en: Quick Actions
+    roles:
+      sales:
+        - icon: "👥"
+          label:
+            zh: 我的客户
+            en: My Customers
+          href: "/ui/Customer?project=crm"
+          color: "blue"
+        - icon: "💰"
+          label:
+            zh: 我的商机
+            en: My Opportunities
+          href: "/ui/Opportunity?project=crm"
+          color: "green"
+          badge: "5"
+        - icon: "📄"
+          label:
+            zh: 创建报价
+            en: Create Quote
+          href: "/ui/Quote?project=crm"
+          color: "purple"
+        - icon: "📞"
+          label:
+            zh: 待跟进
+            en: Follow Ups
+          href: "/ui/Contact?project=crm"
+          color: "orange"
+          badge: "12"
+      manager:
+        - icon: "📊"
+          label:
+            zh: 销售报表
+            en: Sales Report
+          href: "/ui/Opportunity?project=crm&view=report"
+          color: "blue"
+        - icon: "👥"
+          label:
+            zh: 团队管理
+            en: Team Management
+          href: "/ui/Employee?project=crm"
+          color: "green"
+        - icon: "🎯"
+          label:
+            zh: 目标设定
+            en: Targets
+          href: "/ui/Opportunity?project=crm&view=targets"
+          color: "purple"
+        - icon: "📈"
+          label:
+            zh: 业绩分析
+            en: Performance
+          href: "/ui/Order?project=crm&view=analytics"
+          color: "orange"
+
+  # ==================== 核心业务模块导航 ====================
+  - type: section_title
+    title:
+      zh: 业务模块
+      en: Business Modules
+    subtitle:
+      zh: 客户管理、销售机会、报价订单全流程管理
+      en: Customer, opportunity, quote and order management
+    style:
+      icon: "🗂️"
+      align: "center"
+
+  - type: card_grid_modern
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 2
+      wide: 3
+    cards:
+      - icon: "👥"
+        title:
           zh: 客户管理
-          en: Customers
-        href: "/ui/Customer?project=crm"
-        color: "blue"
+          en: Customer Management
         description:
-          zh: 管理客户信息
-          en: Manage customer info
-      - icon: 💰
-        label:
+          zh: 360°客户视图，完整客户信息
+          en: 360° customer view with complete info
+        href: "/ui/Customer?project=crm"
+        gradient: "from-blue-500 to-cyan-500"
+        stats:
+          - label: "总客户数"
+            value: "128"
+          - label: "活跃客户"
+            value: "96"
+      - icon: "📇"
+        title:
+          zh: 联系人管理
+          en: Contact Management
+        description:
+          zh: 客户联系人，决策链管理
+          en: Customer contacts and decision makers
+        href: "/ui/Contact?project=crm"
+        gradient: "from-indigo-500 to-purple-500"
+        stats:
+          - label: "联系人总数"
+            value: "356"
+          - label: "主要联系人"
+            value: "128"
+      - icon: "💰"
+        title:
           zh: 销售机会
           en: Opportunities
+        description:
+          zh: 销售漏斗，商机阶段跟踪
+          en: Sales pipeline and opportunity tracking
         href: "/ui/Opportunity?project=crm"
-        color: "green"
-        description:
-          zh: 跟踪销售流程
-          en: Track sales pipeline
-      - icon: 📄
-        label:
+        gradient: "from-amber-500 to-orange-500"
+        stats:
+          - label: "进行中"
+            value: "45"
+          - label: "预计金额"
+            value: "¥2.8M"
+      - icon: "📄"
+        title:
           zh: 报价管理
-          en: Quotes
+          en: Quote Management
+        description:
+          zh: 快速报价，价格审批流程
+          en: Quick quotes and price approval
         href: "/ui/Quote?project=crm"
-        color: "purple"
-        description:
-          zh: 创建和管理报价
-          en: Create and manage quotes
-      - icon: 🛒
-        label:
+        gradient: "from-green-500 to-emerald-500"
+        stats:
+          - label: "待审批"
+            value: "8"
+          - label: "本月报价"
+            value: "32"
+      - icon: "🛒"
+        title:
           zh: 订单管理
-          en: Orders
-        href: "/ui/Order?project=crm"
-        color: "orange"
+          en: Order Management
         description:
-          zh: 处理销售订单
-          en: Process sales orders
+          zh: 销售订单，合同执行跟踪
+          en: Sales orders and contract tracking
+        href: "/ui/Order?project=crm"
+        gradient: "from-pink-500 to-rose-500"
+        stats:
+          - label: "进行中订单"
+            value: "18"
+          - label: "本月销售额"
+            value: "¥856K"
+      - icon: "📦"
+        title:
+          zh: 产品管理
+          en: Product Management
+        description:
+          zh: 产品目录，价格库存管理
+          en: Product catalog, price and inventory
+        href: "/ui/Product?project=crm"
+        gradient: "from-teal-500 to-cyan-500"
+        stats:
+          - label: "产品总数"
+            value: "256"
+          - label: "活跃产品"
+            value: "189"
 
-  # 数据管理标题
+  # ==================== 待办事项和提醒 ====================
+  - type: section_title
+    title:
+      zh: 待办事项
+      en: Tasks & Reminders
+    subtitle:
+      zh: 重要待跟进事项，不错过任何商机
+      en: Important follow-ups, never miss an opportunity
+    style:
+      icon: "⏰"
+      align: "center"
+
+  - type: reminders
+    title:
+      zh: 今日待办
+      en: Today's Tasks
+    items:
+      - icon: "📞"
+        text:
+          zh: 回访 ABC 科技公司 - 张总
+          en: Follow up with ABC Tech - Mr. Zhang
+        time: "上午 10:00"
+        priority: "high"
+      - icon: "📧"
+        text:
+          zh: 发送 XYZ 集团报价方案
+          en: Send quote to XYZ Group
+        time: "下午 2:00"
+        priority: "high"
+      - icon: "🤝"
+        text:
+          zh: 与 LMN 公司合同谈判
+          en: Contract negotiation with LMN Corp
+        time: "下午 4:00"
+        priority: "medium"
+      - icon: "📝"
+        text:
+          zh: 更新 Q1 销售预测报告
+          en: Update Q1 sales forecast report
+        time: "下班前"
+        priority: "medium"
+      - icon: "👥"
+        text:
+          zh: 新客户入职培训准备
+          en: Prepare new customer onboarding
+        time: "本周内"
+        priority: "low"
+
+  # ==================== 活动时间线 ====================
+  - type: section_title
+    title:
+      zh: 最近活动
+      en: Recent Activities
+    subtitle:
+      zh: 团队最新动态，业务进展一目了然
+      en: Latest team activities and business progress
+    style:
+      icon: "📅"
+      align: "center"
+
+  - type: activity_timeline
+    title:
+      zh: 活动记录
+      en: Activity Log
+    subtitle:
+      zh: 最近 30 天的业务活动
+      en: Business activities in last 30 days
+    limit: 8
+
+  # ==================== 数据模型快速访问 ====================
   - type: section_title
     title:
       zh: 数据管理
       en: Data Management
     subtitle:
-      zh: 管理客户、产品、联系人等基础数据
-      en: Manage customers, products, contacts
+      zh: 管理所有业务数据模型
+      en: Manage all business data models
     style:
       icon: "🗄️"
       align: "left"
 
-  # 数据管理卡片网格
   - type: card_grid
     title:
       zh: 数据模型
@@ -85,59 +358,28 @@ layout:
       mobile: 1
       tablet: 2
       desktop: 3
+      wide: 4
 
-  # 统计信息
-  - type: stats_modern
-    title:
-      zh: 销售概览
-      en: Sales Overview
-    background: "bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50"
-    items:
-      - value: "128"
-        suffix: "+"
-        label:
-          zh: 总客户数
-          en: Total Customers
-        color: "from-blue-500 to-cyan-500"
-        icon: "👥"
-      - value: "45"
-        suffix: "个"
-        label:
-          zh: 进行中商机
-          en: Active Opportunities
-        color: "from-amber-500 to-orange-500"
-        icon: "💰"
-      - value: "2.8"
-        suffix: "M"
-        label:
-          zh: 预计成交额
-          en: Expected Revenue
-        color: "from-green-500 to-emerald-500"
-        icon: "📈"
-      - value: "85"
-        suffix: "%"
-        label:
-          zh: 成交率
-          en: Win Rate
-        color: "from-purple-500 to-pink-500"
-        icon: "🎯"
-
-  # 页脚
+  # ==================== 页脚 ====================
   - type: footer
-    background: "bg-gradient-to-r from-indigo-900 via-purple-900 to-pink-900"
+    background: "bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900"
     links:
       - text:
           zh: CRM 文档
-          en: CRM Docs
+          en: CRM Documentation
         href: "/docs"
       - text:
-          zh: API
-          en: API
+          zh: API 参考
+          en: API Reference
         href: "/docs"
       - text:
-          zh: 关于
+          zh: 用户手册
+          en: User Manual
+        href: "/docs"
+      - text:
+          zh: 关于系统
           en: About
         href: "/docs"
     copyright:
-      zh: "© 2026 CRM 客户关系管理。All rights reserved."
+      zh: "© 2026 CRM 客户关系管理系统。All rights reserved."
       en: "© 2026 CRM Customer Relationship Management. All rights reserved."

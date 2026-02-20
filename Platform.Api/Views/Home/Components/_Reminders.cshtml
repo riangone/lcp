@@ -1,0 +1,39 @@
+@model Platform.Infrastructure.Definitions.RemindersConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+}
+
+<div class="bg-white rounded-2xl p-6 shadow-md">
+    @if (!string.IsNullOrEmpty(Model.Title?.GetText(currentLang)))
+    {
+        <div class="mb-6">
+            <h3 class="text-xl font-bold text-gray-800">@Model.Title.GetText(currentLang)</h3>
+        </div>
+    }
+
+    <div class="space-y-3">
+        @foreach (var item in Model.Items)
+        {
+            var priorityClass = item.Priority switch
+            {
+                "high" => "border-l-4 border-red-500",
+                "medium" => "border-l-4 border-yellow-500",
+                "low" => "border-l-4 border-green-500",
+                _ => "border-l-4 border-gray-300"
+            };
+
+            <div class="@priorityClass bg-gray-50 rounded-lg p-3 hover:bg-gray-100 transition-colors cursor-pointer">
+                <div class="flex items-center space-x-3">
+                    <span class="text-xl">@item.Icon</span>
+                    <div class="flex-1">
+                        <div class="text-sm font-medium text-gray-800">@item.Text.GetText(currentLang)</div>
+                        @if (!string.IsNullOrEmpty(item.Time))
+                        {
+                            <div class="text-xs text-gray-500 mt-1">@item.Time</div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

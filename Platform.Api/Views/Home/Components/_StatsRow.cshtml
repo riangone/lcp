@@ -1,0 +1,37 @@
+@model Platform.Infrastructure.Definitions.StatsRowConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var bgClass = Model.Background ?? "bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50";
+}
+
+<div class="@bgClass py-12">
+    <div class="container mx-auto px-4">
+        @if (!string.IsNullOrEmpty(Model.Title?.GetText(currentLang)))
+        {
+            <div class="text-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">@Model.Title.GetText(currentLang)</h2>
+            </div>
+        }
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
+            @foreach (var item in Model.Items)
+            {
+                <div class="bg-white rounded-xl p-5 shadow-md hover:shadow-lg transition-shadow">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-2xl">@item.Icon</span>
+                        @if (!string.IsNullOrEmpty(item.Trend))
+                        {
+                            <span class="text-xs font-medium @(item.Trend.StartsWith("+") ? "text-green-600" : "text-red-600")">
+                                @item.Trend
+                            </span>
+                        }
+                    </div>
+                    <div class="text-3xl font-bold text-gray-800 mb-1">
+                        @item.Value@item.Suffix
+                    </div>
+                    <div class="text-sm text-gray-500">@item.Label.GetText(currentLang)</div>
+                </div>
+            }
+        </div>
+    </div>
+</div>

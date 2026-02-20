@@ -1,0 +1,44 @@
+@model Platform.Infrastructure.Definitions.CardGridModernConfig
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var columns = Model.Columns;
+    var colClass = $"grid-cols-{columns.Mobile} sm:grid-cols-{columns.Tablet} md:grid-cols-{columns.Desktop} lg:grid-cols-{columns.Wide}";
+}
+
+<div class="container mx-auto px-4 py-8">
+    <div class="grid @colClass gap-6">
+        @foreach (var card in Model.Cards)
+        {
+            <a href="@card.Href" class="group bg-white rounded-2xl p-6 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border border-gray-100">
+                <div class="flex items-start space-x-4 mb-4">
+                    <div class="w-14 h-14 rounded-xl bg-gradient-to-br @card.Gradient flex items-center justify-center text-2xl text-white flex-shrink-0 group-hover:scale-110 transition-transform">
+                        @card.Icon
+                    </div>
+                    <div class="flex-1">
+                        <h3 class="text-lg font-bold text-gray-800 mb-1 group-hover:text-blue-600 transition-colors">
+                            @card.Title.GetText(currentLang)
+                        </h3>
+                        <p class="text-sm text-gray-500">
+                            @card.Description.GetText(currentLang)
+                        </p>
+                    </div>
+                </div>
+                
+                @if (card.Stats.Any())
+                {
+                    <div class="border-t border-gray-100 pt-4 mt-4">
+                        <div class="grid grid-cols-2 gap-3">
+                            @foreach (var stat in card.Stats)
+                            {
+                                <div>
+                                    <div class="text-xs text-gray-500">@stat.Label</div>
+                                    <div class="text-lg font-bold text-gray-800">@stat.Value</div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </a>
+        }
+    </div>
+</div>
