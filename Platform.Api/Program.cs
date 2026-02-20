@@ -28,6 +28,10 @@ var builder = WebApplication.CreateBuilder(new WebApplicationOptions
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
+        // 添加标准视图搜索路径
+        options.ViewLocationFormats.Add("/Views/{1}/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Shared/{0}.cshtml");
+        
         // 添加项目视图目录
         var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
         if (Directory.Exists(projectsDir))
