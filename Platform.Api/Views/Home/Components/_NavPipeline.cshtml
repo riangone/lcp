@@ -1,0 +1,57 @@
+@model dynamic
+@{
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    var title = Model?.Title?.GetText(currentLang) ?? "";
+    var stages = Model?.Stages as List<dynamic> ?? new List<dynamic>();
+}
+
+<div class="bg-white border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between py-4">
+            <h2 class="text-lg font-semibold text-gray-800">@title</h2>
+            <div class="flex items-center space-x-1">
+                @for (int i = 0; i < stages.Count; i++)
+                {
+                    var stage = stages[i];
+                    var label = stage.Label.GetText(currentLang);
+                    var icon = stage.Icon?.ToString() ?? "📍";
+                    var gradient = stage.Color?.ToString() ?? "from-gray-500 to-gray-600";
+                    var href = stage.Href?.ToString() ?? "#";
+                    
+                    <div class="flex items-center">
+                        <a href="@href" class="group flex items-center px-3 py-2 rounded-lg hover:bg-gray-50 transition-all">
+                            <span class="text-xl mr-2">@icon</span>
+                            <span class="text-sm font-medium text-gray-700 group-hover:text-gray-900">@label</span>
+                        </a>
+                        @if (i < stages.Count - 1)
+                        {
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .pipeline-nav {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    @@media (max-width: 1024px) {
+        .pipeline-nav {
+            overflow-x: scroll;
+        }
+        .pipeline-nav::-webkit-scrollbar {
+            height: 4px;
+        }
+        .pipeline-nav::-webkit-scrollbar-thumb {
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+    }
+</style>
