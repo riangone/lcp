@@ -248,13 +248,12 @@
     // 加载当前天气
     async function loadCurrentWeather(cityId) {
         try {
-            const response = await fetch(`${API_BASE}/WeatherRecord?project=weather`);
-            const records = await response.json();
-            const todayRecords = records.filter(r => parseInt(r.CityId) === cityId);
+            // 使用实时天气 API
+            const response = await fetch(`${API_BASE}/weather/current/${cityId}?project=weather`);
+            const data = await response.json();
             
-            if (todayRecords.length > 0) {
-                const latest = todayRecords[todayRecords.length - 1];
-                updateWeatherDisplay(latest);
+            if (data && data.Temperature !== undefined) {
+                updateWeatherDisplay(data);
             }
         } catch (error) {
             console.error('Error loading weather:', error);
@@ -283,13 +282,13 @@
     // 加载天气预报
     async function loadForecast(cityId) {
         try {
-            const response = await fetch(`${API_BASE}/WeatherForecast?project=weather`);
+            // 使用实时天气预报 API
+            const response = await fetch(`${API_BASE}/weather/forecast/${cityId}?project=weather`);
             const forecasts = await response.json();
-            const cityForecasts = forecasts.filter(f => parseInt(f.CityId) === cityId)
-                .sort((a, b) => new Date(a.ForecastDate) - new Date(b.ForecastDate))
-                .slice(0, 7);
             
-            renderForecast(cityForecasts);
+            if (forecasts && forecasts.length > 0) {
+                renderForecast(forecasts);
+            }
         } catch (error) {
             console.error('Error loading forecast:', error);
         }
@@ -301,21 +300,29 @@
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         
         container.innerHTML = forecasts.map(f => {
-            const date = new Date(f.ForecastDate);
+            // 支持新旧两种数据格式
+            const forecastDate = f.ForecastDate || f.Date || f.forecastDate;
+            const tempMax = f.TempMax || f.tempMax || f.MaxTemp;
+            const tempMin = f.TempMin || f.tempMin || f.MinTemp;
+            const condition = f.WeatherCondition || f.weatherCondition || f.Description;
+            const code = f.WeatherCode || f.weatherCode || f.Code;
+            const precipProb = f.PrecipitationProbability || f.precipitationProbability || 0;
+            
+            const date = forecastDate ? new Date(forecastDate) : new Date();
             const dayName = date.getDate() === new Date().getDate() ? 'Today' : days[date.getDay()];
-            const icon = getWeatherIcon(f.WeatherCode || f.WeatherCondition);
+            const icon = getWeatherIcon(code || condition);
             
             return `
                 <div class="bg-white rounded-2xl p-4 shadow-lg text-center hover:shadow-xl transition">
                     <div class="font-medium text-gray-700 mb-2">${dayName}</div>
                     <div class="text-3xl mb-2">${icon}</div>
-                    <div class="text-sm text-gray-500">${f.WeatherCondition || '--'}</div>
+                    <div class="text-sm text-gray-500">${condition || '--'}</div>
                     <div class="flex justify-center space-x-2 mt-2">
-                        <span class="text-red-500 font-bold">${f.TempMax}°</span>
-                        <span class="text-blue-500">${f.TempMin}°</span>
+                        <span class="text-red-500 font-bold">${tempMax !== undefined ? Math.round(tempMax) : '--'}°</span>
+                        <span class="text-blue-500">${tempMin !== undefined ? Math.round(tempMin) : '--'}°</span>
                     </div>
-                    ${f.PrecipitationProbability ? `
-                        <div class="text-xs text-blue-400 mt-1">💧 ${f.PrecipitationProbability}%</div>
+                    ${precipProb ? `
+                        <div class="text-xs text-blue-400 mt-1">💧 ${precipProb}%</div>
                     ` : ''}
                 </div>
             `;
