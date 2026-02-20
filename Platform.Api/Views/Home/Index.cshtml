@@ -1,116 +1,557 @@
-@model Platform.Infrastructure.Definitions.HomeDefinition
-@using YamlDotNet.Serialization
-@using Platform.Infrastructure.Definitions
 @{
-    ViewData["Title"] = Model?.Title ?? "LowCode Platform";
-    ViewData["ActivePage"] = "Home";
+    ViewData["Title"] = "CRM 客户关系管理";
+    ViewData["ActivePage"] = "CRM";
+    var project = "crm";
 }
-<div class="min-h-screen">
-@if (Model?.Layout != null)
-{
-    foreach (var component in Model.Layout)
-    {
-        var viewName = GetComponentViewName(component.Type);
-        try
-        {
-            // 使用 YamlDotNet 将 Dictionary 转换为强类型对象
-            var typedData = ConvertToTypedData(component.Data, component.Type);
-            await Html.RenderPartialAsync(viewName, typedData);
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💼 CRM 客户关系管理 - LowCode Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* 商务深蓝主题 */
+        :root {
+            --primary-dark: #1e3a5f;
+            --primary: #2c5282;
+            --primary-light: #4299e1;
+            --accent: #38a169;
+            --warning: #d69e2e;
+            --danger: #e53e3e;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
         }
-        catch (Exception ex)
-        {
-            <div class="text-red-500 p-4 bg-red-50 rounded-lg mb-4">
-                <div class="font-bold">Component '@component.Type' not found or failed</div>
-                <div class="text-sm mt-2 font-mono">@ex.Message</div>
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #1e3a5f 100%);
+            min-height: 100vh;
+        }
+        
+        /* 商务卡片 */
+        .biz-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
+            border: 1px solid rgba(66, 153, 225, 0.2);
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .biz-card:hover {
+            border-color: rgba(66, 153, 225, 0.4);
+            box-shadow: 0 8px 32px rgba(66, 153, 225, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .biz-card-header {
+            border-bottom: 1px solid rgba(66, 153, 225, 0.1);
+            padding: 1rem 1.5rem;
+        }
+        
+        /* 数据卡片 */
+        .stat-card {
+            background: linear-gradient(135deg, rgba(44, 82, 130, 0.3), rgba(30, 41, 59, 0.5));
+            border: 1px solid rgba(66, 153, 225, 0.25);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: linear-gradient(135deg, rgba(44, 82, 130, 0.4), rgba(30, 41, 59, 0.6));
+            border-color: rgba(66, 153, 225, 0.4);
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #38a169);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        /* 导航栏 */
+        .biz-nav {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(66, 153, 225, 0.2);
+        }
+        
+        .biz-nav-link {
+            color: #94a3b8;
+            transition: all 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+        }
+        
+        .biz-nav-link:hover {
+            color: #f1f5f9;
+            background: rgba(66, 153, 225, 0.15);
+        }
+        
+        .biz-nav-link.active {
+            color: #f1f5f9;
+            background: rgba(66, 153, 225, 0.2);
+        }
+        
+        /* 按钮 */
+        .biz-btn {
+            padding: 0.625rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .biz-btn-primary {
+            background: linear-gradient(135deg, #2c5282, #4299e1);
+            color: white;
+        }
+        
+        .biz-btn-primary:hover {
+            background: linear-gradient(135deg, #1e3a5f, #3182ce);
+            box-shadow: 0 4px 16px rgba(66, 153, 225, 0.4);
+        }
+        
+        .biz-btn-secondary {
+            background: rgba(66, 153, 225, 0.15);
+            color: #60a5fa;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+        }
+        
+        .biz-btn-secondary:hover {
+            background: rgba(66, 153, 225, 0.25);
+        }
+        
+        /* 表格 */
+        .biz-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .biz-table th {
+            background: rgba(30, 41, 59, 0.8);
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(66, 153, 225, 0.2);
+        }
+        
+        .biz-table td {
+            padding: 1rem 1.5rem;
+            color: #e2e8f0;
+            border-bottom: 1px solid rgba(66, 153, 225, 0.1);
+        }
+        
+        .biz-table tr:hover td {
+            background: rgba(66, 153, 225, 0.08);
+        }
+        
+        /* 状态标签 */
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .status-success {
+            background: rgba(56, 161, 105, 0.2);
+            color: #38a169;
+            border: 1px solid rgba(56, 161, 105, 0.3);
+        }
+        
+        .status-warning {
+            background: rgba(214, 158, 46, 0.2);
+            color: #d69e2e;
+            border: 1px solid rgba(214, 158, 46, 0.3);
+        }
+        
+        .status-info {
+            background: rgba(66, 153, 225, 0.2);
+            color: #4299e1;
+            border: 1px solid rgba(66, 153, 225, 0.3);
+        }
+        
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(66, 153, 225, 0.4);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(66, 153, 225, 0.6);
+        }
+        
+        /* 动画 */
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        .animate-delay-1 { animation-delay: 0.1s; }
+        .animate-delay-2 { animation-delay: 0.2s; }
+        .animate-delay-3 { animation-delay: 0.3s; }
+    </style>
+</head>
+<body class="text-slate-100">
+    <!-- 导航栏 -->
+    <nav class="biz-nav sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-8">
+                    <a href="/" class="flex items-center space-x-2 text-lg font-semibold">
+                        <span>🏢</span>
+                        <span>LowCode Platform</span>
+                    </a>
+                    <div class="hidden md:flex items-center space-x-2">
+                        <a href="/?project=crm" class="biz-nav-link active">
+                            <i class="fas fa-home mr-1"></i> 首页
+                        </a>
+                        <a href="/ui/Customer?project=crm" class="biz-nav-link">
+                            <i class="fas fa-users mr-1"></i> 客户
+                        </a>
+                        <a href="/ui/Opportunity?project=crm" class="biz-nav-link">
+                            <i class="fas fa-briefcase mr-1"></i> 商机
+                        </a>
+                        <a href="/ui/Quote?project=crm" class="biz-nav-link">
+                            <i class="fas fa-file-invoice mr-1"></i> 报价
+                        </a>
+                        <a href="/ui/Order?project=crm" class="biz-nav-link">
+                            <i class="fas fa-shopping-cart mr-1"></i> 订单
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <select id="project-selector" class="biz-btn biz-btn-secondary text-sm">
+                        <option value="crm">💼 CRM</option>
+                        <option value="weather">🌤️ 天气</option>
+                        <option value="todo">✅ TODO</option>
+                        <option value="journal">📔 日记</option>
+                        <option value="ecommerce">🛒 电商</option>
+                        <option value="chinook">🎵 音乐</option>
+                    </select>
+                </div>
             </div>
-        }
-    }
-}
-else
-{
-    await Html.RenderPartialAsync("_DefaultHome");
-}
-</div>
+        </div>
+    </nav>
 
-@functions {
-    string GetComponentViewName(string type)
-    {
-        return type switch
-        {
-            "hero" => "~/Views/Home/Components/_Hero.cshtml",
-            "quick_actions" => "~/Views/Home/Components/_QuickActions.cshtml",
-            "section_title" => "~/Views/Home/Components/_SectionTitle.cshtml",
-            "card_grid" => "~/Views/Home/Components/_CardGrid.cshtml",
-            "stats_modern" => "~/Views/Home/Components/_StatsModern.cshtml",
-            "footer" => "~/Views/Home/Components/_Footer.cshtml",
-            "alert" => "~/Views/Home/Components/_Alert.cshtml",
-            "stats" => "~/Views/Home/Components/_Stats.cshtml",
-            // CRM 新增组件
-            "nav_pipeline" => "~/Views/Home/Components/_NavPipeline.cshtml",
-            "stats_row" => "~/Views/Home/Components/_StatsRow.cshtml",
-            "role_based_actions" => "~/Views/Home/Components/_RoleBasedActions.cshtml",
-            "card_grid_modern" => "~/Views/Home/Components/_CardGridModern.cshtml",
-            "funnel_chart" => "~/Views/Home/Components/_FunnelChart.cshtml",
-            "activity_timeline" => "~/Views/Home/Components/_ActivityTimeline.cshtml",
-            "reminders" => "~/Views/Home/Components/_Reminders.cshtml",
-            _ => $"~/Views/Home/Components/_{type}.cshtml"
-        };
-    }
+    <!-- 主内容区 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- 页面标题 -->
+        <div class="mb-8 animate-fade-in">
+            <h1 class="text-3xl font-bold mb-2">
+                <span class="text-4xl mr-3">💼</span>
+                CRM 客户关系管理
+            </h1>
+            <p class="text-slate-400">完整的客户 360°视图，销售漏斗管理，报价订单跟踪</p>
+        </div>
 
-    object? ConvertToTypedData(Dictionary<string, object> data, string type)
-    {
-        try
-        {
-            // 所有组件都使用强类型转换
-            return type switch
-            {
-                // CRM 新增组件
-                "nav_pipeline" => ConvertToStrongType<NavPipelineConfig>(data),
-                "stats_row" => ConvertToStrongType<StatsRowConfig>(data),
-                "role_based_actions" => ConvertToStrongType<RoleBasedActionsConfig>(data),
-                "card_grid_modern" => ConvertToStrongType<CardGridModernConfig>(data),
-                "funnel_chart" => ConvertToStrongType<FunnelChartConfig>(data),
-                "activity_timeline" => ConvertToStrongType<ActivityTimelineConfig>(data),
-                "reminders" => ConvertToStrongType<RemindersConfig>(data),
-                // 原有组件
-                "hero" => ConvertToStrongType<Platform.Infrastructure.Definitions.HeroConfig>(data),
-                "quick_actions" => ConvertToStrongType<Platform.Infrastructure.Definitions.QuickActionsConfig>(data),
-                "section_title" => ConvertToStrongType<Platform.Infrastructure.Definitions.SectionTitleConfig>(data),
-                "card_grid" => ConvertToStrongType<Platform.Infrastructure.Definitions.CardGridConfig>(data),
-                "stats_modern" => ConvertToStrongType<Platform.Infrastructure.Definitions.StatsModernConfig>(data),
-                "footer" => ConvertToStrongType<Platform.Infrastructure.Definitions.FooterConfig>(data),
-                "alert" => ConvertToStrongType<Platform.Infrastructure.Definitions.AlertConfig>(data),
-                "stats" => ConvertToStrongType<Platform.Infrastructure.Definitions.StatsConfig>(data),
-                _ => data
-            };
+        <!-- 核心指标卡片 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card animate-fade-in">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">总客户数</span>
+                    <span class="text-2xl">👥</span>
+                </div>
+                <div class="stat-value" id="stat-customers">128</div>
+                <div class="text-sm text-green-400 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 12% 较上月
+                </div>
+            </div>
+            
+            <div class="stat-card animate-fade-in animate-delay-1">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">进行中商机</span>
+                    <span class="text-2xl">💰</span>
+                </div>
+                <div class="stat-value" id="stat-opportunities">45</div>
+                <div class="text-sm text-green-400 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 5% 较上月
+                </div>
+            </div>
+            
+            <div class="stat-card animate-fade-in animate-delay-2">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">待跟进</span>
+                    <span class="text-2xl">📞</span>
+                </div>
+                <div class="stat-value" id="stat-followups">23</div>
+                <div class="text-sm text-red-400 mt-2">
+                    <i class="fas fa-arrow-down mr-1"></i> 3% 较上周
+                </div>
+            </div>
+            
+            <div class="stat-card animate-fade-in animate-delay-3">
+                <div class="flex items-center justify-between mb-2">
+                    <span class="text-slate-400 text-sm">成交率</span>
+                    <span class="text-2xl">🎯</span>
+                </div>
+                <div class="stat-value" id="stat-winrate">85%</div>
+                <div class="text-sm text-green-400 mt-2">
+                    <i class="fas fa-arrow-up mr-1"></i> 2% 较上月
+                </div>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="biz-card mb-8 animate-fade-in animate-delay-1">
+            <div class="biz-card-header">
+                <h2 class="text-lg font-semibold">
+                    <i class="fas fa-bolt text-yellow-400 mr-2"></i>
+                    快捷操作
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <a href="/ui/Customer?project=crm" class="biz-card p-4 text-center group">
+                        <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">👥</div>
+                        <div class="font-medium">客户管理</div>
+                        <div class="text-sm text-slate-400 mt-1">管理客户信息</div>
+                    </a>
+                    <a href="/ui/Opportunity?project=crm" class="biz-card p-4 text-center group">
+                        <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💰</div>
+                        <div class="font-medium">销售机会</div>
+                        <div class="text-sm text-slate-400 mt-1">跟踪销售漏斗</div>
+                    </a>
+                    <a href="/ui/Quote?project=crm" class="biz-card p-4 text-center group">
+                        <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📄</div>
+                        <div class="font-medium">创建报价</div>
+                        <div class="text-sm text-slate-400 mt-1">快速报价流程</div>
+                    </a>
+                    <a href="/ui/Order?project=crm" class="biz-card p-4 text-center group">
+                        <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🛒</div>
+                        <div class="font-medium">订单管理</div>
+                        <div class="text-sm text-slate-400 mt-1">处理销售订单</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 销售漏斗 -->
+        <div class="biz-card mb-8 animate-fade-in animate-delay-2">
+            <div class="biz-card-header">
+                <h2 class="text-lg font-semibold">
+                    <i class="fas fa-chart-funnel text-blue-400 mr-2"></i>
+                    销售漏斗
+                </h2>
+            </div>
+            <div class="p-6">
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">初步接洽</span>
+                            <span class="text-slate-400">120 / 380</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div class="bg-blue-500 h-3 rounded-full" style="width: 31.6%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">需求确认</span>
+                            <span class="text-slate-400">85 / 380</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div class="bg-indigo-500 h-3 rounded-full" style="width: 22.4%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">方案报价</span>
+                            <span class="text-slate-400">62 / 380</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div class="bg-purple-500 h-3 rounded-full" style="width: 16.3%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">商务谈判</span>
+                            <span class="text-slate-400">38 / 380</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div class="bg-pink-500 h-3 rounded-full" style="width: 10%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-slate-300">成交赢单</span>
+                            <span class="text-slate-400">24 / 380</span>
+                        </div>
+                        <div class="w-full bg-slate-700 rounded-full h-3">
+                            <div class="bg-green-500 h-3 rounded-full" style="width: 6.3%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 最近客户 -->
+        <div class="biz-card mb-8 animate-fade-in animate-delay-3">
+            <div class="biz-card-header flex items-center justify-between">
+                <h2 class="text-lg font-semibold">
+                    <i class="fas fa-users text-blue-400 mr-2"></i>
+                    最近客户
+                </h2>
+                <a href="/ui/Customer?project=crm" class="biz-btn biz-btn-secondary text-sm">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="biz-table" id="customers-table">
+                    <thead>
+                        <tr>
+                            <th>客户编号</th>
+                            <th>公司名称</th>
+                            <th>联系人</th>
+                            <th>行业</th>
+                            <th>城市</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customers-list">
+                        <!-- 动态生成 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 待跟进事项 -->
+        <div class="biz-card animate-fade-in animate-delay-3">
+            <div class="biz-card-header flex items-center justify-between">
+                <h2 class="text-lg font-semibold">
+                    <i class="fas fa-clock text-yellow-400 mr-2"></i>
+                    待跟进事项
+                </h2>
+                <a href="/ui/Contact?project=crm" class="biz-btn biz-btn-secondary text-sm">
+                    查看全部 <i class="fas fa-arrow-right ml-1"></i>
+                </a>
+            </div>
+            <div class="p-6">
+                <div class="space-y-3" id="followups-list">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="border-t border-slate-700 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-slate-400">
+            <p>💼 CRM 客户关系管理 - 助力业务增长</p>
+            <p class="text-sm mt-2">客户管理 · 销售机会 · 报价订单 · 全流程跟踪</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_BASE = '/api';
+        
+        // 页面加载
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCustomers();
+            loadFollowUps();
+            setupProjectSelector();
+        });
+        
+        // 项目切换
+        function setupProjectSelector() {
+            document.getElementById('project-selector').addEventListener('change', function() {
+                window.location.href = `/?project=${this.value}`;
+            });
         }
-        catch (Exception ex)
-        {
-            using (var writer = File.AppendText("/tmp/home_debug.log"))
-            {
-                writer.WriteLine($"[{DateTime.Now:yyyy-MM-dd HH:mm:ss.fff}] ConvertToTypedData error for {type}: {ex.Message}");
+        
+        // 加载客户列表
+        async function loadCustomers() {
+            try {
+                const response = await fetch(`${API_BASE}/Customer?project=crm`);
+                const customers = await response.json();
+                
+                const tbody = document.getElementById('customers-list');
+                const recentCustomers = customers.slice(0, 10);
+                
+                tbody.innerHTML = recentCustomers.map(c => {
+                    const statusClass = c.Status === 'Active' ? 'status-success' : 
+                                       c.Status === 'Inactive' ? 'status-warning' : 'status-info';
+                    const statusText = c.Status === 'Active' ? '活跃' : 
+                                      c.Status === 'Inactive' ? '不活跃' : '丢失';
+                    
+                    return `
+                        <tr class="hover:bg-slate-800/50 cursor-pointer" onclick="window.location.href='/ui/Customer/edit/${c.CustomerId}?project=crm'">
+                            <td class="font-mono text-sm">${c.CustomerNo || '-'}</td>
+                            <td class="font-medium">${c.CompanyName || '-'}</td>
+                            <td>${c.ContactPerson || '-'}</td>
+                            <td>${c.Industry || '-'}</td>
+                            <td>${c.City || '-'}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // 更新统计
+                document.getElementById('stat-customers').textContent = customers.length;
+            } catch (error) {
+                console.error('Error loading customers:', error);
             }
-            return data;
         }
-    }
-    
-    T? ConvertToStrongType<T>(Dictionary<string, object> data) where T : class
-    {
-        try
-        {
-            var serializer = new SerializerBuilder().Build();
-            var yaml = serializer.Serialize(data);
-
-            var deserializer = new DeserializerBuilder()
-                .WithNamingConvention(YamlDotNet.Serialization.NamingConventions.UnderscoredNamingConvention.Instance)
-                .IgnoreUnmatchedProperties()
-                .Build();
-
-            return deserializer.Deserialize<T>(yaml);
+        
+        // 加载待跟进事项
+        async function loadFollowUps() {
+            try {
+                const response = await fetch(`${API_BASE}/Contact?project=crm`);
+                const contacts = await response.json();
+                
+                const container = document.getElementById('followups-list');
+                const recentContacts = contacts.slice(0, 5);
+                
+                container.innerHTML = recentContacts.map((c, i) => `
+                    <div class="biz-card p-4 flex items-center justify-between hover:border-blue-500/40 transition">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center font-bold">
+                                ${c.FirstName ? c.FirstName[0] : 'C'}
+                            </div>
+                            <div>
+                                <div class="font-medium">${c.FirstName} ${c.LastName}</div>
+                                <div class="text-sm text-slate-400">${c.Title || '联系人'} · ${c.Email || c.Phone || '-'}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <span class="status-badge status-warning">待跟进</span>
+                            <button class="biz-btn biz-btn-primary text-sm">
+                                <i class="fas fa-phone mr-1"></i> 联系
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // 更新统计
+                document.getElementById('stat-followups').textContent = contacts.length;
+            } catch (error) {
+                console.error('Error loading follow-ups:', error);
+            }
         }
-        catch
-        {
-            return null;
-        }
-    }
-}
+    </script>
+</body>
+</html>
