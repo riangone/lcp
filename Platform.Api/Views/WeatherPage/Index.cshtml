@@ -332,13 +332,15 @@
     // 加载最近记录
     async function loadRecentRecords(cityId) {
         try {
-            const response = await fetch(`${API_BASE}/weather/current/${cityId}?project=weather`);
+            const response = await fetch(`${API_BASE}/weather/records/${cityId}?project=weather&limit=5`);
             const records = await response.json();
-            const cityRecords = records.filter(r => parseInt(r.CityId) === cityId)
-                .sort((a, b) => new Date(b.RecordDate) - new Date(a.RecordDate))
-                .slice(0, 5);
             
-            renderRecordsList(cityRecords);
+            if (Array.isArray(records) && records.length > 0) {
+                const cityRecords = records
+                    .sort((a, b) => new Date(b.RecordDate || b.recordDate) - new Date(a.RecordDate || a.recordDate))
+                    .slice(0, 5);
+                renderRecordsList(cityRecords);
+            }
         } catch (error) {
             console.error('Error loading records:', error);
         }
