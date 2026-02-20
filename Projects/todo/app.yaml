@@ -24,6 +24,42 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          CompletedAt: 完了日時
+          CreatedAt: 作成日時
+          Description: 説明
+          DueDate: 締切日
+          Id: ID
+          Priority: 優先度
+          Status: ステータ스
+          Title: タイトル
+          cancel_button: キャンセル
+          create_button: タスクを追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: タスクを検索...
+          title: タスク
+        ko:
+          Actions: 작업
+          CompletedAt: 완료 일시
+          CreatedAt: 생성 일시
+          Description: 설명
+          DueDate: 마감일
+          Id: ID
+          Priority: 우선순위
+          Status: 상태
+          Title: 제목
+          cancel_button: 취소
+          create_button: 작업 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 작업 검색...
+          title: 작업
       labels:
         en:
           title: Tasks
@@ -167,6 +203,32 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          Description: 説明
+          EndDate: 終了日
+          Id: ID
+          Name: プロジェクト名
+          StartDate: 開始日
+          Status: ステータ스
+          create_button: プロジェクトを追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: プロジェクトを検索...
+          title: プロジェクト
+        ko:
+          Actions: 작업
+          Description: 설명
+          EndDate: 종료일
+          Id: ID
+          Name: 프로젝트 이름
+          StartDate: 시작일
+          Status: 상태
+          create_button: 프로젝트 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 프로젝트 검색...
+          title: 프로젝트
       labels:
         en:
           title: Projects
@@ -290,6 +352,14 @@ models:
     read_only: true
 
     ui:
+        ja:
+          ProjectName: Project
+          ProjectStatus: Project Status
+          title: Tasks by Project
+        ko:
+          ProjectName: Project
+          ProjectStatus: Project Status
+          title: Tasks by Project
       labels:
         en:
           title: Tasks by Project
@@ -355,6 +425,20 @@ models:
     read_only: true
 
     ui:
+        ja:
+          CompletedTasks: 完了
+          InProgressTasks: 進行中
+          PendingTasks: 保留中
+          TotalTasks: Total Tasks
+          UrgentTasks: Urgent
+          title: Project Statistics
+        ko:
+          CompletedTasks: 완료
+          InProgressTasks: 진행 중
+          PendingTasks: 보류 중
+          TotalTasks: Total Tasks
+          UrgentTasks: Urgent
+          title: Project Statistics
       labels:
         en:
           title: Project Statistics

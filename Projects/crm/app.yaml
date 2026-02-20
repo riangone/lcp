@@ -22,6 +22,36 @@ models:
         theme: default
         grid_columns: 2
       labels:
+        ja:
+          City: 도시
+          CompanyName: 会社名
+          ContactPerson: 連絡先担当者
+          Email: メール
+          Industry: 業界
+          Level: ランク
+          OwnerId: 担当者
+          Phone: 電話
+          Status: ステータ스
+          create_button: 顧客を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 顧客を検索...
+          title: 顧客
+        ko:
+          City: 도시
+          CompanyName: 회사명
+          ContactPerson: 연락처 담당자
+          Email: 이메일
+          Industry: 업종
+          Level: 등급
+          OwnerId: 담당자
+          Phone: 전화
+          Status: 상태
+          create_button: 고객 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 고객 검색...
+          title: 고객
         zh:
           title: 客户管理
           create_button: 添加客户
@@ -274,6 +304,38 @@ models:
         theme: default
         grid_columns: 2
       labels:
+        ja:
+          CustomerId: 顧客
+          Department: 部門
+          Email: メール
+          FirstName: 名
+          FullName: 氏名
+          IsPrimary: 主要
+          LastName: 姓
+          Mobile: 携帯電話
+          Phone: 電話
+          Title: 役職
+          create_button: 連絡先を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 連絡先を検索...
+          title: 連絡先
+        ko:
+          CustomerId: 고객
+          Department: 부문
+          Email: 이메일
+          FirstName: 이름
+          FullName: 성명
+          IsPrimary: 주요
+          LastName: 성
+          Mobile: 휴대전화
+          Phone: 전화
+          Title: 직함
+          create_button: 연락처 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 연락처 검색...
+          title: 연락처
         zh:
           title: 联系人管理
           create_button: 添加联系人
@@ -433,6 +495,38 @@ models:
         theme: default
         grid_columns: 1
       labels:
+        ja:
+          Amount: 金額
+          ContactId: 連絡先
+          CustomerId: 顧客
+          ExpectedCloseDate: 予想成約日
+          OwnerId: 担当者
+          Priority: 優先度
+          Probability: 確率
+          Stage: 段階
+          Status: ステータ스
+          Title: 役職
+          create_button: 機会を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 機会を検索...
+          title: 販売機会
+        ko:
+          Amount: 금액
+          ContactId: 연락처
+          CustomerId: 고객
+          ExpectedCloseDate: 예상 성사 날짜
+          OwnerId: 담당자
+          Priority: 우선순위
+          Probability: 확률
+          Stage: 단계
+          Status: 상태
+          Title: 직함
+          create_button: 기회 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 기회 검색...
+          title: 판매 기회
         zh:
           title: 销售机会
           create_button: 添加机会
@@ -665,6 +759,28 @@ models:
         theme: default
         grid_columns: 2
       labels:
+        ja:
+          Category: カテゴリ
+          IsActive: アクティブ
+          ProductName: 製品名
+          StockQuantity: 在庫
+          UnitPrice: 単価
+          create_button: 製品を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 製品を検索...
+          title: 製品
+        ko:
+          Category: 분류
+          IsActive: 활성
+          ProductName: 제품 이름
+          StockQuantity: 재고
+          UnitPrice: 단가
+          create_button: 제품 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 제품 검색...
+          title: 제품
         zh:
           title: 产品管理
           create_button: 添加产品
@@ -812,6 +928,30 @@ models:
         theme: default
         grid_columns: 1
       labels:
+        ja:
+          CustomerId: 顧客
+          OwnerId: 担当者
+          QuoteDate: 見積もり日
+          QuoteNo: 見積もり番号
+          Status: ステータ스
+          TotalAmount: 合計金額
+          create_button: 見積もりを作成
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 見積もりを検索...
+          title: 見積もり
+        ko:
+          CustomerId: 고객
+          OwnerId: 담당자
+          QuoteDate: 견적 날짜
+          QuoteNo: 견적 번호
+          Status: 상태
+          TotalAmount: 총 금액
+          create_button: 견적 생성
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 견적 검색...
+          title: 견적
         zh:
           title: 报价管理
           create_button: 创建报价
@@ -984,6 +1124,22 @@ models:
         theme: default
         grid_columns: 1
       labels:
+        ja:
+          Discount: 割引
+          ProductId: Product
+          Quantity: Quantity
+          QuoteId: Quote
+          Subtotal: 小計
+          UnitPrice: 単価
+          title: Quote Items
+        ko:
+          Discount: 할인
+          ProductId: Product
+          Quantity: Quantity
+          QuoteId: Quote
+          Subtotal: 소계
+          UnitPrice: 단가
+          title: Quote Items
         zh:
           title: 报价明细
           QuoteId: 报价单
@@ -1093,6 +1249,30 @@ models:
         theme: default
         grid_columns: 1
       labels:
+        ja:
+          CustomerId: 顧客
+          OrderDate: 注文日
+          OrderNo: 注文番号
+          PaymentStatus: Payment Status
+          Status: ステータ스
+          TotalAmount: 合計金額
+          create_button: 注文を作成
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 注文を検索...
+          title: 注文
+        ko:
+          CustomerId: 고객
+          OrderDate: 주문 날짜
+          OrderNo: 주문 번호
+          PaymentStatus: Payment Status
+          Status: 상태
+          TotalAmount: 총 금액
+          create_button: 주문 생성
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 주문 검색...
+          title: 주문
         zh:
           title: 订单管理
           create_button: 创建订单
@@ -1327,6 +1507,20 @@ models:
         theme: default
         grid_columns: 1
       labels:
+        ja:
+          OrderId: Order
+          ProductId: Product
+          Quantity: Quantity
+          Subtotal: 小計
+          UnitPrice: 単価
+          title: Order Items
+        ko:
+          OrderId: Order
+          ProductId: Product
+          Quantity: Quantity
+          Subtotal: 소계
+          UnitPrice: 단가
+          title: Order Items
         zh:
           title: 订单明细
           OrderId: 订单
@@ -1434,6 +1628,30 @@ models:
         theme: default
         grid_columns: 2
       labels:
+        ja:
+          ActivityType: Type
+          DueDate: Due Date
+          OwnerId: 担当者
+          Priority: 優先度
+          Status: ステータ스
+          Subject: Subject
+          create_button: Add Activity
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: Search activities...
+          title: Activities
+        ko:
+          ActivityType: Type
+          DueDate: Due Date
+          OwnerId: 담당자
+          Priority: 우선순위
+          Status: 상태
+          Subject: Subject
+          create_button: Add Activity
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: Search activities...
+          title: Activities
         zh:
           title: 活动管理
           create_button: 添加活动
@@ -1610,6 +1828,22 @@ models:
 
     ui:
       labels:
+        ja:
+          CustomerName: Customer Name
+          OrderDate: 注文日
+          OrderNo: 注文番号
+          PaymentStatus: Payment Status
+          Status: ステータ스
+          TotalAmount: 合計金額
+          title: Orders with Customers
+        ko:
+          CustomerName: Customer Name
+          OrderDate: 주문 날짜
+          OrderNo: 주문 번호
+          PaymentStatus: Payment Status
+          Status: 상태
+          TotalAmount: 총 금액
+          title: Orders with Customers
         zh:
           title: 订单客户视图
           OrderNo: 订单号

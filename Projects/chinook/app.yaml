@@ -22,6 +22,30 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          Id: ID
+          Name: 名称
+          cancel_button: キャンセル
+          create_button: アーティストを追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: アーティストを検索...
+          title: アーティスト
+        ko:
+          Actions: 작업
+          Id: ID
+          Name: 이름
+          cancel_button: 취소
+          create_button: 아티스트 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 아티스트 검색...
+          title: 아티스트
       labels:
         en:
           title: Artists
@@ -84,6 +108,32 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          ArtistId: アーティスト ID
+          Id: ID
+          Title: 役職
+          cancel_button: キャンセル
+          create_button: アルバムを追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: アルバムを検索...
+          title: アルバム
+        ko:
+          Actions: 작업
+          ArtistId: 아티스트 ID
+          Id: ID
+          Title: 직함
+          cancel_button: 취소
+          create_button: 앨범 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 앨범 검색...
+          title: 앨범
       labels:
         en:
           title: Albums
@@ -159,6 +209,44 @@ models:
       layout:
         theme: default
         grid_columns: 1
+        ja:
+          Actions: アクション
+          AlbumId: Album ID
+          Bytes: バイト
+          Composer: 作曲家
+          GenreId: Genre ID
+          Id: ID
+          MediaTypeId: Media Type ID
+          Milliseconds: ミリ秒
+          Name: 名称
+          UnitPrice: Unit Price
+          cancel_button: キャンセル
+          create_button: トラックを追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: トラックを検索...
+          title: トラック
+        ko:
+          Actions: 작업
+          AlbumId: Album ID
+          Bytes: 바이트
+          Composer: 작곡가
+          GenreId: Genre ID
+          Id: ID
+          MediaTypeId: Media Type ID
+          Milliseconds: 밀리초
+          Name: 이름
+          UnitPrice: Unit Price
+          cancel_button: 취소
+          create_button: 트랙 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 트랙 검색...
+          title: 트랙
       labels:
         en:
           title: Tracks
@@ -295,6 +383,56 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          Address: Address
+          BirthDate: Birth Date
+          City: City
+          Country: Country
+          Email: Email
+          Fax: Fax
+          FirstName: 名
+          HireDate: Hire Date
+          Id: ID
+          LastName: 姓
+          Phone: Phone
+          PostalCode: Postal Code
+          ReportsTo: Reports To
+          State: State
+          Title: 役職
+          cancel_button: キャンセル
+          create_button: 従業員を追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: 従業員を検索...
+          title: 従業員
+        ko:
+          Actions: 작업
+          Address: Address
+          BirthDate: Birth Date
+          City: City
+          Country: Country
+          Email: Email
+          Fax: Fax
+          FirstName: 이름
+          HireDate: Hire Date
+          Id: ID
+          LastName: 성
+          Phone: Phone
+          PostalCode: Postal Code
+          ReportsTo: Reports To
+          State: State
+          Title: 직함
+          cancel_button: 취소
+          create_button: 직원 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 직원 검색...
+          title: 직원
       labels:
         en:
           title: Employees
@@ -488,6 +626,30 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          Id: ID
+          Name: 名称
+          cancel_button: キャンセル
+          create_button: ジャンルを追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: ジャンルを検索...
+          title: ジャンル
+        ko:
+          Actions: 작업
+          Id: ID
+          Name: 이름
+          cancel_button: 취소
+          create_button: 장르 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 장르 검색...
+          title: 장르
       labels:
         en:
           title: Genres
@@ -550,6 +712,30 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          Id: ID
+          Name: 名称
+          cancel_button: キャンセル
+          create_button: Add Media Type
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: Search media types...
+          title: メディアタイプ
+        ko:
+          Actions: 작업
+          Id: ID
+          Name: 이름
+          cancel_button: 취소
+          create_button: Add Media Type
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: Search media types...
+          title: 미디어 유형
       labels:
         en:
           title: Media Types
@@ -612,6 +798,44 @@ models:
       layout:
         theme: default
         grid_columns: 1
+        ja:
+          Actions: アクション
+          BillingAddress: 請求先住所
+          BillingCity: 請求先都市
+          BillingCountry: 請求先国
+          BillingPostalCode: 請求先郵便番号
+          BillingState: 請求先州
+          CustomerId: Customer ID
+          Id: ID
+          InvoiceDate: 請求書日付
+          Total: 合計
+          cancel_button: キャンセル
+          create_button: 請求書を追加
+          delete_button: 削除
+          edit_button: 編集
+          new_button: 新規
+          save_button: 保存
+          search_placeholder: 請求書を検索...
+          title: 請求書
+        ko:
+          Actions: 작업
+          BillingAddress: 청구 주소
+          BillingCity: 청구 도시
+          BillingCountry: 청구 국가
+          BillingPostalCode: 청구 우편번호
+          BillingState: 청구 주
+          CustomerId: Customer ID
+          Id: ID
+          InvoiceDate: 송장 날짜
+          Total: 총계
+          cancel_button: 취소
+          create_button: 송장 추가
+          delete_button: 삭제
+          edit_button: 편집
+          new_button: 새로 만들기
+          save_button: 저장
+          search_placeholder: 송장 검색...
+          title: 송장
       labels:
         en:
           title: Invoices
@@ -752,6 +976,18 @@ models:
     read_only: true
 
     ui:
+        ja:
+          Country: Country
+          CustomerName: Customer
+          InvoiceDate: 請求書日付
+          Total: 合計
+          title: Invoice With Customer
+        ko:
+          Country: Country
+          CustomerName: Customer
+          InvoiceDate: 송장 날짜
+          Total: 총계
+          title: Invoice With Customer
       labels:
         en:
           title: Invoice With Customer

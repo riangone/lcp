@@ -11,6 +11,26 @@ models:
       layout:
         theme: default
         grid_columns: 3
+        ja:
+          Actions: アクション
+          Description: 説明
+          Name: Name
+          ParentCategoryId: Parent Category
+          create_button: Add Category
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: Search categories...
+          title: Categories
+        ko:
+          Actions: 작업
+          Description: 설명
+          Name: Name
+          ParentCategoryId: Parent Category
+          create_button: Add Category
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: Search categories...
+          title: Categories
       labels:
         en:
           title: Categories
@@ -86,6 +106,32 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          City: 都市
+          CompanyName: 会社名
+          ContactEmail: メール
+          ContactName: 連絡先
+          ContactPhone: 電話
+          Country: 국
+          create_button: Add Supplier
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: Search suppliers...
+          title: Suppliers
+        ko:
+          Actions: 작업
+          City: 도시
+          CompanyName: 회사명
+          ContactEmail: 이메일
+          ContactName: 연락처
+          ContactPhone: 전화
+          Country: 국가
+          create_button: Add Supplier
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: Search suppliers...
+          title: Suppliers
       labels:
         en:
           title: Suppliers
@@ -213,6 +259,36 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          CategoryId: カテゴリ
+          Description: 説明
+          Discontinued: Discontinued
+          ProductName: 製品名
+          ReorderLevel: Reorder Level
+          StockQuantity: 在庫
+          SupplierId: Supplier
+          UnitPrice: 単価
+          create_button: 製品を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 製品を検索...
+          title: 製品
+        ko:
+          Actions: 작업
+          CategoryId: 분류
+          Description: 설명
+          Discontinued: Discontinued
+          ProductName: 제품 이름
+          ReorderLevel: Reorder Level
+          StockQuantity: 재고
+          SupplierId: Supplier
+          UnitPrice: 단가
+          create_button: 제품 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 제품 검색...
+          title: 제품
       labels:
         en:
           title: Products
@@ -346,6 +422,34 @@ models:
       layout:
         theme: default
         grid_columns: 2
+        ja:
+          Actions: アクション
+          City: 都市
+          Country: 국
+          CustomerType: Customer Type
+          Email: メール
+          FirstName: First Name
+          LastName: Last Name
+          Phone: 電話
+          create_button: 顧客を追加
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 顧客を検索...
+          title: 顧客
+        ko:
+          Actions: 작업
+          City: 도시
+          Country: 국가
+          CustomerType: Customer Type
+          Email: 이메일
+          FirstName: First Name
+          LastName: Last Name
+          Phone: 전화
+          create_button: 고객 추가
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 고객 검색...
+          title: 고객
       labels:
         en:
           title: Customers
@@ -506,6 +610,32 @@ models:
       layout:
         theme: default
         grid_columns: 1
+        ja:
+          Actions: アクション
+          CustomerId: 顧客
+          OrderDate: 注文日
+          OrderNumber: 注文番号
+          PaymentStatus: Payment Status
+          Status: ステータ스
+          TotalAmount: 合計金額
+          create_button: 注文を作成
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: 注文を検索...
+          title: 注文
+        ko:
+          Actions: 작업
+          CustomerId: 고객
+          OrderDate: 주문 날짜
+          OrderNumber: 주문 번호
+          PaymentStatus: Payment Status
+          Status: 상태
+          TotalAmount: 총 금액
+          create_button: 주문 생성
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 주문 검색...
+          title: 주문
       labels:
         en:
           title: Orders
@@ -724,6 +854,30 @@ models:
       layout:
         theme: default
         grid_columns: 1
+        ja:
+          Actions: アクション
+          Discount: Discount
+          OrderId: Order
+          ProductId: Product
+          Quantity: Quantity
+          Subtotal: Subtotal
+          UnitPrice: 単価
+          create_button: Add Item
+          delete_button: 削除
+          edit_button: 編集
+          title: Order Items
+        ko:
+          Actions: 작업
+          Discount: Discount
+          OrderId: Order
+          ProductId: Product
+          Quantity: Quantity
+          Subtotal: Subtotal
+          UnitPrice: 단가
+          create_button: Add Item
+          delete_button: 삭제
+          edit_button: 편집
+          title: Order Items
       labels:
         en:
           title: Order Items
@@ -837,6 +991,30 @@ models:
       layout:
         theme: default
         grid_columns: 1
+        ja:
+          Actions: アクション
+          ChangeType: Change Type
+          CreatedAt: Date
+          NewStock: New Stock
+          Notes: Notes
+          PreviousStock: Previous Stock
+          ProductId: Product
+          Quantity: Quantity
+          ReferenceId: Reference ID
+          ReferenceType: Reference Type
+          title: Inventory Logs
+        ko:
+          Actions: 작업
+          ChangeType: Change Type
+          CreatedAt: Date
+          NewStock: New Stock
+          Notes: Notes
+          PreviousStock: Previous Stock
+          ProductId: Product
+          Quantity: Quantity
+          ReferenceId: Reference ID
+          ReferenceType: Reference Type
+          title: Inventory Logs
       labels:
         en:
           title: Inventory Logs
@@ -976,6 +1154,28 @@ models:
     read_only: true
 
     ui:
+        ja:
+          CustomerCity: 都市
+          CustomerCountry: 국
+          CustomerEmail: メール
+          CustomerName: 顧客
+          OrderDate: 注文日
+          OrderNumber: 注文番号
+          PaymentStatus: Payment
+          Status: ステータ스
+          TotalAmount: 合計金額
+          title: Orders with Customers
+        ko:
+          CustomerCity: 도시
+          CustomerCountry: 국가
+          CustomerEmail: 이메일
+          CustomerName: 고객
+          OrderDate: 주문 날짜
+          OrderNumber: 주문 번호
+          PaymentStatus: Payment
+          Status: 상태
+          TotalAmount: 총 금액
+          title: Orders with Customers
       labels:
         en:
           title: Orders with Customers
@@ -1073,6 +1273,22 @@ models:
     read_only: true
 
     ui:
+        ja:
+          CategoryName: カテゴリ
+          ProductName: Product
+          StockQuantity: 在庫
+          TotalRevenue: Revenue
+          TotalSold: Sold
+          UnitPrice: 単価
+          title: Product Sales Report
+        ko:
+          CategoryName: 분류
+          ProductName: Product
+          StockQuantity: 재고
+          TotalRevenue: Revenue
+          TotalSold: Sold
+          UnitPrice: 단가
+          title: Product Sales Report
       labels:
         en:
           title: Product Sales Report

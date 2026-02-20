@@ -27,6 +27,34 @@ models:
       layout:
         theme: journal
         grid_columns: 2
+        ja:
+          Actions: アクション
+          CategoryId: カテゴリ
+          Content: 内容
+          CreatedAt: Created At
+          Date: 日付
+          Id: ID
+          Mood: 気分
+          Title: タイトル
+          create_button: New Entry
+          delete_button: 削除
+          edit_button: 編集
+          search_placeholder: エントリーを検索...
+          title: My Journal
+        ko:
+          Actions: 작업
+          CategoryId: 카테고리
+          Content: 내용
+          CreatedAt: Created At
+          Date: 날짜
+          Id: ID
+          Mood: 기분
+          Title: 제목
+          create_button: New Entry
+          delete_button: 삭제
+          edit_button: 편집
+          search_placeholder: 일기 검색...
+          title: My Journal
       labels:
         en:
           title: My Journal
@@ -154,6 +182,26 @@ models:
       layout:
         theme: default
         grid_columns: 3
+        ja:
+          Actions: アクション
+          Color: 色
+          Description: 説明
+          Id: ID
+          Name: Name
+          create_button: カテゴリを追加
+          delete_button: 削除
+          edit_button: 編集
+          title: カテゴリ
+        ko:
+          Actions: 작업
+          Color: 색상
+          Description: 설명
+          Id: ID
+          Name: Name
+          create_button: 카테고리 추가
+          delete_button: 삭제
+          edit_button: 편집
+          title: 카테고리
       labels:
         en:
           title: Categories
@@ -228,6 +276,16 @@ models:
     primary_key: Id
 
     ui:
+        ja:
+          Color: 色
+          Name: Name
+          create_button: Add Tag
+          title: タグ
+        ko:
+          Color: 색상
+          Name: Name
+          create_button: Add Tag
+          title: 태그
       labels:
         en:
           title: Tags
@@ -274,6 +332,10 @@ models:
     primary_key: Id
 
     ui:
+        ja:
+          title: Entry Tags
+        ko:
+          title: Entry Tags
       labels:
         en:
           title: Entry Tags
@@ -318,6 +380,14 @@ models:
     read_only: true
 
     ui:
+        ja:
+          CategoryColor: 色
+          CategoryName: カテゴリ
+          title: Journal with Category
+        ko:
+          CategoryColor: 색상
+          CategoryName: 카테고리
+          title: Journal with Category
       labels:
         en:
           title: Journal with Category
@@ -385,6 +455,14 @@ models:
     read_only: true
 
     ui:
+        ja:
+          StatName: Statistic
+          StatValue: Value
+          title: Statistics
+        ko:
+          StatName: Statistic
+          StatValue: Value
+          title: Statistics
       labels:
         en:
           title: Statistics
