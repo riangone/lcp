@@ -252,7 +252,8 @@
             const response = await fetch(`${API_BASE}/weather/current/${cityId}?project=weather`);
             const data = await response.json();
             
-            if (data && data.Temperature !== undefined) {
+            // 支持大小写两种字段格式
+            if (data && (data.temperature !== undefined || data.Temperature !== undefined)) {
                 updateWeatherDisplay(data);
             }
         } catch (error) {
