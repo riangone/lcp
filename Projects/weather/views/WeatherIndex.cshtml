@@ -1,0 +1,409 @@
+@{
+    ViewData["Title"] = "Weather App";
+    ViewData["ActivePage"] = "Weather";
+    var project = "weather";
+}
+
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-cyan-50 to-indigo-50">
+    <!-- 顶部天气卡片 -->
+    <div class="container mx-auto px-4 pt-8">
+        <!-- 本地天气卡片 -->
+        <div class="max-w-2xl mx-auto">
+            <div class="bg-gradient-to-br from-blue-500 to-cyan-500 rounded-3xl shadow-2xl p-8 text-white mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-3xl font-bold" id="current-city">Loading...</h2>
+                        <p class="text-blue-100" id="current-date">--</p>
+                    </div>
+                    <div class="text-6xl" id="current-icon">🌤️</div>
+                </div>
+                <div class="flex items-end justify-between">
+                    <div>
+                        <div class="text-7xl font-bold" id="current-temp">--°</div>
+                        <div class="text-xl text-blue-100" id="current-condition">--</div>
+                    </div>
+                    <div class="text-right space-y-2">
+                        <div class="flex items-center space-x-2">
+                            <span>💧</span>
+                            <span id="current-humidity">--%</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>💨</span>
+                            <span id="current-wind">-- km/h</span>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span>🌡️</span>
+                            <span id="current-feels">--°</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索栏 -->
+        <div class="max-w-xl mx-auto mb-8">
+            <div class="bg-white rounded-2xl shadow-lg p-2 flex items-center space-x-2">
+                <input type="text" id="city-search" 
+                       placeholder="Search city..." 
+                       class="flex-1 px-4 py-3 rounded-xl border-none focus:ring-2 focus:ring-blue-500 outline-none"
+                       list="city-list">
+                <datalist id="city-list"></datalist>
+                <button onclick="searchCity()" 
+                        class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition">
+                    🔍 Search
+                </button>
+            </div>
+        </div>
+
+        <!-- 7 天预报 -->
+        <div class="max-w-5xl mx-auto mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">📅 7-Day Forecast</h3>
+            <div class="grid grid-cols-7 gap-3" id="forecast-grid">
+                <!-- 由 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 天气详情卡片 -->
+        <div class="max-w-5xl mx-auto mb-8">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">📊 Weather Details</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
+                    <div class="text-3xl mb-2">☀️</div>
+                    <div class="text-sm text-gray-500">UV Index</div>
+                    <div class="text-2xl font-bold text-gray-800" id="detail-uv">--</div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
+                    <div class="text-3xl mb-2">🌫️</div>
+                    <div class="text-sm text-gray-500">Visibility</div>
+                    <div class="text-2xl font-bold text-gray-800" id="detail-visibility">-- km</div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
+                    <div class="text-3xl mb-2">🔵</div>
+                    <div class="text-sm text-gray-500">Pressure</div>
+                    <div class="text-2xl font-bold text-gray-800" id="detail-pressure">-- hPa</div>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-lg text-center">
+                    <div class="text-3xl mb-2">🌅</div>
+                    <div class="text-sm text-gray-500">Sunrise</div>
+                    <div class="text-2xl font-bold text-gray-800" id="detail-sunrise">--:--</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 城市列表 -->
+        <div class="max-w-5xl mx-auto mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">🏙️ Managed Cities</h3>
+                <a href="/ui/City?project=weather" class="text-blue-500 hover:underline">Manage →</a>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="cities-list">
+                <!-- 由 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 最近记录 -->
+        <div class="max-w-5xl mx-auto mb-8">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-2xl font-bold text-gray-800">📝 Recent Weather Records</h3>
+                <a href="/ui/WeatherRecord?project=weather" class="text-blue-500 hover:underline">View All →</a>
+            </div>
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden" id="records-list">
+                <!-- 由 JavaScript 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="max-w-5xl mx-auto">
+            <h3 class="text-2xl font-bold text-gray-800 mb-4 text-center">⚡ Quick Actions</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <a href="/ui/City?project=weather" 
+                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
+                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🏙️</div>
+                    <div class="font-medium text-gray-700">Add City</div>
+                </a>
+                <a href="/ui/WeatherRecord?project=weather" 
+                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
+                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🌡️</div>
+                    <div class="font-medium text-gray-700">Record Weather</div>
+                </a>
+                <a href="/ui/WeatherForecast?project=weather" 
+                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
+                    <div class="text-4xl mb-2 group-hover:scale-110 transition">📅</div>
+                    <div class="font-medium text-gray-700">View Forecast</div>
+                </a>
+                <a href="/ui/WeatherCondition?project=weather" 
+                   class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition text-center group">
+                    <div class="text-4xl mb-2 group-hover:scale-110 transition">🌦️</div>
+                    <div class="font-medium text-gray-700">Weather Codes</div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = '/api';
+    let allCities = [];
+    let currentCityId = null;
+
+    // 页面加载时获取数据
+    document.addEventListener('DOMContentLoaded', function() {
+        loadCities();
+        loadWeatherConditions();
+    });
+
+    // 加载城市列表
+    async function loadCities() {
+        try {
+            const response = await fetch(`${API_BASE}/City?project=weather`);
+            const cities = await response.json();
+            allCities = cities;
+            
+            // 填充 datalist
+            const datalist = document.getElementById('city-list');
+            datalist.innerHTML = cities.map(c => 
+                `<option value="${c.CityId}">${c.CityName} (${c.Country})</option>`
+            ).join('');
+            
+            // 显示城市列表
+            renderCitiesList(cities.slice(0, 10));
+            
+            // 加载第一个城市的天气
+            if (cities.length > 0) {
+                loadCityWeather(cities[0].CityId, cities[0].CityName);
+            }
+        } catch (error) {
+            console.error('Error loading cities:', error);
+        }
+    }
+
+    // 渲染城市列表
+    function renderCitiesList(cities) {
+        const container = document.getElementById('cities-list');
+        container.innerHTML = `
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">City</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Country</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Province</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Timezone</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        ${cities.map(c => `
+                            <tr class="hover:bg-gray-50 cursor-pointer" onclick="loadCityWeather(${c.CityId}, '${c.CityName}')">
+                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">${c.CityName}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.Country}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.Province || '-'}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">${c.TimeZone || '-'}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    // 搜索城市
+    function searchCity() {
+        const input = document.getElementById('city-search');
+        const cityId = parseInt(input.value);
+        
+        if (cityId) {
+            const city = allCities.find(c => c.CityId === cityId);
+            if (city) {
+                loadCityWeather(city.CityId, city.CityName);
+            }
+        } else {
+            const cityName = input.value.toLowerCase();
+            const city = allCities.find(c => c.CityName.toLowerCase().includes(cityName));
+            if (city) {
+                loadCityWeather(city.CityId, city.CityName);
+            }
+        }
+    }
+
+    // 加载城市天气
+    async function loadCityWeather(cityId, cityName) {
+        currentCityId = cityId;
+        
+        // 更新当前城市显示
+        document.getElementById('current-city').textContent = cityName;
+        document.getElementById('current-date').textContent = new Date().toLocaleDateString('en-US', { 
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+        });
+        
+        // 加载天气记录
+        await loadCurrentWeather(cityId);
+        
+        // 加载天气预报
+        await loadForecast(cityId);
+        
+        // 加载最近记录
+        await loadRecentRecords(cityId);
+    }
+
+    // 加载当前天气
+    async function loadCurrentWeather(cityId) {
+        try {
+            const response = await fetch(`${API_BASE}/WeatherRecord?project=weather`);
+            const records = await response.json();
+            const todayRecords = records.filter(r => parseInt(r.CityId) === cityId);
+            
+            if (todayRecords.length > 0) {
+                const latest = todayRecords[todayRecords.length - 1];
+                updateWeatherDisplay(latest);
+            }
+        } catch (error) {
+            console.error('Error loading weather:', error);
+        }
+    }
+
+    // 更新天气显示
+    function updateWeatherDisplay(record) {
+        document.getElementById('current-temp').textContent = `${record.Temperature}°C`;
+        document.getElementById('current-condition').textContent = record.WeatherCondition || '--';
+        document.getElementById('current-humidity').textContent = `${record.Humidity}%`;
+        document.getElementById('current-wind').textContent = `${record.WindSpeed || 0} km/h`;
+        document.getElementById('current-feels').textContent = `${record.FeelsLike || record.Temperature}°C`;
+        
+        // 设置天气图标
+        const icon = getWeatherIcon(record.WeatherCode || record.WeatherCondition);
+        document.getElementById('current-icon').textContent = icon;
+        
+        // 更新详情
+        document.getElementById('detail-uv').textContent = record.UVIndex || '--';
+        document.getElementById('detail-visibility').textContent = `${record.Visibility || '--'} km`;
+        document.getElementById('detail-pressure').textContent = `${record.Pressure || '--'} hPa`;
+        document.getElementById('detail-sunrise').textContent = record.Sunrise || '--:--';
+    }
+
+    // 加载天气预报
+    async function loadForecast(cityId) {
+        try {
+            const response = await fetch(`${API_BASE}/WeatherForecast?project=weather`);
+            const forecasts = await response.json();
+            const cityForecasts = forecasts.filter(f => parseInt(f.CityId) === cityId)
+                .sort((a, b) => new Date(a.ForecastDate) - new Date(b.ForecastDate))
+                .slice(0, 7);
+            
+            renderForecast(cityForecasts);
+        } catch (error) {
+            console.error('Error loading forecast:', error);
+        }
+    }
+
+    // 渲染天气预报
+    function renderForecast(forecasts) {
+        const container = document.getElementById('forecast-grid');
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        
+        container.innerHTML = forecasts.map(f => {
+            const date = new Date(f.ForecastDate);
+            const dayName = date.getDate() === new Date().getDate() ? 'Today' : days[date.getDay()];
+            const icon = getWeatherIcon(f.WeatherCode || f.WeatherCondition);
+            
+            return `
+                <div class="bg-white rounded-2xl p-4 shadow-lg text-center hover:shadow-xl transition">
+                    <div class="font-medium text-gray-700 mb-2">${dayName}</div>
+                    <div class="text-3xl mb-2">${icon}</div>
+                    <div class="text-sm text-gray-500">${f.WeatherCondition || '--'}</div>
+                    <div class="flex justify-center space-x-2 mt-2">
+                        <span class="text-red-500 font-bold">${f.TempMax}°</span>
+                        <span class="text-blue-500">${f.TempMin}°</span>
+                    </div>
+                    ${f.PrecipitationProbability ? `
+                        <div class="text-xs text-blue-400 mt-1">💧 ${f.PrecipitationProbability}%</div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+    }
+
+    // 加载最近记录
+    async function loadRecentRecords(cityId) {
+        try {
+            const response = await fetch(`${API_BASE}/WeatherRecord?project=weather`);
+            const records = await response.json();
+            const cityRecords = records.filter(r => parseInt(r.CityId) === cityId)
+                .sort((a, b) => new Date(b.RecordDate) - new Date(a.RecordDate))
+                .slice(0, 5);
+            
+            renderRecordsList(cityRecords);
+        } catch (error) {
+            console.error('Error loading records:', error);
+        }
+    }
+
+    // 渲染记录列表
+    function renderRecordsList(records) {
+        const container = document.getElementById('records-list');
+        container.innerHTML = `
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Temp</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Humidity</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Wind</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        ${records.map(r => `
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-gray-900">${r.RecordDate}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">${getWeatherIcon(r.WeatherCode || r.WeatherCondition)} ${r.WeatherCondition}</td>
+                                <td class="px-6 py-4 whitespace-nowrap font-medium">${r.Temperature}°C</td>
+                                <td class="px-6 py-4 whitespace-nowrap">${r.Humidity}%</td>
+                                <td class="px-6 py-4 whitespace-nowrap">${r.WindSpeed || 0} km/h</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    // 加载天气条件
+    async function loadWeatherConditions() {
+        // 预加载天气条件用于图标映射
+    }
+
+    // 获取天气图标
+    function getWeatherIcon(condition) {
+        const icons = {
+            'clear': '☀️',
+            '晴朗': '☀️',
+            'cloudy': '☁️',
+            '多云': '☁️',
+            'partly_cloudy': '⛅',
+            '晴间多云': '⛅',
+            'overcast': '🌥️',
+            '阴天': '🌥️',
+            'rainy': '🌧️',
+            '下雨': '🌧️',
+            'stormy': '⛈️',
+            '雷雨': '⛈️',
+            'snowy': '❄️',
+            '下雪': '❄️',
+            'foggy': '🌫️',
+            '有雾': '🌫️',
+            'windy': '💨',
+            '有风': '💨',
+            'hail': '🌨️',
+            '冰雹': '🌨️'
+        };
+        return icons[condition] || '🌤️';
+    }
+
+    // 回车搜索
+    document.getElementById('city-search').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            searchCity();
+        }
+    });
+</script>
