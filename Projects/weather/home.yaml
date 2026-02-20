@@ -1,0 +1,333 @@
+# 天气应用首页配置
+title: 天气应用
+title_i18n:
+  zh: 天气应用
+  en: Weather App
+  ja: 天気アプリ
+  ko: 날씨 앱
+
+layout:
+  # ==================== Hero 区域 ====================
+  - type: hero
+    icon: 🌤️
+    title:
+      zh: 天气应用
+      en: Weather App
+      ja: 天気アプリ
+      ko: 날씨 앱
+    subtitle:
+      zh: 城市天气记录和预报管理系统，实时掌握各地天气
+      en: City weather recording and forecast management system
+      ja: 都市の天気記録と予報管理システム
+      ko: 도시 날씨 기록 및 예보 관리 시스템
+    style:
+      background: "bg-gradient-to-br from-blue-400 via-cyan-400 to-blue-500"
+      title_size: "text-6xl"
+      title_class: "font-bold"
+      subtitle_class: "text-xl text-white text-opacity-90"
+      icon_size: "text-8xl"
+      height: "h-80"
+      show_wave: false
+
+  # ==================== 快捷操作 ====================
+  - type: quick_actions
+    title:
+      zh: 快速开始
+      en: Quick Start
+      ja: クイックスタート
+      ko: 빠른 시작
+    actions:
+      - icon: "🏙️"
+        label:
+          zh: 城市管理
+          en: Cities
+          ja: 都市管理
+          ko: 도시 관리
+        href: "/ui/City?project=weather"
+        color: "blue"
+        description:
+          zh: 管理城市信息
+          en: Manage city info
+          ja: 都市情報を管理
+          ko: 도시 정보 관리
+      - icon: "🌡️"
+        label:
+          zh: 天气记录
+          en: Records
+          ja: 天気記録
+          ko: 날씨 기록
+        href: "/ui/WeatherRecord?project=weather"
+        color: "cyan"
+        description:
+          zh: 查看天气记录
+          en: View weather records
+          ja: 天気記録を表示
+          ko: 날씨 기록 보기
+      - icon: "📅"
+        label:
+          zh: 天气预报
+          en: Forecast
+          ja: 天気予報
+          ko: 날씨 예보
+        href: "/ui/WeatherForecast?project=weather"
+        color: "indigo"
+        description:
+          zh: 查看天气预报
+          en: View weather forecast
+          ja: 天気予報を表示
+          ko: 날씨 예보 보기
+      - icon: "🌦️"
+        label:
+          zh: 天气代码
+          en: Conditions
+          ja: 天気コード
+          ko: 날씨 코드
+        href: "/ui/WeatherCondition?project=weather"
+        color: "purple"
+        description:
+          zh: 管理天气代码
+          en: Manage weather codes
+          ja: 天気コードを管理
+          ko: 날씨 코드 관리
+
+  # ==================== 数据管理标题 ====================
+  - type: section_title
+    title:
+      zh: 数据管理
+      en: Data Management
+      ja: データ管理
+      ko: 데이터 관리
+    subtitle:
+      zh: 管理城市、天气记录和预报数据
+      en: Manage cities, weather records and forecasts
+      ja: 都市、天気記録、予報データを管理
+      ko: 도시, 날씨 기록 및 예보 데이터 관리
+    style:
+      icon: "🗄️"
+      align: "center"
+
+  # ==================== 数据模型卡片 ====================
+  - type: card_grid
+    title:
+      zh: 数据模型
+      en: Data Models
+      ja: データモデル
+      ko: 데이터 모델
+    source: models
+    card_style:
+      base_class: "bg-gradient-to-br from-white via-blue-50 to-cyan-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-all duration-300 border-l-4 border-blue-400"
+      hover_class: "hover:shadow-2xl hover:border-blue-500"
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+      wide: 4
+
+  # ==================== 天气统计 ====================
+  - type: stats_modern
+    title:
+      zh: 数据概览
+      en: Data Overview
+      ja: データ概要
+      ko: 데이터 개요
+    background: "bg-gradient-to-r from-blue-50 via-cyan-50 to-indigo-50"
+    items:
+      - value: "20"
+        suffix: "+"
+        label:
+          zh: 注册城市
+          en: Cities
+          ja: 登録都市
+          ko: 등록 도시
+        color: "from-blue-500 to-cyan-500"
+        icon: "🏙️"
+      - value: "7"
+        suffix: "天"
+        label:
+          zh: 预报周期
+          en: Forecast Days
+          ja: 予報期間
+          ko: 예보 기간
+        color: "from-cyan-500 to-indigo-500"
+        icon: "📅"
+      - value: "10"
+        suffix: "种"
+        label:
+          zh: 天气类型
+          en: Weather Types
+          ja: 天気タイプ
+          ko: 날씨 유형
+        color: "from-indigo-500 to-purple-500"
+        icon: "🌦️"
+      - value: "100"
+        suffix: "%"
+        label:
+          zh: 低代码驱动
+          en: Low-Code
+          ja: ローコード
+          ko: 로우코드
+        color: "from-green-500 to-emerald-500"
+        icon: "⚡"
+
+  # ==================== 项目切换 ====================
+  - type: section_title
+    title:
+      zh: 其他项目
+      en: Other Projects
+      ja: 他のプロジェクト
+      ko: 다른 프로젝트
+    subtitle:
+      zh: 探索更多功能
+      en: Explore more features
+      ja: さらに機能を探検
+      ko: 더 많은 기능 탐색
+    style:
+      icon: "🔄"
+      align: "center"
+
+  - type: card_grid
+    title:
+      zh: 可用项目
+      en: Available Projects
+      ja: 利用可能なプロジェクト
+      ko: 사용 가능한 프로젝트
+    source: projects
+    card_style:
+      base_class: "rounded-xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+      hover_class: "hover:shadow-3xl"
+    columns:
+      mobile: 1
+      tablet: 2
+      desktop: 3
+    projects:
+      - key: weather
+        icon: "🌤️"
+        name:
+          zh: 天气应用
+          en: Weather App
+          ja: 天気アプリ
+          ko: 날씨 앱
+        description:
+          zh: 城市天气记录和预报管理
+          en: Weather recording and forecast
+          ja: 天気記録と予報管理
+          ko: 날씨 기록 및 예보 관리
+        gradient: "from-blue-400 via-cyan-400 to-blue-500"
+        features:
+          - "城市管理"
+          - "天气记录"
+          - "天气预报"
+        current: true
+      - key: crm
+        icon: "💼"
+        name:
+          zh: CRM 客户管理
+          en: CRM
+          ja: CRM 顧客管理
+          ko: CRM 고객 관리
+        description:
+          zh: 客户、销售机会、订单管理
+          en: Customer, Opportunity, Order
+          ja: 顧客、販売機会、注文管理
+          ko: 고객, 판매 기회, 주문 관리
+        gradient: "from-indigo-500 to-pink-500"
+        features:
+          - "客户 360°视图"
+          - "销售漏斗"
+          - "报价订单"
+      - key: todo
+        icon: "✅"
+        name:
+          zh: TODO 项目管理
+          en: TODO Project
+          ja: TODO プロジェクト
+          ko: TODO 프로젝트
+        description:
+          zh: 任务和项目管理系统
+          en: Task and Project Management
+          ja: タスクとプロジェクト管理
+          ko: 작업 및 프로젝트 관리
+        gradient: "from-blue-500 to-cyan-500"
+        features:
+          - "任务管理"
+          - "项目跟踪"
+          - "状态流转"
+      - key: journal
+        icon: "📔"
+        name:
+          zh: 我的日记本
+          en: My Journal
+          ja: マイジャーナル
+          ko: 내 일기장
+        description:
+          zh: 个人日记管理系统
+          en: Personal Journal System
+          ja: パーソナルジャーナル管理
+          ko: 개인 일기장 관리
+        gradient: "from-purple-500 to-purple-600"
+        features:
+          - "日记记录"
+          - "分类管理"
+          - "心情追踪"
+      - key: ecommerce
+        icon: "🛒"
+        name:
+          zh: 电商订单系统
+          en: E-commerce
+          ja: E コマース
+          ko: 이커머스
+        description:
+          zh: 产品、订单、客户管理
+          en: Product, Order, Customer
+          ja: 製品、注文、顧客管理
+          ko: 제품, 주문, 고객 관리
+        gradient: "from-orange-500 to-red-500"
+        features:
+          - "产品管理"
+          - "订单处理"
+          - "库存跟踪"
+      - key: chinook
+        icon: "🎵"
+        name:
+          zh: Chinook 音乐商店
+          en: Chinook Music
+          ja: Chinook ミュージック
+          ko: Chinook 뮤직
+        description:
+          zh: 艺术家、专辑、音轨管理
+          en: Artist, Album, Track
+          ja: アーティスト、アルバム、トラック
+          ko: 아티스트, 앨범, 트랙
+        gradient: "from-green-500 to-emerald-600"
+        features:
+          - "音乐库管理"
+          - "多表关联"
+          - "只读视图"
+
+  # ==================== 页脚 ====================
+  - type: footer
+    background: "bg-gradient-to-r from-blue-900 via-cyan-900 to-indigo-900"
+    links:
+      - text:
+          zh: 天气文档
+          en: Weather Docs
+          ja: 天気ドキュメント
+          ko: 날씨 문서
+        href: "/docs"
+      - text:
+          zh: API
+          en: API
+          ja: API
+          ko: API
+        href: "/docs"
+      - text:
+          zh: 关于
+          en: About
+          ja: について
+          ko: 정보
+        href: "/docs"
+    copyright:
+      zh: "© 2026 天气应用。All rights reserved."
+      en: "© 2026 Weather App. All rights reserved."
+      ja: "© 2026 天気アプリ。All rights reserved."
+      ko: "© 2026 날씨 앱. All rights reserved."

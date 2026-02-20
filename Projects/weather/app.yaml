@@ -1,0 +1,653 @@
+# 天气应用数据模型定义
+
+models:
+  # ==================== 城市管理 ====================
+  City:
+    table: City
+    primary_key: CityId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 城市管理
+          create_button: 添加城市
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索城市...
+          CityNo: 城市编号
+          CityName: 城市名称
+          Country: 国家
+          Province: 省份
+          Latitude: 纬度
+          Longitude: 经度
+          TimeZone: 时区
+        en:
+          title: City Management
+          create_button: Add City
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search cities...
+          CityNo: City No
+          CityName: City Name
+          Country: Country
+          Province: Province
+          Latitude: Latitude
+          Longitude: Longitude
+          TimeZone: Time Zone
+        ja:
+          title: 都市管理
+          create_button: 都市を追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 都市を検索...
+          CityNo: 都市番号
+          CityName: 都市名
+          Country: 国
+          Province: 都道府県
+          Latitude: 緯度
+          Longitude: 経度
+          TimeZone: タイムゾーン
+        ko:
+          title: 도시 관리
+          create_button: 도시 추가
+          edit_button: 편집
+          delete_button: 삭제
+          search_placeholder: 도시 검색...
+          CityNo: 도시 번호
+          CityName: 도시 이름
+          Country: 국가
+          Province: 도/시
+          Latitude: 위도
+          Longitude: 경도
+          TimeZone: 시간대
+
+    list:
+      columns:
+        - CityId
+        - CityNo
+        - CityName
+        - Country
+        - Province
+        - TimeZone
+
+      filters:
+        CityName:
+          label: City Name
+          type: like
+        Country:
+          label: Country
+          type: like
+        Province:
+          label: Province
+          type: like
+
+    form:
+      title: City
+      fields:
+        CityNo:
+          label: City No
+          type: text
+          required: true
+          max_length: 20
+
+        CityName:
+          label: City Name
+          type: text
+          required: true
+          max_length: 100
+
+        Country:
+          label: Country
+          type: text
+          max_length: 50
+
+        Province:
+          label: Province
+          type: text
+          max_length: 50
+
+        Latitude:
+          label: Latitude
+          type: number
+          min: -90
+          max: 90
+
+        Longitude:
+          label: Longitude
+          type: number
+          min: -180
+          max: 180
+
+        TimeZone:
+          label: Time Zone
+          type: text
+          max_length: 50
+
+    properties:
+      CityId:
+        type: int
+      CityNo:
+        type: string
+        required: true
+      CityName:
+        type: string
+        required: true
+      Country:
+        type: string
+      Province:
+        type: string
+      Latitude:
+        type: decimal
+      Longitude:
+        type: decimal
+      TimeZone:
+        type: string
+
+  # ==================== 天气记录 ====================
+  WeatherRecord:
+    table: WeatherRecord
+    primary_key: RecordId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 天气记录
+          create_button: 添加记录
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索记录...
+          CityId: 城市
+          RecordDate: 记录日期
+          RecordTime: 记录时间
+          Temperature: 温度
+          FeelsLike: 体感温度
+          Humidity: 湿度
+          Pressure: 气压
+          WindSpeed: 风速
+          WindDirection: 风向
+          WeatherCondition: 天气状况
+          Visibility: 能见度
+          UVIndex: 紫外线指数
+        en:
+          title: Weather Records
+          create_button: Add Record
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search records...
+          CityId: City
+          RecordDate: Record Date
+          RecordTime: Record Time
+          Temperature: Temperature
+          FeelsLike: Feels Like
+          Humidity: Humidity
+          Pressure: Pressure
+          WindSpeed: Wind Speed
+          WindDirection: Wind Direction
+          WeatherCondition: Weather Condition
+          Visibility: Visibility
+          UVIndex: UV Index
+        ja:
+          title: 天気記録
+          create_button: 記録を追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 記録を検索...
+          CityId: 都市
+          RecordDate: 記録日
+          RecordTime: 記録時間
+          Temperature: 気温
+          FeelsLike: 体感温度
+          Humidity: 湿度
+          Pressure: 気圧
+          WindSpeed: 風速
+          WindDirection: 風向
+          WeatherCondition: 天気
+          Visibility: 視程
+          UVIndex: UV インデックス
+        ko:
+          title: 날씨 기록
+          create_button: 기록 추가
+          edit_button: 편집
+          delete_button: 삭제
+          search_placeholder: 기록 검색...
+          CityId: 도시
+          RecordDate: 기록 날짜
+          RecordTime: 기록 시간
+          Temperature: 기온
+          FeelsLike: 체감 온도
+          Humidity: 습도
+          Pressure: 기압
+          WindSpeed: 풍속
+          WindDirection: 풍향
+          WeatherCondition: 날씨 상태
+          Visibility: 가시 거리
+          UVIndex: 자외선 지수
+
+    list:
+      columns:
+        - RecordId
+        - CityId
+        - RecordDate
+        - RecordTime
+        - Temperature
+        - WeatherCondition
+        - Humidity
+
+      filters:
+        CityId:
+          label: City
+          type: like
+        RecordDate:
+          label: Record Date
+          type: like
+        WeatherCondition:
+          label: Weather Condition
+          type: like
+
+    form:
+      title: Weather Record
+      fields:
+        CityId:
+          label: City
+          type: number
+          required: true
+
+        RecordDate:
+          label: Record Date
+          type: text
+          required: true
+
+        RecordTime:
+          label: Record Time
+          type: text
+
+        Temperature:
+          label: Temperature
+          type: number
+          min: -50
+          max: 60
+
+        FeelsLike:
+          label: Feels Like
+          type: number
+          min: -50
+          max: 60
+
+        Humidity:
+          label: Humidity
+          type: number
+          min: 0
+          max: 100
+
+        Pressure:
+          label: Pressure
+          type: number
+          min: 900
+          max: 1100
+
+        WindSpeed:
+          label: Wind Speed
+          type: number
+          min: 0
+
+        WindDirection:
+          label: Wind Direction
+          type: text
+          max_length: 10
+
+        WeatherCondition:
+          label: Weather Condition
+          type: text
+          max_length: 50
+
+        WeatherCode:
+          label: Weather Code
+          type: text
+          max_length: 20
+
+        Visibility:
+          label: Visibility
+          type: number
+          min: 0
+
+        UVIndex:
+          label: UV Index
+          type: number
+          min: 0
+          max: 11
+
+        Sunrise:
+          label: Sunrise
+          type: text
+
+        Sunset:
+          label: Sunset
+          type: text
+
+    properties:
+      RecordId:
+        type: int
+      CityId:
+        type: int
+        required: true
+      RecordDate:
+        type: string
+        required: true
+      RecordTime:
+        type: string
+      Temperature:
+        type: decimal
+      FeelsLike:
+        type: decimal
+      Humidity:
+        type: int
+      Pressure:
+        type: decimal
+      WindSpeed:
+        type: decimal
+      WindDirection:
+        type: string
+      WeatherCondition:
+        type: string
+      WeatherCode:
+        type: string
+      Visibility:
+        type: decimal
+      UVIndex:
+        type: int
+      Sunrise:
+        type: string
+      Sunset:
+        type: string
+
+  # ==================== 天气预报 ====================
+  WeatherForecast:
+    table: WeatherForecast
+    primary_key: ForecastId
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 1
+      labels:
+        zh:
+          title: 天气预报
+          create_button: 添加预报
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索预报...
+          CityId: 城市
+          ForecastDate: 预报日期
+          TempMin: 最低温度
+          TempMax: 最高温度
+          WeatherCondition: 天气状况
+          Humidity: 湿度
+          WindSpeed: 风速
+          WindDirection: 风向
+          Precipitation: 降水量
+          PrecipitationProbability: 降水概率
+        en:
+          title: Weather Forecast
+          create_button: Add Forecast
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search forecasts...
+          CityId: City
+          ForecastDate: Forecast Date
+          TempMin: Min Temperature
+          TempMax: Max Temperature
+          WeatherCondition: Weather Condition
+          Humidity: Humidity
+          WindSpeed: Wind Speed
+          WindDirection: Wind Direction
+          Precipitation: Precipitation
+          PrecipitationProbability: Precipitation Probability
+        ja:
+          title: 天気予報
+          create_button: 予報を追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 予報を検索...
+          CityId: 都市
+          ForecastDate: 予報日
+          TempMin: 最低気温
+          TempMax: 最高気温
+          WeatherCondition: 天気
+          Humidity: 湿度
+          WindSpeed: 風速
+          WindDirection: 風向
+          Precipitation: 降水量
+          PrecipitationProbability: 降水確率
+        ko:
+          title: 날씨 예보
+          create_button: 예보 추가
+          edit_button: 편집
+          delete_button: 삭제
+          search_placeholder: 예보 검색...
+          CityId: 도시
+          ForecastDate: 예보 날짜
+          TempMin: 최저 기온
+          TempMax: 최고 기온
+          WeatherCondition: 날씨 상태
+          Humidity: 습도
+          WindSpeed: 풍속
+          WindDirection: 풍향
+          Precipitation: 강수량
+          PrecipitationProbability: 강수 확률
+
+    list:
+      columns:
+        - ForecastId
+        - CityId
+        - ForecastDate
+        - TempMin
+        - TempMax
+        - WeatherCondition
+        - PrecipitationProbability
+
+      filters:
+        CityId:
+          label: City
+          type: like
+        ForecastDate:
+          label: Forecast Date
+          type: like
+        WeatherCondition:
+          label: Weather Condition
+          type: like
+
+    form:
+      title: Weather Forecast
+      fields:
+        CityId:
+          label: City
+          type: number
+          required: true
+
+        ForecastDate:
+          label: Forecast Date
+          type: text
+          required: true
+
+        TempMin:
+          label: Min Temperature
+          type: number
+          min: -50
+          max: 60
+
+        TempMax:
+          label: Max Temperature
+          type: number
+          min: -50
+          max: 60
+
+        WeatherCondition:
+          label: Weather Condition
+          type: text
+          max_length: 50
+
+        WeatherCode:
+          label: Weather Code
+          type: text
+          max_length: 20
+
+        Humidity:
+          label: Humidity
+          type: number
+          min: 0
+          max: 100
+
+        WindSpeed:
+          label: Wind Speed
+          type: number
+          min: 0
+
+        WindDirection:
+          label: Wind Direction
+          type: text
+          max_length: 10
+
+        Precipitation:
+          label: Precipitation
+          type: number
+          min: 0
+
+        PrecipitationProbability:
+          label: Precipitation Probability
+          type: number
+          min: 0
+          max: 100
+
+    properties:
+      ForecastId:
+        type: int
+      CityId:
+        type: int
+        required: true
+      ForecastDate:
+        type: string
+        required: true
+      TempMin:
+        type: decimal
+      TempMax:
+        type: decimal
+      WeatherCondition:
+        type: string
+      WeatherCode:
+        type: string
+      Humidity:
+        type: int
+      WindSpeed:
+        type: decimal
+      WindDirection:
+        type: string
+      Precipitation:
+        type: decimal
+      PrecipitationProbability:
+        type: int
+
+  # ==================== 天气状况代码 ====================
+  WeatherCondition:
+    table: WeatherCondition
+    primary_key: ConditionCode
+
+    ui:
+      layout:
+        theme: default
+        grid_columns: 2
+      labels:
+        zh:
+          title: 天气状况代码
+          create_button: 添加代码
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索代码...
+          ConditionCode: 代码
+          ConditionName: 名称
+          Icon: 图标
+          Description: 描述
+        en:
+          title: Weather Condition Codes
+          create_button: Add Code
+          edit_button: Edit
+          delete_button: Delete
+          search_placeholder: Search codes...
+          ConditionCode: Code
+          ConditionName: Name
+          Icon: Icon
+          Description: Description
+        ja:
+          title: 天気状況コード
+          create_button: コードを追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: コードを検索...
+          ConditionCode: コード
+          ConditionName: 名称
+          Icon: アイコン
+          Description: 説明
+        ko:
+          title: 날씨 상태 코드
+          create_button: 코드 추가
+          edit_button: 편집
+          delete_button: 삭제
+          search_placeholder: 코드 검색...
+          ConditionCode: 코드
+          ConditionName: 이름
+          Icon: 아이콘
+          Description: 설명
+
+    list:
+      columns:
+        - ConditionCode
+        - ConditionName
+        - Icon
+        - Description
+
+      filters:
+        ConditionName:
+          label: Name
+          type: like
+
+    form:
+      title: Weather Condition
+      fields:
+        ConditionCode:
+          label: Code
+          type: text
+          required: true
+          max_length: 20
+
+        ConditionName:
+          label: Name
+          type: text
+          required: true
+          max_length: 50
+
+        Icon:
+          label: Icon
+          type: text
+          max_length: 10
+
+        Description:
+          label: Description
+          type: text
+          max_length: 200
+
+    properties:
+      ConditionCode:
+        type: string
+        required: true
+      ConditionName:
+        type: string
+        required: true
+      Icon:
+        type: string
+      Description:
+        type: string

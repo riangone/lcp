@@ -1,0 +1,21 @@
+# 天气应用项目配置
+name: weather
+display_name: 天气应用
+display_name_i18n:
+  zh: 天气应用
+  en: Weather App
+  ja: 天気アプリ
+  ko: 날씨 앱
+version: 1.0.0
+description: 城市天气记录和预报管理系统
+description_i18n:
+  zh: 城市天气记录和预报管理系统
+  en: City weather recording and forecast management system
+  ja: 都市の天気記録と予報管理システム
+  ko: 도시 날씨 기록 및 예보 관리 시스템
+
+database:
+  type: sqlite
+  path: app.db
+  schema: schema.sql
+  seed_data: data.sql
