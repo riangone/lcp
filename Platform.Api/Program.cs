@@ -194,18 +194,25 @@ app.UseAuthorization();
 app.Use(async (context, next) =>
 {
     var projectScope = context.RequestServices.GetRequiredService<ProjectScope>();
-    var projectName = context.Request.Query["project"].FirstOrDefault() 
+    var projectName = context.Request.Query["project"].FirstOrDefault()
         ?? context.Request.Headers["X-Project"].FirstOrDefault();
-    
+
+    // 自动为 HMSS 路由切换到 HMSS 项目
+    if (string.IsNullOrEmpty(projectName) && 
+        (context.Request.Path.StartsWithSegments("/hmss") || 
+         context.Request.Path.StartsWithSegments("/ui/hmss")))
+    {
+        projectName = "hmss";
+    }
+
     if (!string.IsNullOrEmpty(projectName))
     {
         if (projectScope.SwitchProject(projectName))
         {
             context.Response.Headers["X-Project-Switched"] = projectName;
-            Console.WriteLine($"[PROJECT] Switched to: {projectName}");
         }
     }
-    
+
     // 存储当前项目到 HttpContext 供视图使用
     if (projectScope.CurrentProject != null)
     {

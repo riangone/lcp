@@ -343,12 +343,19 @@ public class UiController : Controller
         if (appDefs == null)
             throw new Exception("No project selected");
 
-        if (!appDefs.AllowedModels.Contains(model))
-            throw new Exception($"Model '{model}' not defined");
-
-        // Find the actual key (case-insensitive)
-        var actualKey = appDefs.Models.Keys.First(k =>
+        // 首先尝试通过模型名查找
+        var actualKey = appDefs.Models.Keys.FirstOrDefault(k =>
             k.Equals(model, StringComparison.OrdinalIgnoreCase));
+
+        // 如果找不到，尝试通过表名查找
+        if (actualKey == null)
+        {
+            actualKey = appDefs.Models.Keys.FirstOrDefault(k =>
+                appDefs.Models[k].Table.Equals(model, StringComparison.OrdinalIgnoreCase));
+        }
+
+        if (actualKey == null)
+            throw new Exception($"Model '{model}' not defined");
 
         return appDefs.Models[actualKey];
     }

@@ -45,13 +45,13 @@ public static class YamlLoader
                     if (string.IsNullOrEmpty(importPath)) continue;
 
                     // 解析相对路径
+                    var combinedPath = Path.Combine(baseDir, importPath);
                     var fullPath = Path.IsPathRooted(importPath)
                         ? importPath
-                        : Path.GetFullPath(Path.Combine(baseDir, importPath));
+                        : Path.GetFullPath(combinedPath);
 
                     if (File.Exists(fullPath))
                     {
-                        Console.WriteLine($"[YAML] Importing: {fullPath}");
                         var importYaml = File.ReadAllText(fullPath);
                         var importDefs = deserializer.Deserialize<AppDefinitions>(importYaml);
 

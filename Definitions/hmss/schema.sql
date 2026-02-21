@@ -493,3 +493,395 @@ INSERT OR IGNORE INTO sdh_tenpo (tenpo_cd, tenpo_nm, tel) VALUES
 -- rel="17": リース
 -- rel="18": リース指定工場
 -- rel="19": 納入依頼
+
+-- ============================================
+-- HMHRMS 人力资源系统表
+-- ============================================
+
+-- 社員基本信息表
+CREATE TABLE IF NOT EXISTS employee (
+    emp_id VARCHAR(10) PRIMARY KEY,
+    emp_nm VARCHAR(50) NOT NULL,
+    emp_kana VARCHAR(50),
+    birth_dt DATE,
+    sex VARCHAR(1),
+    address TEXT,
+    tel VARCHAR(20),
+    email VARCHAR(100),
+    hire_dt DATE,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 社員家族表
+CREATE TABLE IF NOT EXISTS employee_family (
+    family_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    family_nm VARCHAR(50),
+    family_kana VARCHAR(50),
+    relation VARCHAR(20),
+    birth_dt DATE,
+    sex VARCHAR(1),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 社員学历表
+CREATE TABLE IF NOT EXISTS employee_gakureki (
+    gakureki_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    start_dt DATE,
+    end_dt DATE,
+    school_nm VARCHAR(100),
+    dept_nm VARCHAR(100),
+    degree VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 社員职历表
+CREATE TABLE IF NOT EXISTS employee_shokureki (
+    shokureki_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    start_dt DATE,
+    end_dt DATE,
+    company_nm VARCHAR(100),
+    dept_nm VARCHAR(100),
+    position VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 社員资格表
+CREATE TABLE IF NOT EXISTS employee_shikaku (
+    shikaku_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    shikaku_nm VARCHAR(100),
+    acquire_dt DATE,
+    issuer VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- ============================================
+-- JKSYS 人事給与系统表
+-- ============================================
+
+-- 人事费表
+CREATE TABLE IF NOT EXISTS jk_jinkenhi (
+    jinken_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    yymm VARCHAR(6) NOT NULL,
+    emp_id VARCHAR(10) NOT NULL,
+    shikyu_gaku DECIMAL(10,2),
+    genkin_gaku DECIMAL(10,2),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 退职金表
+CREATE TABLE IF NOT EXISTS jk_syoreikin (
+    syorei_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    yymm VARCHAR(6) NOT NULL,
+    syorei_gaku DECIMAL(10,2),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 出勤管理表
+CREATE TABLE IF NOT EXISTS jk_syukkou (
+    syukkou_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    start_dt DATE,
+    end_dt DATE,
+    destination VARCHAR(200),
+    purpose TEXT,
+    seikyu_gaku DECIMAL(10,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 评价表
+CREATE TABLE IF NOT EXISTS jk_hyoka (
+    hyoka_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    hyoka_kikan VARCHAR(20),
+    hyoka_score DECIMAL(5,2),
+    hyoka_rank VARCHAR(1),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 就职活动履历表
+CREATE TABLE IF NOT EXISTS jk_koyou_rireki (
+    koyou_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    start_dt DATE,
+    end_dt DATE,
+    koyou_keitai VARCHAR(10),
+    kinmu_time VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- 异动履历表
+CREATE TABLE IF NOT EXISTS jk_idou_rireki (
+    idou_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10) NOT NULL,
+    idou_dt DATE,
+    idou_shurui VARCHAR(10),
+    before_bumon VARCHAR(50),
+    after_bumon VARCHAR(50),
+    before_shokugyou VARCHAR(50),
+    after_shokugyou VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (emp_id) REFERENCES employee(emp_id)
+);
+
+-- ============================================
+-- R4 管理会计系统表
+-- ============================================
+
+-- 部署主表
+CREATE TABLE IF NOT EXISTS r4k_bumon_mst (
+    bumon_cd VARCHAR(10) PRIMARY KEY,
+    bumon_nm VARCHAR(50) NOT NULL,
+    bumon_kana VARCHAR(50),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 社員主表
+CREATE TABLE IF NOT EXISTS r4k_syain_mst (
+    syain_no VARCHAR(10) PRIMARY KEY,
+    syain_nm VARCHAR(50) NOT NULL,
+    syain_kana VARCHAR(50),
+    bumon_cd VARCHAR(10),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (bumon_cd) REFERENCES r4k_bumon_mst(bumon_cd)
+);
+
+-- 業者主表
+CREATE TABLE IF NOT EXISTS r4k_gyousya_mst (
+    gyousya_cd VARCHAR(10) PRIMARY KEY,
+    gyousya_nm VARCHAR(100) NOT NULL,
+    gyousya_kana VARCHAR(100),
+    tel VARCHAR(20),
+    address TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 予算管理表
+CREATE TABLE IF NOT EXISTS r4k_yosan (
+    yosan_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    yosan_year VARCHAR(4) NOT NULL,
+    bumon_cd VARCHAR(10) NOT NULL,
+    kamoku_cd VARCHAR(10) NOT NULL,
+    yosan_gaku DECIMAL(12,2),
+    jisseci_gaku DECIMAL(12,2),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (bumon_cd) REFERENCES r4k_bumon_mst(bumon_cd)
+);
+
+-- 原価管理表
+CREATE TABLE IF NOT EXISTS r4k_genka (
+    genka_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    genka_dt DATE,
+    gyousya_cd VARCHAR(10),
+    bumon_cd VARCHAR(10),
+    kamoku_cd VARCHAR(10),
+    kingaku DECIMAL(12,2),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (gyousya_cd) REFERENCES r4k_gyousya_mst(gyousya_cd),
+    FOREIGN KEY (bumon_cd) REFERENCES r4k_bumon_mst(bumon_cd)
+);
+
+-- ============================================
+-- HMAUD 审计系统表
+-- ============================================
+
+-- 监察人表
+CREATE TABLE IF NOT EXISTS hmaud_kansa_jin (
+    kansa_jin_cd VARCHAR(10) PRIMARY KEY,
+    kansa_jin_nm VARCHAR(50) NOT NULL,
+    kansa_jin_kana VARCHAR(50),
+    tel VARCHAR(20),
+    email VARCHAR(100),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 监察实绩表
+CREATE TABLE IF NOT EXISTS hmaud_kansa_jisseki (
+    jisseki_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kansa_dt DATE,
+    kansa_jin_cd VARCHAR(10),
+    target_bumon VARCHAR(50),
+    result TEXT,
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (kansa_jin_cd) REFERENCES hmaud_kansa_jin(kansa_jin_cd)
+);
+
+-- SKD 表
+CREATE TABLE IF NOT EXISTS hmaud_skd (
+    skd_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    start_dt DATE,
+    end_dt DATE,
+    kansa_jin_cd VARCHAR(10),
+    target_bumon VARCHAR(50),
+    status VARCHAR(10),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (kansa_jin_cd) REFERENCES hmaud_kansa_jin(kansa_jin_cd)
+);
+
+-- 报告表
+CREATE TABLE IF NOT EXISTS hmaud_report (
+    report_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    report_dt DATE,
+    report_nm VARCHAR(100),
+    content TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 议事录表
+CREATE TABLE IF NOT EXISTS hmaud_gijiroku (
+    gijiroku_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kaigi_dt DATETIME,
+    kaigi_nm VARCHAR(100),
+    content TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- HMTVE 数据汇总系统表
+-- ============================================
+
+-- 输入数据 K 表
+CREATE TABLE IF NOT EXISTS hmtve_input_data_k (
+    data_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    input_dt DATE,
+    tenpo_cd VARCHAR(10),
+    syasyu_cd VARCHAR(10),
+    taikai_cd VARCHAR(10),
+    kazu INTEGER,
+    kingaku DECIMAL(12,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 输入数据 S 表
+CREATE TABLE IF NOT EXISTS hmtve_input_data_s (
+    data_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    input_dt DATE,
+    tenpo_cd VARCHAR(10),
+    syasyu_cd VARCHAR(10),
+    taikai_cd VARCHAR(10),
+    kazu INTEGER,
+    kingaku DECIMAL(12,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 展览表
+CREATE TABLE IF NOT EXISTS hmtve_exhibition (
+    exhibition_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exhibition_dt DATE,
+    exhibition_nm VARCHAR(100),
+    location VARCHAR(200),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 出勤表
+CREATE TABLE IF NOT EXISTS hmtve_attendance (
+    attendance_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    emp_id VARCHAR(10),
+    work_dt DATE,
+    hours DECIMAL(5,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 广报订单表
+CREATE TABLE IF NOT EXISTS hmtve_publicity_order (
+    order_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_dt DATE,
+    order_nm VARCHAR(100),
+    amount DECIMAL(12,2),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- APPM 广域应用系统表
+-- ============================================
+
+-- 账户表
+CREATE TABLE IF NOT EXISTS appm_account (
+    account_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    account_nm VARCHAR(100) NOT NULL,
+    account_type VARCHAR(20),
+    status VARCHAR(10),
+    remark TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 消息表
+CREATE TABLE IF NOT EXISTS appm_messeji (
+    message_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    message_dt DATETIME,
+    title VARCHAR(200),
+    content TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 通知表
+CREATE TABLE IF NOT EXISTS appm_oshirase (
+    oshirase_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    oshirase_dt DATETIME,
+    title VARCHAR(200),
+    content TEXT,
+    priority INTEGER,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- PPRM 无纸化系统表
+-- ============================================
+
+-- 审批表
+CREATE TABLE IF NOT EXISTS pprm_approve (
+    approve_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    approve_dt DATETIME,
+    target_id INTEGER,
+    status VARCHAR(10),
+    comment TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- DC 图像表
+CREATE TABLE IF NOT EXISTS pprm_dc_image (
+    image_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    file_name VARCHAR(255),
+    file_path VARCHAR(500),
+    file_size DECIMAL(10,2),
+    upload_dt DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 登录表
+CREATE TABLE IF NOT EXISTS pprom_login (
+    login_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login_nm VARCHAR(100) NOT NULL,
+    login_type VARCHAR(10),
+    status VARCHAR(10),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 菜单权限表
+CREATE TABLE IF NOT EXISTS pprom_menu_auth (
+    auth_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id VARCHAR(50),
+    menu_id VARCHAR(50),
+    auth_level VARCHAR(10),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
