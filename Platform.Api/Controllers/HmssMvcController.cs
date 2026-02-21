@@ -88,6 +88,18 @@ public class HmssPageController : Controller
     }
 
     /// <summary>
+    /// HMSS 子系统页面（通用处理，重定向到表列表）
+    /// 支持 /hmss/{system} 路由，如 /hmss/jksys, /hmss/r4 等
+    /// </summary>
+    [HttpGet("/hmss/{system}")]
+    [Authorize]
+    public IActionResult Subsystem(string system)
+    {
+        // 重定向到表列表页面
+        return RedirectToAction("TableList");
+    }
+
+    /// <summary>
     /// HMSS 通用 UI 列表页面（支持 /ui/hmss/{model} 路由）
     /// 使用框架的 DynamicRepository 获取数据
     /// </summary>
