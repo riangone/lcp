@@ -1,0 +1,344 @@
+@{
+    Layout = "_HmssLayout";
+    ViewData["Title"] = "SDH 车检替代";
+    ViewData["Breadcrumb1"] = "SDH";
+}
+
+<div class="hmss-page-header">
+    <h1 class="page-title">
+        <i class="bi bi-car-front"></i>
+        SDH 车检替代系统
+    </h1>
+    <p class="page-subtitle">车检代替促进系统 - 追踪客户车检状态，推动车检入厂或替代销售</p>
+</div>
+
+<!-- 功能菜单 -->
+<div class="hmss-function-menu">
+    <div class="function-grid">
+        <a href="/hmss/sdh/hantei" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-clipboard-check"></i>
+            </div>
+            <div class="function-title">车检替代判定</div>
+            <div class="function-desc">车检替代判定主画面</div>
+        </a>
+        
+        <a href="/hmss/sdh/katsudo" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-activity"></i>
+            </div>
+            <div class="function-title">活动状况管理</div>
+            <div class="function-desc">管理客户活动状况</div>
+        </a>
+        
+        <a href="/hmss/sdh/contractor" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-people"></i>
+            </div>
+            <div class="function-title">契约者管理</div>
+            <div class="function-desc">管理客户信息</div>
+        </a>
+        
+        <a href="/hmss/sdh/timeline" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-timeline"></i>
+            </div>
+            <div class="function-title">时间线</div>
+            <div class="function-desc">查看客户事件时间线</div>
+        </a>
+        
+        <a href="/hmss/sdh/chumon" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-file-earmark-text"></i>
+            </div>
+            <div class="function-title">订单书管理</div>
+            <div class="function-desc">管理订单信息</div>
+        </a>
+        
+        <a href="/hmss/sdh/hoken" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-shield-check"></i>
+            </div>
+            <div class="function-title">保险信贷</div>
+            <div class="function-desc">管理保险信贷信息</div>
+        </a>
+        
+        <a href="/hmss/sdh/biko" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-sticky"></i>
+            </div>
+            <div class="function-title">备注管理</div>
+            <div class="function-desc">管理客户备注</div>
+        </a>
+        
+        <a href="/hmss/sdh/nyuko" class="function-card">
+            <div class="function-icon">
+                <i class="bi bi-arrow-right-circle"></i>
+            </div>
+            <div class="function-title">入库状况</div>
+            <div class="function-desc">管理入库状况</div>
+        </a>
+    </div>
+</div>
+
+<!-- 最近活动 -->
+<div class="hmss-section mt-4">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="bi bi-clock-history"></i>
+            最近活动
+        </h2>
+        <a href="/hmss/sdh/timeline" class="btn btn-sm btn-outline-primary">查看全部</a>
+    </div>
+    <div class="section-content">
+        <div id="recentTimeline">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 判定状况统计 -->
+<div class="hmss-section mt-4">
+    <div class="section-header">
+        <h2 class="section-title">
+            <i class="bi bi-graph-up"></i>
+            判定状况统计
+        </h2>
+    </div>
+    <div class="section-content">
+        <div class="stats-grid" id="hanteiStats">
+            <div class="stat-card">
+                <div class="stat-value">-</div>
+                <div class="stat-label">代替促進</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">-</div>
+                <div class="stat-label">入庫促進</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">-</div>
+                <div class="stat-label">代替確定</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">-</div>
+                <div class="stat-label">入庫確定</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .hmss-page-header {
+        margin-bottom: 30px;
+    }
+    
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .page-title i {
+        color: #00A8E0;
+    }
+    
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        margin: 0;
+    }
+    
+    .hmss-function-menu {
+        margin-bottom: 30px;
+    }
+    
+    .function-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+    
+    .function-card {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        cursor: pointer;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+        text-align: center;
+        border: 2px solid transparent;
+    }
+    
+    .function-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-color: #00A8E0;
+    }
+    
+    .function-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin: 0 auto 16px;
+        background: linear-gradient(135deg, #00A8E0 0%, #0077A3 100%);
+        color: white;
+    }
+    
+    .function-title {
+        font-size: 15px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 6px;
+    }
+    
+    .function-desc {
+        font-size: 12px;
+        color: #6c757d;
+        margin: 0;
+    }
+    
+    .hmss-section {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #212529;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .section-title i {
+        color: #00A8E0;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 16px;
+    }
+    
+    .stat-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+    }
+    
+    .stat-value {
+        font-size: 32px;
+        font-weight: 700;
+        color: #00A8E0;
+        margin-bottom: 8px;
+    }
+    
+    .stat-label {
+        font-size: 13px;
+        color: #6c757d;
+    }
+</style>
+}
+
+@section Scripts {
+<script>
+    // 加载最近活动
+    async function loadRecentTimeline() {
+        try {
+            const response = await fetch('/api/hmss/sdh/timeline?size=5');
+            const result = await response.json();
+            
+            if (result.success && result.data) {
+                renderTimeline(result.data);
+            } else {
+                document.getElementById('recentTimeline').innerHTML = 
+                    '<div class="alert alert-info mb-0">暂无活动记录</div>';
+            }
+        } catch (error) {
+            console.error('Load timeline error:', error);
+            document.getElementById('recentTimeline').innerHTML = 
+                '<div class="alert alert-danger mb-0">加载失败</div>';
+        }
+    }
+    
+    function renderTimeline(data) {
+        const container = document.getElementById('recentTimeline');
+        
+        container.innerHTML = data.map(item => `
+            <div class="timeline-item">
+                <div class="timeline-marker"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-date">${formatDate(item.event_dt)}</span>
+                        <span class="timeline-type badge bg-primary">${item.event_type || '一般'}</span>
+                    </div>
+                    <div class="timeline-body">${item.event_content || ''}</div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleString('zh-CN');
+    }
+    
+    // 加载统计数据
+    async function loadStats() {
+        try {
+            // 简化实现，实际应该从 API 获取
+            const stats = {
+                '1': 0, // 代替促進
+                '2': 0, // 入庫促進
+                '4': 0, // 代替確定
+                '6': 0  // 入庫確定
+            };
+            
+            const labels = ['代替促進', '入庫促進', '代替確定', '入庫確定'];
+            const values = Object.values(stats);
+            
+            const statCards = document.querySelectorAll('.stat-card');
+            statCards.forEach((card, index) => {
+                card.querySelector('.stat-value').textContent = values[index];
+                card.querySelector('.stat-label').textContent = labels[index];
+            });
+        } catch (error) {
+            console.error('Load stats error:', error);
+        }
+    }
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        loadRecentTimeline();
+        loadStats();
+    });
+</script>
+}

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="15135" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt;color: Black; font-family: ＭＳ ゴシック; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 15pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="240" BackColor="16777215" CanShrink="0">
+   	 <!-- クール,領域 start -->
+    <Control Type="AR.Label" Name="Label1" Left="0" Top="0" Width="450" Height="120" Caption="クール：" Style="text-align:left;font-weight: normal;font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label2" Left="0" Top="120" Width="450" Height="120" Caption="領　域：" Style="text-align:left;font-weight: normal;font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Field" Name="COUR" DataField="COUR" Left="450" Top="-13" Width="1000" Height="220" Text="" Style="text-align: left;font-weight: normal; font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+    <Control Type="AR.Field" Name="TERRITORY" DataField="TERRITORY" Left="450" Top="100" Width="1000" Height="220" Text="" Style="text-align: left;font-weight: normal; font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+   	 <!-- クール,領域 end -->
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="580" BackColor="16777215" CanShrink="0">
+   	  <!-- ID start -->
+      <Control Type="AR.Label" Name="Label3" Left="0" Top="20" Width="250" Height="300" Caption="ID" Style="text-align:left;background-color: #DCDCDC;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      
+      <Control Type="AR.Shape" Name="Shape1" Left="0" Top="20" Width="250" Height="300"/>
+	  <!-- ID end -->
+<Control Type="AR.Label" Name="Label4" Left="260" Top="20" Width="1909.97" Height="300" Caption="業務手順書項目" Style="text-align:left;background-color: #DCDCDC;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="Label5" Left="2169.97" Top="20" Width="2899.97" Height="300" Caption="業務内容" Style="text-align:left;background-color: #DCDCDC;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="Label6" Left="5069.94" Top="20" Width="2709.97" Height="300" Caption="監査項目" Style="text-align:left;background-color: #DCDCDC;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Shape" Name="Shape2" Left="250" Top="20" Width="1909.97" Height="300" />
+<Control Type="AR.Shape" Name="Shape3" Left="2159.97" Top="20" Width="2899.97" Height="300" />
+<Control Type="AR.Shape" Name="Shape4" Left="5059.94" Top="20" Width="2709.97" Height="300" />
+</Section>
+<Section Type="Detail" Name="Detail" Height="1000" CanShrink="0">
+<Control Type="AR.Shape" Name="Shape5" Left="0" Top="-260" Width="250" Height="1000" />
+<Control Type="AR.Shape" Name="Shape6" Left="250" Top="-260" Width="1909.97" Height="1000" />
+<Control Type="AR.Shape" Name="Shape7" Left="2159.97" Top="-260" Width="2899.97" Height="1000" />
+<Control Type="AR.Shape" Name="Shape8" Left="5059.94" Top="-260" Width="2709.97" Height="1000" />
+<Control Type="AR.Field" Name="COLUMN1" DataField="COLUMN1" Left="20" Top="-240" Width="220" Height="0" Text = "" MultirowNum ="5" Style="text-align: left;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: top; " />
+<Control Type="AR.Field" Name="COLUMN2" DataField="COLUMN2" Left="260" Top="-240" Width="1909.97" Height="0" Text = ""  MultirowNum ="5" Style="text-align: left;font-weight: normal;font-size: 5pt;font-family: ＭＳ ゴシック; vertical-align: top; " />
+<Control Type="AR.Field" Name="COLUMN4" DataField="COLUMN4" Left="2169.97" Top="-240" Width="2899.97" Height="0" Text = ""  MultirowNum ="5" Style="text-align: left;font-weight: normal;font-size: 5pt;font-family: ＭＳ ゴシック; vertical-align: top; " />
+<Control Type="AR.Field" Name="COLUMN7" DataField="COLUMN7" Left="5069.94" Top="-240" Width="2709.97" Height="0" Text = "" MultirowNum ="5" Style="text-align: left;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: top; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="0" DataField="check0" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="1" DataField="check1" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="2" DataField="check2" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="3" DataField="check3" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="4" DataField="check4" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="5" DataField="check5" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="6" DataField="check6" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="7" DataField="check7" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="8" DataField="check8" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="9" DataField="check9" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="10" DataField="check10" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="11" DataField="check11" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="12" DataField="check12" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="13" DataField="check13" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="14" DataField="check14" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="15" DataField="check15" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="16" DataField="check16" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="KYOTENField" Ktnumber="17" DataField="check17" Left="7769.91" Top="-232" Width="400" Height="1000" Text="" Style="text-align:center;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="TOTALField" DataField="total" Left="7769.91" Top="-232" Width="300" Height="1000" Text="" Style="font-weight: normal;font-size: 6.8pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="PERCENTField" DataField="percent" Left="7769.91" Top="-232" Width="720" Height="1000" Text="" Style="font-weight: normal;font-size: 6.8pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Field" Name="RANKField" DataField="rank" Left="7769.91" Top="-232" Width="420" Height="1000" Text="" Style="font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+</Section>
+<Section Type="GroupHeader" Name="GroupHeader1" Height="580" BackColor="16777215" CanShrink="0">
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="0" Caption="ボルボ・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="1" Caption="三次・販売" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="2" Caption="三次・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="3" Caption="可部・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="4" Caption="祇園・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="5" Caption="広・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="6" Caption="呉・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="7" Caption="海田・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="8" Caption="大州・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="9" Caption="宇品・販売" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="10" Caption="宇品・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="11" Caption="庚午・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="12" Caption="五日市・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="13" Caption="石内山田・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="14" Caption="黒瀬・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="15" Caption="福山東・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="16" Caption="尾道山波・サ" Style="text-align:left;background-color: #DCDCDC; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENLabel" Left="7769.91" Top="-1560" Width="400" Height="300" Ktnumber="17" Caption="カーセン・サ" Style="text-align:left;background-color: #C0504D; font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENTotal" Left="7769.91" Top="-1560" Width="300" Height="300" Caption="合計" Style="text-align:left;background-color: #DCDCDC;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENPersent" Left="7769.91" Top="-1560" Width="720" Height="300" Caption="実施度合**（全18拠点）" Style="text-align:left;background-color: #DCDCDC;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+<Control Type="AR.Label" Name="KYOTENRank" Left="7769.91" Top="-1560" Width="420" Height="300" Caption="ランク**（項目）" Style="text-align:left;background-color: #DCDCDC;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+</Section>
+</Sections>
+<ReportComponentTray />
+<PageSettings LeftMargin="150" RightMargin="50" TopMargin="100" BottomMargin="100" PaperSize="9" PaperWidth="21384" PaperHeight="15120" PaperName="" Orientation="2" />
+<Parameters />
+</ActiveReportsLayout>

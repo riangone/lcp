@@ -1,0 +1,644 @@
+# R4 管理会計システム
+
+models:
+  # ============================================
+  # R4 共通主表
+  # ============================================
+  
+  R4kBumonMst:
+    table: r4k_bumon_mst
+    primary_key: bumon_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 部署主表
+          create_button: 添加部署
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索部署...
+          BUMON_CD: 部署代码
+          BUMON_NM: 部署名称
+          BUMON_KANA: 部署假名
+        ja:
+          title: 部署マスタ
+          create_button: 部署追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 部署を検索...
+          BUMON_CD: 部署コード
+          BUMON_NM: 部署名
+          BUMON_KANA: 部署カナ
+      styles:
+        card_class: "card-r4-bumon"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [bumon_cd, bumon_nm, bumon_kana]
+      filters:
+        bumon_nm:
+          label: 部署名称
+          type: like
+    
+    form:
+      title: 部署
+      fields:
+        bumon_cd:
+          label: 部署代码
+          type: text
+          required: true
+          max_length: 10
+        bumon_nm:
+          label: 部署名称
+          type: text
+          required: true
+          max_length: 50
+        bumon_kana:
+          label: 部署假名
+          type: text
+          max_length: 50
+    
+    properties:
+      bumon_cd: { type: string }
+      bumon_nm: { type: string }
+      bumon_kana: { type: string }
+  
+  R4kSyainMst:
+    table: r4k_syain_mst
+    primary_key: syain_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 社員主表
+          create_button: 添加社員
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索社員...
+          SYAIN_NO: 社員编号
+          SYAIN_NM: 社員姓名
+          SYAIN_KANA: 社員假名
+          BUMON_CD: 部署代码
+        ja:
+          title: 社員マスタ
+          create_button: 社員追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 社員を検索...
+          SYAIN_NO: 社員番号
+          SYAIN_NM: 社員名
+          SYAIN_KANA: 社員カナ
+          BUMON_CD: 部署コード
+      styles:
+        card_class: "card-r4-syain"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [syain_no, syain_nm, bumon_cd]
+      filters:
+        syain_nm:
+          label: 社員姓名
+          type: like
+    
+    form:
+      title: 社員
+      fields:
+        syain_no:
+          label: 社員编号
+          type: text
+          required: true
+          max_length: 10
+        syain_nm:
+          label: 社員姓名
+          type: text
+          required: true
+          max_length: 50
+        syain_kana:
+          label: 社員假名
+          type: text
+          max_length: 50
+        bumon_cd:
+          label: 部署代码
+          type: text
+          max_length: 10
+    
+    properties:
+      syain_no: { type: string }
+      syain_nm: { type: string }
+      syain_kana: { type: string }
+      bumon_cd: { type: string }
+  
+  R4kGyousyaMst:
+    table: r4k_gyousya_mst
+    primary_key: gyousya_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 業者主表
+          create_button: 添加業者
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索業者...
+          GYOUSYA_CD: 業者代码
+          GYOUSYA_NM: 業者名称
+          GYOUSYA_KANA: 業者假名
+          TEL: 电话
+          ADDRESS: 地址
+        ja:
+          title: 業者マスタ
+          create_button: 業者追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 業者を検索...
+          GYOUSYA_CD: 業者コード
+          GYOUSYA_NM: 業者名
+          GYOUSYA_KANA: 業者カナ
+          TEL: 電話
+          ADDRESS: 住所
+      styles:
+        card_class: "card-r4-gyousya"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [gyousya_cd, gyousya_nm, tel]
+      filters:
+        gyousya_nm:
+          label: 業者名称
+          type: like
+    
+    form:
+      title: 業者
+      fields:
+        gyousya_cd:
+          label: 業者代码
+          type: text
+          required: true
+          max_length: 10
+        gyousya_nm:
+          label: 業者名称
+          type: text
+          required: true
+          max_length: 100
+        gyousya_kana:
+          label: 業者假名
+          type: text
+          max_length: 100
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        address:
+          label: 地址
+          type: text
+          max_length: 500
+    
+    properties:
+      gyousya_cd: { type: string }
+      gyousya_nm: { type: string }
+      gyousya_kana: { type: string }
+      tel: { type: string }
+      address: { type: string }
+  
+  # ============================================
+  # R4 业务表
+  # ============================================
+  
+  R4kYosan:
+    table: r4k_yosan
+    primary_key: yosan_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 予算管理
+          create_button: 添加予算
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索予算...
+          YOSAN_ID: 予算 ID
+          YOSAN_YEAR: 予算年度
+          BUMON_CD: 部署代码
+          KAMOKU_CD: 科目代码
+          YOSAN_GAKU: 予算金额
+          JISSEKI_GAKU: 实绩金额
+          REMARK: 备注
+        ja:
+          title: 予算管理
+          create_button: 予算追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 予算を検索...
+          YOSAN_ID: 予算 ID
+          YOSAN_YEAR: 予算年度
+          BUMON_CD: 部署コード
+          KAMOKU_CD: 科目コード
+          YOSAN_GAKU: 予算金額
+          JISSEKI_GAKU: 実績金額
+          REMARK: 備考
+      styles:
+        card_class: "card-r4-yosan"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [yosan_id, yosan_year, bumon_cd, kamoku_cd, yosan_gaku, jisseci_gaku]
+      filters:
+        yosan_year:
+          label: 予算年度
+          type: like
+        bumon_cd:
+          label: 部署
+          type: like
+        kamoku_cd:
+          label: 科目
+          type: like
+    
+    form:
+      title: 予算
+      fields:
+        yosan_year:
+          label: 予算年度
+          type: text
+          required: true
+          max_length: 4
+        bumon_cd:
+          label: 部署代码
+          type: text
+          required: true
+          max_length: 10
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          required: true
+          max_length: 10
+        yosan_gaku:
+          label: 予算金额
+          type: number
+          required: true
+        jisseci_gaku:
+          label: 实绩金额
+          type: number
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      yosan_id: { type: int }
+      yosan_year: { type: string }
+      bumon_cd: { type: string }
+      kamoku_cd: { type: string }
+      yosan_gaku: { type: decimal }
+      jisseci_gaku: { type: decimal }
+      remark: { type: string }
+  
+  R4kGenka:
+    table: r4k_genka
+    primary_key: genka_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 原価管理
+          create_button: 添加原価
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索原価...
+          GENKA_ID: 原価 ID
+          GENKA_DT: 原価日期
+          GYOUSYA_CD: 業者代码
+          BUMON_CD: 部署代码
+          KAMOKU_CD: 科目代码
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: 原価管理
+          create_button: 原価追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 原価を検索...
+          GENKA_ID: 原価 ID
+          GENKA_DT: 原価日
+          GYOUSYA_CD: 業者コード
+          BUMON_CD: 部署コード
+          KAMOKU_CD: 科目コード
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-r4-genka"
+        button_class: "btn btn-danger"
+    
+    list:
+      columns: [genka_id, genka_dt, gyousya_cd, bumon_cd, kingaku]
+      filters:
+        genka_dt:
+          label: 原価日期
+          type: date
+        gyousya_cd:
+          label: 業者
+          type: like
+        bumon_cd:
+          label: 部署
+          type: like
+    
+    form:
+      title: 原価
+      fields:
+        genka_dt:
+          label: 原価日期
+          type: date
+          required: true
+        gyousya_cd:
+          label: 業者代码
+          type: text
+          required: true
+          max_length: 10
+        bumon_cd:
+          label: 部署代码
+          type: text
+          required: true
+          max_length: 10
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          max_length: 10
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      genka_id: { type: int }
+      genka_dt: { type: date }
+      gyousya_cd: { type: string }
+      bumon_cd: { type: string }
+      kamoku_cd: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  R4kUriage:
+    table: r4k_uriage
+    primary_key: uriage_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 売上管理
+          create_button: 添加売上
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索売上...
+          URIAGE_ID: 売上 ID
+          URIAGE_DT: 売上日期
+          BUMON_CD: 部署代码
+          KAMOKU_CD: 科目代码
+          URIAGE_GAKU: 売上金额
+          REMARK: 备注
+        ja:
+          title: 売上管理
+          create_button: 売上追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 売上を検索...
+          URIAGE_ID: 売上 ID
+          URIAGE_DT: 売上日
+          BUMON_CD: 部署コード
+          KAMOKU_CD: 科目コード
+          URIAGE_GAKU: 売上金額
+          REMARK: 備考
+      styles:
+        card_class: "card-r4-uriage"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [uriage_id, uriage_dt, bumon_cd, uriage_gaku]
+      filters:
+        uriage_dt:
+          label: 売上日期
+          type: date
+        bumon_cd:
+          label: 部署
+          type: like
+    
+    form:
+      title: 売上
+      fields:
+        uriage_dt:
+          label: 売上日期
+          type: date
+          required: true
+        bumon_cd:
+          label: 部署代码
+          type: text
+          required: true
+          max_length: 10
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          max_length: 10
+        uriage_gaku:
+          label: 売上金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      uriage_id: { type: int }
+      uriage_dt: { type: date }
+      bumon_cd: { type: string }
+      kamoku_cd: { type: string }
+      uriage_gaku: { type: decimal }
+      remark: { type: string }
+  
+  R4kKaikei:
+    table: r4k_kaikei
+    primary_key: kaikei_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 経理処理
+          create_button: 添加経理
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索経理...
+          KAIKEI_ID: 経理 ID
+          KAIKEI_DT: 経理日期
+          KAMOKU_CD: 科目代码
+          KARITAE: 借方/贷方
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: 経理処理
+          create_button: 経理追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 経理を検索...
+          KAIKEI_ID: 経理 ID
+          KAIKEI_DT: 経理日
+          KAMOKU_CD: 科目コード
+          KARITAE: 借方/貸方
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-r4-kaikei"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [kaikei_id, kaikei_dt, kamoku_cd, karitae, kingaku]
+      filters:
+        kaikei_dt:
+          label: 経理日期
+          type: date
+        kamoku_cd:
+          label: 科目
+          type: like
+        karitae:
+          label: 借方/贷方
+          type: select
+          options:
+            '1': '借方'
+            '2': '贷方'
+    
+    form:
+      title: 経理
+      fields:
+        kaikei_dt:
+          label: 経理日期
+          type: date
+          required: true
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          required: true
+          max_length: 10
+        karitae:
+          label: 借方/贷方
+          type: select
+          required: true
+          options:
+            '1': '借方'
+            '2': '贷方'
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      kaikei_id: { type: int }
+      kaikei_dt: { type: date }
+      kamoku_cd: { type: string }
+      karitae: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  R4kSeikyu:
+    table: r4k_seikyu
+    primary_key: seikyu_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 請求管理
+          create_button: 添加請求
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索請求...
+          SEIKYU_ID: 請求 ID
+          SEIKYU_DT: 請求日期
+          GYOUSYA_CD: 業者代码
+          SEIKYU_GAKU: 請求金额
+          SHIHARAI_DT: 支払予定日
+          REMARK: 备注
+        ja:
+          title: 請求管理
+          create_button: 請求追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 請求を検索...
+          SEIKYU_ID: 請求 ID
+          SEIKYU_DT: 請求日
+          GYOUSYA_CD: 業者コード
+          SEIKYU_GAKU: 請求金額
+          SHIHARAI_DT: 支払予定日
+          REMARK: 備考
+      styles:
+        card_class: "card-r4-seikyu"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [seikyu_id, seikyu_dt, gyousya_cd, seikyu_gaku, shiharai_dt]
+      filters:
+        seikyu_dt:
+          label: 請求日期
+          type: date
+        gyousya_cd:
+          label: 業者
+          type: like
+    
+    form:
+      title: 請求
+      fields:
+        seikyu_dt:
+          label: 請求日期
+          type: date
+          required: true
+        gyousya_cd:
+          label: 業者代码
+          type: text
+          required: true
+          max_length: 10
+        seikyu_gaku:
+          label: 請求金额
+          type: number
+          required: true
+        shiharai_dt:
+          label: 支払予定日
+          type: date
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      seikyu_id: { type: int }
+      seikyu_dt: { type: date }
+      gyousya_cd: { type: string }
+      seikyu_gaku: { type: decimal }
+      shiharai_dt: { type: date }
+      remark: { type: string }

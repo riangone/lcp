@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="19296" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptZandakaList2.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ ゴシック; font-size: 10pt; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="0" BackColor="16777215" CanShrink="0" />
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="1230" DataField="KBN" RepeatStyle="4" BackColor="16777215" NewPage="1" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Field" Name="Label" DataField="TITLE" MOD="4" Left="0" Top="0" Width="19296" Height="540" Caption="資産　残高／金利　データ" Style="text-align: center; font-size: 18pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label14" MOD="4" Left="1485" Top="0" Width="315" Height="288" Caption="月" Style="font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox20" DataField="TUKI" MOD="4" Left="1215" Top="0" Width="270" Height="270" Text="99" Multiline="0" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label13" MOD="4" Left="900" Top="0" Width="315" Height="288" Caption="年" Style="font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox19" DataField="NEN" MOD="4" Left="315" Top="0" Width="554.4" Height="270.72" Text="99999" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label29" MOD="4" Left="16380" Top="0" Width="630" Height="270" Caption="DATE：" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtDate" DataField="TODAY" MOD="4" Left="17009.28" Top="0" Width="1080" Height="270.72" Text="" OutputFormat="" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label28" MOD="4" Left="18180" Top="0" Width="630.72" Height="270.72" Caption="PAGE：" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtPageCnt" DataField="PAGE" MOD="4" Left="18809.28" Top="0" Width="450" Height="270" Text="" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " SummaryType="4" SummaryRunning="2" />
+      <Control Type="AR.Label" Name="Label16" MOD="4" Left="194.4" Top="945.36" Width="585" Height="288" Caption="科目" Style="font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label18" MOD="4" Left="4950.72" Top="945.36" Width="479.52" Height="288" Caption="部署" Style="font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label1" MOD="4" Left="9525.6" Top="945.36" Width="1589.76" Height="270.72" Caption="前月残高" Style="text-align: right; font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label2" DataField="TITLE2" MOD="4" Left="11160" Top="945.36" Width="1589.76" Height="270.72" Caption="当月借方発生" Style="text-align: right; font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label3" DataField="TITLE3" MOD="4" Left="12824.64" Top="945.36" Width="1589.76" Height="270.72" Caption="当月貸方発生" Style="text-align: right; font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label4" MOD="4" Left="14444.64" Top="945.36" Width="1589.76" Height="270.72" Caption="当月残高" Style="text-align: right; font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label5" MOD="4" Left="16110.72" Top="945.36" Width="1589.76" Height="270.72" Caption="金利" Style="text-align: right; font-size: 9.75pt; vertical-align: top; " />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="270" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox" DataField="KAMOK_CD" MOD="4" Left="195" Top="0" Width="554.4" Height="270.72" Text="99999" Multiline="0" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="BUSYO_NM" MOD="4" Left="5430" Top="0" Width="4005" Height="270" Text="1234567890123456789012345678901234567890" Multiline="0" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox1" DataField="KAMOK_NM" MOD="4" Left="825" Top="0" Width="4005" Height="270" Text="1234567890123456789012345678901234567890" Multiline="0" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox2" DataField="BUSYO_CD" MOD="4" Left="4950" Top="0" Width="405" Height="270.72" Text="999" Multiline="0" Style="font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox10" DataField="ZEN_ZAN" MOD="4" Left="9525" Top="0" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox3" DataField="TOU_GK" MOD="4" Left="11160" Top="0" Width="1620" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="TAISYOU_GK" MOD="4" Left="12825" Top="0" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox6" DataField="ZEN_GK" MOD="4" Left="14445" Top="0" Width="1605" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox7" DataField="KINRI_GK" MOD="4" Left="16110" Top="0" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox8" DataField="NISSU" MOD="4" Left="17805" Top="0" Width="855.36" Height="270.72" Text="123,4" OutputFormat="#,##0.0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="419" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="txtTotalZEN_ZAN1" DataField="ZEN_ZAN_TOTAL" MOD="4" Left="9525" Top="135" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader1" />
+      <Control Type="AR.Field" Name="txtTotalTOU_GK1" DataField="TOU_GK_TOTAL" MOD="4" Left="11160" Top="135" Width="1620" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader1" />
+      <Control Type="AR.Field" Name="TAISYOU_GK1" DataField="TAISYOU_GK_TOTAL" MOD="4" Left="12825" Top="135" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader1" />
+      <Control Type="AR.Field" Name="txtTotalZEN_GK" DataField="ZEN_GK_TOTAL" MOD="4" Left="14445" Top="135" Width="1605" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader1" />
+      <Control Type="AR.Field" Name="KINRI_GK1" DataField="KINRI_GK_TOTAL" MOD="4" Left="16110" Top="135" Width="1590" Height="270" Text="123,456,789,000" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader1" />
+      <Control Type="AR.Label" Name="Label30" MOD="4" Left="5490" Top="135" Width="990" Height="288" Caption="合計" Style="font-size: 9.75pt; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtKB" DataField="KBN" Visible="0" MOD="4" Left="8460" Top="135" Width="270" Height="270.72" Text="123,4" OutputFormat="" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <PageSettings LeftMargin="1152" RightMargin="1152" TopMargin="720" BottomMargin="720" PaperSize="8" PaperWidth="16838" PaperHeight="23811" PaperName="ユーザー定義のサイズ" Orientation="2" />
+</ActiveReportsLayout>

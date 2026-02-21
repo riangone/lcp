@@ -1,0 +1,662 @@
+@{
+    Layout = "_HmssLayout";
+    ViewData["Title"] = "HMSS 数据管理";
+    ViewData["Breadcrumb1"] = "HMSS";
+    ViewData["Breadcrumb2"] = "数据管理";
+}
+
+<div class="hmss-page-header">
+    <h1 class="page-title">
+        <i class="bi bi-database"></i>
+        HMSS 数据管理
+    </h1>
+    <p class="page-subtitle">各子系统数据表列表 - 支持 CRUD 操作</p>
+</div>
+
+<!-- 系统分类导航 -->
+<div class="hmss-system-tabs mb-4">
+    <ul class="nav nav-tabs" id="systemTabs" role="tablist">
+        <li class="nav-item">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-sdh" type="button">
+                🚗 SDH 车检替代
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hdkaikei" type="button">
+                📊 HDKAIKEI 会计
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hmdps" type="button">
+                📝 HMDPS DPS
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-r4" type="button">
+                💰 R4 管理会计
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hmhrms" type="button">
+                👥 HMHRMS 人力资源
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-jksys" type="button">
+                💵 JKSYS 人事給与
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hmaud" type="button">
+                🔍 HMAUD 审计
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-hmtve" type="button">
+                📈 HMTVE 数据汇总
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-appm" type="button">
+                📱 APPM 广域应用
+            </button>
+        </li>
+        <li class="nav-item">
+            <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-pprm" type="button">
+                📄 PPRM 无纸化
+            </button>
+        </li>
+    </ul>
+</div>
+
+<!-- 表列表内容 -->
+<div class="tab-content" id="systemTabsContent">
+    <!-- SDH 车检替代 -->
+    <div class="tab-pane fade show active" id="tab-sdh" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_contractor'">
+                <div class="table-icon">👤</div>
+                <div class="table-info">
+                    <h5>sdh_contractor</h5>
+                    <p>契约者表 - 客户基本信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_tenpo'">
+                <div class="table-icon">🏢</div>
+                <div class="table-info">
+                    <h5>sdh_tenpo</h5>
+                    <p>店铺表 - 店铺信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_syasyu_mst'">
+                <div class="table-icon">🚗</div>
+                <div class="table-info">
+                    <h5>sdh_syasyu_mst</h5>
+                    <p>判定车种主表 - 车种信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_hantei_lst'">
+                <div class="table-icon">📋</div>
+                <div class="table-info">
+                    <h5>sdh_hantei_lst</h5>
+                    <p>判定列表 - 车检替代判定管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_timeline'">
+                <div class="table-icon">⏰</div>
+                <div class="table-info">
+                    <h5>sdh_timeline</h5>
+                    <p>时间线表 - 客户事件时间线</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_katsudo'">
+                <div class="table-icon">📊</div>
+                <div class="table-info">
+                    <h5>sdh_katsudo</h5>
+                    <p>活动状况表 - 客户活动管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_chumon'">
+                <div class="table-icon">📝</div>
+                <div class="table-info">
+                    <h5>sdh_chumon</h5>
+                    <p>订单书表 - 订单信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_hoken'">
+                <div class="table-icon">🛡️</div>
+                <div class="table-info">
+                    <h5>sdh_hoken</h5>
+                    <p>保险信贷表 - 保险信贷管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_biko'">
+                <div class="table-icon">📌</div>
+                <div class="table-info">
+                    <h5>sdh_biko</h5>
+                    <p>备注表 - 客户备注信息</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_tanto'">
+                <div class="table-icon">👔</div>
+                <div class="table-info">
+                    <h5>sdh_tanto</h5>
+                    <p>担当履历表 - 担当变更履历</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_nyuko'">
+                <div class="table-icon">✅</div>
+                <div class="table-info">
+                    <h5>sdh_nyuko</h5>
+                    <p>入库状况表 - 入库状况管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_vin_wmivds'">
+                <div class="table-icon">🔖</div>
+                <div class="table-info">
+                    <h5>sdh_vin_wmivds</h5>
+                    <p>VIN WMIVDS 表 - 车辆 VIN 管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/sdh_vin_vis'">
+                <div class="table-icon">🏷️</div>
+                <div class="table-info">
+                    <h5>sdh_vin_vis</h5>
+                    <p>VIN VIS 表 - 车辆 VIS 管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HDKAIKEI 会计 -->
+    <div class="tab-pane fade" id="tab-hdkaikei" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_kamoku_mst'">
+                <div class="table-icon">📑</div>
+                <div class="table-info">
+                    <h5>hdk_kamoku_mst</h5>
+                    <p>科目主表 - 会计科目管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_torihikisaki_mst'">
+                <div class="table-icon">🤝</div>
+                <div class="table-info">
+                    <h5>hdk_torihikisaki_mst</h5>
+                    <p>取引先主表 - 客户供应商管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_bumon_mst'">
+                <div class="table-icon">🏛️</div>
+                <div class="table-info">
+                    <h5>hdk_bumon_mst</h5>
+                    <p>部門主表 - 部门信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_syain_mst'">
+                <div class="table-icon">👤</div>
+                <div class="table-info">
+                    <h5>hdk_syain_mst</h5>
+                    <p>社員主表 - 社员信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_denpyo'">
+                <div class="table-icon">📄</div>
+                <div class="table-info">
+                    <h5>hdk_denpyo</h5>
+                    <p>伝票表 - 会计传票管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_shiwake'">
+                <div class="table-icon">✏️</div>
+                <div class="table-info">
+                    <h5>hdk_shiwake</h5>
+                    <p>仕訳表 - 会计分录管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_shiharai'">
+                <div class="table-icon">💰</div>
+                <div class="table-info">
+                    <h5>hdk_shiharai</h5>
+                    <p>支払表 - 支付管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hdk_pattern_mst'">
+                <div class="table-icon">📋</div>
+                <div class="table-info">
+                    <h5>hdk_pattern_mst</h5>
+                    <p>パターン主表 - 传票模式管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HMDPS DPS 传票 -->
+    <div class="tab-pane fade" id="tab-hmdps" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/hmdps_denpyo'">
+                <div class="table-icon">📄</div>
+                <div class="table-info">
+                    <h5>hmdps_denpyo</h5>
+                    <p>DPS 伝票表 - DPS 传票管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmdps_shiwake'">
+                <div class="table-icon">✏️</div>
+                <div class="table-info">
+                    <h5>hmdps_shiwake</h5>
+                    <p>DPS 仕訳表 - DPS 分录管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmdps_shiharai'">
+                <div class="table-icon">💰</div>
+                <div class="table-info">
+                    <h5>hmdps_shiharai</h5>
+                    <p>DPS 支払表 - DPS 支付管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmdps_pattern_mst'">
+                <div class="table-icon">📋</div>
+                <div class="table-info">
+                    <h5>hmdps_pattern_mst</h5>
+                    <p>DPS パターン主表 - DPS 模式管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- R4 管理会计 -->
+    <div class="tab-pane fade" id="tab-r4" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_bumon_mst'">
+                <div class="table-icon">🏛️</div>
+                <div class="table-info">
+                    <h5>r4k_bumon_mst</h5>
+                    <p>部署主表 - 部署信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_syain_mst'">
+                <div class="table-icon">👤</div>
+                <div class="table-info">
+                    <h5>r4k_syain_mst</h5>
+                    <p>社員主表 - 社员信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_gyousya_mst'">
+                <div class="table-icon">🏢</div>
+                <div class="table-info">
+                    <h5>r4k_gyousya_mst</h5>
+                    <p>業者主表 - 业者信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_yosan'">
+                <div class="table-icon">📊</div>
+                <div class="table-info">
+                    <h5>r4k_yosan</h5>
+                    <p>予算表 - 预算管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_genka'">
+                <div class="table-icon">💴</div>
+                <div class="table-info">
+                    <h5>r4k_genka</h5>
+                    <p>原価表 - 原価管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_uriage'">
+                <div class="table-icon">📈</div>
+                <div class="table-info">
+                    <h5>r4k_uriage</h5>
+                    <p>売上表 - 売上管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_kaikei'">
+                <div class="table-icon">📒</div>
+                <div class="table-info">
+                    <h5>r4k_kaikei</h5>
+                    <p>経理表 - 経理处理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/r4k_seikyu'">
+                <div class="table-icon">📝</div>
+                <div class="table-info">
+                    <h5>r4k_seikyu</h5>
+                    <p>請求表 - 請求管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HMHRMS 人力资源 -->
+    <div class="tab-pane fade" id="tab-hmhrms" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/employee'">
+                <div class="table-icon">👤</div>
+                <div class="table-info">
+                    <h5>employee</h5>
+                    <p>社員基本信息表 - 员工信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/employee_family'">
+                <div class="table-icon">👨‍👩‍👧‍👦</div>
+                <div class="table-info">
+                    <h5>employee_family</h5>
+                    <p>家族状況表 - 家族信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/employee_gakureki'">
+                <div class="table-icon">🎓</div>
+                <div class="table-info">
+                    <h5>employee_gakureki</h5>
+                    <p>学歴表 - 学历信息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/employee_shokureki'">
+                <div class="table-icon">💼</div>
+                <div class="table-info">
+                    <h5>employee_shokureki</h5>
+                    <p>社外職歴表 - 外部职历管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/employee_shikaku'">
+                <div class="table-icon">📜</div>
+                <div class="table-info">
+                    <h5>employee_shikaku</h5>
+                    <p>資格免許表 - 资格执照管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JKSYS 人事給与 -->
+    <div class="tab-pane fade" id="tab-jksys" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_jinkenhi'">
+                <div class="table-icon">💰</div>
+                <div class="table-info">
+                    <h5>jk_jinkenhi</h5>
+                    <p>人件費表 - 人事费管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_syoreikin'">
+                <div class="table-icon">🎁</div>
+                <div class="table-info">
+                    <h5>jk_syoreikin</h5>
+                    <p>賞与表 - 奖金管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_hyoka'">
+                <div class="table-icon">⭐</div>
+                <div class="table-info">
+                    <h5>jk_hyoka</h5>
+                    <p>評価表 - 员工评价管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_syukkou'">
+                <div class="table-icon">✈️</div>
+                <div class="table-info">
+                    <h5>jk_syukkou</h5>
+                    <p>出張表 - 出差管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_koyou_rireki'">
+                <div class="table-icon">📋</div>
+                <div class="table-info">
+                    <h5>jk_koyou_rireki</h5>
+                    <p>雇用履歴表 - 雇用履历管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/jk_idou_rireki'">
+                <div class="table-icon">🔄</div>
+                <div class="table-info">
+                    <h5>jk_idou_rireki</h5>
+                    <p>異動履歴表 - 异动履历管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HMAUD 审计 -->
+    <div class="tab-pane fade" id="tab-hmaud" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/hmaud_kansa_jin'">
+                <div class="table-icon">👮</div>
+                <div class="table-info">
+                    <h5>hmaud_kansa_jin</h5>
+                    <p>監査員表 - 監査員管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmaud_kansa_jisseki'">
+                <div class="table-icon">✅</div>
+                <div class="table-info">
+                    <h5>hmaud_kansa_jisseki</h5>
+                    <p>監査実績表 - 監査实绩管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmaud_skd'">
+                <div class="table-icon">📅</div>
+                <div class="table-info">
+                    <h5>hmaud_skd</h5>
+                    <p>監査スケジュール表 - 監査计划</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmaud_report'">
+                <div class="table-icon">📄</div>
+                <div class="table-info">
+                    <h5>hmaud_report</h5>
+                    <p>監査報告表 - 監査报告管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmaud_gijiroku'">
+                <div class="table-icon">📝</div>
+                <div class="table-info">
+                    <h5>hmaud_gijiroku</h5>
+                    <p>議事録表 - 議事録管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HMTVE 数据汇总 -->
+    <div class="tab-pane fade" id="tab-hmtve" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/hmtve_input_data_k'">
+                <div class="table-icon">📥</div>
+                <div class="table-info">
+                    <h5>hmtve_input_data_k</h5>
+                    <p>入力データ K 表 - K 类数据输入</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmtve_input_data_s'">
+                <div class="table-icon">📥</div>
+                <div class="table-info">
+                    <h5>hmtve_input_data_s</h5>
+                    <p>入力データ S 表 - S 类数据输入</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmtve_exhibition'">
+                <div class="table-icon">🎪</div>
+                <div class="table-info">
+                    <h5>hmtve_exhibition</h5>
+                    <p>展示会表 - 展示会管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmtve_attendance'">
+                <div class="table-icon">✅</div>
+                <div class="table-info">
+                    <h5>hmtve_attendance</h5>
+                    <p>出欠表 - 出欠管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/hmtve_publicity_order'">
+                <div class="table-icon">📢</div>
+                <div class="table-info">
+                    <h5>hmtve_publicity_order</h5>
+                    <p>宣伝注文表 - 宣传订单管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- APPM 广域应用 -->
+    <div class="tab-pane fade" id="tab-appm" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/appm_account'">
+                <div class="table-icon">🔑</div>
+                <div class="table-info">
+                    <h5>appm_account</h5>
+                    <p>アカウント表 - 账户管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/appm_messeji'">
+                <div class="table-icon">📧</div>
+                <div class="table-info">
+                    <h5>appm_messeji</h5>
+                    <p>メッセージ表 - 消息管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/appm_oshirase'">
+                <div class="table-icon">📢</div>
+                <div class="table-info">
+                    <h5>appm_oshirase</h5>
+                    <p>お知らせ表 - 通知管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PPRM 无纸化 -->
+    <div class="tab-pane fade" id="tab-pprm" role="tabpanel">
+        <div class="hmss-table-grid">
+            <div class="table-card" onclick="location.href='/ui/hmss/pprom_approve'">
+                <div class="table-icon">✅</div>
+                <div class="table-info">
+                    <h5>pprom_approve</h5>
+                    <p>承認表 - 承認管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/pprom_dc_image'">
+                <div class="table-icon">🖼️</div>
+                <div class="table-info">
+                    <h5>pprom_dc_image</h5>
+                    <p>DC 画像表 - DC 图像管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/pprom_login'">
+                <div class="table-icon">🔐</div>
+                <div class="table-info">
+                    <h5>pprom_login</h5>
+                    <p>登录表 - 登录管理</p>
+                </div>
+            </div>
+            <div class="table-card" onclick="location.href='/ui/hmss/pprom_menu_auth'">
+                <div class="table-icon">🔒</div>
+                <div class="table-info">
+                    <h5>pprom_menu_auth</h5>
+                    <p>メニュー権限表 - 菜单权限管理</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .hmss-page-header {
+        margin-bottom: 30px;
+    }
+    
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .page-title i {
+        color: #00A8E0;
+    }
+    
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        margin: 0;
+    }
+    
+    .hmss-system-tabs .nav-tabs {
+        border-bottom: 2px solid #e9ecef;
+        margin-bottom: 20px;
+    }
+    
+    .hmss-system-tabs .nav-link {
+        border: none;
+        color: #6c757d;
+        padding: 12px 20px;
+        font-weight: 500;
+        transition: all 0.2s;
+    }
+    
+    .hmss-system-tabs .nav-link:hover {
+        color: #00A8E0;
+        background: rgba(0, 168, 224, 0.05);
+    }
+    
+    .hmss-system-tabs .nav-link.active {
+        color: #00A8E0;
+        border-bottom: 3px solid #00A8E0;
+        background: transparent;
+    }
+    
+    .hmss-table-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        padding: 20px 0;
+    }
+    
+    .table-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .table-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-color: #00A8E0;
+    }
+    
+    .table-icon {
+        font-size: 36px;
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #00A8E0 0%, #0077A3 100%);
+        border-radius: 12px;
+    }
+    
+    .table-info h5 {
+        font-size: 16px;
+        font-weight: 600;
+        color: #212529;
+        margin: 0 0 6px 0;
+    }
+    
+    .table-info p {
+        font-size: 13px;
+        color: #6c757d;
+        margin: 0;
+    }
+</style>
+}

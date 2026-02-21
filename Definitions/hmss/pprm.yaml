@@ -1,0 +1,309 @@
+# PPRM ペーパレス化支援システム
+# Paperless Support System
+
+models:
+  # ============================================
+  # 承認管理
+  # ============================================
+  
+  PprmApprove:
+    table: pprom_approve
+    primary_key: approve_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 承認管理
+          create_button: 添加承認
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索承認...
+          APPROVE_ID: 承認 ID
+          APPROVE_TITLE: 承認标题
+          REQUESTER: 申请人
+          APPROVER: 承認人
+          STATUS: 状态
+          REQUEST_DT: 申请日期
+          APPROVE_DT: 承認日期
+        ja:
+          title: 承認管理
+          create_button: 承認追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 承認を検索...
+          APPROVE_ID: 承認 ID
+          APPROVE_TITLE: 承認タイトル
+          REQUESTER: 申請者
+          APPROVER: 承認者
+          STATUS: ステータス
+          REQUEST_DT: 申請日
+          APPROVE_DT: 承認日
+      styles:
+        card_class: "card-approve"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [approve_id, approve_title, requester, status, request_dt]
+      filters:
+        approve_title:
+          label: 承認标题
+          type: like
+        requester:
+          label: 申请人
+          type: like
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '承認待ち'
+            '2': '承認済'
+            '3': '却下'
+    
+    form:
+      title: 承認
+      fields:
+        approve_title:
+          label: 承認标题
+          type: text
+          required: true
+          max_length: 200
+        requester:
+          label: 申请人
+          type: text
+          max_length: 50
+        approver:
+          label: 承認人
+          type: text
+          max_length: 50
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': 承認待ち
+            '2': 承認済
+            '3': 却下
+        request_dt:
+          label: 申请日期
+          type: datetime
+        approve_dt:
+          label: 承認日期
+          type: datetime
+    
+    properties:
+      approve_id: { type: int }
+      approve_title: { type: string }
+      requester: { type: string }
+      approver: { type: string }
+      status: { type: string }
+      request_dt: { type: datetime }
+      approve_dt: { type: datetime }
+  
+  PprmDCImage:
+    table: pprom_dc_image
+    primary_key: image_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: DC 画像管理
+          create_button: 添加画像
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索画像...
+          IMAGE_ID: 画像 ID
+          IMAGE_NAME: 画像名称
+          FILE_PATH: 文件路径
+          FILE_SIZE: 文件大小
+          UPLOAD_DT: 上传日期
+        ja:
+          title: DC 画像管理
+          create_button: 画像追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 画像を検索...
+          IMAGE_ID: 画像 ID
+          IMAGE_NAME: 画像名
+          FILE_PATH: ファイルパス
+          FILE_SIZE: ファイルサイズ
+          UPLOAD_DT: アップロード日
+      styles:
+        card_class: "card-dc-image"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [image_id, image_name, file_path, file_size, upload_dt]
+      filters:
+        image_name:
+          label: 画像名称
+          type: like
+        upload_dt:
+          label: 上传日期
+          type: date
+    
+    form:
+      title: DC 画像
+      fields:
+        image_name:
+          label: 画像名称
+          type: text
+          required: true
+          max_length: 200
+        file_path:
+          label: 文件路径
+          type: text
+          max_length: 500
+        file_size:
+          label: 文件大小
+          type: number
+        upload_dt:
+          label: 上传日期
+          type: datetime
+    
+    properties:
+      image_id: { type: int }
+      image_name: { type: string }
+      file_path: { type: string }
+      file_size: { type: decimal }
+      upload_dt: { type: datetime }
+  
+  PprmLogin:
+    table: pprom_login
+    primary_key: login_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 登录管理
+          create_button: 添加登录
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索登录...
+          LOGIN_ID: 登录 ID
+          LOGIN_NM: 登录名称
+          LOGIN_TYPE: 登录类型
+          STATUS: 状态
+        ja:
+          title: ログイン管理
+          create_button: ログイン追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: ログインを検索...
+          LOGIN_ID: ログイン ID
+          LOGIN_NM: ログイン名
+          LOGIN_TYPE: ログインタイプ
+          STATUS: ステータス
+      styles:
+        card_class: "card-login"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [login_id, login_nm, login_type, status]
+      filters:
+        login_nm:
+          label: 登录名称
+          type: like
+    
+    form:
+      title: 登录
+      fields:
+        login_nm:
+          label: 登录名称
+          type: text
+          required: true
+          max_length: 100
+        login_type:
+          label: 登录类型
+          type: select
+          options:
+            '1': '通常'
+            '2': '管理者'
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '有効'
+            '2': '無効'
+    
+    properties:
+      login_id: { type: int }
+      login_nm: { type: string }
+      login_type: { type: string }
+      status: { type: string }
+  
+  PprmMenuAuth:
+    table: pprom_menu_auth
+    primary_key: auth_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: メニュー権限
+          create_button: 添加権限
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索権限...
+          AUTH_ID: 権限 ID
+          AUTH_NM: 権限名称
+          MENU_ID: メニュー ID
+          AUTH_LEVEL: 権限レベル
+        ja:
+          title: メニュー権限
+          create_button: 権限追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 権限を検索...
+          AUTH_ID: 権限 ID
+          AUTH_NM: 権限名
+          MENU_ID: メニュー ID
+          AUTH_LEVEL: 権限レベル
+      styles:
+        card_class: "card-menu-auth"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [auth_id, auth_nm, menu_id, auth_level]
+      filters:
+        auth_nm:
+          label: 権限名称
+          type: like
+        menu_id:
+          label: メニュー
+          type: like
+    
+    form:
+      title: メニュー権限
+      fields:
+        auth_nm:
+          label: 権限名称
+          type: text
+          required: true
+          max_length: 100
+        menu_id:
+          label: メニュー ID
+          type: text
+          max_length: 20
+        auth_level:
+          label: 権限レベル
+          type: select
+          options:
+            '1': '閲覧のみ'
+            '2': '編集可能'
+            '3': '管理者'
+    
+    properties:
+      auth_id: { type: int }
+      auth_nm: { type: string }
+      menu_id: { type: string }
+      auth_level: { type: string }

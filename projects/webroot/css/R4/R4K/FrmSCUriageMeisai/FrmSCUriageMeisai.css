@@ -1,0 +1,111 @@
+.lbl-yellow {
+    background-color: #ffed97;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    display: block;
+}
+.FrmSCUriageMeisai .lbl-yellow {
+    line-height: 14px;
+}
+.FrmSCUriageMeisai .Label {
+    line-height: 12px;
+}
+.FrmSCUriageMeisai fieldset .Label {
+    line-height: 13px;
+    height: 13px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+.lbl-blue-1 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 90px;
+    text-align: center;
+}
+.lbl-blue-2 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 170px;
+    text-align: center;
+}
+.lbl-blue-3 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 172px;
+    text-align: center;
+}
+.lbl-blue-4 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 216px;
+    text-align: center;
+}
+.lbl-blue-5 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 138px;
+    text-align: center;
+}
+.lbl-blue-6 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 180px;
+    text-align: center;
+}
+.lbl-blue-7 {
+    background-color: #7ec0ee;
+    border: solid 1px black;
+    padding: 0px;
+    height: 13px;
+    width: 166px;
+    text-align: center;
+}
+.label-label {
+    width: 90px;
+    height: 12px;
+    /*border: inset;*/
+    border: solid 1px black;
+    display: block;
+}
+
+.label-label-A {
+    width: 144px;
+    height: 11px;
+    /*border: inset;*/
+    border: solid 1px black;
+    display: block;
+}
+.label-label-B {
+    width: 54px;
+    height: 11px;
+    /*border: inset;*/
+    border: solid 1px black;
+    display: block;
+}
+.label-label-C {
+    width: 34px;
+    height: 11px;
+    /*border: inset;*/
+    border: solid 1px black;
+    display: block;
+}
+.label-label-D {
+    width: 180px;
+    height: 11px;
+    /*border: inset;*/
+    border: solid 1px black;
+    display: block;
+}

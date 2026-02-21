@@ -11,7 +11,7 @@ models:
     custom_view:
       enabled: true
       type: custom
-      default_ui_mode: custom
+      default_ui_mode: generic   # 使用通用 UI
       list_template: "views/task/List.cshtml"
       form_template: "views/task/Form.cshtml"
       style:

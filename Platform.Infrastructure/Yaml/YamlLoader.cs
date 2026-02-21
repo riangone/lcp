@@ -14,6 +14,7 @@ public static class YamlLoader
             throw new FileNotFoundException($"YAML file not found: {filePath}");
         }
 
+        var baseDir = Path.GetDirectoryName(filePath)!;
         var yaml = File.ReadAllText(filePath);
 
         var deserializer = new DeserializerBuilder()
@@ -21,7 +22,62 @@ public static class YamlLoader
             .IgnoreUnmatchedProperties()
             .Build();
 
-        var defs = deserializer.Deserialize<AppDefinitions>(yaml);
+        // 先反序列化为 ExpandoObject 以支持 imports
+        var expandoDeserializer = new DeserializerBuilder()
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .IgnoreUnmatchedProperties()
+            .Build();
+
+        var expando = expandoDeserializer.Deserialize<ExpandoObject>(yaml);
+        var dict = (IDictionary<string, object>)expando;
+
+        var defs = new AppDefinitions();
+
+        // 处理 imports
+        if (dict.ContainsKey("imports"))
+        {
+            var imports = dict["imports"] as IEnumerable<object>;
+            if (imports != null)
+            {
+                foreach (var import in imports)
+                {
+                    var importPath = import?.ToString();
+                    if (string.IsNullOrEmpty(importPath)) continue;
+
+                    // 解析相对路径
+                    var fullPath = Path.IsPathRooted(importPath)
+                        ? importPath
+                        : Path.GetFullPath(Path.Combine(baseDir, importPath));
+
+                    if (File.Exists(fullPath))
+                    {
+                        Console.WriteLine($"[YAML] Importing: {fullPath}");
+                        var importYaml = File.ReadAllText(fullPath);
+                        var importDefs = deserializer.Deserialize<AppDefinitions>(importYaml);
+
+                        // 合并模型定义
+                        foreach (var kvp in importDefs.Models)
+                        {
+                            defs.Models[kvp.Key] = kvp.Value;
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"[YAML] Import file not found: {fullPath}");
+                    }
+                }
+            }
+        }
+
+        // 处理当前文件的 models（如果有）
+        if (dict.ContainsKey("models"))
+        {
+            var localDefs = deserializer.Deserialize<AppDefinitions>(yaml);
+            foreach (var kvp in localDefs.Models)
+            {
+                defs.Models[kvp.Key] = kvp.Value;
+            }
+        }
 
         // 加载页面定义
         defs.Pages = LoadPages(pagesDir, deserializer);

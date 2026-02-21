@@ -17,6 +17,14 @@
     ViewData["ActivePage"] = "Data";
 }
 
-<div id="list" class="container mx-auto px-4 py-8">
+<div id="list" class="list-page-container">
     @await Html.PartialAsync("_ListContent", Model)
 </div>
+
+<style>
+  .list-page-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+</style>

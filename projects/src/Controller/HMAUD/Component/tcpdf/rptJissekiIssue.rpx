@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="5135" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt;color: Black; font-family: ＭＳ ゴシック; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 15pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="240" BackColor="16777215" CanShrink="0">
+   	 <!-- タイトル start -->
+    <Control Type="AR.Field" Name="TITLE" DataField="TITLE1" Left="450" Top="150" Width="3450" Height="600" Text="" Style="text-align: center;background-color: #D8D8D8;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+    <Control Type="AR.Field" Name="TITLE" DataField="TITLE2" Left="4250" Top="150" Width="10955" Height="600" Text="" Style="text-align: center;background-color: #D8D8D8;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+    <Control Type="AR.Field" Name="TITLE" DataField="TITLE3" Left="450" Top="755" Width="3450" Height="320" Text="" Style="text-align: center;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+    
+    <Control Type="AR.Label" Name="LabelTEM" Left="4250" Top="720" Width="1725" Height="320" Caption="営業" Style="text-align:center;background-color: #DEEAF6;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="LabelTEM" Left="5975" Top="720" Width="1725" Height="320" Caption="" Style="background-color: #DEEAF6;" />
+    <Control Type="AR.Label" Name="LabelTEM" Left="8000" Top="720" Width="1730" Height="320" Caption="サービス" Style="text-align:center;background-color: #FBE4D5;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="LabelTEM" Left="9725" Top="720" Width="1725" Height="320" Caption="" Style="background-color: #FBE4D5;" />
+    <Control Type="AR.Label" Name="LabelTEM" Left="11750" Top="720" Width="1725" Height="320" Caption="管理" Style="text-align:center;background-color: #E2EEDA;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="LabelTEM" Left="13474" Top="720" Width="1735" Height="320" Caption="" Style="background-color: #E2EEDA;" />
+    
+    <Control Type="AR.Label" Name="Label4" Left="450" Top="1030" Width="862.5" Height="600" Caption="店舗名" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label9" Left="1312.5" Top="1030" Width="865" Height="600" Caption="今回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label10" Left="2175" Top="1030" Width="865" Height="600" Caption="前回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label11" Left="3037.5" Top="1030" Width="862.5" Height="600" Caption="前回比" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+
+    <Control Type="AR.Label" Name="Label8" Left="4250" Top="1030" Width="862.5" Height="600" Caption="店舗名" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label5" Left="5112.5" Top="1030" Width="862.5" Height="600" Caption="今回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label6" Left="5975" Top="1030" Width="865" Height="600" Caption="前回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label7" Left="6837.5" Top="1030" Width="862.5" Height="600" Caption="前回比" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+
+    <Control Type="AR.Label" Name="Label12" Left="8000" Top="1030" Width="862.5" Height="600" Caption="店舗名" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label13" Left="8865" Top="1030" Width="865" Height="600" Caption="今回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label14" Left="9730" Top="1030" Width="862.5" Height="600" Caption="前回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label15" Left="10587.5" Top="1030" Width="866.5" Height="600" Caption="前回比" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+
+    <Control Type="AR.Label" Name="Label16" Left="11750" Top="1030" Width="870" Height="600" Caption="店舗名" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label17" Left="12618" Top="1030" Width="862" Height="600" Caption="今回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label18" Left="13476" Top="1030" Width="867" Height="600" Caption="前回" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label19" Left="14344" Top="1030" Width="860" Height="600" Caption="前回比" Style="text-align:center;background-color: #D8D8D8;font-weight: normal;font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+     <!-- タイトル end -->
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="1346" BackColor="16777215" CanShrink="0">
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM" Left="1312.5" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUMPRE" Left="2175" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_SUMPRE" Left="3037.5" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_0" Left="5112.5" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUMPRE_0" Left="5975" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_SUMPRE_0" Left="6837.5" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_1" Left="8860" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUMPRE_1" Left="9723" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_SUMPRE_1" Left="10587.5" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_2" Left="12618" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUMPRE_2" Left="13476" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+        <Control Type="AR.Field" Name="TOTAL" DataField="SUM_SUMPRE_2" Left="14341" Top="70" Width="862" Height="320" Text="" Style="text-align: right;font-weight: normal; font-size: 11pt; font-family: ＭＳ ゴシック; vertical-align: middle;" /> 
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="600" RightMargin="50" TopMargin="300" BottomMargin="100" PaperSize="9" PaperWidth="21384" PaperHeight="15120" PaperName="" Orientation="2" />
+</ActiveReportsLayout>

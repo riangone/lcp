@@ -1,0 +1,318 @@
+# HMDPS DPS 伝票処理システム
+
+models:
+  # ============================================
+  # DPS 伝票表
+  # ============================================
+  
+  HmdpsDenpyo:
+    table: hmdps_denpyo
+    primary_key: denpyo_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: DPS 伝票
+          create_button: 创建伝票
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索 DPS 伝票...
+          DENPYO_NO: 伝票编号
+          DENPYO_DT: 伝票日期
+          TORIHIKI_CD: 取引先代码
+          BUMON_CD: 部門代码
+          SYAIN_NO: 社員编号
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: DPS 伝票
+          create_button: 伝票作成
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: DPS 伝票を検索...
+          DENPYO_NO: 伝票番号
+          DENPYO_DT: 伝票日
+          TORIHIKI_CD: 取引先コード
+          BUMON_CD: 部門コード
+          SYAIN_NO: 社員番号
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-hmdps-denpyo"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [denpyo_no, denpyo_dt, torihiki_cd, bumon_cd, kingaku]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        denpyo_dt:
+          label: 伝票日期
+          type: date
+    
+    form:
+      title: DPS 伝票
+      fields:
+        denpyo_dt:
+          label: 伝票日期
+          type: date
+          required: true
+        torihiki_cd:
+          label: 取引先代码
+          type: text
+          max_length: 10
+        bumon_cd:
+          label: 部門代码
+          type: text
+          max_length: 10
+        syain_no:
+          label: 社員编号
+          type: text
+          max_length: 10
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      denpyo_no: { type: int }
+      denpyo_dt: { type: date }
+      torihiki_cd: { type: string }
+      bumon_cd: { type: string }
+      syain_no: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  HmdpsShiwake:
+    table: hmdps_shiwake
+    primary_key: shiwake_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: DPS 仕訳
+          create_button: 添加仕訳
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索 DPS 仕訳...
+          SHIWAKE_NO: 仕訳编号
+          DENPYO_NO: 伝票编号
+          KAMOKU_CD: 科目代码
+          KARITAE: 借方/贷方
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: DPS 仕訳
+          create_button: 仕訳追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: DPS 仕訳を検索...
+          SHIWAKE_NO: 仕訳番号
+          DENPYO_NO: 伝票番号
+          KAMOKU_CD: 科目コード
+          KARITAE: 借方/貸方
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-hmdps-shiwake"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [shiwake_no, denpyo_no, kamoku_cd, karitae, kingaku]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        kamoku_cd:
+          label: 科目
+          type: like
+    
+    form:
+      title: DPS 仕訳
+      fields:
+        denpyo_no:
+          label: 伝票编号
+          type: number
+          required: true
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          required: true
+          max_length: 10
+        karitae:
+          label: 借方/贷方
+          type: select
+          required: true
+          options:
+            '1': '借方'
+            '2': '贷方'
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      shiwake_no: { type: int }
+      denpyo_no: { type: int }
+      kamoku_cd: { type: string }
+      karitae: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  HmdpsShiharai:
+    table: hmdps_shiharai
+    primary_key: shiharai_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: DPS 支払
+          create_button: 添加支払
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索 DPS 支払...
+          SHIHARAI_NO: 支払编号
+          DENPYO_NO: 伝票编号
+          SHIHARAI_DT: 支払日期
+          KINGAKU: 金额
+          SHIHARAI_HOHO: 支払方法
+          REMARK: 备注
+        ja:
+          title: DPS 支払
+          create_button: 支払追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: DPS 支払を検索...
+          SHIHARAI_NO: 支払番号
+          DENPYO_NO: 伝票番号
+          SHIHARAI_DT: 支払日
+          KINGAKU: 金額
+          SHIHARAI_HOHO: 支払方法
+          REMARK: 備考
+      styles:
+        card_class: "card-hmdps-shiharai"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [shiharai_no, denpyo_no, shiharai_dt, kingaku]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        shiharai_dt:
+          label: 支払日期
+          type: date
+    
+    form:
+      title: DPS 支払
+      fields:
+        denpyo_no:
+          label: 伝票编号
+          type: number
+          required: true
+        shiharai_dt:
+          label: 支払日期
+          type: date
+          required: true
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        shiharai_hoho:
+          label: 支払方法
+          type: select
+          options:
+            '1': '现金'
+            '2': '振込'
+            '3': '小切手'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      shiharai_no: { type: int }
+      denpyo_no: { type: int }
+      shiharai_dt: { type: date }
+      kingaku: { type: decimal }
+      shiharai_hoho: { type: string }
+      remark: { type: string }
+  
+  HmdpsPatternMst:
+    table: hmdps_pattern_mst
+    primary_key: pattern_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: DPS パターン主表
+          create_button: 添加パターン
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索パターン...
+          PATTERN_CD: パターン代码
+          PATTERN_NM: パターン名称
+          PATTERN_CONTENT: パターン内容
+        ja:
+          title: DPS パターンマスタ
+          create_button: パターン追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: パターンを検索...
+          PATTERN_CD: パターンコード
+          PATTERN_NM: パターン名
+          PATTERN_CONTENT: パターン内容
+      styles:
+        card_class: "card-hmdps-pattern"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [pattern_cd, pattern_nm]
+      filters:
+        pattern_nm:
+          label: パターン名称
+          type: like
+    
+    form:
+      title: DPS パターン
+      fields:
+        pattern_cd:
+          label: パターン代码
+          type: text
+          required: true
+          max_length: 10
+        pattern_nm:
+          label: パターン名称
+          type: text
+          required: true
+          max_length: 50
+        pattern_content:
+          label: パターン内容
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      pattern_cd: { type: string }
+      pattern_nm: { type: string }
+      pattern_content: { type: string }

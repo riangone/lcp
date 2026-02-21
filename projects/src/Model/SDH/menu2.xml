@@ -1,0 +1,65 @@
+<li rel="01">
+	代替確定
+	<ul>
+		<li rel="01-1">ﾃﾞﾐｵ</li>
+		<li rel="01-2">ﾍﾞﾘｰｻ</li>
+		<li rel="01-3">ﾌﾟﾚﾏｼｰ</li>
+		<li rel="01-4">ﾋﾞｱﾝﾃ</li>
+		<li rel="01-5">MPV</li>
+	</ul>
+</li>
+<li rel="01">
+	代替確定
+	<ul>
+		<li rel="01-6">CX-5</li>
+		<li rel="01-7">ｱｸｾﾗ</li>
+		<li rel="01-8">ｱﾃﾝｻﾞ</li>
+		<li rel="01-9">ﾛｰﾄﾞｽﾀｰ</li>
+	</ul>
+</li>
+<li rel="01">
+	代替確定
+	<ul>
+		<li rel="01-10">フレア</li>
+		<li rel="01-11">フレアワゴン</li>
+		<li rel="01-12">キャロル</li>
+		<li rel="01-13">スクラム</li>
+		<li rel="01-14">タイタン</li>
+		<li rel="01-15">ボンゴ</li>
+		<li rel="01-16">その他</li>
+	</ul>
+</li>
+<li rel="02">受注済</li>
+<li rel="03">代替済</li>
+<li rel="04">入庫確定</li>
+<li rel="05">入庫済</li>
+<li rel="06">転売</li>
+<li rel="07">県外転出</li>
+<li rel="08">抹消依頼</li>
+<li rel="09">車両なし</li>
+<li rel="10">連絡Ｘ</li>
+<li rel="11">所在不明</li>
+<li rel="12">業者契約</li>
+<li rel="13">リース契約</li>
+<li rel="14">ﾘｰｽ指定工場</li>
+<li rel="15">納入依頼</li>
+<li rel="16">他社代替</li>
+<li rel="17">他社代替
+	<ul>
+	<li rel="17-1">ｱﾝﾌｨﾆ</li>
+	<li rel="17-2">ｻﾞﾑ</li>
+	<li rel="17-3">ﾓｰﾀｽ</li>
+	<li rel="17-4">ﾃﾞｨｰﾗｰ</li>
+	</ul>
+</li>
+<li rel="21">他社入庫</li>
+<li rel="21">他社入庫
+	<ul>
+	<li rel="21-1">ＧＳ</li>
+	<li rel="21-2">ｱﾝﾌｨﾆ</li>
+	<li rel="21-3">ｻﾞﾑ</li>
+	<li rel="21-4">ﾓｰﾀｰｽ</li>
+	<li rel="21-5">格安店</li>
+	<li rel="21-6">自工場</li>
+	</ul>
+</li>

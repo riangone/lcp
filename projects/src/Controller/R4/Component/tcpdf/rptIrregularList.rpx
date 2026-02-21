@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="11044.8" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptIrregularList.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ ゴシック; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="1018" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label" MOD="4" Left="0" Top="0" Width="11025" Height="450" Caption="使用者名・所有者名イレギュラーリスト" Style="text-align: center; font-weight: normal; font-size: 18pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label11" MOD="4" Left="1289.88" Top="674.64" Width="1140.48" Height="270.72" Caption="注文書番号" Style="font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label1" MOD="4" Left="6840" Top="675" Width="1170" Height="288" Caption="所有者名" Style="font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label2" MOD="4" Left="2565" Top="675" Width="1170" Height="288" Caption="使用者名" Style="font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label3" MOD="4" Left="45" Top="675" Width="1170" Height="288" Caption="登録予定日" Style="font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line1" MOD="4" X1="11025" Y1="990" X2="0" Y2="990" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="299" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox1" DataField="CHUMN_NO" MOD="4" Left="1290" Top="0" Width="1140" Height="270.72" Text="1234567890" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox" DataField="TOU_Y_DT" MOD="4" Left="45" Top="0" Width="1140" Height="270.72" Text="2006/10/01" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox2" DataField="SHI_USER_NM" MOD="4" Left="2565" Top="0" Width="4185" Height="270.72" Text="" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox3" DataField="SYO_USER_NM" MOD="4" Left="6840" Top="0" Width="4185" Height="270.72" Text="" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="11024.64" Y1="270" X2="0" Y2="270" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <PageSettings LeftMargin="432" RightMargin="432" TopMargin="720" BottomMargin="720" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+</ActiveReportsLayout>

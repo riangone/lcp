@@ -1,0 +1,32 @@
+#PPRM803MenuNameMstMnt {
+    /*width: 60%;*/
+    width: 800px;
+    position: relative;
+}
+
+.PPRM803MenuNameMstMnt.btn {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 1.2em !important;
+}
+
+.PPRM803MenuNameMstMnt.title {
+    margin: 15px 10px;
+}
+
+#gbox_PPRM803MenuNameMstMnt_jqGrid {
+    margin: 0px 15px 5px;
+}
+
+.PPRM803MenuNameMstMnt.btnEdit {
+    position: absolute;
+    right: 0;
+    top: 80px;
+}
+
+.PPRM803MenuNameMstMnt.footer {
+    margin: 0 15px;
+}
+.PPRM803MenuNameMstMnt.footer .ddlUserAuthCtlFlg {
+    width: 100%;
+}

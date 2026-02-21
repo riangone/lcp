@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="15135" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt;color: Black; font-family: ＭＳ ゴシック; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 15pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="240" BackColor="16777215" CanShrink="0">
+   	 <!-- クール,領域 start -->
+    <Control Type="AR.Label" Name="Label1" Left="0" Top="0" Width="450" Height="120" Caption="クール：" Style="text-align:left;font-weight: normal;font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Label" Name="Label2" Left="0" Top="120" Width="450" Height="120" Caption="領　域：" Style="text-align:left;font-weight: normal;font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    <Control Type="AR.Field" Name="COUR" DataField="COUR" Left="450" Top="30" Width="1000" Height="120" Text="" Style="text-align: left;font-weight: normal; font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+    <Control Type="AR.Field" Name="TERRITORY" DataField="TERRITORY" Left="450" Top="150" Width="1000" Height="120" Text="" Style="text-align: left;font-weight: normal; font-size: 5pt; font-family: ＭＳ ゴシック; vertical-align: middle;" />
+   	 <!-- クール,領域 end -->
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="580" BackColor="16777215" CanShrink="0">
+   	  <!-- ID start -->
+      <Control Type="AR.Label" Name="Label3" Left="0" Top="20" Width="250" Height="300" Caption="ID" Style="text-align:left;background-color: #DCDCDC;font-weight: normal;font-size: 5pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      
+      <Control Type="AR.Shape" Name="Shape1" Left="0" Top="20" Width="250" Height="300"/>
+	  <!-- ID end -->

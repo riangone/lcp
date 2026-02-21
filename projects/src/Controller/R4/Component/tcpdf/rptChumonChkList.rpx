@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="11044.8" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptChumonChkList.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: MS UI Gothic; font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="1005" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label" MOD="4" Left="0" Top="0" Width="11025" Height="540" Caption="売上データチェックリスト" Style="text-align: center; font-weight: normal; font-size: 18pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox" DataField="KOUSIN_HANI" MOD="4" Left="8325" Top="315" Width="2700" Height="270" Text="(2005/11/05 ～ 2006/11/05)" Multiline="0" Style="text-align: right; font-weight: normal; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox1" DataField="TAISYO_NEN" MOD="4" Left="9450" Top="45" Width="1575" Height="270" Text="2006年09月" Multiline="0" Style="text-align: right; font-weight: normal; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label1" MOD="4" Left="135" Top="720" Width="765" Height="270.72" Caption="SEQ_NO" Style="text-align: right; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label2" MOD="4" Left="1035.36" Top="720" Width="1124.64" Height="270.72" Caption="注文書番号" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label3" MOD="4" Left="2295" Top="720" Width="1365.12" Height="270.72" Caption="UCNO" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label4" MOD="4" Left="3825" Top="720" Width="1260" Height="270.72" Caption="条件変更日" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="10980" Y1="990" X2="90" Y2="990" />
+      <Control Type="AR.Label" Name="Label5" MOD="4" Left="5220" Top="720" Width="1260" Height="270.72" Caption="解約日" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label6" MOD="4" Left="6615" Top="720" Width="1260" Height="270.72" Caption="更新日" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" MOD="4" Left="7965" Top="720" Width="1260" Height="270.72" Caption="更新端末名" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label8" MOD="4" Left="9405" Top="720" Width="1484.64" Height="270.72" Caption="更新者コード" Style="text-align: left; font-weight: normal; font-size: 9.75pt; vertical-align: middle; " />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="285" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox2" DataField="SEQNO" MOD="4" Left="134.64" Top="0" Width="764.64" Height="270.72" Text="123" OutputFormat="" Multiline="0" Style="text-align: right; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox3" DataField="CMN_NO" MOD="4" Left="1035.36" Top="0" Width="1124.64" Height="270.72" Text="1234567890" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="UC_NO" MOD="4" Left="2295" Top="0" Width="1365.12" Height="270.72" Text="123456789012" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="JHN_DT" MOD="4" Left="3825" Top="0" Width="1260" Height="270.72" Text="2006/11/11" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox6" DataField="CEL_DT" MOD="4" Left="5220" Top="0" Width="1260" Height="270.72" Text="2006/11/11" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox7" DataField="UPD_DT" MOD="4" Left="6615" Top="0" Width="1260" Height="270.72" Text="2006/11/11" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox8" DataField="REC_UPD_CLT_NM" MOD="4" Left="8010" Top="0" Width="1260" Height="270.72" Text="2006/11/11" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox9" DataField="REC_CRE_SYA_CD" MOD="4" Left="9405" Top="0" Width="1485" Height="270.72" Text="2006/11/11" OutputFormat="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <PageSettings LeftMargin="432" RightMargin="432" TopMargin="720" BottomMargin="720" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+</ActiveReportsLayout>

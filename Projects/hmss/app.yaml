@@ -1,0 +1,15 @@
+# HMSS 应用定义
+# 导入所有 HMSS 模型定义
+
+imports:
+  - ../../Definitions/hmss/common.yaml
+  - ../../Definitions/hmss/sdh.yaml
+  - ../../Definitions/hmss/hdkaikei.yaml
+  - ../../Definitions/hmss/hmdps.yaml
+  - ../../Definitions/hmss/r4.yaml
+  - ../../Definitions/hmss/hmhrms.yaml
+  - ../../Definitions/hmss/jksys.yaml
+  - ../../Definitions/hmss/hmaud.yaml
+  - ../../Definitions/hmss/hmtve.yaml
+  - ../../Definitions/hmss/appm.yaml
+  - ../../Definitions/hmss/pprm.yaml

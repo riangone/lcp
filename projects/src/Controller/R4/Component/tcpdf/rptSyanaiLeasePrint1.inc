@@ -1,0 +1,37 @@
+<?php
+	$data_fields_rptSyanaiLeasePrint = Array(
+		"BUSYO_CD" => "",
+		"BUSYO_NM" => "",
+		"SHISAN_NM" => "",
+		"SHISAN_CD" => "",
+		"SYUTOKUBI" => "",
+		"SYUTOKU_KIN" => "",
+		"LEASE_RYO" => "",
+		"SERVICE_CNT" => "",
+		"SERVICE_KIN" => "",
+		"SERVICE_REASE_RYO" => "",
+		"KIGU_CNT" => "",
+		"KIGU_KIN" => "",
+		"KIGU_REASE_RYO" => "",
+		"KIKAI_CNT" => "",
+		"KIKAI_KIN" => "",
+		"KIKAI_REASE_RYO" => "",
+		"KOUGU_CNT" => "",
+		"KOUGU_KIN" => "",
+		"KOUGU_REASE_RYO" => "",
+		"LEASE_KIKAN" => "",
+		"LEASE_RYO_RT" => "",
+		"STATUS" => "",
+		"LEASEKB" => "",
+		"TAISYOU" => "",
+		"TODAY" => "",
+		"SYUTOKU_CNT_Total"=>"",
+		"SYUTOKU_KIN_Total"=>"",
+		"LEASE_RYO_Total"=>"",
+		"SERVICE_REASE_RYO_footer"=>"",
+		"KIKAI_REASE_RYO_footer"=>"",
+		"KOUGU_REASE_RYO_footer"=>"",
+		"KIGU_REASE_RYO_footer"=>""
+		
+	);
+?>

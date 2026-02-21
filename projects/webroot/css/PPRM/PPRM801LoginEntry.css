@@ -1,0 +1,29 @@
+#PPRM801LoginEntry {
+    width: 450px;
+    height: 250px;
+}
+
+.PPRM801LoginEntry table div {
+    width: 100px;
+    text-align: left;
+}
+
+.PPRM801LoginEntry table tr {
+    height: 30px;
+}
+
+.PPRM801LoginEntry.btn {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 1.2em !important;
+}
+
+.PPRM801LoginEntry.buttons {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.PPRM801LoginEntry.btnUpdate {
+    margin-right: 40px;
+}

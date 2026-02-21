@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="16128" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; color: Black; font-family: MS UI Gothic; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="2246" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label22" Left="5580" Top="270" Width="4230" Height="540" Caption="カード伝票明細一覧表" Style="text-decoration: underline; text-align: center; font-weight: normal; font-size: 20pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label23" Left="11880" Top="270" Width="990" Height="270" Caption="作成日　：　" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label25" Left="11880" Top="630" Width="990" Height="270" Caption="作成者　：　" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" DataField="CreName" Name="lblCreName" Left="12960" Top="630" Width="2610" Height="270" Caption="（GD）　太郎" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" DataField="CreDate" Name="txtCreDate" Left="12960" Top="270" Width="2610" Height="270" Text=""  Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="HJM_SYR_DTM" Left="1620" Top="1530" Width="3326.4" Height="273.6" Text="YYYY年MM月DD日　HH時MM分SS秒" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" Left="1260" Top="1530" Width="270" Height="270" Caption="：" HyperLink="" Style="text-align: center; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label4" Left="270" Top="1530" Width="900" Height="270" Caption="日締日時" HyperLink="" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label18" Left="270" Top="1170" Width="900" Height="270" Caption="日 締 No" HyperLink="" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label17" Left="270" Top="630" Width="630" Height="270" Caption="店　舗" HyperLink="" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label1" Left="990" Top="270" Width="270" Height="270" Caption="：" HyperLink="" Style="text-align: center; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label2" Left="1350" Top="270" Width="540" Height="270" Caption="3634" HyperLink="" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label16" Left="270" Top="270" Width="630" Height="270" Caption="販　社" HyperLink="" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label5" Left="1980" Top="270" Width="1440" Height="270" Caption="（D　G）Ｍ" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label8" Left="990" Top="630" Width="270" Height="270" Caption="：" Style="text-align: center; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label9" Left="1260" Top="1170" Width="270" Height="270" Caption="：" Style="text-align: center; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox9" DataField="TEN_HJM_NO" Left="1620" Top="1170" Width="2430" Height="270" Text="123456789012" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox13" DataField="TENPO_CD" Left="1350" Top="630" Width="540" Height="270" Text="123" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox14" DataField="TENPO_NM" Left="1980" Top="630" Width="2070" Height="270" Text="ああああああああ" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line3" X1="10890" Y1="1080" X2="15570" Y2="1080" />
+      <Control Type="AR.Line" Name="Line4" X1="10890" Y1="2160" X2="15570" Y2="2160" />
+      <Control Type="AR.Line" Name="Line5" X1="10890" Y1="1080" X2="10890" Y2="2160" />
+      <Control Type="AR.Line" Name="Line6" X1="12060" Y1="1080" X2="12060" Y2="2160" />
+      <Control Type="AR.Line" Name="Line7" X1="13230" Y1="1080" X2="13230" Y2="2160" />
+      <Control Type="AR.Line" Name="Line8" X1="14400" Y1="1080" X2="14400" Y2="2160" />
+      <Control Type="AR.Line" Name="Line9" X1="15570" Y1="1080" X2="15570" Y2="2160" />
+      </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="1036" DataField="LABEL" RepeatStyle="1" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Line" Name="Line10" X1="270" Y1="990" X2="15840" Y2="990" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label42" Left="360" Top="90" Width="1440" Height="270" Caption="入力伝票No" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label44" Left="360" Top="360" Width="1440" Height="270" Caption="計上区分" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label47" Left="3330" Top="360" Width="1080" Height="270" Caption="口座/必摘" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label48" Left="360" Top="630" Width="1440" Height="270" Caption="計上日" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label49" Left="9090" Top="360" Width="1260" Height="270" Caption="摘要" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label51" Left="5850" Top="90" Width="1170" Height="270" Caption="発生拠点" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label53" Left="7830" Top="630" Width="900" Height="270" Caption="回数" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label54" Left="11970" Top="90" Width="990" Height="270" Caption="入力担当" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label55" Left="14310" Top="90" Width="990" Height="270" Caption="入力日" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label59" Left="14760" Top="630" Width="1080" Height="270" Caption="取扱手数料" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label60" Left="3330" Top="90" Width="810" Height="270" Caption="改歴No" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label61" Left="13320" Top="630" Width="1260" Height="270" Caption="貸方" HyperLink="" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label62" Left="11970" Top="630" Width="1260" Height="270" Caption="借方" HyperLink="" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label63" Left="5850" Top="630" Width="1170" Height="270" Caption="承認No" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label64" Left="7830" Top="90" Width="900" Height="270" Caption="証憑No" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label65" Left="7830" Top="360" Width="900" Height="270" Caption="支払方法" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label66" Left="9090" Top="630" Width="2790" Height="270" Caption="取扱手数料科目" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label56" Left="5850" Top="360" Width="1170" Height="270" Caption="カード会社" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label45" Left="1800" Top="90" Width="1440" Height="270" Caption="(取消前伝票No)" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label46" Left="1800" Top="360" Width="1440" Height="270" Caption="科目" HyperLink="" Style="font-size: 10pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="450" UnderlayNext="1" DataField="BANK_NM_HD" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="Label10" DataField="BANK_NM_HD" Left="2070.72" Top="90.72" Width="7020" Height="270" Text="【 カード振替 0169 136 普通 0605913 （GD）銀行／庄原 】" HyperLink="" Style=" font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader3" Height="7450" UnderlayNext="1" DataField="COUNT" RepeatStyle="1" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Line" Name="Line19" X1="270" Y1="0" X2="15840" Y2="0" />
+      <Control Type="AR.Line" Name="Line20" X1="270" Y1="810" X2="15840" Y2="810" />
+      <Control Type="AR.Line" Name="Line21" X1="270" Y1="1620" X2="15840" Y2="1620" />
+      <Control Type="AR.Line" Name="Line22" X1="270" Y1="2430" X2="15840" Y2="2430" />
+      <Control Type="AR.Line" Name="Line23" X1="270" Y1="3240" X2="15840" Y2="3240" />
+      <Control Type="AR.Line" Name="Line24" X1="270" Y1="4050" X2="15840" Y2="4050" />
+      <Control Type="AR.Line" Name="Line25" X1="270" Y1="4860" X2="15840" Y2="4860" />
+      <Control Type="AR.Line" Name="Line26" X1="270" Y1="6480" X2="15840" Y2="6480" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line27" X1="270" Y1="5670" X2="15840" Y2="5670" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="810" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox24" DataField="BANK_NM" Left="5850" Top="270" Width="1890" Height="270" Text="カード会社" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox1" DataField="INP_DENPY_NO" Left="360" Top="0" Width="1440" Height="270" Text="123456789012" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox2" DataField="KEIJO_KB" Left="360" Top="270" Width="1440" Height="270" Text="1　通常" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox8" DataField="KAIRK_NO" Left="3330" Top="0" Width="810" Height="270" Text="001" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox12" DataField="KEIJO_DT" Left="360" Top="540" Width="1440" Height="270" Text="2010/03/11" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="TME_INP_DEN_NO" Left="1800" Top="0" Width="1440" Height="270" Text="(123456789012)" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox6" DataField="KUM_CD" Left="1800" Top="270" Width="1440" Height="270" Text="21184　467" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox7" DataField="KMK_KUM_RKN" Left="1800" Top="540" Width="1440" Height="270" Text="車預宇品" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox17" DataField="CRD_SNN_NO" Left="5850" Top="540" Width="1890" Height="270" Text="123456789012" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox18" DataField="TEKYO" Left="9090" Top="270" Width="6660" Height="270" Text="車検印紙代" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox19" DataField="SYOHY_NO" Left="7830" Top="0" Width="2340" Height="270" Text="12345678901234567890" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox21" DataField="CRD_SHH" Left="7830" Top="270" Width="900" Height="270" Text="一括" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox22" DataField="DTL_HAS_KTN" Left="5850" Top="0" Width="1890" Height="270" Text="123　拠点名" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox23" DataField="SSU_INP_TANTO" Left="11970" Top="0" Width="2340" Height="270" Text="12345　（GD）　次郎" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox28" DataField="KASHIKATA" Left="13320" Top="540" Width="1260" Height="270" Text="123,456,789" OutputFormat="#,###" Multiline="0" CanGrow="0" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox30" DataField="SSU_INPUT_DT" Left="14310" Top="0" Width="1440" Height="270.72" Text="2010年03月11日"  Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox27" DataField="KARIKATA" Left="11970" Top="540" Width="1260" Height="270" Text="123,456,789" OutputFormat="#,###" Multiline="0" CanGrow="0" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox29" DataField="TES" Left="14580" Top="540" Width="1170" Height="270" Text="(  123,456)" Multiline="0" CanGrow="0" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox3" DataField="KAISU" Left="7830" Top="540" Width="403.2" Height="270.72" Text="99" Multiline="0" CanGrow="0" Style="text-align: right; font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox10" DataField="KOZ_KEY" Left="3330" Top="270" Width="2340" Height="270" Text="9999999999 4670030302" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox11" DataField="KOZ_NM" Left="3330" Top="540" Width="2340" Height="270" Text="（GD）　花子" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox31" DataField="OKYAKU" Left="9090" Top="540" Width="2790" Height="270" Text="1234567890　（GD）　一郎" Multiline="0" CanGrow="0" Style="font-size: 10pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter2" PrintAtBottom="1" Height="450" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="Label50" DataField="BANK_NM_FT" Left="2070" Top="90" Width="7020" Height="270" Text="【 カード振替 0169 136 普通 0605913 （GD）銀行／庄原 合計 】" HyperLink="" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox43" DataField="KARIKATA_SUM" Left="11970" Top="90" Width="1260" Height="270" Text="123,456,789" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="TextBox45" DataField="KASHIKATA_SUM" Left="13320" Top="90" Width="1260" Height="270" Text="123,456,789" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="TextBox46" DataField="INP_DENPY_NO_SUM" Left="10170" Top="90" Width="1260" Height="270" Text="123,456,789" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; white-space: nowrap; vertical-align: middle; " SummaryType="3" SummaryFunc="2" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Label" Name="Label52" Left="11520" Top="90" Width="270" Height="270" Caption="件" HyperLink="" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="630" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label27" Left="11520" Top="180" Width="2520" Height="270" Caption="(カード伝票明細一覧表)" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line2" X1="270" Y1="0" X2="15840" Y2="0" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label28" Left="14220" Top="180" Width="540" Height="270" Caption="Page" Style="text-align: right; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox16" DataField="PAGE" Left="14760" Top="180" Width="270" Height="270" Text="10" Style="text-align: right; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " SummaryType="4" SummaryRunning="2" />
+      <Control Type="AR.Label" Name="Label29"  Left="15030" Top="180" Width="180" Height="270" Caption="／" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ ゴシック; vertical-align: middle; "/>
+      <Control Type="AR.Field" Name="txtPageCntSum" DataField="PAGESUM" Left="15210" Top="180" Width="270" Height="270" Text="" Style="text-align: right; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " SummaryType="4"/>
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="288" RightMargin="288" TopMargin="288" BottomMargin="288" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>

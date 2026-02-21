@@ -1,0 +1,182 @@
+.Login.Wrap {
+    width: 100%;
+    height: 100%;
+    display: table;
+    background-image: url(../../img/bgi.png);
+    color: black;
+    border: 0px solid black;
+    display: table;
+}
+
+.Login.LoginForm {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    border: 0px solid red;
+    margin: auto;
+}
+
+.Login.outsideBorder {
+    border: solid 1px #c1cdcd;
+    padding: 3px 0px 3px 0px;
+}
+
+.Login.LoginFormContentTbl {
+    background-color: #fffff0;
+    padding-top: 10px;
+    width: 99%;
+    vertical-align: middle;
+}
+.Login.LoginFormContentTbl1 {
+    background-color: #fffff0;
+    width: 99%;
+    vertical-align: middle;
+}
+
+.Login.topBorder {
+    /*				padding: 0pt;*/
+    margin-top: 6px;
+    border-top: outset 1px #eecbad;
+    width: 80%;
+}
+.divEmailgetID {
+    margin-top: 9px;
+}
+
+.LoginFormTitlePanel {
+    height: 32px;
+    /*line-height：40px;*/
+    width: 100%;
+    border: 1px solid #a6c9e2;
+    background: #fcfdfd
+        url(../jquery/images/ui-bg_inset-hard_100_fcfdfd_1x100.png) 50% bottom
+        repeat-x;
+}
+
+.LoginFormTitle {
+    background: url(../jquery/images/ui-bg_glass_45_16b1e9_1x400.png) 50% 50%
+        repeat-x;
+    width: 98.5%;
+    height: 81%;
+    border: 1px #137faa solid;
+    margin: 2px auto;
+}
+
+.LoginFormTitle label,
+.LoginFormTitle span {
+    font-size: 10pt;
+    color: #ffffff;
+    /*border: 1px solid red;*/
+    /*vertical-align: middle;*/
+    margin-left: 10px;
+    position: relative;
+    top: 4px;
+}
+
+/*2013-12-05 qiuqiu modify end*/
+
+.inputStyle {
+    width: 190px;
+    background-color: #f7f7f7;
+}
+
+/*fuxiaolin */
+.lblForgetAll:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.divChooseItem {
+    margin-top: 3px;
+    background-color: #e7f4f9;
+    height: 139px;
+    width: 99%;
+}
+
+.LoginForgetPasswordStep.divChooseItem {
+    margin-top: 3px;
+    background-color: #e7f4f9;
+    height: 190px;
+    width: 99%;
+}
+.divChooseItemTitle div {
+    color: #104e8b;
+    font-size: 12pt;
+}
+
+.divChooseForgetID,
+.divChooseForgetPassword {
+    background-color: #ffffff;
+    width: 97%;
+    border: 2px #aaaaaa solid;
+    height: 30px;
+    margin-top: 7px;
+}
+
+.divChooseForgetID div,
+.divChooseForgetPassword div {
+    font-size: 15pt;
+    text-decoration: underline;
+    color: #0066cc;
+    cursor: pointer;
+    float: left;
+    margin-left: 5px;
+}
+
+.divEmailgetID {
+    background-color: #ffffff;
+    width: 97%;
+    border: 2px #aaaaaa solid;
+    height: 65px;
+}
+
+.divIDtoGetPassword,
+.divEmailtoGetPassword {
+    margin-top: 5px;
+    background-color: #ffffff;
+    width: 98%;
+    border: 2px #aaaaaa solid;
+    height: 58px;
+}
+.divEmailFormatErrInfo {
+    /*border:1px green solid;*/
+    display: none;
+}
+
+.lblEmailFormatErrInfo,
+.lblIdErrInfo {
+    width: auto;
+    border: 1px solid #cd0a0a;
+    background: #e14f1c
+        url(../jquery/images/ui-bg_gloss-wave_45_e14f1c_500x100.png) 50% top
+        repeat-x;
+    color: #ffffff;
+}
+.LoginSendMailSuc {
+    margin-top: 3px;
+    font-size: 13pt;
+    color: #104e8b;
+    width: 99%;
+}
+/*fuxiaolin */
+/* 暂时修正 150% start */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .ui-widget {
+        font-size: 1em !important;
+    }
+}
+
+/* 暂时修正 150% end */
+
+.divInformation {
+    background-color: #f0f0bb;
+    text-align: center;
+    font-size: 16px;
+    color: #2020a0;
+
+    font-weight: bolder;
+    padding: 10px 0 0;
+    width: 98%;
+    border: 2px #aaaaaa solid;
+    height: 128px;
+}

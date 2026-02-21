@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="10468.8" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptZandakaOld.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ ゴシック; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="0" BackColor="16777215" CanGrow="0" />
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="2486" RepeatStyle="4" BackColor="16777215" CanGrow="0">
+      <Control Type="AR.Label" Name="Label" DataField="TITLE" MOD="4" Left="0" Top="0" Width="10512" Height="540" Caption="残　　高　　明　　細　　書" Style="text-align: center; font-weight: normal; font-size: 18pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label4" MOD="4" BorderBottomStyle="1" Left="180" Top="810" Width="990" Height="270.72" Caption="勘定科目" Style="text-align: left; font-size: 8.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label5" MOD="4" BorderBottomStyle="1" Left="1170" Top="810" Width="1755" Height="270.72" Caption="11241　仕掛品" Style="text-align: left; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line1" MOD="4" X1="180" Y1="1081" X2="2925" Y2="1081" />
+      <Control Type="AR.Label" Name="Label6" MOD="4" BorderBottomStyle="1" Left="3150" Top="810" Width="990" Height="270.72" Caption="整理科目" Style="text-align: left; font-size: 8.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" MOD="4" BorderBottomStyle="1" Left="4140" Top="810" Width="1755" Height="270.72" Caption="商品化費用" Style="text-align: left; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line2" MOD="4" X1="3150" Y1="1081" X2="5895" Y2="1081" />
+      <Control Type="AR.Field" Name="txtToday2" DataField="TODAY1" MOD="4" Left="7830.72" Top="810.72" Width="2430" Height="270.72" Text="平成 18年 11月 11日" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label8" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="2610" Top="990" Width="854.6402" Height="720" Caption="監査役" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label9" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3465" Top="990" Width="854.6402" Height="720" Caption="監査役" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label10" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="4320" Top="990" Width="854.6402" Height="720" Caption="社長" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label11" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="5175" Top="990" Width="854.6395" Height="720" Caption="取締役" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label12" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="6030" Top="990" Width="854.6395" Height="720" Caption="取締役" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label13" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="6885" Top="990" Width="854.6395" Height="720" Caption="部長" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label14" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="7740" Top="990" Width="854.6395" Height="720" Caption="課長" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label15" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="8595" Top="990" Width="854.6395" Height="720" Caption="" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Label" Name="Label34" MOD="4" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="9450" Top="990" Width="854.6395" Height="720" Caption="" Style="font-size: 6.75pt; " />
+      <Control Type="AR.Line" Name="Line3" MOD="4" X1="2600" Y1="1260" X2="10310" Y2="1260" />
+      <Control Type="AR.Line" Name="Line4" MOD="4" X1="2600" Y1="2010" X2="10310" Y2="2010" />
+      <Control Type="AR.Line" Name="Line5" MOD="4" X1="2600" Y1="1260" X2="2600" Y2="2010" />
+      <Control Type="AR.Line" Name="Line6" MOD="4" X1="3455" Y1="1260" X2="3455" Y2="2010" />
+      <Control Type="AR.Line" Name="Line7" MOD="4" X1="4310" Y1="1260" X2="4310" Y2="2010" />
+      <Control Type="AR.Line" Name="Line8" MOD="4" X1="5165" Y1="1260" X2="5165" Y2="2010" />
+      <Control Type="AR.Line" Name="Line9" MOD="4" X1="6020" Y1="1260" X2="6020" Y2="2010" />
+      <Control Type="AR.Line" Name="Line10" MOD="4" X1="6875" Y1="1260" X2="6875" Y2="2010" />
+      <Control Type="AR.Line" Name="Line11" MOD="4" X1="7730" Y1="1260" X2="7730" Y2="2010" />
+      <Control Type="AR.Line" Name="Line12" MOD="4" X1="8585" Y1="1260" X2="8585" Y2="2010" />
+      <Control Type="AR.Line" Name="Line13" MOD="4" X1="9440" Y1="1260" X2="9440" Y2="2010" />
+      <Control Type="AR.Line" Name="Line14" MOD="4" X1="10310" Y1="1260" X2="10310" Y2="2010" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="135" Y1="2070" X2="10367.64" Y2="2070" />
+      <Control Type="AR.Line" Name="Line1" MOD="4" X1="135" Y1="2070" X2="135" Y2="2468.88" ANCHORB="1" />
+      <Control Type="AR.Line" Name="Line2" MOD="4" X1="10367.64" Y1="2070" X2="10367.64" Y2="2468.88" ANCHORB="1" />
+      <Control Type="AR.Label" Name="Label35" MOD="4" Left="269.64" Top="2115" Width="1845.36" Height="335.3999" Caption="型　　式" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label36" MOD="4" Left="2205" Top="2115" Width="1935" Height="335.4001" Caption="CARNO" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label37" MOD="4" Left="6255" Top="2115" Width="1935" Height="335.4001" Caption="外注金額" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label38" MOD="4" Left="4230" Top="2115" Width="1935" Height="335.4001" Caption="部品金額" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label39" MOD="4" Left="8280" Top="2115" Width="2024.64" Height="335.4001" Caption="合計金額" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Line" Name="Line59" MOD="4" X1="2159.64" Y1="2075.4" X2="2159.64" Y2="2474.28" LineColor="12632256" ANCHORB="1" />
+      <Control Type="AR.Line" Name="Line6" MOD="4" X1="4184.64" Y1="2075.4" X2="4184.64" Y2="2474.28" LineColor="12632256" ANCHORB="1" />
+      <Control Type="AR.Line" Name="Line7" MOD="4" X1="6209.64" Y1="2075.4" X2="6209.64" Y2="2474.28" LineColor="12632256" ANCHORB="1" />
+      <Control Type="AR.Line" Name="Line8" MOD="4" X1="8234.641" Y1="2075.4" X2="8234.641" Y2="2474.28" LineColor="12632256" ANCHORB="1" />
+      <Control Type="AR.Line" Name="Line9" MOD="4" X1="135.36" Y1="2469.6" X2="10368" Y2="2469.6" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="12902" UnderlayNext="1" RepeatStyle="4" BackColor="16777215" CanGrow="0">
+      <Control Type="AR.Line" Name="Line61" MOD="4" X1="135" Y1="0" X2="135" Y2="11640.96" />
+      <Control Type="AR.Line" Name="Line62" MOD="4" X1="10368" Y1="0" X2="10368" Y2="11640.96" />
+      <Control Type="AR.Line" Name="Line63" MOD="4" X1="135.36" Y1="270.7199" X2="10368" Y2="270.7199" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line64" MOD="4" X1="2160" Y1="0" X2="2160" Y2="11640.96" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line65" MOD="4" X1="6210" Y1="0" X2="6210" Y2="11640.96" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line66" MOD="4" X1="135.36" Y1="541.4399" X2="10368" Y2="541.4399" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line67" MOD="4" X1="135.36" Y1="812.1599" X2="10368" Y2="812.1599" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line68" MOD="4" X1="135.36" Y1="1082.88" X2="10368" Y2="1082.88" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line69" MOD="4" X1="135.36" Y1="1353.6" X2="10368" Y2="1353.6" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line70" MOD="4" X1="135.36" Y1="1624.32" X2="10368" Y2="1624.32" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line71" MOD="4" X1="135.36" Y1="1895.04" X2="10368" Y2="1895.04" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line72" MOD="4" X1="135.36" Y1="2165.76" X2="10368" Y2="2165.76" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line73" MOD="4" X1="135.36" Y1="2436.48" X2="10368" Y2="2436.48" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line74" MOD="4" X1="135.36" Y1="2707.2" X2="10368" Y2="2707.2" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line75" MOD="4" X1="135.36" Y1="2977.92" X2="10368" Y2="2977.92" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line76" MOD="4" X1="135.36" Y1="3248.64" X2="10368" Y2="3248.64" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line77" MOD="4" X1="135.36" Y1="3519.36" X2="10368" Y2="3519.36" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line78" MOD="4" X1="135.36" Y1="3790.08" X2="10368" Y2="3790.08" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line79" MOD="4" X1="135.36" Y1="4060.8" X2="10368" Y2="4060.8" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line80" MOD="4" X1="135.36" Y1="4331.52" X2="10368" Y2="4331.52" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line81" MOD="4" X1="135.36" Y1="4602.24" X2="10368" Y2="4602.24" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line82" MOD="4" X1="135.36" Y1="4872.96" X2="10368" Y2="4872.96" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line83" MOD="4" X1="135.36" Y1="5143.68" X2="10368" Y2="5143.68" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line84" MOD="4" X1="135.36" Y1="5414.399" X2="10368" Y2="5414.399" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line85" MOD="4" X1="135.36" Y1="5685.12" X2="10368" Y2="5685.12" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line86" MOD="4" X1="135.36" Y1="5955.839" X2="10368" Y2="5955.839" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line87" MOD="4" X1="135.36" Y1="6226.56" X2="10368" Y2="6226.56" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line88" MOD="4" X1="135.36" Y1="6497.28" X2="10368" Y2="6497.28" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line89" MOD="4" X1="135.36" Y1="6768" X2="10368" Y2="6768" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line90" MOD="4" X1="135.36" Y1="7038.72" X2="10368" Y2="7038.72" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line91" MOD="4" X1="135.36" Y1="7309.438" X2="10368" Y2="7309.438" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line92" MOD="4" X1="135.36" Y1="7580.16" X2="10368" Y2="7580.16" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line93" MOD="4" X1="135.36" Y1="7850.88" X2="10368" Y2="7850.88" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line94" MOD="4" X1="135.36" Y1="8392.32" X2="10368" Y2="8392.32" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line95" MOD="4" X1="135.36" Y1="8121.6" X2="10368" Y2="8121.6" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line96" MOD="4" X1="135.36" Y1="8663.04" X2="10368" Y2="8663.04" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line97" MOD="4" X1="135.36" Y1="8933.76" X2="10368" Y2="8933.76" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line98" MOD="4" X1="135.36" Y1="9204.48" X2="10368" Y2="9204.48" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line99" MOD="4" X1="135.36" Y1="9475.2" X2="10368" Y2="9475.2" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line100" MOD="4" X1="135.36" Y1="9745.92" X2="10368" Y2="9745.92" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line101" MOD="4" X1="135.36" Y1="10016.64" X2="10368" Y2="10016.64" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line102" MOD="4" X1="135.36" Y1="10287.36" X2="10368" Y2="10287.36" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line103" MOD="4" X1="135.36" Y1="10558.08" X2="10368" Y2="10558.08" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line104" MOD="4" X1="135.36" Y1="10828.8" X2="10368" Y2="10828.8" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line105" MOD="4" X1="135.36" Y1="11099.52" X2="10368" Y2="11099.52" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line106" MOD="4" X1="135.36" Y1="11370.24" X2="10368" Y2="11370.24" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line107" MOD="4" X1="135.36" Y1="11640.96" X2="10368" Y2="11640.96" />
+      <Control Type="AR.Line" Name="Line13" MOD="4" X1="4185" Y1="0" X2="4185" Y2="11640.96" LineColor="12632256" />
+      <Control Type="AR.Line" Name="Line14" MOD="4" X1="8235" Y1="0" X2="8235" Y2="11640.96" LineColor="12632256" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="270" BackColor="16777215" CanGrow="0">
+      <Control Type="AR.Field" Name="TextBox5" DataField="SYADAIKATA" MOD="4" Left="269.28" Top="14.4" Width="1846.08" Height="256.32" Text="12345" Multiline="0" Style="font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox" DataField="CARNO" MOD="4" Left="2204.64" Top="14.4" Width="1935.36" Height="256.32" Text="1234567890" Multiline="0" Style="font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox2" DataField="BUHIN" MOD="4" Left="4230.72" Top="14.4" Width="1935.36" Height="256.32" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="GAICHU" MOD="4" Left="6255.36" Top="14.4" Width="1935.36" Height="256.32" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox6" DataField="GOUKEI" MOD="4" Left="8280" Top="14.4" Width="2024.64" Height="256.32" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter2" PrintAtBottom="1" Height="1530" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Label" Name="Label40" MOD="4" Left="270.72" Top="-40" Width="1846.08" Height="270.72" Caption="合　　計" Style="text-align: center; font-size: 11.25pt; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox7" DataField="BUHIN_TOTAL" MOD="4" Left="4232.16" Top="0" Width="1935.36" Height="270.72" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader5" />
+      <Control Type="AR.Field" Name="TextBox8" DataField="GAICHU_TOTAL" MOD="4" Left="6256.8" Top="0" Width="1935.36" Height="270.72" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader5" />
+      <Control Type="AR.Field" Name="TextBox12" DataField="GOUKEI_TOTAL" MOD="4" Left="8281.439" Top="0" Width="2024.64" Height="270.72" Text="2,140,401,301" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: top; " SummaryType="3" SummaryRunning="1" SummaryGroup="GroupHeader5" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Visible="0" Height="0" BackColor="16777215" CanShrink="0" />
+    <Section Type="PageFooter" Name="PageFooter" Visible="0" Height="0" BackColor="16777215" CanGrow="0" />
+  </Sections>
+  <PageSettings LeftMargin="720" RightMargin="720" TopMargin="720" BottomMargin="720" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+</ActiveReportsLayout>

@@ -1,0 +1,15 @@
+.FrmFDDataSelect .ui-paging-info {
+    display: block !important;
+    height: 24px !important;
+    line-height: 24px !important;
+}
+/* 暂时修正 150% */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .FrmFDDataSelect.GroupBox1 table > tbody > tr:first-child {
+        height: 24px !important;
+    }
+    #jqgh_FrmFDDataSelect_sprList_FD_CRE,
+    #jqgh_FrmFDDataSelect_sprList_INP_FLG {
+        top: 8px !important;
+    }
+}

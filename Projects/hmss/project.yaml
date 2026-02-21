@@ -1,0 +1,39 @@
+# HMSS 项目配置
+name: hmss
+displayName: HMSS 车检代替销售系统
+version: 1.0.0
+description: Hiroshima Mazda Sales System - 马自达汽车销售系统
+
+database:
+  type: sqlite
+  path: hmss.db
+  schema: Definitions/hmss/schema.sql
+  seed_data: Definitions/hmss/seed.sql
+
+features:
+  authentication: cookie
+  multi_language: true
+  languages:
+    - zh-CN
+    - ja-JP
+  
+  systems:
+    - Master
+    - Login
+    - SDH
+    - HDKAIKEI
+    - HMAUD
+    - HMDPS
+    - HMHRMS
+    - HMTVE
+    - JKSYS
+    - R4
+    - APPM
+    - PPRM
+    - CkChkzaiko
+
+ui:
+  theme: modern
+  sidebar: true
+  header: true
+  breadcrumb: true

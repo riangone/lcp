@@ -1,0 +1,443 @@
+# HMHRMS 人力资源系统
+# Human Resource Management System
+
+models:
+  # ============================================
+  # 社員基本信息表
+  # ============================================
+  
+  Employee:
+    table: employee
+    primary_key: emp_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 社員信息
+          create_button: 添加社員
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索社員...
+          EMP_ID: 社員 ID
+          EMP_NM: 社員姓名
+          EMP_KANA: 社員假名
+          BIRTH_DT: 出生日期
+          SEX: 性别
+          ADDRESS: 地址
+          TEL: 电话
+          EMAIL: 邮箱
+          HIRE_DT: 入职日期
+        ja:
+          title: 社員情報
+          create_button: 社員追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 社員を検索...
+          EMP_ID: 社員 ID
+          EMP_NM: 社員名
+          EMP_KANA: 社員カナ
+          BIRTH_DT: 生年月日
+          SEX: 性別
+          ADDRESS: 住所
+          TEL: 電話
+          EMAIL: メール
+          HIRE_DT: 入社日
+      styles:
+        card_class: "card-employee"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [emp_id, emp_nm, emp_kana, birth_dt, hire_dt]
+      filters:
+        emp_nm:
+          label: 社員姓名
+          type: like
+        emp_kana:
+          label: 假名
+          type: like
+    
+    form:
+      title: 社員
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        emp_nm:
+          label: 社員姓名
+          type: text
+          required: true
+          max_length: 50
+        emp_kana:
+          label: 社員假名
+          type: text
+          max_length: 50
+        birth_dt:
+          label: 出生日期
+          type: date
+        sex:
+          label: 性别
+          type: select
+          options:
+            '1': '男'
+            '2': '女'
+        address:
+          label: 地址
+          type: text
+          max_length: 500
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        email:
+          label: 邮箱
+          type: email
+          max_length: 100
+        hire_dt:
+          label: 入职日期
+          type: date
+    
+    properties:
+      emp_id: { type: string }
+      emp_nm: { type: string }
+      emp_kana: { type: string }
+      birth_dt: { type: date }
+      sex: { type: string }
+      address: { type: string }
+      tel: { type: string }
+      email: { type: string }
+      hire_dt: { type: date }
+  
+  EmployeeFamily:
+    table: employee_family
+    primary_key: family_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 家族状況
+          create_button: 添加家族
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索家族...
+          FAMILY_ID: 家族 ID
+          EMP_ID: 社員 ID
+          FAMILY_NM: 家族姓名
+          FAMILY_KANA: 家族假名
+          ZOKUZOKU: 続柄
+          BIRTH_DT: 出生日期
+        ja:
+          title: 家族状況
+          create_button: 家族追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 家族を検索...
+          FAMILY_ID: 家族 ID
+          EMP_ID: 社員 ID
+          FAMILY_NM: 家族名
+          FAMILY_KANA: 家族カナ
+          ZOKUZOKU: 続柄
+          BIRTH_DT: 生年月日
+      styles:
+        card_class: "card-family"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [family_id, emp_id, family_nm, zokuzoku, birth_dt]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        family_nm:
+          label: 家族姓名
+          type: like
+    
+    form:
+      title: 家族
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        family_nm:
+          label: 家族姓名
+          type: text
+          required: true
+          max_length: 50
+        family_kana:
+          label: 家族假名
+          type: text
+          max_length: 50
+        zokuzoku:
+          label: 続柄
+          type: select
+          options:
+            '1': '配偶者'
+            '2': '子'
+            '3': '父'
+            '4': '母'
+            '5': '其他'
+        birth_dt:
+          label: 出生日期
+          type: date
+    
+    properties:
+      family_id: { type: int }
+      emp_id: { type: string }
+      family_nm: { type: string }
+      family_kana: { type: string }
+      zokuzoku: { type: string }
+      birth_dt: { type: date }
+  
+  EmployeeGakureki:
+    table: employee_gakureki
+    primary_key: gakureki_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 学歴
+          create_button: 添加学歴
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索学歴...
+          GAKUREKI_ID: 学歴 ID
+          EMP_ID: 社員 ID
+          START_DT: 开始日期
+          END_DT: 结束日期
+          SCHOOL_NM: 学校名称
+          GAKUBU: 学部/学科
+          SOTUGYO: 毕业区分
+        ja:
+          title: 学歴
+          create_button: 学歴追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 学歴を検索...
+          GAKUREKI_ID: 学歴 ID
+          EMP_ID: 社員 ID
+          START_DT: 開始日
+          END_DT: 終了日
+          SCHOOL_NM: 学校名
+          GAKUBU: 学部/学科
+          SOTUGYO: 卒業区分
+      styles:
+        card_class: "card-gakureki"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [gakureki_id, emp_id, start_dt, school_nm, gakubu]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        school_nm:
+          label: 学校名称
+          type: like
+    
+    form:
+      title: 学歴
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        start_dt:
+          label: 开始日期
+          type: date
+        end_dt:
+          label: 结束日期
+          type: date
+        school_nm:
+          label: 学校名称
+          type: text
+          max_length: 100
+        gakubu:
+          label: 学部/学科
+          type: text
+          max_length: 100
+        sotugyo:
+          label: 毕业区分
+          type: select
+          options:
+            '1': '毕业'
+            '2': '退学'
+            '3': '在学中'
+    
+    properties:
+      gakureki_id: { type: int }
+      emp_id: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      school_nm: { type: string }
+      gakubu: { type: string }
+      sotugyo: { type: string }
+  
+  EmployeeShokureki:
+    table: employee_shokureki
+    primary_key: shokureki_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 社外職歴
+          create_button: 添加職歴
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索職歴...
+          SHOKUREKI_ID: 職歴 ID
+          EMP_ID: 社員 ID
+          START_DT: 开始日期
+          END_DT: 结束日期
+          KAISHA_NM: 公司名称
+          BUMON: 部門
+          SHOKUGYOU: 职位
+        ja:
+          title: 社外職歴
+          create_button: 職歴追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 職歴を検索...
+          SHOKUREKI_ID: 職歴 ID
+          EMP_ID: 社員 ID
+          START_DT: 開始日
+          END_DT: 終了日
+          KAISHA_NM: 会社名
+          BUMON: 部門
+          SHOKUGYOU: 職位
+      styles:
+        card_class: "card-shokureki"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [shokureki_id, emp_id, start_dt, kaisha_nm, shokugyou]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        kaisha_nm:
+          label: 公司名称
+          type: like
+    
+    form:
+      title: 職歴
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        start_dt:
+          label: 开始日期
+          type: date
+        end_dt:
+          label: 结束日期
+          type: date
+        kaisha_nm:
+          label: 公司名称
+          type: text
+          max_length: 100
+        bumon:
+          label: 部門
+          type: text
+          max_length: 50
+        shokugyou:
+          label: 职位
+          type: text
+          max_length: 50
+    
+    properties:
+      shokureki_id: { type: int }
+      emp_id: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      kaisha_nm: { type: string }
+      bumon: { type: string }
+      shokugyou: { type: string }
+  
+  EmployeeShikaku:
+    table: employee_shikaku
+    primary_key: shikaku_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 資格免許
+          create_button: 添加資格
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索資格...
+          SHIKAKU_ID: 資格 ID
+          EMP_ID: 社員 ID
+          SHIKAKU_NM: 資格名称
+          SHUTOKU_DT: 取得日期
+          RENEWAL_DT: 更新期限
+        ja:
+          title: 資格免許
+          create_button: 資格追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 資格を検索...
+          SHIKAKU_ID: 資格 ID
+          EMP_ID: 社員 ID
+          SHIKAKU_NM: 資格名
+          SHUTOKU_DT: 取得日
+          RENEWAL_DT: 更新期限
+      styles:
+        card_class: "card-shikaku"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [shikaku_id, emp_id, shikaku_nm, shutoku_dt]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        shikaku_nm:
+          label: 資格名称
+          type: like
+    
+    form:
+      title: 資格
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        shikaku_nm:
+          label: 資格名称
+          type: text
+          required: true
+          max_length: 100
+        shutoku_dt:
+          label: 取得日期
+          type: date
+        renewal_dt:
+          label: 更新期限
+          type: date
+    
+    properties:
+      shikaku_id: { type: int }
+      emp_id: { type: string }
+      shikaku_nm: { type: string }
+      shutoku_dt: { type: date }
+      renewal_dt: { type: date }

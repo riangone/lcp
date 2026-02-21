@@ -597,6 +597,25 @@ body {
   cursor: pointer;
 }
 
+.desktop-menu-link.hmss-link {
+  background: linear-gradient(135deg, rgba(176, 8, 56, 0.15) 0%, rgba(139, 6, 44, 0.15) 100%);
+  border-color: rgba(176, 8, 56, 0.3);
+  color: #B00838;
+  font-weight: 600;
+}
+
+.desktop-menu-link.hmss-link:hover {
+  background: linear-gradient(135deg, rgba(176, 8, 56, 0.25) 0%, rgba(139, 6, 44, 0.25) 100%);
+  border-color: #B00838;
+}
+
+.desktop-menu-divider {
+  width: 100%;
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 0.25rem 0;
+}
+
 .desktop-menu-link-btn {
   font-family: inherit;
 }

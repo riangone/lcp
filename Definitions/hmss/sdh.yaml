@@ -1,0 +1,1348 @@
+# SDH 车检替代系统模型定义
+# Shaken Daitai System - 车检代替促进系统
+
+models:
+  # ============================================
+  # SDH 基础主表
+  # ============================================
+  
+  SdhContractor:
+    table: sdh_contractor
+    primary_key: csrno
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 契约者管理
+          create_button: 添加契约者
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索契约者...
+          CSRNO: 客户编号
+          CSR_NM: 客户姓名
+          KANA: 片假名
+          TEL: 电话
+          TEL2: 电话 2
+          FAX: 传真
+          EMAIL: 邮箱
+          ADDRESS: 地址
+          POST_CD: 邮编
+          TENPO_CD: 店铺
+          JYASYU_CD: 车型区分
+          XH10CAID: 车辆区分
+          XG11KOTEIID: 固定化分类
+          DM_FKA_KB: DM 可否
+          XHKTGKBN: 引续区分
+          CSRRANK: 客户来源
+        ja:
+          title: 契約者管理
+          create_button: 契約者追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 契約者を検索...
+          CSRNO: 顧客番号
+          CSR_NM: 顧客名
+          KANA: カナ
+          TEL: 電話
+          TEL2: 電話 2
+          FAX: FAX
+          EMAIL: メール
+          ADDRESS: 住所
+          POST_CD: 郵便番号
+          TENPO_CD: 店舗
+          JYASYU_CD: 車種区分
+          XH10CAID: 車両区分
+          XG11KOTEIID: 固定化分類
+          DM_FKA_KB: DM 可否
+          XHKTGKBN: 引続区分
+          CSRRANK: 顧客ソース
+      styles:
+        card_class: "card-contractor"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [csrno, csr_nm, kana, tel, tenpo_cd, jyasyu_cd]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        csr_nm:
+          label: 客户姓名
+          type: like
+        kana:
+          label: 片假名
+          type: like
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    form:
+      title: 契约者
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        csr_nm:
+          label: 客户姓名
+          type: text
+          required: true
+          max_length: 100
+        kana:
+          label: 片假名
+          type: text
+          max_length: 100
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        tel2:
+          label: 电话 2
+          type: text
+          max_length: 20
+        fax:
+          label: 传真
+          type: text
+          max_length: 20
+        email:
+          label: 邮箱
+          type: email
+          max_length: 100
+        address:
+          label: 地址
+          type: text
+          max_length: 500
+        post_cd:
+          label: 邮编
+          type: text
+          max_length: 10
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+        jyasyu_cd:
+          label: 车型区分
+          type: select
+          options:
+            '1': '新車'
+            '2': '中古車'
+            '3': 'リース'
+        xh10caid:
+          label: 车辆区分
+          type: select
+          options:
+            '0': '自新直'
+            '1': '自新业'
+            '2': '他社新'
+            '3': '他从中'
+        xg11koteiid:
+          label: 固定化分类
+          type: select
+          options:
+            'F': '固定特'
+            'G': '未入库'
+            'H': '其他'
+        dm_fka_kb:
+          label: DM 可否
+          type: select
+          options:
+            '0': '不可'
+            '1': '可'
+        xhktgkbn:
+          label: 引续区分
+          type: select
+          options:
+            '1': '本人管理'
+            '2': '未管理'
+            '3': '他社'
+        csrrank:
+          label: 客户来源
+          type: select
+          options:
+            'A': '自己开拓'
+            'B': '引继'
+            'C': '业贩'
+            'D': '其他'
+    
+    properties:
+      csrno: { type: string }
+      csr_nm: { type: string }
+      kana: { type: string }
+      tel: { type: string }
+      tel2: { type: string }
+      fax: { type: string }
+      email: { type: string }
+      address: { type: string }
+      post_cd: { type: string }
+      city_cd: { type: string }
+      tenpo_cd: { type: string }
+      jyasyu_cd: { type: string }
+      xh10caid: { type: string }
+      xg11koteiid: { type: string }
+      dm_fka_kb: { type: string }
+      xhktgkbn: { type: string }
+      csrrank: { type: string }
+  
+  SdhTenpo:
+    table: sdh_tenpo
+    primary_key: tenpo_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 店铺管理
+          create_button: 添加店铺
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索店铺...
+          TENPO_CD: 店铺代码
+          TENPO_NM: 店铺名称
+          ADDRESS: 地址
+          TEL: 电话
+          FAX: 传真
+        ja:
+          title: 店舗管理
+          create_button: 店舗追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 店舗を検索...
+          TENPO_CD: 店舗コード
+          TENPO_NM: 店舗名
+          ADDRESS: 住所
+          TEL: 電話
+          FAX: FAX
+      styles:
+        card_class: "card-tenpo"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [tenpo_cd, tenpo_nm, tel, fax]
+      filters:
+        tenpo_nm:
+          label: 店铺名称
+          type: like
+    
+    form:
+      title: 店铺
+      fields:
+        tenpo_cd:
+          label: 店铺代码
+          type: text
+          required: true
+          max_length: 10
+        tenpo_nm:
+          label: 店铺名称
+          type: text
+          required: true
+          max_length: 100
+        address:
+          label: 地址
+          type: text
+          max_length: 500
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        fax:
+          label: 传真
+          type: text
+          max_length: 20
+    
+    properties:
+      tenpo_cd: { type: string }
+      tenpo_nm: { type: string }
+      address: { type: string }
+      tel: { type: string }
+      fax: { type: string }
+  
+  SdhSyasyuMst:
+    table: sdh_syasyu_mst
+    primary_key: syasyu_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 判定车种主表
+          create_button: 添加车种
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索车种...
+          SYASYU_CD: 车种代码
+          SYASYU_NM: 车种名称
+          DISPLAY_ORDER: 显示顺序
+        ja:
+          title: 判定車種マスタ
+          create_button: 車種追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 車種を検索...
+          SYASYU_CD: 車種コード
+          SYASYU_NM: 車種名
+          DISPLAY_ORDER: 表示順序
+      styles:
+        card_class: "card-syasyu"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [syasyu_cd, syasyu_nm, display_order]
+      filters:
+        syasyu_nm:
+          label: 车种名称
+          type: like
+    
+    form:
+      title: 车种
+      fields:
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          required: true
+          max_length: 10
+        syasyu_nm:
+          label: 车种名称
+          type: text
+          required: true
+          max_length: 100
+        display_order:
+          label: 显示顺序
+          type: number
+    
+    properties:
+      syasyu_cd: { type: string }
+      syasyu_nm: { type: string }
+      display_order: { type: int }
+  
+  # ============================================
+  # SDH 业务表
+  # ============================================
+  
+  SdhHanteiLst:
+    table: sdh_hantei_lst
+    primary_key: id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 判定列表
+          create_button: 添加判定
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索判定...
+          YYMM: 年月
+          SYADAI: 车辆
+          CARNO: 车牌号
+          CSRNO: 客户编号
+          HANTEI_CD: 判定代码
+          HANTEI_DT: 判定日期
+          TENPO_CD: 店铺
+          USR_ID: 用户 ID
+        ja:
+          title: 判定リスト
+          create_button: 判定追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 判定を検索...
+          YYMM: 年月
+          SYADAI: 車両
+          CARNO: 車番号
+          CSRNO: 顧客番号
+          HANTEI_CD: 判定コード
+          HANTEI_DT: 判定日
+          TENPO_CD: 店舗
+          USR_ID: ユーザー ID
+      styles:
+        card_class: "card-hantei"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [yymm, syadai, carno, csrno, hantei_cd, hantei_dt, tenpo_cd]
+      filters:
+        yymm:
+          label: 年月
+          type: like
+        csrno:
+          label: 客户编号
+          type: like
+        carno:
+          label: 车牌号
+          type: like
+        hantei_cd:
+          label: 判定代码
+          type: select
+          options:
+            '1': '代替促進'
+            '2': '入庫促進'
+            '3': '入促・代促'
+            '4': '代替確定'
+            '5': '代替予定'
+            '6': '入庫確定'
+            '7': '入庫予定'
+            '8': '他社代替'
+            '9': '他社入庫'
+            '10': '転売'
+            '11': '県外転出'
+            '12': '入庫 X'
+            '13': '車両なし'
+            '14': '連絡 X'
+            '15': '所在不明'
+            '16': '業者契約'
+            '17': 'リース'
+            '18': 'リース指定工場'
+            '19': '納入依頼'
+    
+    form:
+      title: 判定
+      fields:
+        yymm:
+          label: 年月
+          type: text
+          required: true
+          max_length: 6
+        syadai:
+          label: 车辆
+          type: text
+          max_length: 50
+        carno:
+          label: 车牌号
+          type: text
+          max_length: 20
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        hantei_cd:
+          label: 判定代码
+          type: select
+          required: true
+          options:
+            '1': '代替促進'
+            '2': '入庫促進'
+            '3': '入促・代促'
+            '4': '代替確定'
+            '5': '代替予定'
+            '6': '入庫確定'
+            '7': '入庫予定'
+            '8': '他社代替'
+            '9': '他社入庫'
+            '10': '転売'
+            '11': '県外転出'
+            '12': '入庫 X'
+            '13': '車両なし'
+            '14': '連絡 X'
+            '15': '所在不明'
+            '16': '業者契約'
+            '17': 'リース'
+            '18': 'リース指定工場'
+            '19': '納入依頼'
+        hantei_dt:
+          label: 判定日期
+          type: date
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    properties:
+      yymm: { type: string }
+      syadai: { type: string }
+      carno: { type: string }
+      csrno: { type: string }
+      hantei_cd: { type: string }
+      hantei_dt: { type: date }
+      tenpo_cd: { type: string }
+      usr_id: { type: string }
+  
+  SdhTimeline:
+    table: sdh_timeline
+    primary_key: tl_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 时间线
+          create_button: 添加事件
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索事件...
+          CSRNO: 客户编号
+          EVENT_DT: 事件日期
+          EVENT_TYPE: 事件类型
+          EVENT_CONTENT: 事件内容
+          EVENT_KB: 事件区分
+          USR_ID: 用户 ID
+          TENPO_CD: 店铺
+        ja:
+          title: タイムライン
+          create_button: イベント追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: イベントを検索...
+          CSRNO: 顧客番号
+          EVENT_DT: イベント日
+          EVENT_TYPE: イベントタイプ
+          EVENT_CONTENT: イベント内容
+          EVENT_KB: イベント区分
+          USR_ID: ユーザー ID
+          TENPO_CD: 店舗
+      styles:
+        card_class: "card-timeline"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [csrno, event_dt, event_type, event_content, usr_id]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        event_type:
+          label: 事件类型
+          type: like
+        event_dt:
+          label: 事件日期
+          type: date
+    
+    form:
+      title: 事件
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        event_dt:
+          label: 事件日期
+          type: datetime
+          required: true
+        event_type:
+          label: 事件类型
+          type: text
+          max_length: 20
+        event_content:
+          label: 事件内容
+          type: textarea
+          max_length: 1000
+        event_kb:
+          label: 事件区分
+          type: select
+          options:
+            '1': '电话'
+            '2': '来访'
+            '3': '邮件'
+            '4': '其他'
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    properties:
+      csrno: { type: string }
+      event_dt: { type: datetime }
+      event_type: { type: string }
+      event_content: { type: string }
+      event_kb: { type: string }
+      usr_id: { type: string }
+      tenpo_cd: { type: string }
+  
+  SdhKatsudo:
+    table: sdh_katsudo
+    primary_key: katsudo_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 活动状况
+          create_button: 添加活动
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索活动...
+          CSRNO: 客户编号
+          HANTEI_CD: 判定代码
+          HANTEI_DT: 判定日期
+          JYASYU_CD: 车型区分
+          SYASYU_CD: 车种代码
+          SYADAI: 车辆
+          CARNO: 车牌号
+          VIN: VIN
+          WMIVDS: WMIVDS
+          VIS: VIS
+          MEMO: 备注
+          TENPO_CD: 店铺
+          USR_ID: 用户 ID
+        ja:
+          title: 活動状況
+          create_button: 活動追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 活動を検索...
+          CSRNO: 顧客番号
+          HANTEI_CD: 判定コード
+          HANTEI_DT: 判定日
+          JYASYU_CD: 車種区分
+          SYASYU_CD: 車種コード
+          SYADAI: 車両
+          CARNO: 車番号
+          VIN: VIN
+          WMIVDS: WMIVDS
+          VIS: VIS
+          MEMO: 備考
+          TENPO_CD: 店舗
+          USR_ID: ユーザー ID
+      styles:
+        card_class: "card-katsudo"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [csrno, hantei_cd, hantei_dt, syasyu_cd, syadai, carno, tenpo_cd]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        hantei_cd:
+          label: 判定代码
+          type: select
+          options:
+            '1': '代替促進'
+            '2': '入庫促進'
+            '3': '入促・代促'
+            '4': '代替確定'
+            '5': '代替予定'
+            '6': '入庫確定'
+            '7': '入庫予定'
+            '8': '他社代替'
+            '9': '他社入庫'
+        syasyu_cd:
+          label: 车种
+          type: like
+    
+    form:
+      title: 活动
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        hantei_cd:
+          label: 判定代码
+          type: select
+          required: true
+          options:
+            '1': '代替促進'
+            '2': '入庫促進'
+            '3': '入促・代促'
+            '4': '代替確定'
+            '5': '代替予定'
+            '6': '入庫確定'
+            '7': '入庫予定'
+            '8': '他社代替'
+            '9': '他社入庫'
+            '10': '転売'
+            '11': '県外転出'
+            '12': '入庫 X'
+            '13': '車両なし'
+            '14': '連絡 X'
+            '15': '所在不明'
+            '16': '業者契約'
+            '17': 'リース'
+            '18': 'リース指定工場'
+            '19': '納入依頼'
+        hantei_dt:
+          label: 判定日期
+          type: datetime
+        jyasyu_cd:
+          label: 车型区分
+          type: select
+          options:
+            '1': '新車'
+            '2': '中古車'
+            '3': 'リース'
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        syadai:
+          label: 车辆
+          type: text
+          max_length: 50
+        carno:
+          label: 车牌号
+          type: text
+          max_length: 20
+        vin:
+          label: VIN
+          type: text
+          max_length: 50
+        wmivds:
+          label: WMIVDS
+          type: text
+          max_length: 50
+        vis:
+          label: VIS
+          type: text
+          max_length: 50
+        memo:
+          label: 备注
+          type: textarea
+          max_length: 1000
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    properties:
+      csrno: { type: string }
+      hantei_cd: { type: string }
+      hantei_dt: { type: datetime }
+      jyasyu_cd: { type: string }
+      syasyu_cd: { type: string }
+      syadai: { type: string }
+      carno: { type: string }
+      vin: { type: string }
+      wmivds: { type: string }
+      vis: { type: string }
+      memo: { type: string }
+      tenpo_cd: { type: string }
+      usr_id: { type: string }
+  
+  SdhVinWmivds:
+    table: sdh_vin_wmivds
+    primary_key: id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: VIN WMIVDS
+          create_button: 添加 VIN
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索 VIN...
+          CSRNO: 客户编号
+          VIN: VIN
+          WMIVDS: WMIVDS
+        ja:
+          title: VIN WMIVDS
+          create_button: VIN 追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: VIN を検索...
+          CSRNO: 顧客番号
+          VIN: VIN
+          WMIVDS: WMIVDS
+      styles:
+        card_class: "card-vin"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [csrno, vin, wmivds]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        vin:
+          label: VIN
+          type: like
+    
+    form:
+      title: VIN
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        vin:
+          label: VIN
+          type: text
+          max_length: 50
+        wmivds:
+          label: WMIVDS
+          type: text
+          max_length: 50
+    
+    properties:
+      csrno: { type: string }
+      vin: { type: string }
+      wmivds: { type: string }
+  
+  SdhVinVis:
+    table: sdh_vin_vis
+    primary_key: id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: VIN VIS
+          create_button: 添加 VIN
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索 VIN...
+          CSRNO: 客户编号
+          VIN: VIN
+          VIS: VIS
+        ja:
+          title: VIN VIS
+          create_button: VIN 追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: VIN を検索...
+          CSRNO: 顧客番号
+          VIN: VIN
+          VIS: VIS
+      styles:
+        card_class: "card-vis"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [csrno, vin, vis]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        vin:
+          label: VIN
+          type: like
+    
+    form:
+      title: VIN
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        vin:
+          label: VIN
+          type: text
+          max_length: 50
+        vis:
+          label: VIS
+          type: text
+          max_length: 50
+    
+    properties:
+      csrno: { type: string }
+      vin: { type: string }
+      vis: { type: string }
+  
+  SdhChumon:
+    table: sdh_chumon
+    primary_key: chumon_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 订单书
+          create_button: 添加订单
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索订单...
+          CSRNO: 客户编号
+          CHUMON_DT: 订单日期
+          CHUMON_KB: 订单区分
+          SYASYU_CD: 车种代码
+          SYADAI: 车辆
+          CARNO: 车牌号
+          KIN_GAKU: 金额
+          MEMO: 备注
+          TENPO_CD: 店铺
+          USR_ID: 用户 ID
+        ja:
+          title: 注文書
+          create_button: 注文追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 注文を検索...
+          CSRNO: 顧客番号
+          CHUMON_DT: 注文日
+          CHUMON_KB: 注文区分
+          SYASYU_CD: 車種コード
+          SYADAI: 車両
+          CARNO: 車番号
+          KIN_GAKU: 金額
+          MEMO: 備考
+          TENPO_CD: 店舗
+          USR_ID: ユーザー ID
+      styles:
+        card_class: "card-chumon"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [csrno, chumon_dt, chumon_kb, syadai, carno, kin_gaku, tenpo_cd]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        chumon_kb:
+          label: 订单区分
+          type: like
+        syadai:
+          label: 车辆
+          type: like
+    
+    form:
+      title: 订单
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        chumon_dt:
+          label: 订单日期
+          type: datetime
+        chumon_kb:
+          label: 订单区分
+          type: select
+          options:
+            '1': '新車'
+            '2': '中古車'
+            '3': '车検'
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        syadai:
+          label: 车辆
+          type: text
+          max_length: 50
+        carno:
+          label: 车牌号
+          type: text
+          max_length: 20
+        kin_gaku:
+          label: 金额
+          type: number
+        memo:
+          label: 备注
+          type: textarea
+          max_length: 1000
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    properties:
+      csrno: { type: string }
+      chumon_dt: { type: datetime }
+      chumon_kb: { type: string }
+      syasyu_cd: { type: string }
+      syadai: { type: string }
+      carno: { type: string }
+      kin_gaku: { type: decimal }
+      memo: { type: string }
+      tenpo_cd: { type: string }
+      usr_id: { type: string }
+  
+  SdhHoken:
+    table: sdh_hoken
+    primary_key: hoken_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 保险信贷
+          create_button: 添加保险
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索保险...
+          CSRNO: 客户编号
+          HOKEN_KB: 保险区分
+          HOKEN_NM: 保险名称
+          KIKAN_START: 期间开始
+          KIKAN_END: 期间结束
+          KIN_GAKU: 金额
+          MEMO: 备注
+        ja:
+          title: 保険信貸
+          create_button: 保険追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 保険を検索...
+          CSRNO: 顧客番号
+          HOKEN_KB: 保険区分
+          HOKEN_NM: 保険名
+          KIKAN_START: 期間開始
+          KIKAN_END: 期間終了
+          KIN_GAKU: 金額
+          MEMO: 備考
+      styles:
+        card_class: "card-hoken"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [csrno, hoken_kb, hoken_nm, kikan_start, kikan_end, kin_gaku]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        hoken_nm:
+          label: 保险名称
+          type: like
+    
+    form:
+      title: 保险
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        hoken_kb:
+          label: 保险区分
+          type: select
+          options:
+            '1': '自社保'
+            '2': '他社保'
+            '3': '信贷'
+        hoken_nm:
+          label: 保险名称
+          type: text
+          max_length: 100
+        kikan_start:
+          label: 期间开始
+          type: date
+        kikan_end:
+          label: 期间结束
+          type: date
+        kin_gaku:
+          label: 金额
+          type: number
+        memo:
+          label: 备注
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      csrno: { type: string }
+      hoken_kb: { type: string }
+      hoken_nm: { type: string }
+      kikan_start: { type: date }
+      kikan_end: { type: date }
+      kin_gaku: { type: decimal }
+      memo: { type: string }
+  
+  SdhBiko:
+    table: sdh_biko
+    primary_key: biko_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 备注
+          create_button: 添加备注
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索备注...
+          CSRNO: 客户编号
+          BIKO_NAYO: 备注内容
+          USR_ID: 用户 ID
+        ja:
+          title: 備考
+          create_button: 備考追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 備考を検索...
+          CSRNO: 顧客番号
+          BIKO_NAYO: 備考内容
+          USR_ID: ユーザー ID
+      styles:
+        card_class: "card-biko"
+        button_class: "btn btn-light"
+    
+    list:
+      columns: [csrno, biko_nayo, usr_id, created_at]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+    
+    form:
+      title: 备注
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        biko_nayo:
+          label: 备注内容
+          type: textarea
+          required: true
+          max_length: 2000
+    
+    properties:
+      csrno: { type: string }
+      biko_nayo: { type: string }
+      usr_id: { type: string }
+  
+  SdhTanto:
+    table: sdh_tanto
+    primary_key: tanto_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 担当履历
+          create_button: 添加担当
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索担当...
+          CSRNO: 客户编号
+          TANTO_USR_ID: 担当用户 ID
+          TANTO_NM: 担当姓名
+          START_DT: 开始日期
+          END_DT: 结束日期
+          MEMO: 备注
+        ja:
+          title: 担当履歴
+          create_button: 担当追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 担当を検索...
+          CSRNO: 顧客番号
+          TANTO_USR_ID: 担当ユーザー ID
+          TANTO_NM: 担当者名
+          START_DT: 開始日
+          END_DT: 終了日
+          MEMO: 備考
+      styles:
+        card_class: "card-tanto"
+        button_class: "btn btn-dark"
+    
+    list:
+      columns: [csrno, tanto_usr_id, tanto_nm, start_dt, end_dt]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        tanto_nm:
+          label: 担当姓名
+          type: like
+    
+    form:
+      title: 担当
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        tanto_usr_id:
+          label: 担当用户 ID
+          type: text
+          required: true
+          max_length: 20
+        tanto_nm:
+          label: 担当姓名
+          type: text
+          max_length: 50
+        start_dt:
+          label: 开始日期
+          type: date
+        end_dt:
+          label: 结束日期
+          type: date
+        memo:
+          label: 备注
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      csrno: { type: string }
+      tanto_usr_id: { type: string }
+      tanto_nm: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      memo: { type: string }
+  
+  SdhNyuko:
+    table: sdh_nyuko
+    primary_key: nyuko_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 入库状况
+          create_button: 添加入库
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索入库...
+          CSRNO: 客户编号
+          NYUKO_KB: 入库区分
+          NYUKO_DT: 入库日期
+          SYASYU_CD: 车种代码
+          SYADAI: 车辆
+          CARNO: 车牌号
+          VIN: VIN
+          MEMO: 备注
+          TENPO_CD: 店铺
+          USR_ID: 用户 ID
+        ja:
+          title: 入庫状況
+          create_button: 入庫追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 入庫を検索...
+          CSRNO: 顧客番号
+          NYUKO_KB: 入庫区分
+          NYUKO_DT: 入庫日
+          SYASYU_CD: 車種コード
+          SYADAI: 車両
+          CARNO: 車番号
+          VIN: VIN
+          MEMO: 備考
+          TENPO_CD: 店舗
+          USR_ID: ユーザー ID
+      styles:
+        card_class: "card-nyuko"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [csrno, nyuko_kb, nyuko_dt, syadai, carno, tenpo_cd]
+      filters:
+        csrno:
+          label: 客户编号
+          type: like
+        nyuko_kb:
+          label: 入库区分
+          type: select
+          options:
+            '1': '入庫確定'
+            '2': '入庫予定'
+            '3': '他社入庫'
+        nyuko_dt:
+          label: 入库日期
+          type: date
+    
+    form:
+      title: 入库
+      fields:
+        csrno:
+          label: 客户编号
+          type: text
+          required: true
+          max_length: 20
+        nyuko_kb:
+          label: 入库区分
+          type: select
+          required: true
+          options:
+            '1': '入庫確定'
+            '2': '入庫予定'
+            '3': '他社入庫'
+        nyuko_dt:
+          label: 入库日期
+          type: datetime
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        syadai:
+          label: 车辆
+          type: text
+          max_length: 50
+        carno:
+          label: 车牌号
+          type: text
+          max_length: 20
+        vin:
+          label: VIN
+          type: text
+          max_length: 50
+        memo:
+          label: 备注
+          type: textarea
+          max_length: 1000
+        tenpo_cd:
+          label: 店铺
+          type: select
+          options:
+            '001': '广岛本店'
+            '002': '东广岛店'
+            '003': '吴店'
+            '004': '福山店'
+            '005': '尾道店'
+    
+    properties:
+      csrno: { type: string }
+      nyuko_kb: { type: string }
+      nyuko_dt: { type: datetime }
+      syasyu_cd: { type: string }
+      syadai: { type: string }
+      carno: { type: string }
+      vin: { type: string }
+      memo: { type: string }
+      tenpo_cd: { type: string }
+      usr_id: { type: string }

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="15135" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt;color: Black; font-family: ＭＳ ゴシック; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 15pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="350" BackColor="16777215" CanShrink="0">
+   	 <!-- TITLE start -->
+        <Control Type="AR.Field" Name="TITLE" DataField="TITLE" Left="-5" Top="20" Width="15700" Height="350" Text = "" Style="text-align: left;background-color: #DCDCDC;font-weight: normal;font-size: 11pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+   	 <!-- TITLE end -->
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="500" BackColor="16777215" CanShrink="0">
+        <Control Type="AR.Field" Name="TERRITORYName" DataField="TERRITORYName" Left="0" Top="20" Width="700" Height="250" Text = "営業" Style="text-align: center;font-weight: normal;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Shape" Name="Shape" Left="0" Top="0" Width="700" Height="250"/>
+        <Control Type="AR.Label" Name="Label3" Left="0" Top="250" Width="700" Height="250" Caption="項目ID" Style="text-align:center;background-color: #DCDCDC;font-weight: normal;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Label" Name="Label4" Left="700" Top="250" Width="700" Height="250" Caption="今回" Style="text-align:center;background-color: #DCDCDC;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Label" Name="Label5" Left="1400" Top="250" Width="700" Height="250" Caption="前回" Style="text-align:center;background-color: #DCDCDC;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Label" Name="Label5" Left="2100" Top="250" Width="700" Height="250" Caption="前回比" Style="text-align:center;background-color: #DCDCDC;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Label" Name="Label6" Left="2800" Top="250" Width="12900" Height="250" Caption="監査項目" Style="text-align:center;background-color: #DCDCDC;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Shape" Name="Shape" Left="0" Top="250" Width="700" Height="250"/>
+        <Control Type="AR.Shape" Name="Shape" Left="700" Top="250" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="1400" Top="250" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="2100" Top="250" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="2800" Top="250" Width="12900" Height="250" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="250" CanShrink="0">
+        <Control Type="AR.Shape" Name="Shape" Left="0" Top="0" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="700" Top="0" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="1400" Top="0" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="2100" Top="0" Width="700" Height="250" />
+        <Control Type="AR.Shape" Name="Shape" Left="2800" Top="0" Width="12900" Height="250" />
+        <Control Type="AR.Field" Name="CHECK_LST_ID" DataField="CHECK_LST_ID" Left="0" Top="30" Width="700" Height="250" Text = "" Style="text-align: center;font-weight: normal;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Field" Name="KYOTEN_COUNT" DataField="KYOTEN_COUNT" Left="700" Top="30" Width="700" Height="250" Text = "" Style="text-align: right;font-weight: normal;font-size: 7pt;font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Field" Name="PRE_KYOTEN" DataField="PRE_KYOTEN" Left="1400" Top="30" Width="700" Height="250" Text = "" Style="text-align: right;font-weight: normal;font-size: 7pt;font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Field" Name="ROTIO" DataField="ROTIO" Left="2100" Top="30" Width="700" Height="250" Text = "" Style="text-align: right;font-weight: normal;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+        <Control Type="AR.Field" Name="COLUMN7" DataField="COLUMN7" Left="2800" Top="30" Width="12900" Height="250" Text = "" Style="text-align: left;font-weight: normal;font-size: 7pt font-family: ＭＳ ゴシック; vertical-align: middle; " />
+    </Section>
+    </Sections>
+    <ReportComponentTray />
+    <PageSettings LeftMargin="567" RightMargin="300" TopMargin="567" BottomMargin="450" PaperSize="9" PaperWidth="21384" PaperHeight="15120" PaperName="" Orientation="2" />
+    <Parameters />
+    </ActiveReportsLayout>

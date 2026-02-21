@@ -1,0 +1,424 @@
+@{
+    var projectName = Context.Request.Query["project"].FirstOrDefault() ?? "app";
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
+    ViewData["Title"] = $"{projectName} - Low Code Platform";
+}
+
+<!DOCTYPE html>
+<html lang="@currentLang" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@projectName - Low Code Platform</title>
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* 主题变量 */
+        [data-theme="light"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #334155;
+            --accent-color: #60a5fa;
+            --accent-hover: #3b82f6;
+            --shadow: 0 1px 3px rgba(0,0,0,0.3);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.4);
+        }
+
+        [data-theme="blue"] {
+            --bg-primary: #eff6ff;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #1e3a8a;
+            --text-secondary: #64748b;
+            --border-color: #bfdbfe;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --shadow: 0 1px 3px rgba(37,99,235,0.1);
+            --shadow-lg: 0 4px 6px rgba(37,99,235,0.15);
+        }
+
+        [data-theme="green"] {
+            --bg-primary: #f0fdf4;
+            --bg-secondary: #ffffff;
+            --bg-card: #ffffff;
+            --text-primary: #166534;
+            --text-secondary: #64748b;
+            --border-color: #bbf7d0;
+            --accent-color: #16a34a;
+            --accent-hover: #15803d;
+            --shadow: 0 1px 3px rgba(22,163,74,0.1);
+            --shadow-lg: 0 4px 6px rgba(22,163,74,0.15);
+        }
+
+        /* 基础样式 */
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* 主题切换器 */
+        .theme-switcher {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            gap: 0.5rem;
+            background: var(--bg-card);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-btn {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 9999px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            background: transparent;
+            color: var(--text-primary);
+        }
+
+        .theme-btn:hover {
+            background: var(--bg-primary);
+        }
+
+        .theme-btn.active {
+            border-color: var(--accent-color);
+            background: var(--bg-primary);
+        }
+
+        /* 页面容器 */
+        .page-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+
+        /* 头部 */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .page-subtitle {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* 卡片网格 */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* 卡片 */
+        .info-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .info-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-color);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        /* 快捷操作 */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* 数据模型列表 */
+        .model-list {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .model-list h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .model-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .model-link {
+            padding: 0.5rem 1rem;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+        }
+
+        .model-link:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        /* 页脚 */
+        .page-footer {
+            text-align: center;
+            padding: 2rem 0;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* 响应式 */
+        @@media (max-width: 768px) {
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .theme-switcher {
+                top: 0.5rem;
+                right: 0.5rem;
+                padding: 0.25rem;
+            }
+
+            .theme-btn {
+                width: 2rem;
+                height: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 主题切换器 -->
+    <div class="theme-switcher">
+        <button class="theme-btn active" data-theme="light" title="Light">
+            <i class="fas fa-sun"></i>
+        </button>
+        <button class="theme-btn" data-theme="dark" title="Dark">
+            <i class="fas fa-moon"></i>
+        </button>
+        <button class="theme-btn" data-theme="blue" title="Blue">
+            <i class="fas fa-tint"></i>
+        </button>
+        <button class="theme-btn" data-theme="green" title="Green">
+            <i class="fas fa-leaf"></i>
+        </button>
+    </div>
+
+    <div class="page-container">
+        <!-- 页面头部 -->
+        <div class="page-header">
+            <h1 class="page-title" id="page-title">Loading...</h1>
+            <p class="page-subtitle" id="page-subtitle">Low Code Platform</p>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="quick-actions" id="quick-actions">
+            <!-- 动态生成 -->
+        </div>
+
+        <!-- 数据模型 -->
+        <div class="model-list">
+            <h3><i class="fas fa-database"></i> Data Models</h3>
+            <div class="model-links" id="model-links">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 项目切换 -->
+        <div class="model-list">
+            <h3><i class="fas fa-folder"></i> Projects</h3>
+            <div class="model-links" id="project-links">
+                <!-- 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 页脚 -->
+        <footer class="page-footer">
+            <p>Low Code Platform - Powered by .NET 10 & YAML</p>
+            <p>&copy; 2026 All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        const projects = {
+            todo: { name: 'TODO Project', icon: '✅', actions: [
+                { label: 'Tasks', href: '/ui/Task?project=todo', icon: '📝' },
+                { label: 'Projects', href: '/ui/Project?project=todo', icon: '📁' }
+            ]},
+            journal: { name: 'My Journal', icon: '📔', actions: [
+                { label: 'Entries', href: '/ui/Entry?project=journal', icon: '✍️' },
+                { label: 'Categories', href: '/ui/Category?project=journal', icon: '🏷️' }
+            ]},
+            chinook: { name: 'Chinook Music', icon: '🎵', actions: [
+                { label: 'Artists', href: '/ui/Artist?project=chinook', icon: '🎤' },
+                { label: 'Albums', href: '/ui/Album?project=chinook', icon: '💿' }
+            ]},
+            ecommerce: { name: 'E-commerce', icon: '🛒', actions: [
+                { label: 'Products', href: '/ui/Product?project=ecommerce', icon: '📦' },
+                { label: 'Orders', href: '/ui/Order?project=ecommerce', icon: '📋' }
+            ]},
+            crm: { name: 'CRM', icon: '💼', actions: [
+                { label: 'Customers', href: '/ui/Customer?project=crm', icon: '👥' },
+                { label: 'Opportunities', href: '/ui/Opportunity?project=crm', icon: '💰' }
+            ]},
+            weather: { name: 'Weather', icon: '🌤️', actions: [
+                { label: 'Weather', href: '/ui/weather?project=weather', icon: '🌡️' }
+            ]}
+        };
+
+        // 主题切换
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+        }
+
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.theme === theme);
+            });
+        }
+
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', () => setTheme(btn.dataset.theme));
+        });
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            initTheme();
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const project = urlParams.get('project') || 'todo';
+            const projectData = projects[project] || projects['todo'];
+
+            // 设置标题
+            document.getElementById('page-title').textContent = `${projectData.icon} ${projectData.name}`;
+
+            // 快捷操作
+            const actionsContainer = document.getElementById('quick-actions');
+            if (projectData.actions && projectData.actions.length > 0) {
+                actionsContainer.innerHTML = projectData.actions.map(action => `
+                    <a href="${action.href}" class="action-btn">
+                        <span>${action.icon}</span>
+                        <span>${action.label}</span>
+                    </a>
+                `).join('');
+            }
+
+            // 加载数据模型
+            fetch(`/api/models?project=${project}`)
+                .then(r => r.json())
+                .then(models => {
+                    const linksContainer = document.getElementById('model-links');
+                    if (models && models.length > 0) {
+                        linksContainer.innerHTML = models.slice(0, 12).map(m => `
+                            <a href="/ui/${m}?project=${project}" class="model-link">${m}</a>
+                        `).join('');
+                    }
+                })
+                .catch(console.error);
+
+            // 项目链接
+            const projectLinks = document.getElementById('project-links');
+            projectLinks.innerHTML = Object.entries(projects).map(([key, data]) => `
+                <a href="/?project=${key}" class="model-link ${key === project ? 'active' : ''}" 
+                   style="${key === project ? 'background: var(--accent-color); color: white; border-color: var(--accent-color);' : ''}">
+                    ${data.icon} ${data.name}
+                </a>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

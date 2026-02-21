@@ -1,0 +1,99 @@
+body {
+    zoom: 1;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+    margin: 0px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    cursor: auto;
+    font-size: 0.8em;
+    font-family: "MS PGothic", "Simhei", "Arial", "Helvetica", "Verdana",
+        "sans-serif";
+}
+
+.HMAUD-resizer-west {
+    cursor: w-resize;
+}
+
+.HMAUD-content {
+    margin: 3px;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    border: 1px #a6c9e2 solid;
+    overflow: hidden;
+    position: relative;
+    min-width: 50%;
+}
+
+.HMAUD-loading-icon {
+    margin: 400px auto;
+    background: url(../../jquery/images/loading_index.gif) no-repeat center;
+    width: 35px;
+    height: 35px;
+}
+
+.ui-widget-content.HMAUD.HMAUD-layout-center {
+    position: relative;
+    height: 401px;
+    visibility: visible;
+}
+
+.ui-layout-pane-west.ui-layout-container {
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+    right: auto;
+    top: 34px;
+    bottom: 34px;
+    height: 470px;
+    z-index: 0;
+    width: 190px;
+    display: block;
+    visibility: visible;
+    overflow: hidden;
+}
+
+.ui-widget-content.HMAUD.HMAUD-layout-west {
+    position: relative;
+    height: 64px;
+    visibility: visible;
+}
+
+.HMAUD-content > div {
+    margin: 5px;
+}
+
+.HMAUD-content fieldset legend b span {
+    font-size: 10pt;
+}
+
+.HMAUD-content-fixed-width {
+    width: 1113px;
+}
+
+.HMAUD-content .btn.disabled,
+.HMAUD-content .btn[disabled],
+.HMAUD-content fieldset[disabled] .btn {
+    background-image: none !important;
+    opacity: 0.35 !important;
+}
+.HMAUD-content .HMS-button-set button,
+.HMAUD-content .HMS-button-pane button {
+    /*親要素の中央に対するサブ要素の配置*/
+    vertical-align: middle;
+}
+/* 暂时修正 150% */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .HMAUD-content-fixed-width {
+        width: 1045px;
+    }
+    .HMAUD-content fieldset legend b span {
+        font-size: 8pt;
+    }
+}
+/* 暂时修正 150% */

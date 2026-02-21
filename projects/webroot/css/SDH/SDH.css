@@ -1,0 +1,587 @@
+.tooltip {
+    position: relative;
+    display: inline-block;
+    text-decoration: none;
+    color: red;
+    outline: none;
+}
+
+.tooltip span {
+    color: black;
+    visibility: hidden;
+    position: absolute;
+    top: 15px;
+    left: 50%;
+    z-index: 1000;
+    width: 400px;
+    /*margin-left: -100px;*/
+    padding: 8px;
+    border: 2px solid #ccc;
+    opacity: 0.9;
+    background-color: #ddd;
+    background-image: -webkit-linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    background-image: -moz-linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    background-image: -ms-linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    background-image: -o-linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    background-image: linear-gradient(
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4),
+        0 1px 0 rgba(255, 255, 255, 0.5) inset;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.4);
+    text-align: left;
+}
+
+.tooltip:hover {
+    border: 0; /* IE6 fix */
+}
+
+.tooltip:hover span {
+    visibility: visible;
+}
+
+.tooltip span:before,
+.tooltip span:after {
+    content: "";
+    position: absolute;
+    z-index: 1000;
+    top: -8px;
+    left: 150px;
+    /*margin-left: 85px;*/
+    border-top: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-bottom: 8px solid #ffeaa6;
+}
+
+.hanteikekka {
+    margin-left: -280px;
+    left: 150px;
+}
+
+.hanteikekka:before,
+.hanteikekka:after {
+    margin-left: 115px;
+    left: 150px;
+}
+
+.hanteinai {
+    margin-left: -100px;
+}
+
+.hanteinai:before,
+.hanteinai:after {
+    margin-left: -58px;
+}
+
+.tooltip span:before {
+    border-bottom-color: #ccc;
+    top: -9px;
+}
+
+/* Yellow */
+
+.yellow-tooltip span {
+    border-color: #e1ca82;
+    background-color: #ffeaa6;
+}
+
+.yellow-tooltip span:after {
+    border-top-color: #ffeaa6;
+}
+
+.yellow-tooltip span:before {
+    border-top-color: #e1ca82;
+}
+
+/*==========================Opration modules start==========================*/
+
+.OprationButton {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    text-align: center;
+    line-height: 25px;
+    height: 30px;
+    outline: none;
+    border: 1px solid #dddddd;
+}
+.lbl_count {
+    padding: 3px;
+    /*    font-family: MS PGothic;*/
+    font-size: 16px;
+    text-align: right;
+    line-height: 30px;
+    height: 24px;
+    width: 134px;
+    background-color: #eee8aa;
+    white-space: nowrap;
+}
+
+.ListSelect {
+    padding: 3px;
+    /*    font-family: MS PGothic;*/
+    font-size: 16px;
+    line-height: 30px;
+    height: 30px;
+    width: 120px;
+    background-color: #ccffdd;
+}
+.ListSelect:hover {
+    background-color: #00ffaa;
+}
+.ListSelect:focus {
+    background-color: #00ffaa;
+}
+
+/*==========================Inputs modules end============================*/
+
+/*==========================CarLists modules start========================*/
+.carlist {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    width: 257px;
+    height: 30px;
+    text-align: left;
+    background-color: #ffffff;
+    margin: 3px;
+}
+.carlist:hover {
+    background-color: #00ff66;
+}
+.carlist:active {
+    background-color: #aaffcc;
+}
+
+.carlistTitle {
+    /*    font-family: MS PGothic;*/
+    font-size: 16px;
+    color: #7c7c7c;
+    font-weight: bold;
+    text-align: center;
+    width: 257px;
+    height: 22px;
+    line-height: 22px;
+    background-color: #eeeeaa;
+    margin: 3px;
+}
+/*==========================CarLists modules end==========================*/
+
+/*==========================Records modules end===========================*/
+.RecordA {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    width: 300px;
+    line-height: 20px;
+    text-align: left;
+    background-color: #ffeeaa;
+    margin: 3px 3px 10px 57px;
+    word-wrap: break-word;
+    word-break: normal;
+    box-shadow: 3px 3px #cccccc;
+}
+.RecordB {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    width: 300px;
+    line-height: 20px;
+    text-align: left;
+    background-color: #ccffcc;
+    margin: 3px 57px 10px 3px;
+    word-wrap: break-word;
+    word-break: normal;
+    box-shadow: 3px 3px #cccccc;
+}
+/*==========================Records modules end===========================*/
+.tdTitle {
+    margin: 1px 0 0 1px;
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    text-align: left;
+    font-weight: bold;
+    color: #7c7c7c;
+    background-color: #aaeeee;
+    height: 16px;
+}
+
+fieldset {
+    -moz-border-radius: 5px; /* for Firefox */
+    -webkit-border-radius: 5px; /* for Chrome */
+    padding: 2px;
+    margin: 0px;
+}
+/*==========================Records modules end===========================*/
+
+/*==========================SDH01 start===========================*/
+
+.sdh.sdh01.all {
+    width: 100%;
+    height: 100%;
+    background-color: #999999;
+    font-size: 11px;
+}
+
+.sdh.sdh01.content {
+    width: 100%;
+    height: 100%;
+}
+
+.sdh.sdh01.content.left.panel {
+    float: right;
+    position: absolute;
+    width: 420px !important; /* 20150316 edit*/
+    z-index: 100;
+    height: inherit;
+    left: 0px;
+}
+
+.sdh.sdh01.content.left.hantei_list {
+    float: left;
+    width: 400px !important; /* 20150316 edit*/
+    height: 100%;
+    overflow: auto;
+}
+
+.sdh.sdh01.content.left.hantei_list_showhide {
+    float: right !important;
+    width: 20px;
+    background-color: #dddddd;
+    height: 100%;
+    cursor: pointer;
+    text-align: center;
+}
+
+.sdh.sdh01.content.center {
+    float: left;
+    width: 100%;
+    height: 100%;
+    margin-left: 20px;
+}
+.sdh.sdh01.btn_sdh_02 {
+    width: 120px;
+    background-color: #55ff99;
+    background: linear-gradient(#eeddee, #77ffaa, #eeddee);
+}
+.sdh.sdh01.btn_sdh_03 {
+    width: 120px;
+    background: linear-gradient(#eeeedd, #77ddff, #eeeeee);
+}
+.sdh.sdh01.btn_sdh_05 {
+    width: 120px;
+    background: linear-gradient(#eeeedd, #77ddff, #eeeeee);
+}
+.sdh.sdh01.btn_sdh_06 {
+    width: 120px;
+    background: linear-gradient(#eeeedd, #77ddff, #eeeeee);
+}
+.sdh.sdh01.btn_sdh_04 {
+    width: 140px;
+    background: linear-gradient(#eeeeee, #55ddff, #eeeeee);
+}
+.sdh.sdh01.btn_reload {
+    width: 62px;
+    background: linear-gradient(#eeeeee, #ccccff, #eeeeee);
+}
+.sdh.sdh01.btn_prev_syaryou {
+    width: 92px;
+    background: linear-gradient(#eeeeee, #ccccff, #eeeeee);
+}
+.sdh.sdh01.btn_save {
+    width: 92px;
+    background: linear-gradient(#eeeeee, #ffcc55, #eeeeee);
+}
+/* ----20220121 sun add s */
+.sdh.sdh01.btn_sinchoku {
+    width: 92px;
+    background: linear-gradient(#eeeeee, #ffcc55, #eeeeee);
+}
+/* ----20220121 sun add e */
+.sdh.sdh01.btn_next_syaryou {
+    width: 92px;
+    background: linear-gradient(#eeeeee, #ccccff, #eeeeee);
+}
+.sdh.sdh01.btn_help {
+    width: 62px;
+    background: linear-gradient(#eeeedd, #77ddff, #eeeeee);
+}
+
+.sdh.sdh01.result_button_08 {
+    width: 92px;
+    line-height: 15px;
+    background: linear-gradient(#eeeedd, #77ddff, #eeeeee);
+}
+.sdh.sdh01.hantei_01 {
+    background-color: #ffdddd;
+}
+.sdh.sdh01.hantei_02 {
+    background-color: #ffccaa;
+}
+.sdh.sdh01.hantei_03 {
+    background-color: #ffeeaa;
+}
+.sdh.sdh01.hantei_04 {
+    background-color: #aaffaa;
+}
+.sdh.sdh01.hantei_05 {
+    background-color: #aaffcc;
+}
+.sdh.sdh01.hantei_06 {
+    background-color: #aaeeff;
+}
+.sdh.sdh01.hantei_07 {
+    background-color: #bbccee;
+}
+
+/*==========================SDH01 end===========================*/
+
+/*==========================SDH03 start===========================*/
+.sdh.div {
+    background-color: #99ffff;
+    color: #808080;
+    font-weight: bold;
+}
+.sdh.price {
+    color: blue;
+    text-align: right;
+}
+.sdh.sfont {
+    font-size: 12px;
+    line-height: 12px;
+}
+/*==========================SDH03 end===========================*/
+/*2014/11/26  ins  金 E愁E start*/
+/*==========================SDH04 start===========================*/
+.sdh.sdh04.valuealign {
+    text-align: right;
+}
+/*==========================SDH04 end===========================*/
+/*2014/11/26  ins  金 E愁E end*/
+
+/*==========================SDH06 start===========================*/
+.sdh.sdh06 {
+    color: #808080;
+    font-weight: bold;
+}
+/*==========================SDH06 end===========================*/
+
+/*==========================SDH0102 start===========================*/
+.sdh.label {
+    background-color: #aaeeee;
+    color: #808080;
+    font-weight: bold;
+}
+/* ----------------------------------- 表格 ----------------------------------- */
+/*20180416 lqs INS S*/
+.sdh.mlabel {
+    background-color: #aaeeee;
+    color: #808080;
+    height: 15px;
+    font-weight: bold;
+}
+/*20180416 lqs INS E*/
+table.dataintable {
+    border-collapse: collapse;
+    border: 1px solid #aaa;
+    width: 100%;
+}
+
+table.dataintable th {
+    vertical-align: baseline;
+    padding: 5px 15px 5px 6px;
+    background-color: #d5d5d5;
+    border: 1px solid #aaa;
+    text-align: left;
+}
+
+table.dataintable td {
+    /*20180416 lqs DEL S*/
+    /*vertical-align: text-top;*/
+    /*20180416 lqs DEL E*/
+    /*20180416 lqs INS S*/
+    padding: 0px 1px 0px 1px;
+    /*20180416 lqs INS E*/
+    /*padding: 6px 15px 6px 6px;*/
+    background-color: white;
+    /*border: 1px solid #aaa;*/
+}
+
+/*==========================SDH0102 end===========================*/
+
+/*==========================SDH0104 start===========================*/
+.RecordA {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    width: 300px;
+    line-height: 20px;
+    text-align: left;
+    background-color: #ffeeaa;
+    margin: 3px 3px 10px 57px;
+    word-wrap: break-word;
+    word-break: normal;
+    box-shadow: 3px 3px #cccccc;
+    margin-right: 20px;
+}
+.RecordB {
+    /*    font-family: MS PGothic;*/
+    font-size: 12px;
+    width: 300px;
+    line-height: 20px;
+    text-align: left;
+    background-color: #ccffcc;
+    margin: 3px 57px 10px 3px;
+    word-wrap: break-word;
+    word-break: normal;
+    box-shadow: 3px 3px #cccccc;
+}
+/*==========================SDH0104 end===========================*/
+
+.sdh.sdh09.label {
+    font-size: 9pt;
+    line-height: 13px;
+}
+
+/*----20220208 sun add s select2複数列*/
+/*20220209 YIN INS S*/
+#select2-selectconditions4-results li,
+#select2-selectconditions-results li,
+#select2-selectconditions3-results li {
+    float: none;
+    width: 90%;
+}
+#select2-busyoData-results li {
+    height: 12.8px;
+}
+/*20220209 YIN INS E*/
+.select2-results__option {
+    /* do the columns */
+    float: left;
+    width: 45%;
+}
+li.select2-results__option {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+/*----20220208 sun add e select2複数列*/
+.sdh .Label {
+    height: auto;
+    line-height: 15px;
+}
+/* 暂时修正 150% */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    /* 検索条件変更 画面 dropdown list */
+    body {
+        font-size: 0.68em !important;
+    }
+    /* 検索条件変更 画面 店舗　dropdown list */
+    .select2-results__option {
+        padding: 4px !important;
+    }
+    /* 検索条件変更 画面 対象年月 */
+    .sdh.sdh02.input_data {
+        font-size: 10pt !important;
+    }
+    /* 検索条件変更 画面 リスト種類 dropdown list　*/
+    #select2-selectData-results {
+        max-height: 320px !important;
+    }
+    /* 画面 左上 件数 */
+    .sdh .lbl_count {
+        padding: 0px 2px 0px 0px !important;
+        font-size: 14px !important;
+        width: 111px !important;
+    }
+    .sdh .lbl_count span {
+        line-height: 21px !important;
+    }
+    .sdh .ListSelect,
+    .sdh .OprationButton,
+    .sdh .lbl_count {
+        height: 21px !important;
+        line-height: 18px !important;
+    }
+    .sdh .OprationButton:not(.sdh01.btn_reload):not(.sdh01.btn_help) {
+        width: 80px !important;
+        font-size: 9px !important;
+    }
+    /* 画面 textarea 部分 */
+    .mcdropdown-input-control {
+        font-size: 9px !important;
+    }
+    .mcdropdown-dropdown-handle {
+        right: 0 !important;
+        top: 0 !important;
+    }
+    .mcdropdown_menu li {
+        line-height: 26px !important;
+        height: 26px !important;
+    }
+    .mcdropdown_menu ul li {
+        font-size: 13px !important;
+        line-height: 26px !important;
+    }
+    .sdh.sdh01.all,
+    .sdh.sdh01 text {
+        font-size: 9px !important;
+    }
+    /* 画面 青い背景 label */
+    .sdh.mlabel {
+        height: 12px !important;
+    }
+    .sdh .Label {
+        line-height: 12px !important;
+    }
+    /* 画面 右下 入庫・コンタクト履歴 */
+    .RecordA,
+    .RecordB {
+        font-size: 10px !important;
+        line-height: 14px !important;
+    }
+    /* 画面 左側 list */
+    .carlistTitle {
+        font-size: 13px !important;
+    }
+    /* ヘルプ */
+    .sdh.sfont {
+        font-size: 10px !important;
+    }
+    /* 集計情報 車種別集計情報 注文書情報 任意保険＆クレジット情報 */
+    .sdh.sdh09.dialog,
+    .sdh.sdh10.dialog,
+    .sdh.sdh03.dialog,
+    .sdh.sdh03.dialog fieldset legend b span,
+    .sdh.sdh04.dialog fieldset legend span {
+        font-size: 11px !important;
+    }
+    /* 集計情報 */
+    .sdh.sdh09.label {
+        font-size: 10px !important;
+    }
+    /* 車種別集計情報 */
+    .sdh.sdh10.dialog table tr td[width="60px"] {
+        width: 53px !important;
+    }
+    .sdh.sdh10.dialog .\31 0hanteinengetu_01 {
+        line-height: 11pt !important;
+    }
+    .sdh.sdh10.dialog > div:first-of-type {
+        max-width: 100%;
+    }
+}

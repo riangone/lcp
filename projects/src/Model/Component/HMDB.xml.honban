@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<application>
+	<!--Database Information-->
+
+	<!-- 業務 -->
+	<userid>gdmz</userid>
+	<password>gdmz</password>
+
+	<!--<server>10.136.7.2/gdmz</server>-->
+	<server>10.136.6.83/gdmz</server>
+
+	<!-- 業務-->
+	<!-- 経理 -->
+	<ppruserid>ppr3634</ppruserid><!-- Add 20131106 -->
+	<pprpassword>pprxuxw</pprpassword><!-- Add 20131106 -->
+
+	<!--<pprserver>10.136.8.6/PPR3634</pprserver>--><!-- Add 20131106 -->
+	<pprserver>10.136.6.83/gdmz</pprserver>
+
+	<timeout>3600</timeout>
+	<!-- 経理 -->
+	<!--DBLink Information-->
+	<GyoumSvLinkNM>@PPR36340001</GyoumSvLinkNM>
+	<!-- cakePHPでは取得結果を次の様にする事で(TMP.$getPath) で"app/tmp/"フォルダ内にアクセスします -->
+	<backuppath>BackUp/</backuppath>
+	<SKUcsvpath>SHIKAKU/</SKUcsvpath>
+	<logpath>logs/R2CSV.LOG</logpath>
+	<downloadpath>logs/DownLoad.log</downloadpath>
+	<N5200CSVERR>logs/N5200CSVERR.log</N5200CSVERR>
+
+	<!-- 共有フォルダマウント場所 cake/app/mntフォルダ以下を追加する -->
+                <!--<SnapShotPath>mnt/gdmz/SNAPSHOTREFRESH/</SnapShotPath>--><!-- Edit 20131106 -->
+	<SnapShotPath>mnt/temp/SNAPSHOTREFRESH/</SnapShotPath><!-- Edit 20131106 -->
+	<!--<FDCreate>mnt/gdmz/FD/</FDCreate>--><!-- Edit -->
+	<FDCreate>mnt/temp/FDCreate/</FDCreate>
+
+	<PathFrom>mnt/From/</PathFrom> <!-- Add -->
+	<!-- Add fuxiaolin-->
+	<PprErrLog>mnt/temp/ErrLog/</PprErrLog>
+	<UpLoad>R4/R4K/upload/</UpLoad>
+	<ExcelLayoutPath>mnt/temp/TEMPLATE/</ExcelLayoutPath>
+	<GenkaMstPath>mnt/temp/GenkaMst/GenkaMst.csv</GenkaMstPath>
+	<!-- Add fuxiaolin-->
+</application>

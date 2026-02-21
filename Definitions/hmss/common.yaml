@@ -1,0 +1,175 @@
+# HMSS 基础模型定义
+# Hiroshima Mazda Sales System
+
+models:
+  # ============================================
+  # 基础表 - 用户和系统管理
+  # ============================================
+  
+  HmssUser:
+    table: hmss_users
+    primary_key: usr_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 用户管理
+          create_button: 添加用户
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索用户...
+          USR_ID: 用户 ID
+          USR_NAME: 用户姓名
+          email: 邮箱
+          SYS1_FLG: Master 权限
+          SYS11_FLG: SDH 权限
+        ja:
+          title: ユーザー管理
+          create_button: ユーザー追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: ユーザーを検索...
+          USR_ID: ユーザー ID
+          USR_NAME: ユーザー名
+          email: メール
+          SYS1_FLG: マスター権限
+          SYS11_FLG: SDH 権限
+      styles:
+        card_class: "card-user"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [usr_id, usr_name, email, sys1_flg, sys11_flg]
+      filters:
+        usr_id:
+          label: 用户 ID
+          type: like
+        usr_name:
+          label: 姓名
+          type: like
+    
+    form:
+      title: 用户
+      fields:
+        usr_id:
+          label: 用户 ID
+          type: text
+          required: true
+          max_length: 20
+        usr_name:
+          label: 用户姓名
+          type: text
+          required: true
+          max_length: 50
+        email:
+          label: 邮箱
+          type: email
+          max_length: 100
+        pass:
+          label: 密码
+          type: password
+          max_length: 255
+    
+    properties:
+      usr_id: { type: string }
+      usr_name: { type: string }
+      email: { type: string }
+      pass: { type: string }
+      sys1_flg: { type: string }
+      sys2_flg: { type: string }
+      sys3_flg: { type: string }
+      sys4_flg: { type: string }
+      sys5_flg: { type: string }
+      sys6_flg: { type: string }
+      sys7_flg: { type: string }
+      sys8_flg: { type: string }
+      sys9_flg: { type: string }
+      sys10_flg: { type: string }
+      sys11_flg: { type: string }
+      sys12_flg: { type: string }
+      sys13_flg: { type: string }
+      sys14_flg: { type: string }
+  
+  HmssSystem:
+    table: hmss_system_m
+    primary_key: sys_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 系统管理
+          create_button: 添加系统
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索系统...
+          SYS_CD: 系统代码
+          SYS_NM: 系统名称
+          SYS_URL: 系统 URL
+          SYS_ORDER: 排序
+          SYS_USE_FLG: 使用标志
+        ja:
+          title: システム管理
+          create_button: システム追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: システムを検索...
+          SYS_CD: システムコード
+          SYS_NM: システム名
+          SYS_URL: システム URL
+          SYS_ORDER: 順序
+          SYS_USE_FLG: 使用フラグ
+      styles:
+        card_class: "card-system"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [sys_cd, sys_nm, sys_url, sys_order, sys_use_flg]
+      filters:
+        sys_nm:
+          label: 系统名称
+          type: like
+    
+    form:
+      title: 系统
+      fields:
+        sys_cd:
+          label: 系统代码
+          type: text
+          required: true
+          max_length: 10
+        sys_nm:
+          label: 系统名称
+          type: text
+          required: true
+          max_length: 50
+        sys_url:
+          label: 系统 URL
+          type: text
+          max_length: 100
+        sys_order:
+          label: 排序
+          type: number
+        sys_use_flg:
+          label: 使用标志
+          type: select
+          options:
+            '1': '使用中'
+            '0': '未使用'
+        sys_icon:
+          label: 图标
+          type: text
+          max_length: 50
+    
+    properties:
+      sys_cd: { type: string }
+      sys_nm: { type: string }
+      sys_url: { type: string }
+      sys_order: { type: int }
+      sys_use_flg: { type: string }
+      sys_icon: { type: string }

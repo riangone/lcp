@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<application>
+	<!--Database Information-->
+
+	<!-- 業務 -->
+	<userid>C##gdmz</userid>
+	<password>gdmz</password>
+	<server>192.168.2.251/gdmzh</server>
+	<!-- 業務-->
+
+	<!-- 経理 -->
+	<ppruserid>C##ppr3634</ppruserid><!-- Add 20131106 -->
+	<pprpassword>pprxuxw</pprpassword><!-- Add 20131106 -->
+	<pprserver>192.168.2.251/ppr3634</pprserver><!-- Add 20131106 -->
+	<!-- 経理 -->
+
+	<!-- 人事給与 --><!-- Add 20190418 -->
+	<kyjuserid>C##HMJINJI</kyjuserid>
+	<kyjpassword>jltmnxuxw</kyjpassword>
+	<kyjserver>192.168.2.251/gdmzj</kyjserver>
+	<!-- 人事給与--><!-- Add 20190418 -->
+
+	<!-- 社員情報 -->
+	<hmuserid>gdmz</hmuserid>
+	<hmpassword>@gdmz123</hmpassword>
+	<hmdbname>hmhr</hmdbname>
+	<hmserver>192.168.2.170</hmserver>
+	<hmport>3306</hmport>
+	<!-- 社員情報写真のパス -->
+	<hmhrmsPhotoPath>mnt/hmhrms/</hmhrmsPhotoPath>
+	<!-- 社員情報-->
+
+	<!-- （TMRH）HD伝票集計 --><!-- Add 20230626 -->
+	<hdkuserid>C##HDKAIKEI</hdkuserid>
+	<hdkpassword>hdk3634</hdkpassword>
+	<hdkserver>192.168.2.251/HDKAIKEI</hdkserver>
+	<!-- （TMRH）HD伝票集計 --><!-- Add 20230626 -->
+
+	<timeout>3600</timeout>
+	<!--DBLink Information-->
+	<GyoumSvLinkNM>@PPR36340001</GyoumSvLinkNM>
+	<!-- cakePHPでは取得結果を次の様にする事で(TMP.$getPath) で"app/tmp/"フォルダ内にアクセスします -->
+	<backuppath>BackUp/</backuppath>
+	<SKUcsvpath>SHIKAKU/</SKUcsvpath>
+	<logpath>logs/R2CSV.LOG</logpath>
+	<pprlogpath>log/R2CSV.LOG</pprlogpath>
+	<downloadpath>logs/DownLoad.log</downloadpath>
+	<N5200CSVERR>logs/N5200CSVERR.log</N5200CSVERR>
+
+	<JKImportCsvPath>logs</JKImportCsvPath>
+	<JKImportCsvLog>logs/JKImportCsv.Log</JKImportCsvLog>
+	<KyuuyoFileNM>KyuuyoInfo.csv</KyuuyoFileNM>
+	<SyouyoFileNM>SyouyoInfo.csv</SyouyoFileNM>
+	<!-- 共有フォルダマウント場所 cake/app/mntフォルダ以下を追加する -->
+
+	<SnapShotPath>mnt/temp/SNAPSHOTREFRESH/</SnapShotPath><!-- Edit 20131106 -->
+
+	<FDCreate>mnt/temp/FDCreate/</FDCreate><!-- Edit -->
+
+	<PathFrom>mnt/From/</PathFrom> <!-- Add -->
+	<JksysPathFrom>mnt/hmjinji/</JksysPathFrom>
+
+	<!-- Add fuxiaolin-->
+	<PprErrLog>mnt/temp/ErrLog/</PprErrLog>
+	<!-- <UpLoad>R4/R4K/upload/</UpLoad>-->
+	<UpLoad>files/R4K/upload/</UpLoad>
+    <!-- EXCELテンプレートの参照先（その他） -->
+	<ExcelLayoutPath>mnt/temp/TEMPLATE/</ExcelLayoutPath>
+
+	<!-- EXCELファイルの出力先（人事給与） -->
+	<JksysPathFrom>mnt/hmjinji/</JksysPathFrom>
+	<!-- EXCELファイルの出力先（人事考課表） -->
+	<KoukaPathFrom>mnt/jkkouka/result/</KoukaPathFrom>
+	<!-- 取込ファイルパス（人事給与） -->
+	<!-- <JksysUpLoad>JKSYS/upload/</JksysUpLoad>-->
+	<JksysUpLoad>files/JKSYS/upload/</JksysUpLoad>
+
+	<!-- EXCELテンプレートの参照先（人事給与） -->
+	<JksysExcelLayoutPath>mnt/hmjinji/</JksysExcelLayoutPath>
+	<!-- EXCELテンプレートの参照先（人事考課表） -->
+	<KoukaExcelLayoutPath>mnt/jkkouka/</KoukaExcelLayoutPath>
+
+	<!-- 取込ファイルパス（（TMRH）HD伝票集計） -->
+	<!--<HdkaikeiUpLoad>HDKAIKEI/upload/</HdkaikeiUpLoad>-->
+	<HdkaikeiUpLoad>files/HDKAIKEI/</HdkaikeiUpLoad>
+
+	<!-- 添付ファイルパス（（TMRH）HD伝票集計） -->
+	<HdkaikeiMomUpLoad>files/HDKAIKEI/</HdkaikeiMomUpLoad>
+	<!--<HdkaikeiMomUpLoad>mnt/hdkaikei/attachment/</HdkaikeiMomUpLoad>-->
+
+	<!-- テンプレートファイルパス（（TMRH）HD伝票集計） -->
+	<HDKAIKEIExcelLayoutPath>mnt/temp/TEMPLATE/HDKAIKEI/</HDKAIKEIExcelLayoutPath>
+
+	<!-- EXCELテンプレートの参照先（データ集計） -->
+	<HmtveExcelLayoutPath>mnt/temp/TEMPLATE/HMTVE/</HmtveExcelLayoutPath>
+
+	<GenkaMstPath>mnt/temp/GenkaMst/GenkaMst.csv</GenkaMstPath>
+	<!-- Add fuxiaolin-->
+	<!-- Add zhangxiaolei -->
+	<KAIcsvpath>mnt/CSV/KEIRI/</KAIcsvpath>
+	<!-- Add zhangxiaolei -->
+
+	<!-- 社員情報 -->
+	<hmhrmsPhotoPath>mnt/hmhrms/</hmhrmsPhotoPath>
+	<!-- 社員情報 -->
+
+	<!-- （内部統制） -->
+	<SMTPAuth>false</SMTPAuth>
+	<!-- 取込ファイルパス（内部統制） -->
+	<!--<HmaudUpLoad>HMAUD/upload/</HmaudUpLoad>-->
+	<HmaudUpLoad>files/HMAUD/upload/</HmaudUpLoad>
+	<!-- 議事録ファイルパス（内部統制） -->
+	<!--<HmaudMomUpLoad>webroot/files/HMAUD/</HmaudMomUpLoad>-->
+	<HmaudMomUpLoad>files/HMAUD/</HmaudMomUpLoad>
+	<HMAUDExcelLayoutPath>mnt/temp/TEMPLATE/HMAUD/</HMAUDExcelLayoutPath>
+
+</application>

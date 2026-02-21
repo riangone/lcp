@@ -106,6 +106,13 @@ public class UiController : Controller
         if (def.IsReadOnly)
             return BadRequest("This model is read-only.");
 
+        // 如果是直接访问（非 HTMX 请求），默认使用 page 模式
+        var isHtmxRequest = Request.Headers["HX-Request"] == "true";
+        if (!isHtmxRequest && string.Equals(editMode, "modal", StringComparison.OrdinalIgnoreCase))
+        {
+            editMode = "page";
+        }
+
         var project = Request.Query["project"].FirstOrDefault() ?? "app";
         Prepare(model);
         ViewData["ReturnUrl"] = returnUrl;
@@ -113,7 +120,7 @@ public class UiController : Controller
 
         // 检查是否有专用表单视图
         var hasCustomView = def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate);
-        
+
         // 获取 UI 模式
         var uiMode = Request.Query["ui"].FirstOrDefault();
         if (string.IsNullOrEmpty(uiMode))
@@ -124,8 +131,7 @@ public class UiController : Controller
         // 根据 UI 模式决定使用哪个视图
         if (uiMode == "generic" || !hasCustomView)
         {
-            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-                Request.Headers["HX-Request"] != "true")
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase))
             {
                 return View("CreatePage");
             }
@@ -139,11 +145,16 @@ public class UiController : Controller
             {
                 // views/task/Form.cshtml -> task_Form
                 var viewName = templatePath.Replace("views/", "").Replace("/", "_").Replace(".cshtml", "");
+                
+                // 如果是 HTMX 请求或 modal 模式，返回 PartialView
+                if (isHtmxRequest || string.Equals(editMode, "modal", StringComparison.OrdinalIgnoreCase))
+                {
+                    return PartialView(viewName);
+                }
                 return View(viewName);
             }
             // 回退到通用视图
-            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-                Request.Headers["HX-Request"] != "true")
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase))
             {
                 return View("CreatePage");
             }
@@ -163,6 +174,13 @@ public class UiController : Controller
         if (row == null)
             return NotFound();
 
+        // 如果是直接访问（非 HTMX 请求），默认使用 page 模式
+        var isHtmxRequest = Request.Headers["HX-Request"] == "true";
+        if (!isHtmxRequest && string.Equals(editMode, "modal", StringComparison.OrdinalIgnoreCase))
+        {
+            editMode = "page";
+        }
+
         var project = Request.Query["project"].FirstOrDefault() ?? "app";
         Prepare(model);
         ViewData["Row"] = row;
@@ -171,7 +189,7 @@ public class UiController : Controller
 
         // 检查是否有专用表单视图
         var hasCustomView = def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.FormTemplate);
-        
+
         // 获取 UI 模式
         var uiMode = Request.Query["ui"].FirstOrDefault();
         if (string.IsNullOrEmpty(uiMode))
@@ -182,8 +200,7 @@ public class UiController : Controller
         // 根据 UI 模式决定使用哪个视图
         if (uiMode == "generic" || !hasCustomView)
         {
-            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-                Request.Headers["HX-Request"] != "true")
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase))
             {
                 return View("EditPage", row);
             }
@@ -197,11 +214,16 @@ public class UiController : Controller
             {
                 // views/customer/Form.cshtml -> customer_Form
                 var viewName = templatePath.Replace("views/", "").Replace("/", "_").Replace(".cshtml", "");
+                
+                // 如果是 HTMX 请求或 modal 模式，返回 PartialView
+                if (isHtmxRequest || string.Equals(editMode, "modal", StringComparison.OrdinalIgnoreCase))
+                {
+                    return PartialView(viewName);
+                }
                 return View(viewName);
             }
             // 回退到通用视图
-            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase) &&
-                Request.Headers["HX-Request"] != "true")
+            if (string.Equals(editMode, "page", StringComparison.OrdinalIgnoreCase))
             {
                 return View("EditPage", row);
             }

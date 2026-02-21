@@ -1,0 +1,396 @@
+# HMAUD 内部統制システム
+# Internal Audit System
+
+models:
+  # ============================================
+  # 監査員マスタ
+  # ============================================
+  
+  HmaudKansaJin:
+    table: hmaud_kansa_jin
+    primary_key: kansa_jin_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 監査員管理
+          create_button: 添加監査員
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索監査員...
+          KANSA_JIN_CD: 監査員代码
+          KANSA_JIN_NM: 監査員姓名
+          KANSA_JIN_KANA: 監査員假名
+          TEL: 电话
+          EMAIL: 邮箱
+        ja:
+          title: 監査員管理
+          create_button: 監査員追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 監査員を検索...
+          KANSA_JIN_CD: 監査員コード
+          KANSA_JIN_NM: 監査員名
+          KANSA_JIN_KANA: 監査員カナ
+          TEL: 電話
+          EMAIL: メール
+      styles:
+        card_class: "card-kansa-jin"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [kansa_jin_cd, kansa_jin_nm, kansa_jin_kana, tel]
+      filters:
+        kansa_jin_nm:
+          label: 監査員姓名
+          type: like
+    
+    form:
+      title: 監査員
+      fields:
+        kansa_jin_cd:
+          label: 監査員代码
+          type: text
+          required: true
+          max_length: 10
+        kansa_jin_nm:
+          label: 監査員姓名
+          type: text
+          required: true
+          max_length: 50
+        kansa_jin_kana:
+          label: 監査員假名
+          type: text
+          max_length: 50
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        email:
+          label: 邮箱
+          type: email
+          max_length: 100
+    
+    properties:
+      kansa_jin_cd: { type: string }
+      kansa_jin_nm: { type: string }
+      kansa_jin_kana: { type: string }
+      tel: { type: string }
+      email: { type: string }
+  
+  HmaudKansaJisseki:
+    table: hmaud_kansa_jisseki
+    primary_key: jisseki_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 監査実績
+          create_button: 添加実績
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索実績...
+          JISSEKI_ID: 実績 ID
+          KANSA_DT: 監査日期
+          KANSA_JIN_CD: 監査員代码
+          TARGET_BUMON: 対象部門
+          RESULT: 結果
+          REMARK: 备注
+        ja:
+          title: 監査実績
+          create_button: 実績追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 実績を検索...
+          JISSEKI_ID: 実績 ID
+          KANSA_DT: 監査日
+          KANSA_JIN_CD: 監査員コード
+          TARGET_BUMON: 対象部門
+          RESULT: 結果
+          REMARK: 備考
+      styles:
+        card_class: "card-kansa-jisseki"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [jisseki_id, kansa_dt, kansa_jin_cd, target_bumon, result]
+      filters:
+        kansa_dt:
+          label: 監査日期
+          type: date
+        kansa_jin_cd:
+          label: 監査員
+          type: like
+    
+    form:
+      title: 監査実績
+      fields:
+        kansa_dt:
+          label: 監査日期
+          type: date
+          required: true
+        kansa_jin_cd:
+          label: 監査員代码
+          type: text
+          required: true
+          max_length: 10
+        target_bumon:
+          label: 対象部門
+          type: text
+          max_length: 50
+        result:
+          label: 結果
+          type: select
+          options:
+            '1': '適正'
+            '2': '要改善'
+            '3': '不適正'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      jisseki_id: { type: int }
+      kansa_dt: { type: date }
+      kansa_jin_cd: { type: string }
+      target_bumon: { type: string }
+      result: { type: string }
+      remark: { type: string }
+  
+  HmaudSKD:
+    table: hmaud_skd
+    primary_key: skd_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 監査スケジュール
+          create_button: 添加スケジュール
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索スケジュール...
+          SKD_ID: スケジュール ID
+          START_DT: 開始日期
+          END_DT: 終了日期
+          KANSA_JIN_CD: 監査員代码
+          TARGET_BUMON: 対象部門
+          STATUS: 状态
+        ja:
+          title: 監査スケジュール
+          create_button: スケジュール追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: スケジュールを検索...
+          SKD_ID: スケジュール ID
+          START_DT: 開始日
+          END_DT: 終了日
+          KANSA_JIN_CD: 監査員コード
+          TARGET_BUMON: 対象部門
+          STATUS: ステータス
+      styles:
+        card_class: "card-skd"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [skd_id, start_dt, end_dt, kansa_jin_cd, target_bumon, status]
+      filters:
+        start_dt:
+          label: 開始日期
+          type: date
+        kansa_jin_cd:
+          label: 監査員
+          type: like
+    
+    form:
+      title: 監査スケジュール
+      fields:
+        start_dt:
+          label: 開始日期
+          type: date
+          required: true
+        end_dt:
+          label: 終了日期
+          type: date
+          required: true
+        kansa_jin_cd:
+          label: 監査員代码
+          type: text
+          max_length: 10
+        target_bumon:
+          label: 対象部門
+          type: text
+          max_length: 50
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '予定'
+            '2': '実施中'
+            '3': '完了'
+            '4': 'キャンセル'
+    
+    properties:
+      skd_id: { type: int }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      kansa_jin_cd: { type: string }
+      target_bumon: { type: string }
+      status: { type: string }
+  
+  HmaudReport:
+    table: hmaud_report
+    primary_key: report_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 監査報告
+          create_button: 添加報告
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索報告...
+          REPORT_ID: 報告 ID
+          REPORT_DT: 報告日期
+          REPORT_TITLE: 報告标题
+          REPORT_CONTENT: 報告内容
+          STATUS: 状态
+        ja:
+          title: 監査報告
+          create_button: 報告追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 報告を検索...
+          REPORT_ID: 報告 ID
+          REPORT_DT: 報告日
+          REPORT_TITLE: 報告タイトル
+          REPORT_CONTENT: 報告内容
+          STATUS: ステータス
+      styles:
+        card_class: "card-report"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [report_id, report_dt, report_title, status]
+      filters:
+        report_dt:
+          label: 報告日期
+          type: date
+        report_title:
+          label: 報告标题
+          type: like
+    
+    form:
+      title: 監査報告
+      fields:
+        report_dt:
+          label: 報告日期
+          type: date
+        report_title:
+          label: 報告标题
+          type: text
+          required: true
+          max_length: 200
+        report_content:
+          label: 報告内容
+          type: textarea
+          max_length: 5000
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '草案'
+            '2': '承認済'
+            '3': '公開'
+    
+    properties:
+      report_id: { type: int }
+      report_dt: { type: date }
+      report_title: { type: string }
+      report_content: { type: string }
+      status: { type: string }
+  
+  HmaudGijiroku:
+    table: hmaud_gijiroku
+    primary_key: gijiroku_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 議事録管理
+          create_button: 添加議事録
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索議事録...
+          GIJIROKU_ID: 議事録 ID
+          KAIGI_DT: 会議日期
+          KAIGI_TITLE: 会議标题
+          FILE_PATH: 文件路径
+          REMARK: 备注
+        ja:
+          title: 議事録管理
+          create_button: 議事録追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 議事録を検索...
+          GIJIROKU_ID: 議事録 ID
+          KAIGI_DT: 会議日
+          KAIGI_TITLE: 会議タイトル
+          FILE_PATH: ファイルパス
+          REMARK: 備考
+      styles:
+        card_class: "card-gijiroku"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [gijiroku_id, kaigi_dt, kaigi_title, file_path]
+      filters:
+        kaigi_dt:
+          label: 会議日期
+          type: date
+        kaigi_title:
+          label: 会議标题
+          type: like
+    
+    form:
+      title: 議事録
+      fields:
+        kaigi_dt:
+          label: 会議日期
+          type: date
+          required: true
+        kaigi_title:
+          label: 会議标题
+          type: text
+          required: true
+          max_length: 200
+        file_path:
+          label: 文件路径
+          type: text
+          max_length: 500
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      gijiroku_id: { type: int }
+      kaigi_dt: { type: date }
+      kaigi_title: { type: string }
+      file_path: { type: string }
+      remark: { type: string }

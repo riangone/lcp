@@ -1,0 +1,28 @@
+<?php
+	$data_fields_HijimeIchiran = Array(
+		"HJM_SYR_DTM" => "",
+		"TEN_HJM_NO" => "",
+		"TENPO_CD" => "",
+		"TENPO_NM" => "",
+		"CreDate" => "",
+		"CreName" => "",
+		"EGK_STA_DEN_NO" => "",
+		"EGK_END_DEN_NO" => "",
+		"KMY_STA_DEN_NO" => "",
+		"KMY_END_DEN_NO" => "",
+		"CRD_DEN_DTL_STA_DEN_NO" => "",
+		"CRD_DEN_DTL_END_DEN_NO" => "",
+		"SIR_DEN_DTL_STA_DEN_NO" => "",
+		"SIR_DEN_DTL_END_DEN_NO" => "",
+		"FRK_DEN_DTL_STA_DEN_NO" => "",
+		"FRK_DEN_DTL_END_DEN_NO" => "",
+		"ETC_DEN_DTL_STA_DEN_NO" => "",
+		"ETC_DEN_DTL_END_DEN_NO" => "",
+		"EGK_KEJ_KENSU" => "",
+		"KMY_KEJ_KENSU" => "",
+		"CRD_DEN_DTL_KEJ_KENSU" => "",
+		"SIR_DEN_DTL_KEJ_KENSU" => "",
+		"FRK_DEN_DTL_KEJ_KENSU" => "",
+		"ETC_DEN_DTL_KEJ_KENSU" => "",
+	);
+?>

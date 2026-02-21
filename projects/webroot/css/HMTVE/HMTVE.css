@@ -1,0 +1,100 @@
+body {
+    zoom: 1;
+    overflow: hidden;
+    width: auto;
+    height: auto;
+    margin: 0px;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    cursor: auto;
+    font-size: 0.8em;
+    font-family: "MS PGothic", "Simhei", "Arial", "Helvetica", "Verdana",
+        "sans-serif";
+}
+
+.HMTVE-resizer-west {
+    cursor: w-resize;
+}
+
+.HMTVE-content {
+    margin: 3px;
+    width: auto;
+    height: auto;
+    padding: 2px;
+    border: 1px #a6c9e2 solid;
+    overflow: hidden;
+    position: relative;
+    min-width: 50%;
+}
+
+.HMTVE-loading-icon {
+    margin: 400px auto;
+    background: url(../../jquery/images/loading_index.gif) no-repeat center;
+    width: 35px;
+    height: 35px;
+}
+
+.ui-widget-content.HMTVE.HMTVE-layout-center {
+    position: relative;
+    height: 401px;
+    visibility: visible;
+}
+
+.ui-layout-pane-west.ui-layout-container {
+    position: absolute;
+    margin: 0px;
+    left: 0px;
+    right: auto;
+    top: 34px;
+    bottom: 34px;
+    height: 470px;
+    z-index: 0;
+    width: 190px;
+    display: block;
+    visibility: visible;
+    overflow: hidden;
+}
+
+.ui-widget-content.HMTVE.HMTVE-layout-west {
+    position: relative;
+    height: 64px;
+    visibility: visible;
+}
+
+.HMTVE-content > div {
+    margin: 5px;
+}
+
+.HMTVE-content fieldset legend b span {
+    font-size: 10pt;
+}
+
+.HMTVE-content-fixed-width {
+    width: 1113px;
+}
+
+.HMTVE-content .btn.disabled,
+.HMTVE-content .btn[disabled],
+.HMTVE-content fieldset[disabled] .btn {
+    background-image: none !important;
+    opacity: 0.35 !important;
+}
+.HMTVE-content .HMS-button-set button,
+.HMTVE-content .HMS-button-pane button {
+    /*親要素の中央に対するサブ要素の配置*/
+    vertical-align: middle;
+}
+
+/* 暂时修正 150% */
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .HMTVE-content-fixed-width {
+        width: 1045px;
+    }
+    .HMTVE-content fieldset legend b span {
+        font-size: 8pt;
+    }
+}
+/* 暂时修正 150% */

@@ -1,0 +1,513 @@
+# JKSYS 人事給与システム
+
+models:
+  # ============================================
+  # 人件費表
+  # ============================================
+  
+  JkJinkenhi:
+    table: jk_jinkenhi
+    primary_key: jinken_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 人件費管理
+          create_button: 添加人件費
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索人件費...
+          JINKEN_ID: 人件費 ID
+          EMP_ID: 社員 ID
+          YYMM: 年月
+          SHIKYU_GAKU: 支給金额
+          GENKIN_GAKU: 現金金额
+          REMARK: 备注
+        ja:
+          title: 人件費管理
+          create_button: 人件費追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 人件費を検索...
+          JINKEN_ID: 人件費 ID
+          EMP_ID: 社員 ID
+          YYMM: 年月
+          SHIKYU_GAKU: 支給金額
+          GENKIN_GAKU: 現金金額
+          REMARK: 備考
+      styles:
+        card_class: "card-jinkenhi"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [jinken_id, emp_id, yymm, shikyu_gaku, genkin_gaku]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        yymm:
+          label: 年月
+          type: like
+    
+    form:
+      title: 人件費
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        yymm:
+          label: 年月
+          type: text
+          required: true
+          max_length: 6
+        shikyu_gaku:
+          label: 支給金额
+          type: number
+          required: true
+        genkin_gaku:
+          label: 現金金额
+          type: number
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      jinken_id: { type: int }
+      emp_id: { type: string }
+      yymm: { type: string }
+      shikyu_gaku: { type: decimal }
+      genkin_gaku: { type: decimal }
+      remark: { type: string }
+  
+  JkSyoreikin:
+    table: jk_syoreikin
+    primary_key: syorei_id
+    
+    ui:
+      layout:
+      theme: modern
+      grid_columns: 1
+    labels:
+      zh:
+        title: 賞与管理
+        create_button: 添加賞与
+        edit_button: 编辑
+        delete_button: 删除
+        search_placeholder: 搜索賞与...
+        SYOREI_ID: 賞与 ID
+        EMP_ID: 社員 ID
+        YYMM: 年月
+        SYOREI_GAKU: 賞与金额
+        REMARK: 备注
+      ja:
+        title: 賞与管理
+        create_button: 賞与追加
+        edit_button: 編集
+        delete_button: 削除
+        search_placeholder: 賞与を検索...
+        SYOREI_ID: 賞与 ID
+        EMP_ID: 社員 ID
+        YYMM: 年月
+        SYOREI_GAKU: 賞与金額
+        REMARK: 備考
+    styles:
+      card_class: "card-syoreikin"
+      button_class: "btn btn-success"
+    
+    list:
+      columns: [syorei_id, emp_id, yymm, syorei_gaku]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        yymm:
+          label: 年月
+          type: like
+    
+    form:
+      title: 賞与
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        yymm:
+          label: 年月
+          type: text
+          required: true
+          max_length: 6
+        syorei_gaku:
+          label: 賞与金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      syorei_id: { type: int }
+      emp_id: { type: string }
+      yymm: { type: string }
+      syorei_gaku: { type: decimal }
+      remark: { type: string }
+  
+  JkHyoka:
+    table: jk_hyoka
+    primary_key: hyoka_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 評価管理
+          create_button: 添加評価
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索評価...
+          HYOKA_ID: 評価 ID
+          EMP_ID: 社員 ID
+          HYOKA_KIKAN: 評価期間
+          HYOKA_SCORE: 評価点数
+          HYOKA_RANK: 評価ランク
+          REMARK: 备注
+        ja:
+          title: 評価管理
+          create_button: 評価追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 評価を検索...
+          HYOKA_ID: 評価 ID
+          EMP_ID: 社員 ID
+          HYOKA_KIKAN: 評価期間
+          HYOKA_SCORE: 評価点数
+          HYOKA_RANK: 評価ランク
+          REMARK: 備考
+      styles:
+        card_class: "card-hyoka"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [hyoka_id, emp_id, hyoka_kikan, hyoka_score, hyoka_rank]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        hyoka_kikan:
+          label: 評価期間
+          type: like
+    
+    form:
+      title: 評価
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        hyoka_kikan:
+          label: 評価期間
+          type: text
+          required: true
+          max_length: 20
+        hyoka_score:
+          label: 評価点数
+          type: number
+        hyoka_rank:
+          label: 評価ランク
+          type: select
+          options:
+            'S': 'S (最優秀)'
+            'A': 'A (優秀)'
+            'B': 'B (普通)'
+            'C': 'C (要改善)'
+            'D': 'D (不良)'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      hyoka_id: { type: int }
+      emp_id: { type: string }
+      hyoka_kikan: { type: string }
+      hyoka_score: { type: decimal }
+      hyoka_rank: { type: string }
+      remark: { type: string }
+  
+  JkSyukkou:
+    table: jk_syukkou
+    primary_key: syukkou_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 出張管理
+          create_button: 添加出張
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索出張...
+          SYUKKOU_ID: 出張 ID
+          EMP_ID: 社員 ID
+          START_DT: 开始日期
+          END_DT: 结束日期
+          DESTINATION: 目的地
+          PURPOSE: 目的
+          SEIKYU_GAKU: 精算金额
+        ja:
+          title: 出張管理
+          create_button: 出張追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 出張を検索...
+          SYUKKOU_ID: 出張 ID
+          EMP_ID: 社員 ID
+          START_DT: 開始日
+          END_DT: 終了日
+          DESTINATION: 目的地
+          PURPOSE: 目的
+          SEIKYU_GAKU: 精算金額
+      styles:
+        card_class: "card-syukkou"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [syukkou_id, emp_id, start_dt, end_dt, destination]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        start_dt:
+          label: 开始日期
+          type: date
+    
+    form:
+      title: 出張
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        start_dt:
+          label: 开始日期
+          type: date
+          required: true
+        end_dt:
+          label: 结束日期
+          type: date
+          required: true
+        destination:
+          label: 目的地
+          type: text
+          max_length: 200
+        purpose:
+          label: 目的
+          type: text
+          max_length: 500
+        seikyu_gaku:
+          label: 精算金额
+          type: number
+    
+    properties:
+      syukkou_id: { type: int }
+      emp_id: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      destination: { type: string }
+      purpose: { type: string }
+      seikyu_gaku: { type: decimal }
+  
+  JkKoyouRireki:
+    table: jk_koyou_rireki
+    primary_key: koyou_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 雇用履歴
+          create_button: 添加雇用履歴
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索雇用履歴...
+          KOYOU_ID: 雇用 ID
+          EMP_ID: 社員 ID
+          START_DT: 开始日期
+          END_DT: 结束日期
+          KOYOU_KEITAI: 雇用形态
+          KINMU_TIME: 勤务时间
+        ja:
+          title: 雇用履歴
+          create_button: 雇用履歴追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 雇用履歴を検索...
+          KOYOU_ID: 雇用 ID
+          EMP_ID: 社員 ID
+          START_DT: 開始日
+          END_DT: 終了日
+          KOYOU_KEITAI: 雇用形態
+          KINMU_TIME: 勤務時間
+      styles:
+        card_class: "card-koyou"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [koyou_id, emp_id, start_dt, end_dt, koyou_keitai]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        koyou_keitai:
+          label: 雇用形态
+          type: like
+    
+    form:
+      title: 雇用履歴
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        start_dt:
+          label: 开始日期
+          type: date
+          required: true
+        end_dt:
+          label: 结束日期
+          type: date
+        koyou_keitai:
+          label: 雇用形态
+          type: select
+          options:
+            '1': '正社員'
+            '2': '契約社員'
+            '3': '派遣社員'
+            '4': 'アルバイト'
+        kinmu_time:
+          label: 勤务时间
+          type: text
+          max_length: 50
+    
+    properties:
+      koyou_id: { type: int }
+      emp_id: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      koyou_keitai: { type: string }
+      kinmu_time: { type: string }
+  
+  JkIdouRireki:
+    table: jk_idou_rireki
+    primary_key: idou_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 異動履歴
+          create_button: 添加異動
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索異動...
+          IDOU_ID: 異動 ID
+          EMP_ID: 社員 ID
+          IDOU_DT: 異動日期
+          IDOU_SHURUI: 異動种类
+          BEFORE_BUMON: 異動前部門
+          AFTER_BUMON: 異動後部門
+          BEFORE_SHOKUGYOU: 異動前职位
+          AFTER_SHOKUGYOU: 異動後职位
+        ja:
+          title: 異動履歴
+          create_button: 異動追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 異動を検索...
+          IDOU_ID: 異動 ID
+          EMP_ID: 社員 ID
+          IDOU_DT: 異動日
+          IDOU_SHURUI: 異動种类
+          BEFORE_BUMON: 異動前部門
+          AFTER_BUMON: 異動後部門
+          BEFORE_SHOKUGYOU: 異動前職位
+          AFTER_SHOKUGYOU: 異動後職位
+      styles:
+        card_class: "card-idou"
+        button_class: "btn btn-dark"
+    
+    list:
+      columns: [idou_id, emp_id, idou_dt, idou_shurui, after_bumon]
+      filters:
+        emp_id:
+          label: 社員 ID
+          type: like
+        idou_dt:
+          label: 異動日期
+          type: date
+    
+    form:
+      title: 異動
+      fields:
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        idou_dt:
+          label: 異動日期
+          type: date
+          required: true
+        idou_shurui:
+          label: 異動种类
+          type: select
+          options:
+            '1': '昇進'
+            '2': '降格'
+            '3': '配置転換'
+            '4': '転勤'
+            '5': '其他'
+        before_bumon:
+          label: 異動前部門
+          type: text
+          max_length: 50
+        after_bumon:
+          label: 異動後部門
+          type: text
+          max_length: 50
+        before_shokugyou:
+          label: 異動前职位
+          type: text
+          max_length: 50
+        after_shokugyou:
+          label: 異動後职位
+          type: text
+          max_length: 50
+    
+    properties:
+      idou_id: { type: int }
+      emp_id: { type: string }
+      idou_dt: { type: date }
+      idou_shurui: { type: string }
+      before_bumon: { type: string }
+      after_bumon: { type: string }
+      before_shokugyou: { type: string }
+      after_shokugyou: { type: string }

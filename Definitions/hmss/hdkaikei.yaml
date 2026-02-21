@@ -1,0 +1,641 @@
+# HDKAIKEI 会计传票系统模型定义
+# TMRH HD 伝票集計システム
+
+models:
+  # ============================================
+  # 主表
+  # ============================================
+  
+  HdkKamokuMst:
+    table: hdk_kamoku_mst
+    primary_key: kamoku_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 科目主表
+          create_button: 添加科目
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索科目...
+          KAMOKU_CD: 科目代码
+          KAMOKU_NM: 科目名称
+          KAMOKU_KANA: 科目假名
+          KAMOKU_LEVEL: 科目级别
+          PARENT_KAMOKU_CD: 父科目代码
+        ja:
+          title: 科目マスタ
+          create_button: 科目追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 科目を検索...
+          KAMOKU_CD: 科目コード
+          KAMOKU_NM: 科目名
+          KAMOKU_KANA: 科目カナ
+          KAMOKU_LEVEL: 科目レベル
+          PARENT_KAMOKU_CD: 親科目コード
+      styles:
+        card_class: "card-kamoku"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [kamoku_cd, kamoku_nm, kamoku_kana, kamoku_level]
+      filters:
+        kamoku_nm:
+          label: 科目名称
+          type: like
+        kamoku_kana:
+          label: 假名
+          type: like
+    
+    form:
+      title: 科目
+      fields:
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          required: true
+          max_length: 10
+        kamoku_nm:
+          label: 科目名称
+          type: text
+          required: true
+          max_length: 50
+        kamoku_kana:
+          label: 科目假名
+          type: text
+          max_length: 50
+        kamoku_level:
+          label: 科目级别
+          type: number
+        parent_kamoku_cd:
+          label: 父科目代码
+          type: text
+          max_length: 10
+    
+    properties:
+      kamoku_cd: { type: string }
+      kamoku_nm: { type: string }
+      kamoku_kana: { type: string }
+      kamoku_level: { type: int }
+      parent_kamoku_cd: { type: string }
+  
+  HdkTorihikisakiMst:
+    table: hdk_torihikisaki_mst
+    primary_key: torihiki_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 取引先主表
+          create_button: 添加取引先
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索取引先...
+          TORIHIKI_CD: 取引先代码
+          TORIHIKI_NM: 取引先名称
+          TORIHIKI_KANA: 取引先假名
+          TEL: 电话
+          FAX: 传真
+          ADDRESS: 地址
+        ja:
+          title: 取引先マスタ
+          create_button: 取引先追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 取引先を検索...
+          TORIHIKI_CD: 取引先コード
+          TORIHIKI_NM: 取引先名
+          TORIHIKI_KANA: 取引先カナ
+          TEL: 電話
+          FAX: FAX
+          ADDRESS: 住所
+      styles:
+        card_class: "card-torihiki"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [torihiki_cd, torihiki_nm, torihiki_kana, tel]
+      filters:
+        torihiki_nm:
+          label: 取引先名称
+          type: like
+        torihiki_kana:
+          label: 假名
+          type: like
+    
+    form:
+      title: 取引先
+      fields:
+        torihiki_cd:
+          label: 取引先代码
+          type: text
+          required: true
+          max_length: 10
+        torihiki_nm:
+          label: 取引先名称
+          type: text
+          required: true
+          max_length: 100
+        torihiki_kana:
+          label: 取引先假名
+          type: text
+          max_length: 100
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        fax:
+          label: 传真
+          type: text
+          max_length: 20
+        address:
+          label: 地址
+          type: text
+          max_length: 500
+    
+    properties:
+      torihiki_cd: { type: string }
+      torihiki_nm: { type: string }
+      torihiki_kana: { type: string }
+      tel: { type: string }
+      fax: { type: string }
+      address: { type: string }
+  
+  HdkBumonMst:
+    table: hdk_bumon_mst
+    primary_key: bumon_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 部門主表
+          create_button: 添加部門
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索部門...
+          BUMON_CD: 部門代码
+          BUMON_NM: 部門名称
+          BUMON_KANA: 部門假名
+        ja:
+          title: 部門マスタ
+          create_button: 部門追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 部門を検索...
+          BUMON_CD: 部門コード
+          BUMON_NM: 部門名
+          BUMON_KANA: 部門カナ
+      styles:
+        card_class: "card-bumon"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [bumon_cd, bumon_nm, bumon_kana]
+      filters:
+        bumon_nm:
+          label: 部門名称
+          type: like
+    
+    form:
+      title: 部門
+      fields:
+        bumon_cd:
+          label: 部門代码
+          type: text
+          required: true
+          max_length: 10
+        bumon_nm:
+          label: 部門名称
+          type: text
+          required: true
+          max_length: 50
+        bumon_kana:
+          label: 部門假名
+          type: text
+          max_length: 50
+    
+    properties:
+      bumon_cd: { type: string }
+      bumon_nm: { type: string }
+      bumon_kana: { type: string }
+  
+  HdkSyainMst:
+    table: hdk_syain_mst
+    primary_key: syain_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: 社員主表
+          create_button: 添加社員
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索社員...
+          SYAIN_NO: 社員编号
+          SYAIN_NM: 社員姓名
+          SYAIN_KANA: 社員假名
+          BUMON_CD: 部門代码
+          TEL: 电话
+          EMAIL: 邮箱
+        ja:
+          title: 社員マスタ
+          create_button: 社員追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 社員を検索...
+          SYAIN_NO: 社員番号
+          SYAIN_NM: 社員名
+          SYAIN_KANA: 社員カナ
+          BUMON_CD: 部門コード
+          TEL: 電話
+          EMAIL: メール
+      styles:
+        card_class: "card-syain"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [syain_no, syain_nm, bumon_cd, tel]
+      filters:
+        syain_nm:
+          label: 社員姓名
+          type: like
+        bumon_cd:
+          label: 部門
+          type: like
+    
+    form:
+      title: 社員
+      fields:
+        syain_no:
+          label: 社員编号
+          type: text
+          required: true
+          max_length: 10
+        syain_nm:
+          label: 社員姓名
+          type: text
+          required: true
+          max_length: 50
+        syain_kana:
+          label: 社員假名
+          type: text
+          max_length: 50
+        bumon_cd:
+          label: 部門代码
+          type: text
+          max_length: 10
+        tel:
+          label: 电话
+          type: text
+          max_length: 20
+        email:
+          label: 邮箱
+          type: email
+          max_length: 100
+    
+    properties:
+      syain_no: { type: string }
+      syain_nm: { type: string }
+      syain_kana: { type: string }
+      bumon_cd: { type: string }
+      tel: { type: string }
+      email: { type: string }
+  
+  # ============================================
+  # 伝票业务表
+  # ============================================
+  
+  HdkDenpyo:
+    table: hdk_denpyo
+    primary_key: denpyo_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 伝票管理
+          create_button: 创建伝票
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索伝票...
+          DENPYO_NO: 伝票编号
+          DENPYO_DT: 伝票日期
+          TORIHIKI_CD: 取引先代码
+          BUMON_CD: 部門代码
+          SYAIN_NO: 社員编号
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: 伝票管理
+          create_button: 伝票作成
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 伝票を検索...
+          DENPYO_NO: 伝票番号
+          DENPYO_DT: 伝票日
+          TORIHIKI_CD: 取引先コード
+          BUMON_CD: 部門コード
+          SYAIN_NO: 社員番号
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-denpyo"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [denpyo_no, denpyo_dt, torihiki_cd, bumon_cd, kingaku]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        denpyo_dt:
+          label: 伝票日期
+          type: date
+        torihiki_cd:
+          label: 取引先
+          type: like
+    
+    form:
+      title: 伝票
+      fields:
+        denpyo_dt:
+          label: 伝票日期
+          type: date
+          required: true
+        torihiki_cd:
+          label: 取引先代码
+          type: text
+          max_length: 10
+        bumon_cd:
+          label: 部門代码
+          type: text
+          max_length: 10
+        syain_no:
+          label: 社員编号
+          type: text
+          max_length: 10
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      denpyo_no: { type: int }
+      denpyo_dt: { type: date }
+      torihiki_cd: { type: string }
+      bumon_cd: { type: string }
+      syain_no: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  HdkShiwake:
+    table: hdk_shiwake
+    primary_key: shiwake_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 仕訳管理
+          create_button: 添加仕訳
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索仕訳...
+          SHIWAKE_NO: 仕訳编号
+          DENPYO_NO: 伝票编号
+          KAMOKU_CD: 科目代码
+          KARITAE: 借方/贷方
+          KINGAKU: 金额
+          REMARK: 备注
+        ja:
+          title: 仕訳管理
+          create_button: 仕訳追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 仕訳を検索...
+          SHIWAKE_NO: 仕訳番号
+          DENPYO_NO: 伝票番号
+          KAMOKU_CD: 科目コード
+          KARITAE: 借方/貸方
+          KINGAKU: 金額
+          REMARK: 備考
+      styles:
+        card_class: "card-shiwake"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [shiwake_no, denpyo_no, kamoku_cd, karitae, kingaku]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        kamoku_cd:
+          label: 科目
+          type: like
+        karitae:
+          label: 借方/贷方
+          type: select
+          options:
+            '1': '借方'
+            '2': '贷方'
+    
+    form:
+      title: 仕訳
+      fields:
+        denpyo_no:
+          label: 伝票编号
+          type: number
+          required: true
+        kamoku_cd:
+          label: 科目代码
+          type: text
+          required: true
+          max_length: 10
+        karitae:
+          label: 借方/贷方
+          type: select
+          required: true
+          options:
+            '1': '借方'
+            '2': '贷方'
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      shiwake_no: { type: int }
+      denpyo_no: { type: int }
+      kamoku_cd: { type: string }
+      karitae: { type: string }
+      kingaku: { type: decimal }
+      remark: { type: string }
+  
+  HdkShiharai:
+    table: hdk_shiharai
+    primary_key: shiharai_no
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 支払管理
+          create_button: 添加支払
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索支払...
+          SHIHARAI_NO: 支払编号
+          DENPYO_NO: 伝票编号
+          SHIHARAI_DT: 支払日期
+          KINGAKU: 金额
+          SHIHARAI_HOHO: 支払方法
+          REMARK: 备注
+        ja:
+          title: 支払管理
+          create_button: 支払追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 支払を検索...
+          SHIHARAI_NO: 支払番号
+          DENPYO_NO: 伝票番号
+          SHIHARAI_DT: 支払日
+          KINGAKU: 金額
+          SHIHARAI_HOHO: 支払方法
+          REMARK: 備考
+      styles:
+        card_class: "card-shiharai"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [shiharai_no, denpyo_no, shiharai_dt, kingaku, shiharai_hoho]
+      filters:
+        denpyo_no:
+          label: 伝票编号
+          type: like
+        shiharai_dt:
+          label: 支払日期
+          type: date
+    
+    form:
+      title: 支払
+      fields:
+        denpyo_no:
+          label: 伝票编号
+          type: number
+          required: true
+        shiharai_dt:
+          label: 支払日期
+          type: date
+          required: true
+        kingaku:
+          label: 金额
+          type: number
+          required: true
+        shiharai_hoho:
+          label: 支払方法
+          type: select
+          options:
+            '1': '现金'
+            '2': '振込'
+            '3': '小切手'
+            '4': '手形'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      shiharai_no: { type: int }
+      denpyo_no: { type: int }
+      shiharai_dt: { type: date }
+      kingaku: { type: decimal }
+      shiharai_hoho: { type: string }
+      remark: { type: string }
+  
+  HdkPatternMst:
+    table: hdk_pattern_mst
+    primary_key: pattern_cd
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: パターン主表
+          create_button: 添加パターン
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索パターン...
+          PATTERN_CD: パターン代码
+          PATTERN_NM: パターン名称
+          PATTERN_CONTENT: パターン内容
+        ja:
+          title: パターンマスタ
+          create_button: パターン追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: パターンを検索...
+          PATTERN_CD: パターンコード
+          PATTERN_NM: パターン名
+          PATTERN_CONTENT: パターン内容
+      styles:
+        card_class: "card-pattern"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [pattern_cd, pattern_nm]
+      filters:
+        pattern_nm:
+          label: パターン名称
+          type: like
+    
+    form:
+      title: パターン
+      fields:
+        pattern_cd:
+          label: パターン代码
+          type: text
+          required: true
+          max_length: 10
+        pattern_nm:
+          label: パターン名称
+          type: text
+          required: true
+          max_length: 50
+        pattern_content:
+          label: パターン内容
+          type: textarea
+          max_length: 1000
+    
+    properties:
+      pattern_cd: { type: string }
+      pattern_nm: { type: string }
+      pattern_content: { type: string }

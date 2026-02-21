@@ -1,0 +1,43 @@
+#PPRM802MenuAuthMstMnt {
+    /*width: 60%;*/
+    width: 800px;
+    position: relative;
+}
+
+.PPRM802MenuAuthMstMnt.btn {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 1.2em !important;
+}
+
+.PPRM802MenuAuthMstMnt.tblMain {
+    width: 1200px;
+    height: 100%;
+}
+
+.PPRM802MenuAuthMstMnt.title {
+    margin: 15px;
+}
+
+#gbox_PPRM802MenuAuthMstMnt_gvRights {
+    margin: 0px 15px 5px;
+}
+
+.PPRM802MenuAuthMstMnt.btnAdd {
+    margin: 0px 15px 15px;
+}
+
+.PPRM802MenuAuthMstMnt.btnSelect {
+    margin-top: 60px;
+}
+
+.PPRM802MenuAuthMstMnt.lblRightsID,
+.lblRightsName {
+    width: 100px;
+    text-align: left;
+    margin-bottom: 8px;
+}
+.PPRM802MenuAuthMstMnt.txtRightsID,
+.txtRightsName {
+    margin-bottom: 8px;
+}

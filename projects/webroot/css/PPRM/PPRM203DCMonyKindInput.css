@@ -1,0 +1,193 @@
+#PPRM203DCMonyKindInput {
+    /*width: 60%;*/
+    width: 1000px;
+}
+
+.PPRM203DCMonyKindInput.clearfix:after {
+    content: "020";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.PPRM203DCMonyKindInput.clearfix {
+    /* 触发 hasLayout */
+    zoom: 1;
+}
+
+.PPRM203DCMonyKindInput.normalHeader {
+    width: 100%;
+    text-align: center;
+}
+
+.PPRM203DCMonyKindInput.btn {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 1.2em !important;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .PPRM203DCMonyKindInput.btn {
+        height: 20px !important;
+        line-height: 0px !important;
+        padding: 0 1.2em !important;
+    }
+}
+.PPRM203DCMonyKindInput.header table div {
+    text-align: left;
+    width: 100px;
+}
+.PPRM203DCMonyKindInput.header .txtTenpoCD {
+    width: 120px;
+}
+.PPRM203DCMonyKindInput.header .lblTenpo {
+    width: 150px;
+}
+.PPRM203DCMonyKindInput.header .txtHJMNo {
+    width: 150px;
+}
+.PPRM203DCMonyKindInput.header .txtHJMDate {
+    width: 100px;
+}
+
+.PPRM203DCMonyKindInput.panel {
+    margin-top: 15px;
+    height: 300px;
+    /*width:98%;*/
+}
+.PPRM203DCMonyKindInput.panel .left,
+.panel .right {
+    float: left;
+}
+.PPRM203DCMonyKindInput.panel .left {
+    width: 60%;
+    margin-right: 5%;
+}
+.PPRM203DCMonyKindInput.panel .right {
+    width: 35%;
+}
+.PPRM203DCMonyKindInput.panel .title {
+    height: 40px;
+    line-height: 40px;
+    position: relative;
+}
+.PPRM203DCMonyKindInput.panel .title .btnRowAdd,
+.panel .title .btnRowDel {
+    position: absolute;
+    top: 10px;
+}
+.PPRM203DCMonyKindInput.panel .title .btnRowAdd {
+    right: 100px;
+}
+.PPRM203DCMonyKindInput.panel .title .btnRowDel {
+    right: 0px;
+}
+.PPRM203DCMonyKindInput.panel .left .box1 {
+    margin-left: 4%;
+}
+.PPRM203DCMonyKindInput.panel table {
+    width: 98%;
+    margin: 5px;
+    border: solid #a6c9e2;
+    border-width: 1px 0px 0px 1px;
+}
+.PPRM203DCMonyKindInput.panel .right .Kogite {
+    margin-bottom: 0px;
+    border-bottom: none;
+}
+.PPRM203DCMonyKindInput.panel .right .Kogite thead {
+    display: block;
+}
+.PPRM203DCMonyKindInput.panel .right .Kogite thead td:nth-of-type(1) {
+    width: 160px;
+}
+.PPRM203DCMonyKindInput.panel .right .Kogite thead td:nth-of-type(2) {
+    width: 160px;
+}
+.PPRM203DCMonyKindInput.panel .right .Kogite tbody {
+    display: block;
+    height: 150px;
+    overflow-y: scroll;
+}
+.PPRM203DCMonyKindInput.panel .right .KogiteGoukei {
+    /*border-top:none;*/
+    margin-top: 0px;
+}
+.PPRM203DCMonyKindInput.panel table thead label {
+    overflow: visible !important;
+}
+.PPRM203DCMonyKindInput.panel table td {
+    border: solid #a6c9e2;
+    border-width: 0px 1px 1px 0px;
+    height: 24px;
+    line-height: 8px;
+    text-align: center;
+}
+.PPRM203DCMonyKindInput.panel .left table tbody td input {
+    width: 60px;
+    text-align: center;
+}
+.PPRM203DCMonyKindInput.panel .right table tbody td input {
+    text-align: center;
+}
+.PPRM203DCMonyKindInput.panel .right table tbody td:nth-of-type(1) {
+    width: 160px;
+}
+.PPRM203DCMonyKindInput.panel .right table tbody td:nth-of-type(2) {
+    width: 140px;
+}
+.PPRM203DCMonyKindInput.panel .right table tbody td:nth-of-type(1) input {
+    width: 140px;
+    text-align: center;
+}
+.PPRM203DCMonyKindInput.panel .right table tbody td:nth-of-type(2) input {
+    width: 100px;
+    text-align: center;
+}
+
+.PPRM203DCMonyKindInput.panel table td span {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.PPRM203DCMonyKindInput.footer {
+    width: 100%;
+}
+.PPRM203DCMonyKindInput.footer .left,
+.footer .right {
+    float: left;
+    width: 45%;
+}
+.PPRM203DCMonyKindInput.footer .left {
+    margin-right: 10%;
+    overflow: hidden;
+}
+.PPRM203DCMonyKindInput.footer .left div {
+    text-align: center;
+    width: 98%;
+    display: block;
+    margin-bottom: 3px;
+}
+.PPRM203DCMonyKindInput.footer .txtRiyu {
+    width: 98%;
+}
+
+.PPRM203DCMonyKindInput.footer .right table {
+    width: 100%;
+}
+.PPRM203DCMonyKindInput.footer .right table td {
+    border: solid #a6c9e2;
+    border-width: 0px 1px 1px 0px;
+    height: 20px;
+    line-height: 20px;
+    text-align: right;
+}
+.PPRM203DCMonyKindInput.footer .right table td span {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.PPRM203DCMonyKindInput.footerButton {
+    float: right;
+    margin-top: 15px;
+}

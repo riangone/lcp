@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="11044.8" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptKyakuPrint.vb">
+ <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ 明朝; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>    
+    <Section Type="PageHeader" Name="PageHeader" Visible="0" Height="0" BackColor="16777215" CanShrink="0" />    
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="3224" DataField="" BackColor="16777215" CanShrink="0">    
+    	 <Control Type="AR.Label" Name="" MOD="4" Left="900" Top="600" Caption="「ヒロアプ」ログイン情報"  Style="ddo-char-set: 128;font-weight:narmal;text-align: left; font-size: 36pt;font-family: ＭＳ 明朝;" />    
+      <Control Type="AR.Label" Name="" MOD="4" Left="1900" Top="5200" Caption="氏名"   Style="ddo-char-set: 128;text-align: left; font-size: 28pt;font-family: ＭＳ 明朝;" />      
+      <Control Type="AR.Field" Name="CSRNM" DataField="CSRNM" Left="4800" Top="5200"  MOD="4"  Width="50000" Height="270" Text="山田 太郎" Multiline="0" Style="font-size: 28pt; font-family: ＭＳ ゴシック; " />      
+      <Control Type="AR.Label" Name="" MOD="4" Left="2100" Top="6200" Caption="ID" Style="ddo-char-set: 128;text-align: left; font-size: 28pt;font-family: ＭＳ 明朝;" />      
+      <Control Type="AR.Field" Name="ROGUIN_ID" DataField="ROGUIN_ID" Left="4800" Top="6200"  MOD="4"  Width="50000" Height="270" Text="123456" Multiline="0" Style="text-align: left; font-size: 28pt; font-family: ＭＳ ゴシック; " />        
+      <Control Type="AR.Label" Name="" MOD="4" Left="800" Top="7200" Caption="仮パスワード" Style="ddo-char-set: 128;text-align: left; font-size: 28pt;font-family: ＭＳ 明朝;" />      
+      <Control Type="AR.Field" Name="KARI_PASUWADO" DataField="KARI_PASUWADO" Left="4800" Top="7200"  MOD="4"  Width="50000" Height="270" Text="Hw2p34" Multiline="0" Style="text-align: left; font-size: 28pt; font-family: ＭＳ ゴシック; " />    	
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="500" Y1="5000.64" X2="10306.4" Y2="5000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="500" Y1="6000.64" X2="10306.4" Y2="6000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="500" Y1="7000.64" X2="10306.4" Y2="7000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="500" Y1="8000.64" X2="10306.4" Y2="8000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="500" Y1="5000.64" X2="500" Y2="8000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="4500" Y1="5000.64" X2="4500" Y2="8000.64" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="10306.4" Y1="5000.64" X2="10306.4" Y2="8000.64" LineWeight="3" />
+    </Section>    
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />  	
+  </Sections>  
+  <PageSettings LeftMargin="432" RightMargin="432" TopMargin="720" BottomMargin="720" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+</ActiveReportsLayout>

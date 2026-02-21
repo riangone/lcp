@@ -1,0 +1,229 @@
+# APPM 広アプシステム
+# Wide Area Application System
+
+models:
+  # ============================================
+  # アカウント管理
+  # ============================================
+  
+  AppmAccount:
+    table: appm_account
+    primary_key: account_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 2
+      labels:
+        zh:
+          title: アカウント管理
+          create_button: 添加アカウント
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索アカウント...
+          ACCOUNT_ID: アカウント ID
+          ACCOUNT_NM: アカウント名称
+          ACCOUNT_TYPE: アカウント类型
+          STATUS: 状态
+          REMARK: 备注
+        ja:
+          title: アカウント管理
+          create_button: アカウント追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: アカウントを検索...
+          ACCOUNT_ID: アカウント ID
+          ACCOUNT_NM: アカウント名
+          ACCOUNT_TYPE: アカウントタイプ
+          STATUS: ステータス
+          REMARK: 備考
+      styles:
+        card_class: "card-account"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [account_id, account_nm, account_type, status]
+      filters:
+        account_nm:
+          label: アカウント名称
+          type: like
+        account_type:
+          label: アカウント类型
+          type: like
+    
+    form:
+      title: アカウント
+      fields:
+        account_nm:
+          label: アカウント名称
+          type: text
+          required: true
+          max_length: 100
+        account_type:
+          label: アカウント类型
+          type: select
+          options:
+            '1': '通常'
+            '2': '管理者'
+            '3': '閲覧のみ'
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '有効'
+            '2': '無効'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      account_id: { type: int }
+      account_nm: { type: string }
+      account_type: { type: string }
+      status: { type: string }
+      remark: { type: string }
+  
+  AppmMesseji:
+    table: appm_messeji
+    primary_key: messeji_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: メッセージ管理
+          create_button: 添加メッセージ
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索メッセージ...
+          MESSEJI_ID: メッセージ ID
+          MESSEJI_TITLE: メッセージ标题
+          MESSEJI_CONTENT: メッセージ内容
+          SEND_DT: 发送日期
+          STATUS: 状态
+        ja:
+          title: メッセージ管理
+          create_button: メッセージ追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: メッセージを検索...
+          MESSEJI_ID: メッセージ ID
+          MESSEJI_TITLE: メッセージタイトル
+          MESSEJI_CONTENT: メッセージ内容
+          SEND_DT: 送信日
+          STATUS: ステータス
+      styles:
+        card_class: "card-messeji"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [messeji_id, messeji_title, send_dt, status]
+      filters:
+        messeji_title:
+          label: メッセージ标题
+          type: like
+        send_dt:
+          label: 发送日期
+          type: date
+    
+    form:
+      title: メッセージ
+      fields:
+        messeji_title:
+          label: メッセージ标题
+          type: text
+          required: true
+          max_length: 200
+        messeji_content:
+          label: メッセージ内容
+          type: textarea
+          required: true
+          max_length: 2000
+        send_dt:
+          label: 发送日期
+          type: datetime
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '草案'
+            '2': '送信済'
+            '3': '公開'
+    
+    properties:
+      messeji_id: { type: int }
+      messeji_title: { type: string }
+      messeji_content: { type: string }
+      send_dt: { type: datetime }
+      status: { type: string }
+  
+  AppmOshirase:
+    table: appm_oshirase
+    primary_key: oshirase_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: お知らせ管理
+          create_button: 添加お知らせ
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索お知らせ...
+          OSHIRASE_ID: お知らせ ID
+          OSHIRASE_TITLE: お知らせ标题
+          OSHIRASE_CONTENT: お知らせ内容
+          START_DT: 開始日期
+          END_DT: 終了日期
+        ja:
+          title: お知らせ管理
+          create_button: お知らせ追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: お知らせを検索...
+          OSHIRASE_ID: お知らせ ID
+          OSHIRASE_TITLE: お知らせタイトル
+          OSHIRASE_CONTENT: お知らせ内容
+          START_DT: 開始日
+          END_DT: 終了日
+      styles:
+        card_class: "card-oshirase"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [oshirase_id, oshirase_title, start_dt, end_dt]
+      filters:
+        oshirase_title:
+          label: お知らせ标题
+          type: like
+    
+    form:
+      title: お知らせ
+      fields:
+        oshirase_title:
+          label: お知らせ标题
+          type: text
+          required: true
+          max_length: 200
+        oshirase_content:
+          label: お知らせ内容
+          type: textarea
+          max_length: 2000
+        start_dt:
+          label: 開始日期
+          type: date
+        end_dt:
+          label: 終了日期
+          type: date
+    
+    properties:
+      oshirase_id: { type: int }
+      oshirase_title: { type: string }
+      oshirase_content: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }

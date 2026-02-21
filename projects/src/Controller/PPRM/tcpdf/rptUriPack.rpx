@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="16128" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; color: Black; font-family: MS UI Gothic; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="473" GroupKeepTogether="1" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label2" Left="270.72" Top="149.76" Width="2250" Height="270" Caption="&lt;パック金額&gt;" HyperLink="" Style="font-weight: bold; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="371" GroupKeepTogether="1" RepeatStyle="4" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label22" Left="90" Top="0" Width="1440" Height="270" Caption="納品書No." Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" Left="8460" Top="0" Width="1170" Height="270" Caption="パック金額" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label6" Left="1710" Top="0" Width="1440" Height="270" Caption="売上日" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label21" Left="3330" Top="0" Width="1440" Height="270" Caption="請求先CD" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label30" Left="4950" Top="0" Width="900" Height="270" Caption="請求先名" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line4" X1="4860" Y1="0" X2="4860" Y2="270" />
+      <Control Type="AR.Line" Name="Line7" X1="8370" Y1="0" X2="8370" Y2="270" />
+      <Control Type="AR.Line" Name="Line12" X1="3240" Y1="0" X2="3240" Y2="270" />
+      <Control Type="AR.Line" Name="Line11" X1="0" Y1="360" X2="9630" Y2="360" />
+      <Control Type="AR.Line" Name="Line16" X1="0" Y1="270" X2="9630" Y2="270" />
+      <Control Type="AR.Line" Name="Line32" X1="0" Y1="0" X2="9630" Y2="0" />
+      <Control Type="AR.Line" Name="Line1" X1="1620" Y1="0" X2="1620" Y2="270" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="285" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="txtDaiko" DataField="PACKKIN" Left="8460" Top="0" Width="1170" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox76" DataField="SEIKYU_NM" Left="4950" Top="0" Width="3330" Height="270" Text="あいうえおかきくけこ" Multiline="0" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox77" DataField="SEIKYU_CD" Left="3330" Top="0" Width="1440" Height="270" Text="ABCDEFGHIJ" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox78" DataField="URIAGEDT" Left="1710" Top="0" Width="1440" Height="270" Text="2010/99/99" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox80" DataField="SEB_NOU_NO" Left="90" Top="0" Width="1440" Height="270" Text="12345678901" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line49" X1="4860" Y1="0" X2="4860" Y2="270" />
+      <Control Type="AR.Line" Name="Line50" X1="1620" Y1="0" X2="1620" Y2="270" />
+      <Control Type="AR.Line" Name="Line52" X1="8370" Y1="0" X2="8370" Y2="270" />
+      <Control Type="AR.Line" Name="Line53" X1="3240" Y1="0" X2="3240" Y2="270" />
+      <Control Type="AR.Line" Name="Line64" X1="0" Y1="270" X2="9630" Y2="270" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter2" Height="457" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox49" DataField="PACKKIN" Left="8460" Top="90" Width="1170" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Label" Name="Label28" Left="1350" Top="90" Width="810" Height="270" Caption="伝票数" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label29" Left="90" Top="90" Width="1080" Height="270" Caption="&lt;合計&gt;" Style="text-align: center; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox46" DataField="DENPYOSU" Left="2610" Top="90" Width="900" Height="270" Text="1,234" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Line" Name="Line48" X1="0" Y1="360" X2="9630" Y2="360" />
+      <Control Type="AR.Line" Name="Line19" X1="0" Y1="450" X2="9630" Y2="450" />
+      <Control Type="AR.Line" Name="Line25" X1="8370" Y1="86.4" X2="8370" Y2="360" />
+      <Control Type="AR.Line" Name="Line18" X1="0" Y1="90" X2="9630" Y2="90" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="288" RightMargin="288" TopMargin="288" BottomMargin="288" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>

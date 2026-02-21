@@ -1,0 +1,21 @@
+#PPRM800LoginList {
+    width: 960px;
+}
+
+.PPRM800LoginList.header table div {
+    width: 100px;
+    text-align: left;
+}
+
+.PPRM800LoginList.btn {
+    height: 24px !important;
+    line-height: 24px !important;
+    padding: 0 1.2em !important;
+}
+@media (-webkit-min-device-pixel-ratio: 1.5), (min-resolution: 1.5dppx) {
+    .PPRM800LoginList.btn {
+        height: 20px !important;
+        line-height: 0px !important;
+        padding: 0 1.2em !important;
+    }
+}

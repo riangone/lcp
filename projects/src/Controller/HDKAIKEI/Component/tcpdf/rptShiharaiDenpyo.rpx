@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="11044.8" DocumentName="ActiveReports Document"
+	ScriptLang="C#" CodeFile="rptMeisai.vb">
+	<StyleSheet>
+		<Style Name="Normal"
+			Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt;color: Black; font-family: ＭＳ ゴシック; ddo-char-set: 128; " />
+		<Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; " />
+		<Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+		<Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+	</StyleSheet>
+	<Sections>
+		<Section Type="PageHeader" Name="PageHeader" Height="696" BackColor="16777215" CanShrink="0">
+			<!-- 页眉标题内容 start-->
+			<Control Type="AR.Label" Name="Label1" Left="5200" Top="50" Width="1155" Height="262"
+				Caption="支払伝票"
+				Style="text-decoration: underline; text-align: left; text-align: center; font-size: 15.75pt;" />
+			<Control Type="AR.Field" Name="PRINT_DATE" Left="5300" Top="390" Width="1400"
+				Height="103" DataField="PRINT_DATE" Text=""
+				Style="text-align: left; font-weight: normal; font-size: 9.75pt; font-family: ＭＳ ゴシック; vertical-align: middle;font-family:MS UI Gothic;" />
+			<Control Type="AR.Label" Name="Label3" Left="7205" Top="0" Width="1425" Height="295"
+				Caption="証憑№"
+				Style="background-color: #DCDCDC; text-align: left;font-weight: normal;font-size: 11.25pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label4" Left="7205" Top="300" Width="1425" Height="295"
+				Caption="経理処理日"
+				Style="background-color: #DCDCDC; text-align: left;font-weight: normal;font-size: 11.25pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="SYOHY_NO" DataField="SYOHY_NO" Left="8696" Top="0"
+				Width="1950" Height="290" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 11.25pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="KEIRI_DT" DataField="KEIRI_DT" Left="8696" Top="300"
+				Width="1950" Height="290" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 11.25pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<!-- 証憑№ table线 start-->
+			<!-- 水平線 start -->
+			<Control Type="AR.Line" Name="Line1" X1="7205" Y1="0" X2="11215" Y2="0" />
+			<Control Type="AR.Line" Name="Line2" X1="7205" Y1="300" X2="11215" Y2="300"
+				Style="border-width:2pt;" />
+			<Control Type="AR.Line" Name="Line3" X1="7205" Y1="599" X2="11215" Y2="599"
+				Style="border-width:2pt;" />
+			<!-- 水平線 end -->
+			<!-- 垂直線 start -->
+			<Control Type="AR.Line" Name="Line4" X1="7205" Y1="0" X2="7205" Y2="599"
+				Style="border-width:2pt;" />
+			<Control Type="AR.Line" Name="Line5" X1="8639" Y1="0" X2="8639" Y2="599"
+				Style="border-width:2pt;" />
+			<Control Type="AR.Line" Name="Line6" X1="11215" Y1="0" X2="11215" Y2="599"
+				Style="border-width:2pt;" />
+			<!-- 垂直線 end -->
+		</Section>
+		<Section Type="GroupHeader" Name="GroupHeader1" Height="640" RepeatStyle="4"
+			BackColor="16777215" CanShrink="0">
+			<!-- tableTitle内容 start-->
+			<Control Type="AR.Label" Name="Label7" Left="100" Top="117" Width="1304" Height="604"
+				Caption="借方部署"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label8" Left="1394" Top="117" Width="1334" Height="604"
+				Caption="借方科目"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label9" Left="2720" Top="117" Width="2390" Height="604"
+				Caption="借方補助科目"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label10" Left="4950" Top="117" Width="800" Height="302"
+				Caption="税区分"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label11" Left="4950" Top="417" Width="800" Height="302"
+				Caption="税率"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label13" Left="5665" Top="117" Width="1304" Height="604"
+				Caption="貸方部署"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label14" Left="6925" Top="117" Width="1374" Height="604"
+				Caption="貸方科目"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label15" Left="8300" Top="117" Width="2390" Height="604"
+				Caption="貸方補助科目"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label16" Left="10500" Top="117" Width="710" Height="302"
+				Caption="税区分"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label17" Left="10500" Top="417" Width="710" Height="302"
+				Caption="税率"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label18" Left="100" Top="710" Width="2240" Height="302"
+				Caption="取引先コード"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label19" Left="1390" Top="710" Width="3810" Height="302"
+				Caption="取引先名"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label20" Left="4939" Top="710" Width="2254" Height="302"
+				Caption="支払時期"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label21" Left="6930" Top="710" Width="2513" Height="302"
+				Caption="支払予定日"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label22" Left="8300" Top="710" Width="2933" Height="302"
+				Caption="金額"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt;  vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label23" Left="100" Top="1000" Width="2820" Height="302"
+				Caption="振込銀行名"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label24" Left="2730" Top="1000" Width="3500" Height="302"
+				Caption="支店"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label25" Left="4939" Top="1000" Width="2254" Height="302"
+				Caption="口座種別"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label26" Left="6930" Top="1000" Width="2513" Height="302"
+				Caption="口座NO"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label27" Left="8300" Top="1000" Width="2933" Height="302"
+				Caption="名義"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label28" Left="100" Top="1290" Width="8187" Height="302"
+				Caption="摘要"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Label" Name="Label28" Left="8292" Top="1290" Width="2943" Height="302"
+				Caption="社員"
+				Style="background-color: #DCDCDC;text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<!-- フッター start-->
+			<Control Type="AR.Label" Name="Label41" Left="0" Top="14396" Width="3000"
+				Height="262" Caption="(（TMRH）HD用伝票集計システム)"
+				Style="text-decoration: none; font-size: 9.75pt;" />
+			<Control Type="AR.Field" Name="PAGE" Left="10490" Top="14396" Width="1400"
+				Height="100" DataField="PAGE" Text=""
+				Style="text-align: left; font-weight: normal; font-size: 9.75pt; font-family: ＭＳ ゴシック;vertical-align: middle;font-family:MS UI Gothic;" />
+			<!-- フッター end -->
+			<!--table
+			title  外层边框-->
+			<!-- 水平線 start -->
+			<Control Type="AR.Line" Name="Line7" X1="100" Y1="103" X2="11215" Y2="103"
+				LineWeight="3" />
+			<Control Type="AR.Line" Name="Line8" X1="100" Y1="701" X2="11215" Y2="701" />
+			<Control Type="AR.Line" Name="Line9" X1="100" Y1="1003" X2="11215" Y2="1003" />
+			<Control Type="AR.Line" Name="Line10" X1="100" Y1="1300" X2="11215" Y2="1300" />
+			<Control Type="AR.Line" Name="Line11" X1="100" Y1="1580" X2="11215" Y2="1580"
+				LineWeight="3" />
+			<!-- 水平線 end -->
+			<!-- 垂直線 start -->
+			<Control Type="AR.Line" Name="Line12" X1="100" Y1="116" X2="100" Y2="1399"
+				LineWeight="3" />
+			<Control Type="AR.Line" Name="Line13" X1="11215" Y1="116" X2="11215" Y2="1399"
+				LineWeight="3" />
+			<!-- 垂直線 end -->
+			<!--table
+			title  内层分割竖线-->
+			<!-- 垂直線 start -->
+			<Control Type="AR.Line" Name="Line14" X1="1404" Y1="116" X2="1404" Y2="695" />
+			<Control Type="AR.Line" Name="Line15" X1="2718" Y1="116" X2="2718" Y2="695" />
+			<Control Type="AR.Line" Name="Line16" X1="4943" Y1="116" X2="4943" Y2="695" />
+			<Control Type="AR.Line" Name="Line17" X1="5686" Y1="116" X2="5686" Y2="695" />
+			<Control Type="AR.Line" Name="Line18" X1="6930" Y1="116" X2="6930" Y2="695" />
+			<Control Type="AR.Line" Name="Line19" X1="8285" Y1="116" X2="8285" Y2="695" />
+			<Control Type="AR.Line" Name="Line20" X1="10503" Y1="116" X2="10503" Y2="695" />
+			<Control Type="AR.Line" Name="Line21" X1="1404" Y1="707" X2="1404" Y2="1002" />
+			<Control Type="AR.Line" Name="Line22" X1="4943" Y1="707" X2="4943" Y2="1002" />
+			<Control Type="AR.Line" Name="Line23" X1="6930" Y1="707" X2="6930" Y2="1002" />
+			<Control Type="AR.Line" Name="Line24" X1="8285" Y1="707" X2="8285" Y2="1002" />
+			<Control Type="AR.Line" Name="Line25" X1="2738" Y1="1008" X2="2738" Y2="1300" />
+			<Control Type="AR.Line" Name="Line26" X1="4943" Y1="1008" X2="4943" Y2="1300" />
+			<Control Type="AR.Line" Name="Line27" X1="6930" Y1="1008" X2="6930" Y2="1300" />
+			<Control Type="AR.Line" Name="Line28" X1="8285" Y1="1008" X2="8285" Y2="1300" />
+			<Control Type="AR.Line" Name="Line29" X1="8285" Y1="1309" X2="8285" Y2="1601" />
+			<!-- 垂直線 start -->
+		</Section>
+		<Section Type="Detail" Name="Detail" Height="1935" BackColor="16777215" CanShrink="0">
+			<!-- table内容部分 start -->
+			<Control Type="AR.Field" Name="Label15" DataField="L_BUSYO_CD" Left="115" Top="940"
+				Width="1274" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label15" DataField="L_BUSYO" Left="115" Top="1164"
+				Width="1274" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label17" DataField="L_KAMCD" Left="1420" Top="940"
+				Width="1300" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label17" DataField="L_KAM_NAME" Left="1420" Top="1164"
+				Width="1300" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label18" DataField="L_KOUCD" Left="2750" Top="940"
+				Width="2420" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label18" DataField="L_SUBKAM_NAME" Left="2750" Top="1164"
+				Width="2200" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle;" />
+			<Control Type="AR.Field" Name="Label19" DataField="L_SYOHIZEI" Left="4990" Top="940"
+				Width="720" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label19" DataField="L_SYOHIZEI_RT" Left="4990" Top="1164"
+				Width="720" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label21" DataField="R_BUSYO_CD" Left="5730" Top="940"
+				Width="1180" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label21" DataField="R_BUSYO" Left="5730" Top="1164"
+				Width="1180" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label23" DataField="R_KAMCD" Left="6960" Top="940"
+				Width="1330" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label23" DataField="R_KAMOKU" Left="6960" Top="1164"
+				Width="1330" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label25" DataField="R_KOUCD" Left="8330" Top="940"
+				Width="2280" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label25" DataField="R_SUB_KAMOKU" Left="8330" Top="1164"
+				Width="2160" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle;" />
+			<Control Type="AR.Field" Name="Label25" DataField="R_SYOHIZEI" Left="10550" Top="940"
+				Width="645" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label25" DataField="R_SYOHIZEI_RT" Left="10550"
+				Top="1164" Width="645" Height="255" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label15" DataField="TORIHIKISAKI_CD" Left="140"
+				Top="1482" Width="2208" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label17" DataField="TORIHIKISAKI_NAME" Left="1410"
+				Top="1482" Width="3535" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label21" DataField="SHIHARAI" Left="4980" Top="1482"
+				Width="1914" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label21" DataField="SHIHARAI_DT" Left="6981" Top="1482"
+				Width="4300" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label21" DataField="ZEIKM_GK" Left="8280" Top="1482"
+				OutputFormat="#,##0" Width="2913" Height="355" Text=""
+				Style="text-align: right;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label15" DataField="GINKOMEI" Left="140" Top="1875"
+				Width="2538" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle;" />
+			<Control Type="AR.Field" Name="Label17" DataField="SHITEN_NM" Left="2758" Top="1875"
+				Width="2330" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle;" />
+			<Control Type="AR.Field" Name="Label21" DataField="SYUBETU" Left="4980" Top="1875"
+				Width="1914" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle;" />
+			<Control Type="AR.Field" Name="Label21" DataField="KOUZA_NO" Left="6981" Top="1875"
+				Width="1250" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; font-family:MS UI Gothic;" />
+			<Control Type="AR.Field" Name="Label21" DataField="KOUZA_KN" Left="8330" Top="1875"
+				Width="2890" Height="355" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<!-- 摘要 -->
+			<Control Type="AR.Field" Name="Label29" DataField="TEKYO" Left="140" Top="2330"
+				MultirowNum="2" Width="8143" Height="302" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<Control Type="AR.Field" Name="Label30" DataField="SYAIN" Left="8330" Top="2330"
+				Width="2890" Height="470" Text=""
+				Style="text-align: left;font-weight: normal;font-size: 9.75pt; vertical-align: middle; " />
+			<!--table线
+			外层-->
+			<!-- 水平線 start -->
+			<Control Type="AR.Line" Name="Line8" X1="100" Y1="1452" X2="11215" Y2="1452" />
+			<Control Type="AR.Line" Name="Line9" X1="100" Y1="1850" X2="11215" Y2="1850" />
+			<Control Type="AR.Line" Name="Line10" X1="100" Y1="2268" X2="11215" Y2="2268" />
+			<Control Type="AR.Line" Name="Line11" X1="100" Y1="2866" X2="11215" Y2="2866"
+				LineWeight="3" />
+			<!-- 水平線 end -->
+			<!-- 垂直線 start -->
+			<Control Type="AR.Line" Name="Line21" X1="100" Y1="106" X2="100" Y2="2835"
+				LineWeight="3" />
+			<Control Type="AR.Line" Name="Line22" X1="11215" Y1="106" X2="11215" Y2="2835"
+				LineWeight="3" />
+			<!-- 垂直線 end -->
+			<!--table线
+			内层-->
+			<!-- 垂直線 start -->
+			<Control Type="AR.Line" Name="Line14" X1="1404" Y1="950" X2="1404" Y2="1452" />
+			<Control Type="AR.Line" Name="Line15" X1="2738" Y1="950" X2="2738" Y2="1452" />
+			<Control Type="AR.Line" Name="Line16" X1="4943" Y1="950" X2="4943" Y2="1452" />
+			<Control Type="AR.Line" Name="Line17" X1="5710" Y1="950" X2="5710" Y2="1452" />
+			<Control Type="AR.Line" Name="Line18" X1="6930" Y1="950" X2="6930" Y2="1452" />
+			<Control Type="AR.Line" Name="Line19" X1="8285" Y1="950" X2="8285" Y2="1452" />
+			<Control Type="AR.Line" Name="Line20" X1="10503" Y1="950" X2="10503" Y2="1452" />
+			<Control Type="AR.Line" Name="Line21" X1="1404" Y1="1452" X2="1404" Y2="1850" />
+			<Control Type="AR.Line" Name="Line22" X1="4943" Y1="1452" X2="4943" Y2="1850" />
+			<Control Type="AR.Line" Name="Line23" X1="6930" Y1="1452" X2="6930" Y2="1850" />
+			<Control Type="AR.Line" Name="Line24" X1="8285" Y1="1452" X2="8285" Y2="1850" />
+			<Control Type="AR.Line" Name="Line25" X1="2738" Y1="1850" X2="2738" Y2="2270" />
+			<Control Type="AR.Line" Name="Line26" X1="4943" Y1="1850" X2="4943" Y2="2270" />
+			<Control Type="AR.Line" Name="Line27" X1="6930" Y1="1850" X2="6930" Y2="2270" />
+			<Control Type="AR.Line" Name="Line28" X1="8285" Y1="1850" X2="8285" Y2="2270" />
+			<Control Type="AR.Line" Name="Line29" X1="8285" Y1="2248" X2="8285" Y2="2858" />
+			<!-- 垂直線 end -->
+		</Section>
+		<Section Type="GroupFooter" Name="GroupFooter100" Height="1900" BackColor="16777215"
+			CanShrink="0">
+			<Control Type="AR.Label" Name="GOUKEI_Label" Caption="合計金額：" Left="7350" Top="8770"
+				Width="1600" Height="262" Text=""
+				Style="text-align: right; background-color: Gainsboro; font-size: 15.75pt;" />
+			<Control Type="AR.Field" Name="ZEIKM_GK_GOUKEI" DataField="ZEIKM_GK_GOUKEI"
+				OutputFormat="#,##0" Left="9008" Top="8770" Width="2200" Height="262" Text=""
+				Style="text-align: center; background-color: Gainsboro; font-size: 15.75pt; font-family:MS UI Gothic;" />
+			<!-- 役員,部長,課長,係長,照査,経理,出納 start-->
+			<Control Type="AR.Shape" Name="Shape1" MOD="4" Left="100" Top="9266" Width="2308"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label47" MOD="4" Left="100" Top="9266" Width="400"
+				Height="240" Caption="役員"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Shape" Name="Shape2" MOD="4" Left="2408" Top="9266" Width="1498"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label48" MOD="4" Left="2408" Top="9266" Width="400"
+				Height="240" Caption="部長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Shape" Name="Shape3" MOD="4" Left="3906" Top="9266" Width="1498"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label49" MOD="4" Left="3906" Top="9266" Width="400"
+				Height="240" Caption="課長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Shape" Name="Shape4" MOD="4" Left="5404" Top="9266" Width="1498"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label50" MOD="4" Left="5404" Top="9266" Width="400"
+				Height="240" Caption="係長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Shape" Name="Shape5" MOD="4" Left="6902" Top="9266" Width="1498"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label51" MOD="4" Left="6902" Top="9266" Width="400"
+				Height="240" Caption="照査"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Label" Name="Label52" MOD="4" Left="8400" Top="9266" Width="363"
+				Height="1100" Caption="" Style="background-color: #DCDCDC" />
+			<Control Type="AR.Shape" Name="Shape6" MOD="4" Left="8400" Top="9266" Width="363"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label53" MOD="4" Left="8400" Top="9267" Width="363"
+				Height="150" Caption="経"
+				Style="text-align: center;font-weight: normal;font-size: 9.75pt; font-family: ＭＳ ゴシック;" />
+			<Control Type="AR.Label" Name="Label54" MOD="4" Left="8400" Top="9457" Width="363"
+				Height="150" Caption="理"
+				Style="text-align: center;font-weight: normal;font-size: 9.75pt; font-family: ＭＳ ゴシック;" />
+			<Control Type="AR.Shape" Name="Shape7" MOD="4" Left="9008" Top="9266" Width="2208"
+				Height="1100" />
+			<Control Type="AR.Label" Name="Label55" MOD="4" Left="9008" Top="9266" Width="400"
+				Height="240" Caption="出納"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<!-- 役員,部長,課長,係長,照査,経理,出納 end-->
+			<!-- 役員,部長,店長,課長,係長,担当,発行 start-->
+			<Control Type="AR.Label" Name="Label36" MOD="4" Left="8408" Top="10545" Width="363"
+				Height="1100" Caption="" Style="background-color: #DCDCDC" />
+			<Control Type="AR.Label" Name="Label37" MOD="4" Left="8408" Top="10545" Width="363"
+				Height="150" Caption="発"
+				Style="text-align: center;font-weight: normal;font-size: 9.75pt; font-family: ＭＳ ゴシック;" />
+			<Control Type="AR.Label" Name="Label38" MOD="4" Left="8408" Top="10735" Width="363"
+				Height="150" Caption="行"
+				Style="text-align: center;font-weight: normal;font-size: 9.75pt; font-family: ＭＳ ゴシック;" />
+			<!-- 水平線 start -->
+			<Control Type="AR.Line" Name="Line49" MOD="4" X1="100" Y1="10545" X2="8763" Y2="10545" />
+			<Control Type="AR.Line" Name="Line50" MOD="4" X1="100" Y1="11645" X2="8763" Y2="11645" />
+			<!-- 水平線 end -->
+			<Control Type="AR.Line" Name="Line51" MOD="4" X1="100" Y1="10545" X2="100" Y2="11645" />
+			<Control Type="AR.Label" Name="Label39" MOD="4" Left="100" Top="10545" Width="400"
+				Height="240" Caption="役員"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line52" MOD="4" X1="2408" Y1="10545" X2="2408" Y2="11645" />
+			<Control Type="AR.Label" Name="Label40" MOD="4" Left="2408" Top="10545" Width="400"
+				Height="240" Caption="部長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line53" MOD="4" X1="3608" Y1="10545" X2="3608" Y2="11645" />
+			<Control Type="AR.Label" Name="Label41" MOD="4" Left="3608" Top="10545" Width="400"
+				Height="240" Caption="店長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line54" MOD="4" X1="4808" Y1="10545" X2="4808" Y2="11645" />
+			<Control Type="AR.Label" Name="Label42" MOD="4" Left="4808" Top="10545" Width="400"
+				Height="240" Caption="課長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line55" MOD="4" X1="6008" Y1="10545" X2="6008" Y2="11645" />
+			<Control Type="AR.Label" Name="Label43" MOD="4" Left="6008" Top="10545" Width="400"
+				Height="240" Caption="係長"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line56" MOD="4" X1="7208" Y1="10545" X2="7208" Y2="11645" />
+			<Control Type="AR.Label" Name="Label44" MOD="4" Left="7208" Top="10545" Width="400"
+				Height="240" Caption="担当"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<Control Type="AR.Line" Name="Line57" MOD="4" X1="8408" Y1="10545" X2="8408" Y2="11645" />
+			<Control Type="AR.Line" Name="Line58" MOD="4" X1="8771" Y1="10545" X2="8771" Y2="11645" />
+			<!-- 役員,部長,店長,課長,係長,担当,発行 end-->
+			<!-- 受領 start -->
+			<Control Type="AR.Label" Name="Label45" MOD="4" Left="9008" Top="10545" Width="400"
+				Height="240" Caption="受領"
+				Style="text-align: center;font-weight: normal;font-size: 8.25pt; font-family: ＭＳ ゴシック; " />
+			<!-- 水平線 start -->
+			<Control Type="AR.Line" Name="Line58" MOD="4" X1="9008" Y1="10545" X2="11216" Y2="10545" />
+			<Control Type="AR.Line" Name="Line59" MOD="4" X1="9008" Y1="11645" X2="11216" Y2="11645" />
+			<!-- 水平線 end -->
+			<Control Type="AR.Line" Name="Line60" MOD="4" X1="9008" Y1="10545" X2="9008" Y2="11645" />
+			<Control Type="AR.Line" Name="Line61" MOD="4" X1="11216" Y1="10545" X2="11216"
+				Y2="11645" />
+			<!-- 受領 end -->
+		</Section>
+	</Sections>
+	<ReportComponentTray />
+	<PageSettings LeftMargin="216" RightMargin="144" TopMargin="990" BottomMargin="265"
+		PaperWidth="11886" PaperHeight="16810" PaperName="" Orientation="1" />
+	<Parameters />
+</ActiveReportsLayout>

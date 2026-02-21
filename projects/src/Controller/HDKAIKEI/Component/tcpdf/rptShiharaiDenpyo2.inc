@@ -1,0 +1,28 @@
+<?php
+	$data_fields_rptShiharaiDenpyo2 = Array(
+		"SHIHARAISAKI_CD" => "",
+		"SHIHARAISAKI_NM" => "",
+		"PRINT_DATE" => "",
+		"SYOHY_NO" => "",
+		"KEIRI_DT" => "",
+		"TEKYO" => "",
+		"L_BUSYO_CD" => "",
+		"L_BUSYO" => "",
+		"L_KAMOKU_CD" => "",
+		"L_KAMOKU" => "",
+		"ZEIKM_GK" => "",
+		"L_SYOHIZEI" => "",
+		"UCHIWAKE1" => "",
+		"UCHIWAKE_TA" => "",
+		"UCHIWAKE_KARI" => "",
+		"UCHIWAKE_KASHI" => "",
+		"SHIHARAI_DT" => "",
+		"SHIKIN" => "",
+		"R_BUSYO" => "",
+		"GINKOMEI" => "",
+		"SHITEN_NM" => "",
+		"SYUBETU" => "",
+		"KOUZA_NO" => "",
+		"KOUZA_KN" => "",
+	);
+?>

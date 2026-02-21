@@ -35,4 +35,16 @@ public class HomeController : Controller
         // 传递 HomeConfig 到视图
         return View(project?.HomeConfig);
     }
+
+    [HttpGet("/Home/SimpleIndex")]
+    public IActionResult SimpleIndex()
+    {
+        var project = _projectScope.CurrentProject;
+        
+        ViewData["Title"] = $"{project?.Name ?? "app"} - Low Code Platform";
+        ViewData["ProjectName"] = project?.Name ?? "app";
+        ViewData["ProjectDisplayName"] = project?.DisplayName ?? "LowCode Platform";
+        
+        return View();
+    }
 }

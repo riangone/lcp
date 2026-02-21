@@ -1,0 +1,79 @@
+body {
+	zoom: 1;
+	overflow: hidden;
+	width: auto;
+	height: auto;
+	margin: 0px;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	cursor: auto;
+	font-size: .8em;
+	font-family: "MS PGothic", "Simhei", "Arial", "Helvetica", "Verdana", "sans-serif";
+}
+
+
+.APPM-resizer-west {
+	/*position: absolute;*/
+	/*padding: 0px;
+	 margin: 0px;
+	 font-size: 1px;
+	 text-align: left;
+	 overflow: hidden;*/
+	/*z-index: 0;*/
+	cursor: w-resize;
+	/*left: 249px;*/
+	/*height: 442px;
+	 width: 6px;
+	 top: 29px;*/
+}
+/*.ui-layout-resizer-west {
+ width: 10px;
+ }*/
+
+
+.APPM-content {
+	margin: 3px;
+	width: auto;
+	height: auto;
+	padding: 2px;
+	border: 1px #a6c9e2 solid;
+	overflow: hidden;
+	position: relative;
+	min-width: 50%;
+}
+
+.ui-widget-content.APPM.APPM-layout-center {
+	position: relative;
+	height: 401px;
+	visibility: visible;
+}
+
+.ui-layout-pane-west.ui-layout-container {
+	position: absolute;
+	margin: 0px;
+	left: 0px;
+	right: auto;
+	top: 34px;
+	bottom: 34px;
+	height: 470px;
+	z-index: 0;
+	width: 190px;
+	display: block;
+	visibility: visible;
+	overflow: hidden;
+}
+
+.ui-widget-content.APPM.APPM-layout-west {
+	position: relative;
+	height: 64px;
+	visibility: visible;
+}
+.label-snow {
+	border: solid #000000 1px;
+	height: 18px;
+	padding-top: 2px;
+	background-color: snow
+}

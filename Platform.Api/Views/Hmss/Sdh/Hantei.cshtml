@@ -1,0 +1,432 @@
+@{
+    Layout = "_HmssLayout";
+    ViewData["Title"] = "车检替代判定";
+    ViewData["Breadcrumb1"] = "SDH";
+    ViewData["Breadcrumb2"] = "车检替代判定";
+}
+
+<div class="hmss-page-header">
+    <h1 class="page-title">
+        <i class="bi bi-clipboard-check"></i>
+        车检替代判定
+    </h1>
+    <p class="page-subtitle">车检替代判定主画面 - 管理客户车检替代判定信息</p>
+</div>
+
+<!-- 搜索区域 -->
+<div class="hmss-search-panel mb-4">
+    <div class="search-form">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">客户编号</label>
+                <input type="text" class="form-control" id="searchCsrno" placeholder="请输入客户编号">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">客户姓名</label>
+                <input type="text" class="form-control" id="searchCsrnm" placeholder="请输入客户姓名">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">车牌号</label>
+                <input type="text" class="form-control" id="searchCarno" placeholder="请输入车牌号">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">店铺</label>
+                <select class="form-select" id="searchTenpo">
+                    <option value="">全部</option>
+                    <option value="001">广岛本店</option>
+                    <option value="002">东广岛店</option>
+                    <option value="003">吴店</option>
+                    <option value="004">福山店</option>
+                    <option value="005">尾道店</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-actions mt-3">
+            <button type="button" class="btn btn-primary" onclick="searchHantei()">
+                <i class="bi bi-search"></i> 搜索
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="resetSearch()">
+                <i class="bi bi-arrow-counterclockwise"></i> 重置
+            </button>
+            <button type="button" class="btn btn-success" onclick="createNew()">
+                <i class="bi bi-plus-lg"></i> 新增
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- 判定列表 -->
+<div class="hmss-data-panel">
+    <div class="panel-header">
+        <h2 class="panel-title">判定列表</h2>
+        <div class="panel-actions">
+            <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="exportCSV()">
+                    <i class="bi bi-download"></i> 导出 CSV
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="panel-content">
+        <div class="table-responsive">
+            <table class="hmss-table" id="hanteiTable">
+                <thead>
+                    <tr>
+                        <th>年月</th>
+                        <th>客户编号</th>
+                        <th>客户姓名</th>
+                        <th>车牌号</th>
+                        <th>车辆</th>
+                        <th>判定代码</th>
+                        <th>判定日期</th>
+                        <th>店铺</th>
+                        <th class="text-center">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="hanteiTableBody">
+                    <tr>
+                        <td colspan="9" class="text-center py-5">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 分页 -->
+        <div class="hmss-pagination" id="hanteiPagination">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center" id="paginationUl">
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<!-- 详情模态框 -->
+<div class="modal fade" id="detailModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-file-text"></i>
+                    判定详情
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="detailModalBody">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">编辑</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+<style>
+    .hmss-page-header {
+        margin-bottom: 30px;
+    }
+    
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+    
+    .page-title i {
+        color: #00A8E0;
+    }
+    
+    .page-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        margin: 0;
+    }
+    
+    .hmss-search-panel {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .search-form .form-label {
+        font-weight: 500;
+        font-size: 14px;
+        color: #495057;
+        margin-bottom: 6px;
+    }
+    
+    .search-actions {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .hmss-data-panel {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+    
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .panel-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #212529;
+        margin: 0;
+    }
+    
+    .panel-content {
+        padding: 24px;
+    }
+    
+    .hmss-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    .hmss-table thead th {
+        background: #f8f9fa;
+        padding: 12px 16px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #495057;
+        border-bottom: 2px solid #dee2e6;
+        white-space: nowrap;
+    }
+    
+    .hmss-table tbody td {
+        padding: 12px 16px;
+        border-bottom: 1px solid #e9ecef;
+        font-size: 14px;
+    }
+    
+    .hmss-table tbody tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .hmss-pagination {
+        padding: 20px 24px;
+        border-top: 1px solid #e9ecef;
+    }
+    
+    .badge-hantei {
+        display: inline-block;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    
+    .btn-action {
+        padding: 4px 8px;
+        font-size: 13px;
+    }
+</style>
+}
+
+@section Scripts {
+<script>
+    let currentPage = 1;
+    const pageSize = 20;
+    
+    // 搜索判定列表
+    async function searchHantei(page = 1) {
+        currentPage = page;
+        
+        const params = new URLSearchParams({
+            page: page,
+            size: pageSize,
+            csrno: document.getElementById('searchCsrno').value,
+            csrnm: document.getElementById('searchCsrnm').value,
+            carno: document.getElementById('searchCarno').value,
+            tenpo_cd: document.getElementById('searchTenpo').value
+        });
+        
+        try {
+            const response = await fetch(`/api/hmss/sdh/hantei?${params}`);
+            const result = await response.json();
+            
+            if (result.success) {
+                renderTable(result.data);
+                renderPagination(result.total, page);
+            } else {
+                showError('加载失败');
+            }
+        } catch (error) {
+            console.error('Search error:', error);
+            showError('网络错误');
+        }
+    }
+    
+    // 渲染表格
+    function renderTable(data) {
+        const tbody = document.getElementById('hanteiTableBody');
+        
+        if (!data || data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="9" class="text-center py-5">暂无数据</td></tr>';
+            return;
+        }
+        
+        tbody.innerHTML = data.map(item => `
+            <tr>
+                <td>${item.yymm || ''}</td>
+                <td>${item.csrno || ''}</td>
+                <td>${item.csr_nm || ''}</td>
+                <td>${item.carno || ''}</td>
+                <td>${item.syadai || ''}</td>
+                <td>${renderHanteiCd(item.hantei_cd)}</td>
+                <td>${formatDate(item.hantei_dt)}</td>
+                <td>${renderTenpo(item.tenpo_cd)}</td>
+                <td class="text-center">
+                    <button class="btn btn-sm btn-outline-primary btn-action" onclick="viewDetail('${item.id}')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-secondary btn-action" onclick="editHantei('${item.id}')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    // 渲染判定代码
+    function renderHanteiCd(cd) {
+        const map = {
+            '1': { text: '代替促進', class: 'bg-primary' },
+            '2': { text: '入庫促進', class: 'bg-success' },
+            '3': { text: '入促・代促', class: 'bg-info' },
+            '4': { text: '代替確定', class: 'bg-warning' },
+            '5': { text: '代替予定', class: 'bg-primary-subtle' },
+            '6': { text: '入庫確定', class: 'bg-success-subtle' },
+            '7': { text: '入庫予定', class: 'bg-info-subtle' },
+            '8': { text: '他社代替', class: 'bg-secondary' },
+            '9': { text: '他社入庫', class: 'bg-secondary' },
+            '10': { text: '転売', class: 'bg-dark' },
+            '11': { text: '県外転出', class: 'bg-dark' },
+            '12': { text: '入庫 X', class: 'bg-danger' },
+            '13': { text: '車両なし', class: 'bg-warning' },
+            '14': { text: '連絡 X', class: 'bg-danger' },
+            '15': { text: '所在不明', class: 'bg-danger' },
+            '16': { text: '業者契約', class: 'bg-secondary' },
+            '17': { text: 'リース', class: 'bg-secondary' },
+            '18': { text: 'リース指定工場', class: 'bg-secondary' },
+            '19': { text: '納入依頼', class: 'bg-primary' }
+        };
+        
+        const info = map[cd] || { text: cd, class: 'bg-secondary' };
+        return `<span class="badge ${info.class}">${info.text}</span>`;
+    }
+    
+    // 渲染店铺
+    function renderTenpo(cd) {
+        const map = {
+            '001': '广岛本店',
+            '002': '东广岛店',
+            '003': '吴店',
+            '004': '福山店',
+            '005': '尾道店'
+        };
+        return map[cd] || cd;
+    }
+    
+    // 格式化日期
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const date = new Date(dateStr);
+        return date.toLocaleDateString('zh-CN');
+    }
+    
+    // 渲染分页
+    function renderPagination(total, current) {
+        const totalPages = Math.ceil(total / pageSize);
+        const ul = document.getElementById('paginationUl');
+        
+        if (totalPages <= 1) {
+            ul.innerHTML = '';
+            return;
+        }
+        
+        let html = `
+            <li class="page-item ${current === 1 ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="searchHantei(${current - 1}); return false;">上一页</a>
+            </li>
+        `;
+        
+        for (let i = 1; i <= totalPages; i++) {
+            html += `
+                <li class="page-item ${i === current ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="searchHantei(${i}); return false;">${i}</a>
+                </li>
+            `;
+        }
+        
+        html += `
+            <li class="page-item ${current === totalPages ? 'disabled' : ''}">
+                <a class="page-link" href="#" onclick="searchHantei(${current + 1}); return false;">下一页</a>
+            </li>
+        `;
+        
+        ul.innerHTML = html;
+    }
+    
+    // 重置搜索
+    function resetSearch() {
+        document.getElementById('searchCsrno').value = '';
+        document.getElementById('searchCsrnm').value = '';
+        document.getElementById('searchCarno').value = '';
+        document.getElementById('searchTenpo').value = '';
+        searchHantei(1);
+    }
+    
+    // 新增
+    function createNew() {
+        window.location.href = '/hmss/sdh/hantei/create';
+    }
+    
+    // 查看详情
+    function viewDetail(id) {
+        // TODO: 实现详情查看
+        alert('查看详情：' + id);
+    }
+    
+    // 编辑
+    function editHantei(id) {
+        // TODO: 实现编辑
+        alert('编辑：' + id);
+    }
+    
+    // 导出 CSV
+    function exportCSV() {
+        // TODO: 实现 CSV 导出
+        alert('导出 CSV');
+    }
+    
+    // 显示错误
+    function showError(message) {
+        const tbody = document.getElementById('hanteiTableBody');
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center py-5 text-danger">${message}</td></tr>`;
+    }
+    
+    // 页面加载时搜索
+    document.addEventListener('DOMContentLoaded', () => {
+        searchHantei(1);
+    });
+</script>
+}

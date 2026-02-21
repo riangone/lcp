@@ -1,0 +1,411 @@
+# HMTVE データ集計システム
+# Data Totalization System
+
+models:
+  # ============================================
+  # 入力データ
+  # ============================================
+  
+  HmtveInputDataK:
+    table: hmtve_input_data_k
+    primary_key: data_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 入力データ K
+          create_button: 添加入力データ
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索入力データ...
+          DATA_ID: データ ID
+          INPUT_DT: 入力日期
+          TENPO_CD: 店铺代码
+          SYASYU_CD: 车种代码
+          TAIKAI_CD: 大会代码
+          KAZU: 数量
+          KINGAKU: 金额
+        ja:
+          title: 入力データ K
+          create_button: データ追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: データを検索...
+          DATA_ID: データ ID
+          INPUT_DT: 入力日
+          TENPO_CD: 店舗コード
+          SYASYU_CD: 車種コード
+          TAIKAI_CD: 大会コード
+          KAZU: 数量
+          KINGAKU: 金額
+      styles:
+        card_class: "card-input-k"
+        button_class: "btn btn-primary"
+    
+    list:
+      columns: [data_id, input_dt, tenpo_cd, syasyu_cd, kazu, kingaku]
+      filters:
+        input_dt:
+          label: 入力日期
+          type: date
+        tenpo_cd:
+          label: 店铺
+          type: like
+        syasyu_cd:
+          label: 车种
+          type: like
+    
+    form:
+      title: 入力データ K
+      fields:
+        input_dt:
+          label: 入力日期
+          type: date
+          required: true
+        tenpo_cd:
+          label: 店铺代码
+          type: text
+          max_length: 10
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        taikai_cd:
+          label: 大会代码
+          type: text
+          max_length: 10
+        kazu:
+          label: 数量
+          type: number
+        kingaku:
+          label: 金额
+          type: number
+    
+    properties:
+      data_id: { type: int }
+      input_dt: { type: date }
+      tenpo_cd: { type: string }
+      syasyu_cd: { type: string }
+      taikai_cd: { type: string }
+      kazu: { type: int }
+      kingaku: { type: decimal }
+  
+  HmtveInputDataS:
+    table: hmtve_input_data_s
+    primary_key: data_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 入力データ S
+          create_button: 添加入力データ
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索入力データ...
+          DATA_ID: データ ID
+          INPUT_DT: 入力日期
+          TENPO_CD: 店铺代码
+          SYASYU_CD: 车种代码
+          KAZU: 数量
+          KINGAKU: 金额
+        ja:
+          title: 入力データ S
+          create_button: データ追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: データを検索...
+          DATA_ID: データ ID
+          INPUT_DT: 入力日
+          TENPO_CD: 店舗コード
+          SYASYU_CD: 車種コード
+          KAZU: 数量
+          KINGAKU: 金額
+      styles:
+        card_class: "card-input-s"
+        button_class: "btn btn-success"
+    
+    list:
+      columns: [data_id, input_dt, tenpo_cd, syasyu_cd, kazu, kingaku]
+      filters:
+        input_dt:
+          label: 入力日期
+          type: date
+    
+    form:
+      title: 入力データ S
+      fields:
+        input_dt:
+          label: 入力日期
+          type: date
+          required: true
+        tenpo_cd:
+          label: 店铺代码
+          type: text
+          max_length: 10
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        kazu:
+          label: 数量
+          type: number
+        kingaku:
+          label: 金额
+          type: number
+    
+    properties:
+      data_id: { type: int }
+      input_dt: { type: date }
+      tenpo_cd: { type: string }
+      syasyu_cd: { type: string }
+      kazu: { type: int }
+      kingaku: { type: decimal }
+  
+  HmtveExhibition:
+    table: hmtve_exhibition
+    primary_key: exh_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 展示会管理
+          create_button: 添加展示会
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索展示会...
+          EXH_ID: 展示会 ID
+          EXH_NM: 展示会名称
+          START_DT: 開始日期
+          END_DT: 終了日期
+          PLACE: 会場
+          STATUS: 状态
+        ja:
+          title: 展示会管理
+          create_button: 展示会追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 展示会を検索...
+          EXH_ID: 展示会 ID
+          EXH_NM: 展示会名
+          START_DT: 開始日
+          END_DT: 終了日
+          PLACE: 会場
+          STATUS: ステータス
+      styles:
+        card_class: "card-exhibition"
+        button_class: "btn btn-info"
+    
+    list:
+      columns: [exh_id, exh_nm, start_dt, end_dt, place, status]
+      filters:
+        exh_nm:
+          label: 展示会名称
+          type: like
+        start_dt:
+          label: 開始日期
+          type: date
+    
+    form:
+      title: 展示会
+      fields:
+        exh_nm:
+          label: 展示会名称
+          type: text
+          required: true
+          max_length: 100
+        start_dt:
+          label: 開始日期
+          type: date
+          required: true
+        end_dt:
+          label: 終了日期
+          type: date
+          required: true
+        place:
+          label: 会場
+          type: text
+          max_length: 200
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '予定'
+            '2': '実施中'
+            '3': '完了'
+    
+    properties:
+      exh_id: { type: int }
+      exh_nm: { type: string }
+      start_dt: { type: date }
+      end_dt: { type: date }
+      place: { type: string }
+      status: { type: string }
+  
+  HmtveAttendance:
+    table: hmtve_attendance
+    primary_key: att_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 出欠管理
+          create_button: 添加出欠
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索出欠...
+          ATT_ID: 出欠 ID
+          EXH_ID: 展示会 ID
+          EMP_ID: 社員 ID
+          ATTENDANCE: 出欠区分
+          REMARK: 备注
+        ja:
+          title: 出欠管理
+          create_button: 出欠追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 出欠を検索...
+          ATT_ID: 出欠 ID
+          EXH_ID: 展示会 ID
+          EMP_ID: 社員 ID
+          ATTENDANCE: 出欠区分
+          REMARK: 備考
+      styles:
+        card_class: "card-attendance"
+        button_class: "btn btn-warning"
+    
+    list:
+      columns: [att_id, exh_id, emp_id, attendance]
+      filters:
+        exh_id:
+          label: 展示会
+          type: like
+        emp_id:
+          label: 社員
+          type: like
+    
+    form:
+      title: 出欠
+      fields:
+        exh_id:
+          label: 展示会 ID
+          type: number
+          required: true
+        emp_id:
+          label: 社員 ID
+          type: text
+          required: true
+          max_length: 10
+        attendance:
+          label: 出欠区分
+          type: select
+          required: true
+          options:
+            '1': '出席'
+            '2': '欠席'
+            '3': '遅刻'
+            '4': '早退'
+        remark:
+          label: 备注
+          type: textarea
+          max_length: 500
+    
+    properties:
+      att_id: { type: int }
+      exh_id: { type: int }
+      emp_id: { type: string }
+      attendance: { type: string }
+      remark: { type: string }
+  
+  HmtvePublicityOrder:
+    table: hmtve_publicity_order
+    primary_key: pub_order_id
+    
+    ui:
+      layout:
+        theme: modern
+        grid_columns: 1
+      labels:
+        zh:
+          title: 宣伝注文
+          create_button: 添加注文
+          edit_button: 编辑
+          delete_button: 删除
+          search_placeholder: 搜索注文...
+          PUB_ORDER_ID: 注文 ID
+          ORDER_DT: 注文日期
+          CUSTOMER_NM: 客户名称
+          SYASYU_CD: 车种代码
+          KAZU: 数量
+          STATUS: 状态
+        ja:
+          title: 宣伝注文
+          create_button: 注文追加
+          edit_button: 編集
+          delete_button: 削除
+          search_placeholder: 注文を検索...
+          PUB_ORDER_ID: 注文 ID
+          ORDER_DT: 注文日
+          CUSTOMER_NM: 顧客名
+          SYASYU_CD: 車種コード
+          KAZU: 数量
+          STATUS: ステータス
+      styles:
+        card_class: "card-publicity"
+        button_class: "btn btn-secondary"
+    
+    list:
+      columns: [pub_order_id, order_dt, customer_nm, syasyu_cd, status]
+      filters:
+        order_dt:
+          label: 注文日期
+          type: date
+        customer_nm:
+          label: 客户名称
+          type: like
+    
+    form:
+      title: 宣伝注文
+      fields:
+        order_dt:
+          label: 注文日期
+          type: date
+          required: true
+        customer_nm:
+          label: 客户名称
+          type: text
+          max_length: 100
+        syasyu_cd:
+          label: 车种代码
+          type: text
+          max_length: 10
+        kazu:
+          label: 数量
+          type: number
+        status:
+          label: 状态
+          type: select
+          options:
+            '1': '受付'
+            '2': '処理中'
+            '3': '完了'
+            '4': '取消'
+    
+    properties:
+      pub_order_id: { type: int }
+      order_dt: { type: date }
+      customer_nm: { type: string }
+      syasyu_cd: { type: string }
+      kazu: { type: int }
+      status: { type: string }

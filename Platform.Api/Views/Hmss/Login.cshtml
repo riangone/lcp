@@ -1,0 +1,203 @@
+@{
+    Layout = null;
+    ViewData["Title"] = "登录";
+}
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>登录 - HMSS</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="/css/hmss-theme.css" rel="stylesheet" />
+    
+    <style>
+        .hmss-login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+        
+        .hmss-login-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .hmss-login-header {
+            background: linear-gradient(135deg, #B00838 0%, #8B062C 100%);
+            color: white;
+            padding: 40px 30px;
+            text-align: center;
+        }
+        
+        .hmss-login-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .hmss-login-header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .hmss-login-body {
+            padding: 40px 30px;
+        }
+        
+        .form-floating > label {
+            color: #6c757d;
+        }
+        
+        .form-floating > .form-control:focus {
+            border-color: #B00838;
+            box-shadow: 0 0 0 0.25rem rgba(176, 8, 56, 0.25);
+        }
+        
+        .btn-hmss-primary {
+            background: linear-gradient(135deg, #B00838 0%, #8B062C 100%);
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-hmss-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(176, 8, 56, 0.4);
+            color: white;
+        }
+        
+        .login-alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="hmss-login-page">
+        <div class="hmss-login-card">
+            <div class="hmss-login-header">
+                <i class="bi bi-speedometer2" style="font-size: 48px; margin-bottom: 10px;"></i>
+                <h1>HMSS</h1>
+                <p>Hiroshima Mazda Sales System</p>
+            </div>
+            
+            <div class="hmss-login-body">
+                <div id="loginAlert" class="alert alert-danger login-alert d-none" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <span id="loginAlertMessage">用户 ID 或密码错误</span>
+                </div>
+                
+                <form id="loginForm" method="post">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="userId" name="userId" placeholder="用户 ID" required>
+                        <label for="userId"><i class="bi bi-person"></i> 用户 ID</label>
+                    </div>
+                    
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="密码" required>
+                        <label for="password"><i class="bi bi-lock"></i> 密码</label>
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                        <label class="form-check-label" for="rememberMe">
+                            记住我
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-hmss-primary">
+                        <i class="bi bi-box-arrow-in-right"></i> 登录
+                    </button>
+                </form>
+                
+                <div class="text-center mt-3">
+                    <a href="#" class="text-decoration-none">忘记密码？</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="copyright">
+        &copy; 2026 HMSS. All rights reserved.
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
+            const alertDiv = document.getElementById('loginAlert');
+            const alertMessage = document.getElementById('loginAlertMessage');
+            
+            // 隐藏之前的错误
+            alertDiv.classList.add('d-none');
+            
+            try {
+                const response = await fetch('/api/hmss/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ userId, password, rememberMe })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // 登录成功，跳转到主页
+                    window.location.href = result.data.redirectUrl || '/hmss/master';
+                } else {
+                    // 登录失败
+                    alertMessage.textContent = result.message || '登录失败，请稍后重试';
+                    alertDiv.classList.remove('d-none');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alertMessage.textContent = '网络错误，请稍后重试';
+                alertDiv.classList.remove('d-none');
+            }
+        });
+        
+        // 支持回车键登录
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').requestSubmit();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="21600" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptArariekiChkList.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ ゴシック; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="960" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label" MOD="4" Left="0" Top="0" Width="21600" Height="540" Caption="新車車種別粗利益表チェックリスト" Style="text-align: center; font-weight: normal; font-size: 18pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox19" DataField="NEN" MOD="4" Left="3555.36" Top="270.72" Width="554.4" Height="270.72" Text="99999" Multiline="0" Style="text-align: right; font-weight: normal; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label13" MOD="4" Left="4140" Top="270" Width="315" Height="288" Caption="年" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox20" DataField="TUKI" MOD="4" Left="4455" Top="270" Width="270" Height="270" Text="99" Multiline="0" Style="font-weight: normal; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label14" MOD="4" Left="4725" Top="270" Width="630" Height="288" Caption="月度" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="4574" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Label" Name="Label11" MOD="4" Left="4185" Top="495" Width="1845" Height="288" Caption="車両本体" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label1" MOD="4" Left="4185" Top="961.7142" Width="1845" Height="288" Caption="特別仕様" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label2" MOD="4" Left="4185" Top="1428.428" Width="1845" Height="288" Caption="車両値引" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label3" MOD="4" Left="4185" Top="1895.143" Width="1845" Height="288" Caption="下損" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label4" MOD="4" Left="4185" Top="2361.857" Width="1845" Height="288" Caption="車両原価" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label5" MOD="4" Left="4185" Top="2828.572" Width="1845" Height="288" Caption="架装実原価" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label6" MOD="4" Left="4185" Top="3295.286" Width="1845" Height="288" Caption="架装社内実原価" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" MOD="4" Left="4185" Top="3762" Width="1845" Height="288" Caption="買取" Style="font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label8" MOD="4" Left="7605" Top="45" Width="2790.72" Height="270.72" Caption="会計データ" Style="text-align: right; font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label9" MOD="4" Left="12870" Top="44.64" Width="2790.72" Height="270.72" Caption="売上" Style="text-align: right; font-weight: normal; font-size: 11.25pt; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox1" DataField="KAI_SYARYO" MOD="4" Left="7605.36" Top="495.36" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox" DataField="KAI_TOKUBETU" MOD="4" Left="7605.36" Top="961.92" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox2" DataField="KAI_NEBIKI" MOD="4" Left="7605.36" Top="1428.48" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox4" DataField="KAI_GENKA" MOD="4" Left="7605" Top="2340" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="KAI_KASOU" MOD="4" Left="7605" Top="2835" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox8" DataField="URI_SYARYO" MOD="4" Left="12870" Top="495.36" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox9" DataField="URI_TOKUBETU" MOD="4" Left="12870" Top="961.92" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox10" DataField="URI_NEBIKI" MOD="4" Left="12870" Top="1428.48" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox11" DataField="URI_SITASON" MOD="4" Left="12870" Top="1890.72" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox12" DataField="URI_GENKA" MOD="4" Left="12870" Top="2340" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="TextBox14" DataField="URI_KASOU" MOD="4" Left="12870" Top="3294.72" Width="2790" Height="270.72" Text="999,999,999" OutputFormat="#,##0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ ゴシック; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="19569.6" Y1="404.64" X2="1440" Y2="404.64" />
+      <Control Type="AR.Line" Name="Line1" MOD="4" X1="19569.6" Y1="856.44" X2="1440" Y2="855" />
+      <Control Type="AR.Line" Name="Line2" MOD="4" X1="19569.6" Y1="2250" X2="1440" Y2="2250.72" />
+      <Control Type="AR.Line" Name="Line3" MOD="4" X1="19569.6" Y1="1321.92" X2="1440" Y2="1321.92" />
+      <Control Type="AR.Line" Name="Line4" MOD="4" X1="19569.6" Y1="1800" X2="1440" Y2="1800" />
+      <Control Type="AR.Line" Name="Line5" MOD="4" X1="19569.6" Y1="3690" X2="1440" Y2="3690.72" />
+      <Control Type="AR.Line" Name="Line6" MOD="4" X1="19569.6" Y1="2744.64" X2="1440" Y2="2745" />
+      <Control Type="AR.Line" Name="Line7" MOD="4" X1="19569.6" Y1="3240" X2="1440" Y2="3240" />
+      <Control Type="AR.Line" Name="Line8" MOD="4" X1="19569.6" Y1="4140" X2="1440" Y2="4140" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <PageSettings  LeftMargin="1152" RightMargin="1152"  PaperSize="0" PaperWidth="21600" PaperHeight="15840" PaperName="ユーザー定義のサイズ" Orientation="2" />
+</ActiveReportsLayout>

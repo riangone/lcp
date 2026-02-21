@@ -5,7 +5,8 @@
     var modelName = (string)ViewData["ModelName"]!;
     var row = (Dictionary<string, object>)ViewData["Row"]!;
     var returnUrl = ViewData["ReturnUrl"] as string;
-    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}";
+    var project = Context.Request.Query["project"].FirstOrDefault() ?? "app";
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}?project={project}";
 
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var uiLabels = def.Ui?.Labels;
@@ -31,23 +32,23 @@
     ViewData["Title"] = $"{detailsLabel} - {title}";
 }
 
-<div class="container mx-auto px-4 py-8">
-  <div class="card max-w-3xl mx-auto">
-    <div class="flex items-center justify-between mb-4">
-      <h1 class="text-2xl font-bold text-gray-800">@detailsLabel - @title</h1>
+<div class="details-page-container">
+  <div class="@def.Ui?.Styles?.CardClass">
+    <div class="details-header">
+      <h1 class="details-title">@detailsLabel - @title</h1>
       <a href="@backUrl" class="btn btn-outline">@backLabel</a>
     </div>
 
-    <div class="overflow-x-auto">
-      <table class="table w-full">
+    <div class="details-content">
+      <table class="details-table">
         <tbody>
           @foreach (var col in detailColumns)
           {
               var label = localizedLabels.ContainsKey(col) ? localizedLabels[col] : col;
               var value = row.ContainsKey(col) && row[col] != null ? row[col]!.ToString() : "";
               <tr>
-                <th class="w-1/3 px-4 py-3 text-left text-sm font-semibold text-gray-700">@label</th>
-                <td class="px-4 py-3 text-sm text-gray-900">@value</td>
+                <th class="label">@label</th>
+                <td class="value">@value</td>
               </tr>
           }
         </tbody>
@@ -55,3 +56,69 @@
     </div>
   </div>
 </div>
+
+<style>
+  .details-page-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  
+  .details-title {
+    margin: 0;
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  
+  .details-content {
+    padding: 0.5rem 0;
+  }
+  
+  .details-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .details-table th,
+  .details-table td {
+    padding: 0.875rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+    font-size: var(--text-base);
+  }
+  
+  .details-table th {
+    width: 35%;
+    font-weight: 600;
+    color: var(--text-primary);
+    background-color: var(--bg-secondary);
+  }
+  
+  .details-table th.label {
+    vertical-align: top;
+  }
+  
+  .details-table td {
+    color: var(--text-primary);
+    word-break: break-word;
+  }
+  
+  .details-table tr:last-child th,
+  .details-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .details-table tr:hover {
+    background-color: var(--bg-secondary);
+  }
+</style>

@@ -14,6 +14,7 @@ using System.Text.Json;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(new WebApplicationOptions
@@ -35,6 +36,11 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Ecommerce/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Chinook/{0}.cshtml");
 
+        // 添加 HMSS 视图目录
+        options.ViewLocationFormats.Add("/Views/Hmss/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Hmss/Shared/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/Hmss/Sdh/{0}.cshtml");
+
         // 添加项目视图目录
         var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
         if (Directory.Exists(projectsDir))
@@ -52,11 +58,22 @@ builder.Services.AddControllersWithViews()
     });
 builder.Services.AddOpenApi();
 
-// ★ JWT 认证配置
+// ★ Cookie 认证配置 (HMSS 使用)
 builder.Services.AddAuthentication(options =>
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/hmss/login";
+    options.LogoutPath = "/hmss/logout";
+    options.AccessDeniedPath = "/hmss/access-denied";
+    options.Cookie.Name = "HMSS_AUTH";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.ExpireTimeSpan = TimeSpan.FromDays(7);
+    options.SlidingExpiration = true;
 })
 .AddJwtBearer(options =>
 {
@@ -87,11 +104,22 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.DefaultPolicy = new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 // ★ 项目管理服务 - 支持运行时动态切换项目
 var projectsDirectory = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
-builder.Services.AddSingleton<ProjectManager>(sp => 
+
+// ★ HMSS 数据库初始化服务
+var hmssDbPath = Path.Combine(projectsDirectory, "hmss", "hmss.db");
+var hmssConnectionString = $"Data Source={hmssDbPath}";
+builder.Services.AddHmssDatabaseInitializer(hmssConnectionString);
+
+builder.Services.AddSingleton<ProjectManager>(sp =>
 {
     var logger = sp.GetRequiredService<ILogger<ProjectManager>>();
     return new ProjectManager(projectsDirectory, logger);
@@ -144,6 +172,17 @@ builder.Services.AddAntiforgery(options =>
 
 var app = builder.Build();
 
+// ★ 初始化 HMSS 数据库
+try
+{
+    await app.Services.InitializeHmssDatabaseAsync();
+    Console.WriteLine("[HMSS] Database initialized successfully");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"[HMSS] Failed to initialize database: {ex.Message}");
+}
+
 // 静态文件
 app.UseStaticFiles();
 
@@ -192,32 +231,8 @@ app.MapGet("/", (HttpContext context) =>
     {
         return Results.Redirect("/Home");
     }
-    // 天气应用重定向到专用 UI
-    if (project == "weather")
-    {
-        return Results.Redirect($"/ui/weather?project={project}");
-    }
-    // TODO 应用重定向到专用首页
-    if (project == "todo")
-    {
-        return Results.Redirect($"/todo?project={project}");
-    }
-    // Journal 应用重定向到专用首页
-    if (project == "journal")
-    {
-        return Results.Redirect($"/journal?project={project}");
-    }
-    // Ecommerce 应用重定向到专用首页
-    if (project == "ecommerce")
-    {
-        return Results.Redirect($"/ecommerce?project={project}");
-    }
-    // Chinook 应用重定向到专用首页
-    if (project == "chinook")
-    {
-        return Results.Redirect($"/chinook?project={project}");
-    }
-    return Results.Redirect($"/Home?project={project}");
+    // 所有项目都使用简约首页
+    return Results.Redirect($"/Home/SimpleIndex?project={project}");
 });
 app.MapGet("/docs", () => Results.Redirect("/scalar/v1"));
 

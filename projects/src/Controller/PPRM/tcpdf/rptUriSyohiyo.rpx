@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="16128" DocumentName="ARNet Document" ScriptLang="C#" MasterReport="0">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; color: Black; font-family: MS UI Gothic; ddo-char-set: 128; " />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; " />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; " />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="473" GroupKeepTogether="1" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Label" Name="Label2" Left="270" Top="90" Width="2250" Height="270" Caption="&lt;諸費用明細一覧&gt;" HyperLink="" Style="font-weight: bold; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="655" GroupKeepTogether="1" RepeatStyle="4" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Label" Name="Label22" Left="90" Top="0" Width="1350" Height="270" Caption="納品書No." Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label33" Left="9450" Top="270" Width="1080" Height="270" Caption="代行料" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label7" Left="10620" Top="0" Width="5490" Height="270" Caption="登録No." Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label4" Left="7110" Top="270" Width="1080" Height="270" Caption="重量税" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label5" Left="5940" Top="270" Width="1080" Height="270" Caption="自賠責" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label6" Left="2970" Top="0" Width="1080" Height="270" Caption="売上日" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label9" Left="8280" Top="270" Width="1080" Height="270" Caption="印紙代" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label13" Left="3600" Top="270" Width="1080" Height="270" Caption="諸費用合計" Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label21" Left="4770" Top="0" Width="2250" Height="270" Caption="請求先CD" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label30" Left="7110" Top="0" Width="3420" Height="270" Caption="請求先名" Style="text-align: left; font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line4" X1="7020" Y1="0" X2="7020" Y2="540" />
+      <Control Type="AR.Line" Name="Line5" X1="8190" Y1="273.6" X2="8190" Y2="540" />
+      <Control Type="AR.Line" Name="Line6" X1="9360" Y1="273.6" X2="9360" Y2="540" />
+      <Control Type="AR.Line" Name="Line7" X1="10530" Y1="0" X2="10530" Y2="540" />
+      <Control Type="AR.Line" Name="Line12" X1="4680" Y1="0" X2="4680" Y2="540" />
+      <Control Type="AR.Label" Name="Label23" Left="90" Top="270" Width="1350" Height="270" Caption="旧納品書No." Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line14" X1="15033.6" Y1="273.6" X2="15033.6" Y2="540" />
+      <Control Type="AR.Line" Name="Line10" X1="13953.6" Y1="273.6" X2="13953.6" Y2="540" />
+      <Control Type="AR.Line" Name="Line9" X1="12870" Y1="273.6" X2="12870" Y2="540" />
+      <Control Type="AR.Line" Name="Line8" X1="11700" Y1="273.6" X2="11700" Y2="540" />
+      <Control Type="AR.Label" Name="Label26" Left="1530" Top="0" Width="1350" Height="270" Caption="受付No." Style="font-size: 9.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line15" X1="3510" Y1="273.6" X2="3510" Y2="540" />
+      <Control Type="AR.Line" Name="Line11" X1="0" Y1="540" X2="16113.6" Y2="540" />
+      <Control Type="AR.Line" Name="Line13" X1="5850" Y1="273.6" X2="5850" Y2="540" />
+      <Control Type="AR.Line" Name="Line16" X1="3510" Y1="270" X2="16113.6" Y2="270" />
+      <Control Type="AR.Line" Name="Line1" X1="0" Y1="630" X2="16113.6" Y2="630" />
+      <Control Type="AR.Line" Name="Line32" X1="0" Y1="0" X2="16113.6" Y2="0" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="565" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="txtYumuKbn" DataField="YUMUKBN" Visible="0" Left="1530" Top="270" Width="1350" Height="270" Text="有償/無償" OutputFormat="" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtJuryo" DataField="JURYO" Left="7020" Top="270" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtHiyouGk" DataField="HIYOUGK" Left="3510" Top="270" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtDaiko" DataField="DAIKO" Left="9360" Top="270" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox72" DataField="OLD_SEB_NOU_NO" Left="90" Top="270" Width="1350" Height="270" Text="12345678901" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtInshi" DataField="INSHI" Left="8190" Top="270" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtJibai" DataField="JIBAI" Left="5850" Top="270" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtTorokuNo" Left="10620" Top="0" Width="3420" Height="270" Text="あいうえおかきくけこさしすせそ" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox76" DataField="SEIKYU_NM" Left="7110" Top="0" Width="3420" Height="270" Text="あいうえおかきくけこ" Multiline="0" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox77" DataField="SEIKYU_CD" Left="4770" Top="0" Width="2250" Height="270" Text="ABCDEFGHIJ" CanGrow="0" Style="text-align: left; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox78" DataField="URIAGEDT" Left="2970" Top="0" Width="1170" Height="270" Text="2010/99/99" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox79" DataField="UKK_NO" Left="1530" Top="0" Width="1350" Height="270" Text="1234567890" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox80" DataField="SEB_NOU_NO" Left="90" Top="0" Width="1350" Height="270" Text="12345678901" CanGrow="0" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Line" Name="Line49" X1="7020" Y1="0" X2="7020" Y2="540" />
+      <Control Type="AR.Line" Name="Line50" X1="8190" Y1="273.6" X2="8190" Y2="540" />
+      <Control Type="AR.Line" Name="Line51" X1="9360" Y1="273.6" X2="9360" Y2="540" />
+      <Control Type="AR.Line" Name="Line52" X1="10530" Y1="0" X2="10530" Y2="540" />
+      <Control Type="AR.Line" Name="Line53" X1="4680" Y1="0" X2="4680" Y2="540" />
+      <Control Type="AR.Line" Name="Line56" X1="12870" Y1="273.6" X2="12870" Y2="540" />
+      <Control Type="AR.Line" Name="Line57" X1="11700" Y1="273.6" X2="11700" Y2="540" />
+      <Control Type="AR.Line" Name="Line62" X1="0" Y1="540" X2="16113.6" Y2="540" />
+      <Control Type="AR.Line" Name="Line64" X1="3510" Y1="270" X2="16113.6" Y2="270" />
+      <Control Type="AR.Line" Name="Line2" X1="3510" Y1="273.6" X2="3510" Y2="540" />
+      <Control Type="AR.Line" Name="Line3" X1="13950" Y1="270" X2="13950" Y2="540" />
+      <Control Type="AR.Line" Name="Line17" X1="15030" Y1="270" X2="15030" Y2="540" />
+      <Control Type="AR.Line" Name="Line31" X1="5850" Y1="273.6" X2="5850" Y2="540" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter2" Height="1305" BackColor="16777215" KeepTogether="1" CanShrink="0">
+      <Control Type="AR.Field" Name="TextBox49" DataField="DAIKO" Left="9360" Top="90" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtMuInshi" Left="8190" Top="720" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtYuJuryo" Left="7020" Top="450" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox5" DataField="HIYOUGK" Left="3510" Top="90" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtMuDenpyo" DataField="MUDENPYOSU" Left="2700" Top="720" Width="720" Height="270" Text="1,234" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtYuDenpyo" DataField="YUDENPYOSU" Left="2700" Top="450" Width="720" Height="270" Text="1,234" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Label" Name="Label3" Left="1440" Top="720" Width="810" Height="270" Caption="伝票数" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label1" Left="1440" Top="450" Width="810" Height="270" Caption="伝票数" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtYuDaiko" Left="9360" Top="450" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox40" DataField="JIBAI" Left="5850" Top="90" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtYuHiyoGk" Left="3510" Top="450" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Label" Name="Label28" Left="1440" Top="90" Width="810" Height="270" Caption="伝票数" Style="font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label29" Left="0" Top="90" Width="1440" Height="270" Caption="&lt;合計&gt;" Style="text-align: center; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label25" Left="0" Top="450" Width="1440" Height="270" Caption="有償計" Style="text-align: center; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label19" Left="0" Top="720" Width="1440" Height="270" Caption="無償計" Style="text-align: center; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtMuDaiko" Left="9360" Top="720" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtYuInshi" Left="8190" Top="450" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtMuJibai" Left="5850" Top="720" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="txtYuJibai" Left="5850" Top="450" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox38" DataField="JURYO" Left="7020" Top="90" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="TextBox39" DataField="INSHI" Left="8190" Top="90" Width="1080" Height="270" Text="123,456" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtMuHiyoGk" Left="3510" Top="720" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Field" Name="TextBox46" DataField="DENPYOSU" Left="2700" Top="90" Width="720" Height="270" Text="1,234" OutputFormat="#,##0" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: middle; " SummaryType="3" SummaryGroup="GroupHeader2" />
+      <Control Type="AR.Field" Name="txtMuJuryo" Left="7020" Top="720" Width="1080" Height="270" Text="123,456" OutputFormat="#,###" CanGrow="0" Style="text-align: right; font-size: 10.5pt; font-family: ＭＳ 明朝; vertical-align: top; " />
+      <Control Type="AR.Line" Name="Line33" X1="7020" Y1="446.4" X2="7020" Y2="990" />
+      <Control Type="AR.Line" Name="Line34" X1="8190" Y1="446.4" X2="8190" Y2="990" />
+      <Control Type="AR.Line" Name="Line35" X1="9360" Y1="446.4" X2="9360" Y2="990" />
+      <Control Type="AR.Line" Name="Line36" X1="10530" Y1="446.4" X2="10530" Y2="990" />
+      <Control Type="AR.Line" Name="Line37" X1="4680" Y1="446.4" X2="4680" Y2="990" />
+      <Control Type="AR.Line" Name="Line38" X1="15030" Y1="450" X2="15030" Y2="990" />
+      <Control Type="AR.Line" Name="Line39" X1="13950" Y1="450" X2="13950" Y2="990" />
+      <Control Type="AR.Line" Name="Line40" X1="12870" Y1="446.4" X2="12870" Y2="990" />
+      <Control Type="AR.Line" Name="Line41" X1="11700" Y1="446.4" X2="11700" Y2="990" />
+      <Control Type="AR.Line" Name="Line42" X1="0" Y1="990" X2="16113.6" Y2="990" />
+      <Control Type="AR.Line" Name="Line45" X1="3510" Y1="446.4" X2="3510" Y2="990" />
+      <Control Type="AR.Line" Name="Line46" X1="0" Y1="720" X2="16113.6" Y2="720" />
+      <Control Type="AR.Line" Name="Line47" X1="5850" Y1="446.4" X2="5850" Y2="990" />
+      <Control Type="AR.Line" Name="Line48" X1="0" Y1="360" X2="16113.6" Y2="360" />
+      <Control Type="AR.Line" Name="Line19" X1="0" Y1="450" X2="16113.6" Y2="450" />
+      <Control Type="AR.Line" Name="Line20" X1="3510" Y1="86.4" X2="3510" Y2="360" />
+      <Control Type="AR.Line" Name="Line21" X1="4680" Y1="86.4" X2="4680" Y2="360" />
+      <Control Type="AR.Line" Name="Line22" X1="5850" Y1="86.4" X2="5850" Y2="360" />
+      <Control Type="AR.Line" Name="Line23" X1="7020" Y1="86.4" X2="7020" Y2="360" />
+      <Control Type="AR.Line" Name="Line24" X1="8190" Y1="86.4" X2="8190" Y2="360" />
+      <Control Type="AR.Line" Name="Line25" X1="9360" Y1="86.4" X2="9360" Y2="360" />
+      <Control Type="AR.Line" Name="Line26" X1="10530" Y1="86.4" X2="10530" Y2="360" />
+      <Control Type="AR.Line" Name="Line27" X1="11700" Y1="86.4" X2="11700" Y2="360" />
+      <Control Type="AR.Line" Name="Line28" X1="12870" Y1="86.4" X2="12870" Y2="360" />
+      <Control Type="AR.Line" Name="Line29" X1="13950" Y1="90" X2="13950" Y2="360" />
+      <Control Type="AR.Line" Name="Line30" X1="15030" Y1="90" X2="15030" Y2="360" />
+      <Control Type="AR.Line" Name="Line18" X1="0" Y1="90" X2="16113.6" Y2="90" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="0" BackColor="16777215" CanGrow="0" />
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="288" RightMargin="288" TopMargin="288" BottomMargin="288" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>

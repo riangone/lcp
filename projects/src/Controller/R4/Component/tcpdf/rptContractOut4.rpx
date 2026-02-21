@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3" PrintWidth="11044.8" DocumentName="ActiveReports Document" ScriptLang="C#" CodeFile="rptContractOut4.vb">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; font-variant: inherit; font-weight: normal; font-size: 10pt; font-size-adjust: inherit; font-stretch: inherit; color: rgb(0,0,0); background-repeat: inherit; background-attachment: inherit; opacity: inherit; word-spacing: inherit; letter-spacing: inherit; text-decoration: none; vertical-align: inherit; text-transform: inherit; text-align: inherit; text-indent: inherit; unicode-bidi: inherit; line-height: inherit; white-space: inherit; ddo-char-set: 128; font-family: ＭＳ 明朝; " />
+    <Style Name="Heading1" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 16pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-style: italic; font-variant: inherit; font-weight: bold; font-size: 14pt; font-size-adjust: inherit; font-stretch: inherit; " />
+    <Style Name="Heading3" Value="font-family: inherit; font-style: inherit; font-variant: inherit; font-weight: bold; font-size: 13pt; font-size-adjust: inherit; font-stretch: inherit; " />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="0" BackColor="16777215" CanShrink="0" />
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="3870" DataField="TORIHIKI_CD" RepeatStyle="4" BackColor="16777215" NewPage="1" KeepTogether="1" CanShrink="1">
+      <Control Type="AR.Shape" Name="Shape9" MOD="4" Left="135.36" Top="675" Width="5445" Height="720" BackColor="16777215" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line78" MOD="4" X1="1124.64" Y1="675" X2="1124.64" Y2="1395" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line79" MOD="4" X1="135.36" Y1="990.36" X2="1125.36" Y2="990.36" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label201" MOD="4" Left="180" Top="719.64" Width="890.9999" Height="225" Caption="店名コード" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_NM1" DataField="TORIHIKI_NM" MOD="4" Left="1260" Top="990.36" Width="3870" Height="360.7198" Text="カーエース（GD）" Multiline="0" Style="text-align: left; font-size: 12pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD13" DataField="TORIHIKI_CD" MOD="4" Left="180" Top="1035" Width="900" Height="315.7198" Text="カ031" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape10" MOD="4" Left="135.36" Top="1575" Width="5445" Height="720" BackColor="16777215" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label202" MOD="4" Left="180" Top="1619.64" Width="1935" Height="225" Caption="お客様名又は下取先" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD14" DataField="SIYOSYA_KN" MOD="4" Left="315.36" Top="1890.36" Width="5040" Height="315.7198" Text="ﾁｭｳﾃﾞﾝｺｳ" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape11" MOD="4" Left="135" Top="2474.64" Width="5445" Height="720" BackColor="16777215" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label203" MOD="4" Left="180" Top="2519.64" Width="1935" Height="225" Caption="型 式 車 台 №" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line80" MOD="4" X1="3284.64" Y1="2475.36" X2="3284.64" Y2="3195.36" LineColor="26367" />
+      <Control Type="AR.Field" Name="Tenpo_CD15" DataField="SYADAI_NO" MOD="4" Left="224.64" Top="2925" Width="2970.72" Height="270.72" Text="(6AHA1A)" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line81" MOD="4" X1="5850" Y1="675" X2="5850.72" Y2="3420" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line82" MOD="4" X1="5850.72" Y1="675" X2="8640.721" Y2="675" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line83" MOD="4" X1="7740" Y1="675" X2="7740" Y2="1395" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line84" MOD="4" X1="8640" Y1="675" X2="8640" Y2="1395" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label204" MOD="4" Left="5895" Top="720" Width="585" Height="225" Caption="扱部署" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD16" DataField="TANTO_BUSYO" MOD="4" Left="6480" Top="855" Width="1170" Height="495.7198" Text="(6AHA1A)" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label205" MOD="4" Left="7784.28" Top="719.64" Width="585" Height="225" Caption="発注者" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD17" DataField="TANTO_NM" MOD="4" Left="7920" Top="944.28" Width="675" Height="405.7198" Text="笠間" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line85" MOD="4" X1="7740.72" Y1="1395" X2="5850.72" Y2="1395" LineColor="36095" />
+      <Control Type="AR.Line" Name="Line86" MOD="4" X1="8640" Y1="1395" X2="7740" Y2="1395" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line87" MOD="4" X1="6164.64" Y1="1395" X2="6165" Y2="2250" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label206" MOD="4" Left="6210.36" Top="1439.64" Width="585" Height="225" Caption="所長" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line88" MOD="4" X1="6930.72" Y1="1395" X2="6930" Y2="2250" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label207" MOD="4" Left="6975.36" Top="1440" Width="585" Height="225" Caption="課長" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line89" MOD="4" X1="7740" Y1="1395" X2="7740" Y2="3420.36" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line91" MOD="4" X1="5850.72" Y1="2835" X2="7740.72" Y2="2835" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line92" MOD="4" X1="5850.72" Y1="3419.64" X2="7740.72" Y2="3419.64" LineColor="17919" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label208" MOD="4" Left="5895.36" Top="2295" Width="900" Height="225" Caption="依　頼　日" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label209" MOD="4" Left="5895.36" Top="2879.64" Width="1080" Height="225" Caption="納 入 期 日" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD6" DataField="SON_HOSYACD" MOD="4" Left="5940" Top="2519.64" Width="306" Height="270" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label210" MOD="4" Left="6246.72" Top="2519.64" Width="270" Height="270" Caption="年" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD7" DataField="SON_HOSYACD" MOD="4" Left="6517.44" Top="2519.64" Width="306" Height="270" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label211" MOD="4" Left="6824.161" Top="2519.64" Width="270" Height="270" Caption="月" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD8" DataField="SON_HOSYACD" MOD="4" Left="7094.88" Top="2519.64" Width="306.72" Height="270.72" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label212" MOD="4" Left="7401.6" Top="2519.64" Width="270" Height="270" Caption="日" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD9" DataField="SON_HOSYACD" MOD="4" Left="5940" Top="3104.28" Width="306" Height="270" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label213" MOD="4" Left="6246.72" Top="3104.28" Width="270" Height="270" Caption="年" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD10" DataField="SON_HOSYACD" MOD="4" Left="6517.44" Top="3104.28" Width="306" Height="270" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label214" MOD="4" Left="6824.161" Top="3104.28" Width="270" Height="270" Caption="月" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="SON_HOSYACD11" DataField="SON_HOSYACD" MOD="4" Left="7094.88" Top="3104.28" Width="306.72" Height="270.72" Text="" Multiline="0" Style="font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: bottom; " />
+      <Control Type="AR.Label" Name="Label215" MOD="4" Left="7401.6" Top="3104.28" Width="270" Height="270" Caption="日" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape12" MOD="4" Left="8910.721" Top="675" Width="2025" Height="585" BackColor="16777215" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label216" MOD="4" Left="8910.361" Top="675" Width="945" Height="225" Caption="扱 部 署" Style="color: #FF6600; ddo-char-set: 1; text-align: center; font-size: 8pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label217" MOD="4" Left="9899.641" Top="675" Width="1080" Height="225" Caption="費用負担部署" Style="color: #FF6600; ddo-char-set: 1; text-align: left; font-size: 8pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line93" MOD="4" X1="9900" Y1="675" X2="9900" Y2="1260" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line94" MOD="4" X1="8910.721" Y1="899.64" X2="10935.72" Y2="899.64" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line95" MOD="4" X1="9240.479" Y1="899.64" X2="9240.479" Y2="1259.64" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line96" MOD="4" X1="9570.24" Y1="899.64" X2="9570.24" Y2="1259.64" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line97" MOD="4" X1="10245.6" Y1="899.64" X2="10245.6" Y2="1259.64" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line98" MOD="4" X1="10589.76" Y1="899.64" X2="10589.76" Y2="1259.64" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label218" MOD="4" Left="8820.721" Top="1350.36" Width="585" Height="225" Caption="B №" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD18" DataField="KASOU_NO" MOD="4" Left="9450" Top="1350.36" Width="1170" Height="225" Text="02-0502" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD19" DataField="HAKKOBI" MOD="4" Left="8145.359" Top="1709.64" Width="1755" Height="225" Text="1906.02.22" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD20" DataField="CMN_NO" MOD="4" Left="7965" Top="1980" Width="1755" Height="315" Text="1-100027" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD21" DataField="KYOTN_CD" MOD="4" Left="7965" Top="2340" Width="450" Height="315" Text="181" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape13" MOD="4" Left="122.4" Top="3600" Width="7905.6" Height="270.72" BackColor="26367" BackStyle="1" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Label" Name="Label219" MOD="4" Left="180" Top="3644.28" Width="5625" Height="225" Caption="加 　 　  工  　 　 箇　　    所" Style="color: White; ddo-char-set: 128; text-align: center; background-color: #FF6600; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label220" MOD="4" Left="5850" Top="3644.64" Width="1080" Height="225" Caption="見積金額" Style="color: White; ddo-char-set: 128; text-align: center; background-color: #FF6600; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label221" MOD="4" Left="6930" Top="3644.64" Width="1080" Height="225" Caption="請求金額" Style="color: White; ddo-char-set: 128; text-align: center; background-color: #FF6600; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line99" MOD="4" X1="5850" Y1="3599.64" X2="5850" Y2="3869.64" LineColor="16777215" />
+      <Control Type="AR.Line" Name="Line100" MOD="4" X1="6930" Y1="3599.64" X2="6930" Y2="3869.64" LineColor="16777215" />
+      <Control Type="AR.Label" Name="lblTitle" MOD="4" Left="0" Top="0" Width="11025" Height="396" Caption="外注加工明細書" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-weight: bold; font-size: 15.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label227" MOD="4" Left="8820" Top="135.36" Width="1440" Height="270" Caption="（GD）（DZM）" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-weight: bold; font-size: 12pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label228" MOD="4" Left="7740" Top="135.36" Width="1035" Height="270" Caption="株式会社" Style="color: #FF6600; ddo-char-set: 128; text-align: right; font-weight: bold; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label233" MOD="4" Left="5895" Top="1395.36" Width="180" Height="225" Caption="依" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label234" MOD="4" Left="5895" Top="1620.36" Width="180" Height="225" Caption="頼" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label235" MOD="4" Left="5895" Top="1845.36" Width="180" Height="225" Caption="部" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label236" MOD="4" Left="5895" Top="2070.36" Width="180" Height="225" Caption="署" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD31" DataField="Tenpo_CD" MOD="4" Left="8910" Top="900" Width="315" Height="360" Text="1" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD32" DataField="Tenpo_CD" MOD="4" Left="9225" Top="900" Width="315" Height="360" Text="7" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD33" DataField="Tenpo_CD" MOD="4" Left="9585" Top="900" Width="315" Height="360" Text="4" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD34" DataField="Tenpo_CD" MOD="4" Left="9945" Top="900" Width="315" Height="360" Text="1" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD35" DataField="Tenpo_CD" MOD="4" Left="10260" Top="900" Width="315" Height="360" Text="7" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD36" DataField="Tenpo_CD" MOD="4" Left="10620" Top="900" Width="315" Height="360" Text="4" Multiline="0" Style="text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+<!-- 2014/02/26 S0002対応 UPDATE Start -->
+<!--
+      <Control Type="AR.Field" Name="Tenpo_CD37" DataField="BUSYO_NM" MOD="4" Left="8415" Top="2340" Width="1260" Height="315" Text="法人営業" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD38" DataField="SYAIN_KNJ_SEI" MOD="4" Left="9675" Top="2340" Width="1035" Height="315" Text="戸田" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+-->
+      <Control Type="AR.Field" Name="Tenpo_CD37" DataField="BUSYO_NM" MOD="4" Left="8415" Top="2340" Width="2295" Height="315" Text="法人営業" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD38" DataField="SYAIN_KNJ_SEI" MOD="4" Left="8415" Top="2660" Width="2295" Height="315" Text="戸田" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+<!-- 2014/02/26 S0002対応 UPDATE End -->
+      <Control Type="AR.Field" Name="SIYOSYA_KN1" DataField="SYASYUMEI" MOD="4" Left="3330.72" Top="2700" Width="2160" Height="315.36" Text="" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtToiawaseNM" DataField="TOIAWASENM" MOD="4" Left="225" Top="2700" Width="2970.72" Height="226.08" Text="(6AHA1A)" Multiline="0" Style="text-align: left; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line90" MOD="4" X1="5850" Y1="2250" X2="7740" Y2="2250" LineColor="26367" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="10695" UnderlayNext="1" RepeatStyle="3" BackColor="16777215" CanShrink="1">
+      <Control Type="AR.Label" Name="Label2" MOD="4" Left="135" Top="10440" Width="3825" Height="225" Caption="④　車両課→外注先→車両課→費用負担部署" Style="color: #FF6600; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line23" MOD="4" X1="5850" Y1="0" X2="5850" Y2="8775" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line24" MOD="4" X1="8012.16" Y1="0" X2="8012.88" Y2="8775" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line25" MOD="4" X1="6930" Y1="0" X2="6930" Y2="8775" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line26" MOD="4" X1="135.36" Y1="673.92" X2="8010.36" Y2="673.92" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line27" MOD="4" X1="135.36" Y1="1347.84" X2="8010.36" Y2="1347.84" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line28" MOD="4" X1="135.36" Y1="2021.76" X2="8010.359" Y2="2021.76" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line29" MOD="4" X1="135.36" Y1="2695.68" X2="8010.359" Y2="2695.68" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line30" MOD="4" X1="135.36" Y1="3369.6" X2="8010.359" Y2="3369.6" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line22" MOD="4" X1="135.36" Y1="0" X2="135.36" Y2="8775" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line31" MOD="4" X1="135.36" Y1="4043.52" X2="8010.359" Y2="4043.52" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line32" MOD="4" X1="135" Y1="4725" X2="8010.72" Y2="4717.44" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line33" MOD="4" X1="135" Y1="5391.36" X2="8010.72" Y2="5391.36" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line34" MOD="4" X1="133.92" Y1="7424.64" X2="8010" Y2="7425" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line35" MOD="4" X1="135" Y1="8775" X2="5850" Y2="8775" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line36" MOD="4" X1="135.36" Y1="6065.28" X2="8010.359" Y2="6065.28" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line37" MOD="4" X1="133.92" Y1="6739.2" X2="8009.64" Y2="6739.92" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line38" MOD="4" X1="135.36" Y1="8087.04" X2="8011.08" Y2="8087.761" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line39" MOD="4" X1="6569.28" Y1="0" X2="6570" Y2="8820" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line40" MOD="4" X1="6209.28" Y1="0" X2="6210" Y2="8820" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line41" MOD="4" X1="7650" Y1="0" X2="7650.72" Y2="8820" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line42" MOD="4" X1="7289.28" Y1="0" X2="7290" Y2="8820" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Shape" Name="Shape6" MOD="4" Left="8190" Top="0" Width="2700" Height="6075" BackColor="16777215" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line58" MOD="4" X1="8414.279" Y1="0" X2="8415" Y2="5445" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line59" MOD="4" X1="8684.279" Y1="0" X2="8685" Y2="6075" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line60" MOD="4" X1="8414.279" Y1="450" X2="10890" Y2="450" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line61" MOD="4" X1="8684.279" Y1="900" X2="10890" Y2="900" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line62" MOD="4" X1="8414.279" Y1="1350" X2="10845" Y2="1350" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line63" MOD="4" X1="8684.279" Y1="1755" X2="10890" Y2="1755" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line64" MOD="4" X1="8954.279" Y1="450" X2="8955" Y2="2160" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line66" MOD="4" X1="8414.279" Y1="2160" X2="10890" Y2="2160" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line67" MOD="4" X1="8414.279" Y1="2565" X2="10890" Y2="2565" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line68" MOD="4" X1="8414.279" Y1="3015" X2="10845" Y2="3015" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line69" MOD="4" X1="8414.279" Y1="3420" X2="10845" Y2="3420" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line70" MOD="4" X1="8414.279" Y1="3825" X2="10845" Y2="3825" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line71" MOD="4" X1="8684.279" Y1="4230" X2="10845" Y2="4230" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line72" MOD="4" X1="8684.279" Y1="4635" X2="10845" Y2="4635" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line73" MOD="4" X1="8684.279" Y1="5040" X2="10845" Y2="5040" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line74" MOD="4" X1="8190" Y1="5445" X2="10890" Y2="5445" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line75" MOD="4" X1="9134.279" Y1="3825" X2="9135" Y2="5445" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label160" MOD="4" Left="8730.721" Top="2655" Width="2070" Height="315" Caption="整　　備 サ ー ビ ス" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label161" MOD="4" Left="8730" Top="3060" Width="2070" Height="315" Caption="サ ー ビ ス カ ー" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label162" MOD="4" Left="8730" Top="3465" Width="2070" Height="315" Caption="材　料　消　耗　品" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label163" MOD="4" Left="9180" Top="3870" Width="1620" Height="315" Caption="中 古 車 架 装" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label164" MOD="4" Left="9180" Top="4275" Width="1620" Height="315" Caption="鈑 　 　 　 金" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label165" MOD="4" Left="9180" Top="4680" Width="1620" Height="315" Caption="塗　　　　　装" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label166" MOD="4" Left="9180" Top="5085" Width="1620" Height="315" Caption="中古車文字入れ" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line76" MOD="4" X1="10305" Y1="5445" X2="10305.72" Y2="6075" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line77" MOD="4" X1="10305" Y1="5625" X2="10890.72" Y2="5625" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label167" MOD="4" Left="10305" Top="5445" Width="495" Height="225" Caption="費目" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label168" MOD="4" Left="8729.279" Top="5490" Width="495" Height="225" Caption="科目" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label169" MOD="4" Left="8279.999" Top="5490" Width="225" Height="225" Caption="そ" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label170" MOD="4" Left="8279.279" Top="5670" Width="225" Height="225" Caption="の" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label171" MOD="4" Left="8279.279" Top="5850" Width="225" Height="225" Caption="他" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label173" MOD="4" Left="8459.279" Top="765" Width="180" Height="225" Caption="1" Style="color: DarkOrange; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label174" MOD="4" Left="8459.999" Top="1620" Width="180" Height="225" Caption="2" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label175" MOD="4" Left="8459.999" Top="2250" Width="180" Height="225" Caption="3" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label176" MOD="4" Left="8459.999" Top="2700" Width="180" Height="225" Caption="4" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label177" MOD="4" Left="8459.999" Top="3105" Width="180" Height="225" Caption="5" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label178" MOD="4" Left="8459.999" Top="3510" Width="180" Height="225" Caption="6" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label179" MOD="4" Left="8459.999" Top="3870" Width="180" Height="225" Caption="7" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label180" MOD="4" Left="8459.999" Top="4140" Width="180" Height="225" Caption="中" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label181" MOD="4" Left="8459.999" Top="4365" Width="180" Height="225" Caption="古" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label182" MOD="4" Left="8459.999" Top="4590" Width="180" Height="225" Caption="車" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label183" MOD="4" Left="8459.999" Top="4815" Width="180" Height="225" Caption="再" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label184" MOD="4" Left="8459.999" Top="5040" Width="189.0005" Height="225" Caption="生" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label185" MOD="4" Left="8235" Top="990" Width="180" Height="225" Caption="外" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label186" MOD="4" Left="8235" Top="1485" Width="180" Height="225" Caption="注" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label187" MOD="4" Left="8235" Top="1980" Width="180" Height="225" Caption="加" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label188" MOD="4" Left="8235.721" Top="2475" Width="180" Height="225" Caption="工" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label189" MOD="4" Left="8235.721" Top="2970" Width="180" Height="225" Caption="依" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label190" MOD="4" Left="8235.721" Top="3465" Width="180" Height="225" Caption="頼" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label191" MOD="4" Left="8235.721" Top="3915" Width="180" Height="225" Caption="区" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label192" MOD="4" Left="8235" Top="4365" Width="180" Height="225" Caption="分" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label193" MOD="4" Left="8729.279" Top="585" Width="180" Height="225" Caption="0" Style="color: DarkOrange; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label194" MOD="4" Left="8728.559" Top="1035" Width="180" Height="225" Caption="6" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label195" MOD="4" Left="8729.999" Top="1440" Width="180" Height="225" Caption="1" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label196" MOD="4" Left="8729.999" Top="1845" Width="180" Height="225" Caption="2" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label197" MOD="4" Left="8729.279" Top="3915" Width="180" Height="225" Caption="3" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label198" MOD="4" Left="8729.279" Top="4320" Width="180" Height="225" Caption="4" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label199" MOD="4" Left="8729.279" Top="4725" Width="180" Height="225" Caption="5" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label200" MOD="4" Left="8729.279" Top="5175" Width="180" Height="225" Caption="7" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape16" MOD="4" Left="135" Top="8910" Width="3555" Height="1485" BackColor="16777215" LineColor="26367" LineWeight="3" Shape="2" />
+      <Control Type="AR.Label" Name="Label229" MOD="4" Left="225" Top="8955" Width="810" Height="225" Caption="理由" Style="color: OrangeRed; ddo-char-set: 128; text-align: left; font-size: 8.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Shape" Name="Shape17" MOD="4" Left="3960" Top="8775" Width="1890" Height="1620" BackColor="26367" BackStyle="1" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line115" MOD="4" X1="3960" Y1="8775" X2="3960" Y2="10395" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line116" MOD="4" X1="3960" Y1="10395" X2="5895" Y2="10395" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line117" MOD="4" X1="5850" Y1="8775" X2="5850" Y2="10395" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label230" MOD="4" Left="4005" Top="8910" Width="1800" Height="225" Caption="小　　　　計" Style="color: White; ddo-char-set: 128; text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line118" MOD="4" X1="5850" Y1="9315" X2="3960" Y2="9315" LineColor="16777215" />
+      <Control Type="AR.Line" Name="Line119" MOD="4" X1="5850" Y1="9855" X2="3960" Y2="9855" LineColor="16777215" />
+      <Control Type="AR.Label" Name="Label231" MOD="4" Left="4005" Top="9450" Width="1800" Height="225" Caption="消 費 税 等" Style="color: White; ddo-char-set: 128; text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label232" MOD="4" Left="4005" Top="9990" Width="1800" Height="225" Caption="請求金額合計" Style="color: White; ddo-char-set: 128; text-align: center; font-size: 9.75pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line120" MOD="4" X1="6210.72" Y1="8775" X2="6210.72" Y2="10395" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line121" MOD="4" X1="6570" Y1="8775" X2="6570" Y2="10395" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line122" MOD="4" X1="6930" Y1="8775" X2="6930" Y2="10395" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line123" MOD="4" X1="7290" Y1="8775" X2="7290" Y2="10395" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line124" MOD="4" X1="7650.72" Y1="8775.359" X2="7650.72" Y2="10395.36" LineColor="26367" LineStyle="3" />
+      <Control Type="AR.Line" Name="Line125" MOD="4" X1="8010" Y1="8730" X2="8012.16" Y2="10395.36" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Line" Name="Line126" MOD="4" X1="5850" Y1="9315" X2="8010.72" Y2="9315.721" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line127" MOD="4" X1="5850" Y1="9855" X2="8010.72" Y2="9855.721" LineColor="26367" />
+      <Control Type="AR.Line" Name="Line128" MOD="4" X1="5850" Y1="10395" X2="8010" Y2="10395" LineColor="26367" LineWeight="3" />
+      <Control Type="AR.Field" Name="txtSyoukei" DataField="SYOUKEI" MOD="4" Left="6959.521" Top="9000" Width="1036.8" Height="270.72" Text="9999999" OutputFormat="0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD25" DataField="M_SYOUKEI" MOD="4" Left="5879.521" Top="9000" Width="1036.08" Height="270" Text="" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD26" DataField="M_ZEI" MOD="4" Left="5879.521" Top="9540" Width="1036.8" Height="270.72" Text="" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtZei" DataField="S_ZEI" MOD="4" Left="6959.521" Top="9540" Width="1036.8" Height="270.72" Text="750" OutputFormat="0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtGoukei" DataField="S_SEIKYU_GK" MOD="4" Left="6959.521" Top="10080" Width="1036.8" Height="270.72" Text="15750" OutputFormat="0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD29" DataField="M_SEIKYU_GK" MOD="4" Left="5879.521" Top="10080" Width="1036.8" Height="270.72" Text="" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line129" MOD="4" X1="3960" Y1="8775" X2="5850" Y2="8775" LineColor="26367" />
+      <Control Type="AR.Field" Name="Tenpo_CD30" MOD="4" Left="225" Top="9180" Width="3375" Height="270" Text="" Multiline="0" Style="text-align: left; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label237" MOD="4" Left="8595" Top="495" Width="450" Height="450" Caption="○" Style="color: Black; text-align: center; font-weight: bold; font-size: 15.75pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label238" MOD="4" Left="8325" Top="675" Width="450" Height="450" Caption="○" Style="color: Black; text-align: center; font-weight: bold; font-size: 15.75pt; vertical-align: middle; " />
+      <Control Type="AR.Line" Name="Line" MOD="4" X1="5850" Y1="8775" X2="8010.72" Y2="8775.721" LineColor="26367" />
+      <Control Type="AR.Label" Name="Label154" MOD="4" Left="8731.441" Top="90" Width="2070" Height="315" Caption="有　　　　　　　償" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label172" MOD="4" Left="8459.999" Top="135" Width="180" Height="225" Caption="0" Style="color: #FF6600; ddo-char-set: 128; text-align: center; font-size: 9pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Label" Name="Label155" MOD="4" Left="9001.441" Top="540" Width="1800" Height="270" Caption="新 　車 　架 　装" Style="color: #FF6600; text-align: center; font-size: 9pt; " />
+      <Control Type="AR.Label" Name="Label156" MOD="4" Left="9001.441" Top="1035" Width="1800" Height="270" Caption="標　準　添　付　品" Style="color: #FF6600; text-align: center; font-size: 9pt; " />
+      <Control Type="AR.Label" Name="Label157" MOD="4" Left="9001.441" Top="1440" Width="1800" Height="270" Caption="新車ｻｰﾋﾞｽ(クレーム)" Style="color: #FF6600; text-align: center; font-size: 9pt; " />
+      <Control Type="AR.Label" Name="Label158" MOD="4" Left="9001.441" Top="1845" Width="1800" Height="270" Caption="新車ｻｰﾋﾞｽ(当社負担)" Style="color: #FF6600; text-align: center; font-size: 9pt; " />
+      <Control Type="AR.Label" Name="Label159" MOD="4" Left="8730.721" Top="2205" Width="2070" Height="315" Caption="中 古 車 サ ー ビ ス" Style="color: #FF6600; text-align: center; font-size: 9pt; vertical-align: middle; " />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="330" BackColor="16777215" CanShrink="0">
+      <Control Type="AR.Field" Name="Tenpo_CD9" DataField="BUHINNM" MOD="4" Left="180" Top="0" Width="5040" Height="336.96" Text="ﾁｭｳﾃﾞﾝｺｳ" Multiline="0" Style="text-align: left; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="Tenpo_CD12" DataField="MITUMORI" MOD="4" Left="5895" Top="0" Width="1035.36" Height="336.96" Text="" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+      <Control Type="AR.Field" Name="txtSeikyu" DataField="SEIKYU" MOD="4" Left="6959.521" Top="0" Width="1035.36" Height="336.96" Text="15000" OutputFormat="0" Multiline="0" Style="text-align: right; font-size: 11.25pt; font-family: ＭＳ 明朝; vertical-align: middle; " />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="0" BackColor="16777215" CanShrink="0" />
+    <Section Type="GroupFooter" Name="GroupFooter2" Height="0" BackColor="16777215" CanShrink="0" />
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanShrink="0" />
+  </Sections>
+  <PageSettings LeftMargin="432" RightMargin="432" TopMargin="720" BottomMargin="720" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+</ActiveReportsLayout>
