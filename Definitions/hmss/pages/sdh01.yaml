@@ -1,0 +1,278 @@
+# SDH01 车检替代判定画面
+# Shaken Daitai System - Hantei (Judgment) Screen
+
+pages:
+  Sdh01:
+    title: 车检替代判定
+    title_ja: 車検代替判定
+    main_table: SdhHantei
+    
+    # 数据加载配置
+    data_loading:
+      strategy: parallel
+      sources:
+        # 判定主表
+        - id: hantei_main
+          type: table
+          table: sdh_hantei
+          where: "VIN = @VIN"
+          primary_key: VIN
+          
+        # 契约者表
+        - id: contractor
+          type: table
+          table: sdh_contractor
+          where: "CSRNO = @CSRNO"
+          primary_key: CSRNO
+          
+        # 活动状况
+        - id: katsudo
+          type: table
+          table: sdh_katsudo
+          where: "VIN = @VIN"
+          order_by: "KATSUDO_DT DESC"
+          
+        # 备忘录
+        - id: biko
+          type: table
+          table: sdh_biko
+          where: "VIN = @VIN"
+          order_by: "BIKO_SEQ"
+          
+        # 入库信息
+        - id: nyuko
+          type: table
+          table: sdh_nyuko
+          where: "VIN = @VIN"
+          
+        # 订单信息
+        - id: chumon
+          type: table
+          table: sdh_chumon
+          where: "VIN = @VIN"
+          
+        # 保险信息
+        - id: hoken
+          type: table
+          table: sdh_hoken
+          where: "VIN = @VIN"
+    
+    # 保存配置
+    save_config:
+      transaction:
+        enabled: true
+        isolation_level: ReadCommitted
+      save_order:
+        # 1. 先保存契约者信息
+        - order: 1
+          table: sdh_contractor
+          crud_type: upsert
+          match_fields: [CSRNO]
+          field_mappings:
+            TENPO_CD:
+              source: session
+              key: tenpo_cd
+            ENTRY_USER:
+              source: session
+              key: user_id
+            ENTRY_DT:
+              source: system
+              function: NOW()
+        
+        # 2. 保存判定信息
+        - order: 2
+          table: sdh_hantei
+          crud_type: upsert
+          match_fields: [VIN]
+          field_mappings:
+            CSRNO:
+              source: parent
+              table: sdh_contractor
+              field: CSRNO
+            ENTRY_USER:
+              source: session
+              key: user_id
+            ENTRY_DT:
+              source: system
+              function: NOW()
+        
+        # 3. 保存活动状况
+        - order: 3
+          table: sdh_katsudo
+          crud_type: insert
+          field_mappings:
+            VIN:
+              source: parent
+              table: sdh_hantei
+              field: VIN
+            ENTRY_USER:
+              source: session
+              key: user_id
+        
+        # 4. 保存备忘录
+        - order: 4
+          table: sdh_biko
+          crud_type: upsert
+          match_fields: [VIN, BIKO_SEQ]
+          field_mappings:
+            VIN:
+              source: parent
+              table: sdh_hantei
+              field: VIN
+    
+    # UI 配置
+    ui:
+      layout:
+        type: tabs
+        theme: hmss
+      tabs:
+        - id: search
+          title: 搜索
+          title_ja: 検索
+          icon: search
+          sections:
+            - id: basic_search
+              title: 基本搜索
+              fields:
+                - VIN
+                - CSRNO
+                - CSR_NM
+                - TENPO_CD
+                - JYASYU_CD
+            - id: detail_search
+              title: 详细搜索
+              fields:
+                - XH10CAID
+                - XG11KOTEIID
+                - DM_FKA_KB
+                - CSRRANK
+        
+        - id: hantei
+          title: 判定
+          title_ja: 判定
+          icon: clipboard-check
+          sections:
+            - id: hantei_basic
+              title: 判定基本信息
+              fields:
+                - VIN
+                - HANTEI_DT
+                - HANTEI_RESULT
+                - HANTEI_COMMENT
+            - id: vehicle_info
+              title: 车辆信息
+              fields:
+                - KYOTN_CD
+                - TENPO_CD
+                - JYASYU_CD
+                - XH10CAID
+        
+        - id: contractor
+          title: 契约者
+          title_ja: 契約者
+          icon: user
+          sections:
+            - id: contractor_basic
+              title: 契约者基本信息
+              fields:
+                - CSRNO
+                - CSR_NM
+                - KANA
+                - TEL
+                - EMAIL
+                - ADDRESS
+        
+        - id: timeline
+          title: 活动状况
+          title_ja: 活動状況
+          icon: clock
+          sections:
+            - id: katsudo_list
+              title: 活动列表
+              type: grid
+              fields:
+                - KATSUDO_DT
+                - KATSUDO_KIND
+                - KATSUDO_CONTENT
+                - RESULT
+        
+        - id: biko
+          title: 备忘录
+          title_ja: 備考
+          icon: memo
+          sections:
+            - id: biko_text
+              title: 备忘录内容
+              type: textarea
+              fields:
+                - BIKO_TEXT
+    
+    # 业务规则
+    business_rules:
+      - name: vin_required
+        message: "VIN 是必填项"
+        message_ja: "VIN は必須項目です"
+        condition: "VIN is not null"
+        severity: error
+        
+      - name: hantei_date_check
+        message: "判定日期不能早于契约日期"
+        message_ja: "判定日は契約日より前にできません"
+        condition: "HANTEI_DT >= CONTRACT_DT"
+        severity: error
+        
+      - name: contractor_exists
+        message: "契约者不存在"
+        message_ja: "契約者が存在しません"
+        condition: "CSRNO exists in sdh_contractor"
+        severity: error
+    
+    # 操作按钮
+    actions:
+      - id: search
+        label: 搜索
+        label_ja: 検索
+        icon: search
+        action: query
+        
+      - id: save
+        label: 登录
+        label_ja: 登録
+        icon: save
+        action: save
+        confirm: true
+        confirm_message: "确定要登录吗？\n登録してもよろしいですか？"
+        
+      - id: correct
+        label: 修正
+        label_ja: 修正
+        icon: edit
+        action: update
+        confirm: true
+        
+      - id: delete
+        label: 删除
+        label_ja: 削除
+        icon: trash
+        action: delete
+        confirm: true
+        danger: true
+        
+      - id: copy
+        label: 判定文复制
+        label_ja: 判定文コピー
+        icon: copy
+        action: custom
+        handler: copyHanteiBun
+        
+      - id: print
+        label: 输出
+        label_ja: 出力
+        icon: printer
+        action: print
+        
+      - id: back
+        label: 返回
+        label_ja: 戻る
+        icon: arrow-left
+        action: back

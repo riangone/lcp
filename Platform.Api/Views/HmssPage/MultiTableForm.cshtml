@@ -1,0 +1,567 @@
+@*
+ * HMSS 多表表单通用视图模板
+ * 支持复杂的多表业务表单
+ *@
+@using Platform.Infrastructure.Definitions
+@model Dictionary<string, object>
+@{
+    var pageDef = (MultiTablePageDefinition)ViewData["PageDef"];
+    var mainTable = (ModelDefinition)ViewData["MainTable"];
+    var pageName = pageDef.Name;
+    var pageTitle = pageDef.Title;
+    var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "ja";
+    var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "hmss";
+    
+    // 获取本地化标签
+    var labels = currentLang == "zh" ? pageDef.Ui?.Labels?.Zh : pageDef.Ui?.Labels?.Ja;
+    
+    ViewData["Title"] = pageTitle;
+    ViewData["PageName"] = pageName;
+    ViewData["Project"] = currentProject;
+    ViewData["Lang"] = currentLang;
+}
+
+<!DOCTYPE html>
+<html lang="@currentLang">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@pageTitle - HMSS</title>
+    <link rel="stylesheet" href="~/css/hmss-theme.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* HMSS 专用样式 */
+        .hmss-page {
+            min-height: 100vh;
+            background: #f5f7fa;
+        }
+        
+        .hmss-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .hmss-toolbar {
+            background: white;
+            padding: 1rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hmss-content {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .hmss-tabs {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .hmss-tab-header {
+            display: flex;
+            border-bottom: 2px solid #e2e8f0;
+            background: #f8fafc;
+        }
+        
+        .hmss-tab-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .hmss-tab-btn:hover {
+            background: #f1f5f9;
+            color: #334155;
+        }
+        
+        .hmss-tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+        
+        .hmss-tab-btn i {
+            margin-right: 0.5rem;
+        }
+        
+        .hmss-tab-content {
+            padding: 2rem;
+            display: none;
+        }
+        
+        .hmss-tab-content.active {
+            display: block;
+        }
+        
+        .hmss-section {
+            margin-bottom: 2rem;
+        }
+        
+        .hmss-section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .hmss-section-title i {
+            margin-right: 0.5rem;
+            color: #667eea;
+        }
+        
+        .hmss-form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .hmss-form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .hmss-form-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+        
+        .hmss-form-label.required::after {
+            content: "*";
+            color: #ef4444;
+            margin-left: 0.25rem;
+        }
+        
+        .hmss-form-input {
+            padding: 0.625rem 0.875rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+        }
+        
+        .hmss-form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .hmss-toolbar-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+        
+        .hmss-btn {
+            padding: 0.625rem 1.25rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .hmss-btn-primary {
+            background: #667eea;
+            color: white;
+        }
+        
+        .hmss-btn-primary:hover {
+            background: #5568d3;
+        }
+        
+        .hmss-btn-secondary {
+            background: #e2e8f0;
+            color: #475569;
+        }
+        
+        .hmss-btn-secondary:hover {
+            background: #cbd5e1;
+        }
+        
+        .hmss-btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .hmss-btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        .hmss-data-grid {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .hmss-data-grid th,
+        .hmss-data-grid td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .hmss-data-grid th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+        
+        .hmss-data-grid tr:hover {
+            background: #f8fafc;
+        }
+        
+        .hmss-search-panel {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+    <div class="hmss-page">
+        @* 页面头部 *@
+        <header class="hmss-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h1 style="margin: 0; font-size: 1.5rem;">@pageTitle</h1>
+                    @if (currentLang == "ja" && pageDef.TitleJa != null && pageDef.TitleJa != pageDef.Title)
+                    {
+                        <p style="margin: 0.25rem 0 0 0; opacity: 0.9; font-size: 0.875rem;">@pageDef.TitleJa</p>
+                    }
+                </div>
+                <div>
+                    <span style="opacity: 0.9;">@currentProject.ToUpper()</span>
+                </div>
+            </div>
+        </header>
+        
+        @* 工具栏 *@
+        <div class="hmss-toolbar">
+            <div class="hmss-toolbar-actions">
+                @foreach (var action in pageDef.Actions ?? Enumerable.Empty<PageAction>())
+                {
+                    var btnClass = action.Danger ? "hmss-btn-danger" : 
+                                   action.Action == "save" || action.Action == "query" ? "hmss-btn-primary" : "hmss-btn-secondary";
+                    <button class="hmss-btn @btnClass" 
+                            onclick="handleAction('@action.Action')"
+                            data-action="@action.Action">
+                        @if (!string.IsNullOrEmpty(action.Icon))
+                        {
+                            <i class="fas @action.Icon"></i>
+                        }
+                        @(currentLang == "ja" ? (action.LabelJa ?? action.Label) : action.Label)
+                    </button>
+                }
+            </div>
+            <div>
+                <select id="lang-selector" class="hmss-form-input" onchange="changeLang(this.value)" style="width: auto;">
+                    <option value="ja" selected="@(currentLang == "ja")">日本語</option>
+                    <option value="zh" selected="@(currentLang == "zh")">中文</option>
+                </select>
+            </div>
+        </div>
+        
+        @* 主内容区 *@
+        <main class="hmss-content">
+            @* 搜索面板 *@
+            @if (pageDef.Ui?.Layout?.Type == "tabs")
+            {
+                <div class="hmss-tabs">
+                    @* Tab 头部 *@
+                    <div class="hmss-tab-header">
+                        @foreach (var tab in pageDef.Ui.Layout.Tabs ?? Enumerable.Empty<TabDefinition>())
+                        {
+                            var tabTitle = currentLang == "ja" ? (tab.TitleJa ?? tab.Title) : tab.Title;
+                            var tabIcon = tab.Icon ?? "folder";
+                            <button class="hmss-tab-btn @(tab.Id == "search" ? "active" : "")"
+                                    onclick="switchTab('@tab.Id')">
+                                <i class="fas @tabIcon"></i>
+                                @tabTitle
+                            </button>
+                        }
+                    </div>
+                    
+                    @* Tab 内容 *@
+                    @foreach (var tab in pageDef.Ui.Layout.Tabs ?? Enumerable.Empty<TabDefinition>())
+                    {
+                        var tabActive = tab.Id == "search" ? "active" : "";
+                        <div class="hmss-tab-content @tabActive" id="tab-@tab.Id">
+                            @foreach (var section in tab.Sections ?? Enumerable.Empty<SectionDefinition>())
+                            {
+                                <div class="hmss-section">
+                                    <h3 class="hmss-section-title">
+                                        @if (!string.IsNullOrEmpty(section.Icon))
+                                        {
+                                            <i class="fas @section.Icon"></i>
+                                        }
+                                        @(currentLang == "ja" ? (section.TitleJa ?? section.Title) : section.Title)
+                                    </h3>
+                                    
+                                    @if (section.Type == "grid")
+                                    {
+                                        @* 网格数据展示 *@
+                                        <div class="table-responsive">
+                                            <table class="hmss-data-grid">
+                                                <thead>
+                                                    <tr>
+                                                        @foreach (var field in section.Fields ?? Enumerable.Empty<string>())
+                                                        {
+                                                            <th>@field</th>
+                                                        }
+                                                        @if (tab.Id == "timeline" || tab.Id == "katsudo")
+                                                        {
+                                                            <th>操作</th>
+                                                        }
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="grid-@section.Id">
+                                                    @* 动态加载数据 *@
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    }
+                                    else if (section.Type == "textarea")
+                                    {
+                                        @* 文本区域 *@
+                                        @foreach (var field in section.Fields ?? Enumerable.Empty<string>())
+                                        {
+                                            <div class="hmss-form-group">
+                                                <textarea class="hmss-form-input" 
+                                                          rows="5" 
+                                                          id="@field" 
+                                                          name="@field"
+                                                          placeholder="@(currentLang == "ja" ? "ここに入力" : "在此输入")"></textarea>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        @* 普通表单字段 *@
+                                        <div class="hmss-form-grid">
+                                            @foreach (var field in section.Fields ?? Enumerable.Empty<string>())
+                                            {
+                                                var fieldDef = mainTable?.Form?.Fields?.FirstOrDefault(f => f.Key == field);
+                                                var fieldLabel = fieldDef?.Value?.Label ?? field;
+                                                var isRequired = fieldDef?.Value?.Required ?? false;
+                                                var fieldType = fieldDef?.Value?.Type ?? "text";
+                                                
+                                                <div class="hmss-form-group">
+                                                    <label class="hmss-form-label @(isRequired ? "required" : "")">
+                                                        @fieldLabel
+                                                    </label>
+                                                    @if (fieldType == "select" && fieldDef?.Value?.Options != null)
+                                                    {
+                                                        <select class="hmss-form-input" id="@field" name="@field">
+                                                            <option value="">選択してください</option>
+                                                            @foreach (var opt in fieldDef.Value.Options)
+                                                            {
+                                                                <option value="@opt.Key">@opt.Value</option>
+                                                            }
+                                                        </select>
+                                                    }
+                                                    else if (fieldType == "textarea")
+                                                    {
+                                                        <textarea class="hmss-form-input" 
+                                                                rows="3" 
+                                                                id="@field" 
+                                                                name="@field"></textarea>
+                                                    }
+                                                    else
+                                                    {
+                                                        <input type="text" 
+                                                               class="hmss-form-input" 
+                                                               id="@field" 
+                                                               name="@field" 
+                                                               placeholder="" />
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                @* 非 Tab 布局 - 简单表单 *@
+                <div class="hmss-section">
+                    @foreach (var section in pageDef.Ui?.Layout?.Sections ?? Enumerable.Empty<SectionDefinition>())
+                    {
+                        <div class="hmss-section">
+                            <h3 class="hmss-section-title">
+                                @(currentLang == "ja" ? (section.TitleJa ?? section.Title) : section.Title)
+                            </h3>
+                            <div class="hmss-form-grid">
+                                @foreach (var field in section.Fields ?? Enumerable.Empty<string>())
+                                {
+                                    var fieldDef = mainTable?.Form?.Fields?.FirstOrDefault(f => f.Key == field);
+                                    <div class="hmss-form-group">
+                                        <label class="hmss-form-label">@(fieldDef?.Value?.Label ?? field)</label>
+                                        <input type="text" class="hmss-form-input" id="@field" name="@field" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </main>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        const pageName = '@pageName';
+        const currentLang = '@currentLang';
+        const currentProject = '@currentProject';
+        
+        // Tab 切换
+        function switchTab(tabId) {
+            document.querySelectorAll('.hmss-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.hmss-tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`.hmss-tab-btn[onclick="switchTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+        
+        // 语言切换
+        function changeLang(lang) {
+            const url = new URL(window.location);
+            url.searchParams.set('lang', lang);
+            window.location.href = url.toString();
+        }
+        
+        // 操作处理
+        function handleAction(action) {
+            switch(action) {
+                case 'query':
+                    searchData();
+                    break;
+                case 'save':
+                    saveData();
+                    break;
+                case 'update':
+                    updateData();
+                    break;
+                case 'delete':
+                    deleteData();
+                    break;
+                case 'back':
+                    history.back();
+                    break;
+                default:
+                    console.log('Unknown action:', action);
+            }
+        }
+        
+        // 搜索数据
+        async function searchData() {
+            try {
+                const formData = collectFormData();
+                const response = await axios.get(`/api/page/${pageName}/load`, {
+                    params: { ...formData, project: currentProject }
+                });
+                displayData(response.data);
+            } catch (error) {
+                alert('搜索失败：' + error.message);
+            }
+        }
+        
+        // 保存数据
+        async function saveData() {
+            if (!confirm('@(currentLang == "ja" ? "登録してもよろしいですか？" : "确定要保存吗？")")) {
+                return;
+            }
+            
+            try {
+                const formData = collectFormData();
+                const response = await axios.post(`/api/page/${pageName}/save`, new URLSearchParams(formData), {
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    params: { project: currentProject }
+                });
+                alert('@(currentLang == "ja" ? "登録しました" : "保存成功")');
+            } catch (error) {
+                alert('保存失败：' + error.message);
+            }
+        }
+        
+        // 收集表单数据
+        function collectFormData() {
+            const formData = {};
+            document.querySelectorAll('input, select, textarea').forEach(el => {
+                if (el.id && el.value) {
+                    formData[el.id] = el.value;
+                }
+            });
+            return formData;
+        }
+        
+        // 显示数据
+        function displayData(data) {
+            // 填充表单字段
+            for (const [key, value] of Object.entries(data)) {
+                const el = document.getElementById(key);
+                if (el) {
+                    el.value = value || '';
+                }
+            }
+        }
+        
+        // 页面加载时自动搜索
+        document.addEventListener('DOMContentLoaded', function() {
+            // 可选：自动加载数据
+            // searchData();
+        });
+    </script>
+</body>
+</html>

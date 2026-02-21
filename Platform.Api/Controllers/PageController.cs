@@ -31,6 +31,16 @@ public class PageController : Controller
     {
         var page = GetPage(pageName);
 
+        // 如果是 HMSS 多表页面
+        if (page.DataLoading != null && page.SaveConfig != null)
+        {
+            ViewData["PageDef"] = page;
+            ViewData["PageName"] = pageName;
+            ViewData["Lang"] = Request.Query["lang"].FirstOrDefault() ?? "ja";
+            ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
+            return View("~/Views/HmssPage/MultiTableForm.cshtml");
+        }
+
         // 如果是多表 CRUD 页面（旧版或新版），使用专用视图
         if (page.MultiTableCrud != null || page.FormSections != null)
         {

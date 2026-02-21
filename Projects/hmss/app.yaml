@@ -13,3 +13,4 @@ imports:
   - ../../Definitions/hmss/hmtve.yaml
   - ../../Definitions/hmss/appm.yaml
   - ../../Definitions/hmss/pprm.yaml
+  - ../../Definitions/hmss/pages/sdh01.yaml
