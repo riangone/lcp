@@ -1,0 +1,588 @@
+@{
+    Layout = "_HmssLayout";
+    var systemCode = ViewData["SystemCode"]?.ToString() ?? "SYSTEM";
+    ViewData["Title"] = systemCode;
+    ViewData["Breadcrumb1"] = systemCode;
+}
+
+<div class="hmss-subsystem-page">
+    @* 页面头部 *@
+    <header class="subsystem-header">
+        <div class="header-content">
+            <div class="header-branding">
+                <div class="brand-icon" id="systemIcon">
+                    <i class="bi bi-box"></i>
+                </div>
+                <div class="brand-text">
+                    <h1 class="page-title" id="systemTitle">@systemCode</h1>
+                    <p class="page-subtitle" id="systemSubtitle">子系统</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <a href="/hmss/master" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-house-door"></i> 返回主页
+                </a>
+            </div>
+        </div>
+    </header>
+
+    @* 功能导航 *@
+    <section class="function-nav">
+        <div class="nav-tabs" role="tablist">
+            <button class="nav-tab active" data-tab="data-list">
+                <i class="bi bi-table"></i>
+                <span>数据列表</span>
+            </button>
+            <button class="nav-tab" data-tab="quick-actions">
+                <i class="bi bi-lightning-charge"></i>
+                <span>快捷操作</span>
+            </button>
+            <button class="nav-tab" data-tab="system-info">
+                <i class="bi bi-info-circle"></i>
+                <span>系统信息</span>
+            </button>
+        </div>
+    </section>
+
+    @* 数据列表 *@
+    <section class="content-section active" id="data-list">
+        <div class="section-header">
+            <h2 class="section-title">数据管理</h2>
+            <div class="section-actions">
+                <a href="/ui/hmss/@(systemCode)?project=hmss" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i>
+                    新建数据
+                </a>
+            </div>
+        </div>
+
+        <div class="data-models-grid" id="modelsGrid">
+            <div class="model-card skeleton">
+                <div class="model-icon skeleton-icon"></div>
+                <div class="model-name skeleton-text"></div>
+                <div class="model-desc skeleton-text-short"></div>
+            </div>
+            <div class="model-card skeleton">
+                <div class="model-icon skeleton-icon"></div>
+                <div class="model-name skeleton-text"></div>
+                <div class="model-desc skeleton-text-short"></div>
+            </div>
+            <div class="model-card skeleton">
+                <div class="model-icon skeleton-icon"></div>
+                <div class="model-name skeleton-text"></div>
+                <div class="model-desc skeleton-text-short"></div>
+            </div>
+        </div>
+    </section>
+
+    @* 快捷操作 *@
+    <section class="content-section" id="quick-actions">
+        <div class="section-header">
+            <h2 class="section-title">快捷操作</h2>
+        </div>
+        <div class="actions-grid">
+            <a href="/ui/hmss/@(systemCode)?project=hmss" class="action-card">
+                <i class="bi bi-file-earmark-plus"></i>
+                <span>新建记录</span>
+            </a>
+            <a href="/hmss/tables?project=hmss" class="action-card">
+                <i class="bi bi-table"></i>
+                <span>查看所有表</span>
+            </a>
+            <a href="/docs" class="action-card">
+                <i class="bi bi-file-earmark-text"></i>
+                <span>API 文档</span>
+            </a>
+            <a href="/hmss/master" class="action-card">
+                <i class="bi bi-house-door"></i>
+                <span>返回主页</span>
+            </a>
+        </div>
+    </section>
+
+    @* 系统信息 *@
+    <section class="content-section" id="system-info">
+        <div class="section-header">
+            <h2 class="section-title">系统信息</h2>
+        </div>
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-label">系统代码</div>
+                <div class="info-value" id="infoCode">@systemCode</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">数据表数量</div>
+                <div class="info-value" id="infoTables">-</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">项目</div>
+                <div class="info-value">HMSS</div>
+            </div>
+            <div class="info-card">
+                <div class="info-label">状态</div>
+                <div class="info-value status-ok">运行中</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Styles {
+<style>
+    .hmss-subsystem-page {
+        padding: 24px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+        min-height: 100vh;
+    }
+
+    /* 页面头部 */
+    .subsystem-header {
+        background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+        border-radius: 16px;
+        padding: 24px 32px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(108, 117, 125, 0.3);
+    }
+
+    .system-card[data-system="SDH"] ~ .subsystem-header {
+        background: linear-gradient(135deg, #00A8E0 0%, #0077A3 100%);
+        box-shadow: 0 4px 20px rgba(0, 168, 224, 0.3);
+    }
+
+    .system-card[data-system="HDKAIKEI"] ~ .subsystem-header {
+        background: linear-gradient(135deg, #28A745 0%, #1E7E34 100%);
+        box-shadow: 0 4px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .system-card[data-system="JKSYS"] ~ .subsystem-header {
+        background: linear-gradient(135deg, #FD7E14 0%, #E8590C 100%);
+        box-shadow: 0 4px 20px rgba(253, 126, 20, 0.3);
+    }
+
+    .system-card[data-system="R4"] ~ .subsystem-header {
+        background: linear-gradient(135deg, #20c997 0%, #198754 100%);
+        box-shadow: 0 4px 20px rgba(32, 201, 151, 0.3);
+    }
+
+    .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .header-branding {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .brand-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        color: white;
+    }
+
+    .brand-text .page-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: white;
+        margin: 0;
+    }
+
+    .brand-text .page-subtitle {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        margin: 4px 0 0 0;
+    }
+
+    /* 功能导航 */
+    .function-nav {
+        margin-bottom: 24px;
+    }
+
+    .nav-tabs {
+        display: flex;
+        gap: 8px;
+        background: white;
+        padding: 8px;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .nav-tab {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 20px;
+        border: none;
+        background: transparent;
+        border-radius: 8px;
+        color: #6c757d;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .nav-tab:hover {
+        background: #f8f9fa;
+    }
+
+    .nav-tab.active {
+        background: linear-gradient(135deg, #B00838 0%, #8B062C 100%);
+        color: white;
+    }
+
+    .nav-tab i {
+        font-size: 18px;
+    }
+
+    /* 内容区域 */
+    .content-section {
+        display: none;
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .section-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #212529;
+        margin: 0;
+    }
+
+    /* 数据模型网格 */
+    .data-models-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .model-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        padding: 24px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        border: 2px solid transparent;
+    }
+
+    .model-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        border-color: #B00838;
+    }
+
+    .model-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 12px;
+        background: linear-gradient(135deg, #B00838 0%, #8B062C 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        color: white;
+        margin-bottom: 16px;
+    }
+
+    .model-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #212529;
+        margin-bottom: 4px;
+    }
+
+    .model-desc {
+        font-size: 13px;
+        color: #6c757d;
+        margin: 0;
+    }
+
+    /* 快捷操作 */
+    .actions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+    }
+
+    .action-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        padding: 24px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        text-decoration: none;
+        color: #212529;
+        transition: all 0.3s ease;
+    }
+
+    .action-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+    }
+
+    .action-card i {
+        font-size: 36px;
+        color: #B00838;
+    }
+
+    .action-card span {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    /* 系统信息 */
+    .info-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 16px;
+    }
+
+    .info-card {
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .info-label {
+        font-size: 13px;
+        color: #6c757d;
+        margin-bottom: 8px;
+    }
+
+    .info-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #212529;
+    }
+
+    .info-value.status-ok {
+        color: #28a745;
+    }
+
+    /* 骨架屏 */
+    .skeleton {
+        pointer-events: none;
+    }
+
+    .skeleton-icon {
+        background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+        background-size: 200% 100%;
+        animation: skeleton-pulse 1.5s infinite;
+    }
+
+    .skeleton-text {
+        height: 20px;
+        width: 80%;
+        background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+        background-size: 200% 100%;
+        animation: skeleton-pulse 1.5s infinite;
+        border-radius: 4px;
+        margin: 0 auto;
+    }
+
+    .skeleton-text-short {
+        height: 14px;
+        width: 60%;
+        background: linear-gradient(90deg, #e9ecef 25%, #f8f9fa 50%, #e9ecef 75%);
+        background-size: 200% 100%;
+        animation: skeleton-pulse 1.5s infinite;
+        border-radius: 4px;
+        margin: 4px auto 0;
+    }
+
+    @keyframes skeleton-pulse {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+        .hmss-subsystem-page {
+            padding: 16px;
+        }
+
+        .subsystem-header {
+            padding: 16px 20px;
+        }
+
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            font-size: 24px;
+        }
+
+        .brand-text .page-title {
+            font-size: 24px;
+        }
+
+        .nav-tabs {
+            overflow-x: auto;
+        }
+
+        .nav-tab {
+            white-space: nowrap;
+        }
+
+        .data-models-grid {
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        }
+
+        .actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+}
+
+@section Scripts {
+<script>
+    const systemCode = '@systemCode';
+
+    // 系统图标映射
+    const systemIcons = {
+        'SDH': 'bi-car-front',
+        'HDKAIKEI': 'bi-calculator',
+        'HMAUD': 'bi-shield-check',
+        'HMDPS': 'bi-file-earmark-text',
+        'HMHRMS': 'bi-people',
+        'HMTVE': 'bi-graph-up',
+        'JKSYS': 'bi-currency-yen',
+        'R4': 'bi-pie-chart',
+        'APPM': 'bi-app-indicator',
+        'PPRM': 'bi-file-earmark-check',
+        'CkChkzaiko': 'bi-boxes'
+    };
+
+    // 系统名称映射
+    const systemNames = {
+        'SDH': '車検代替システム',
+        'HDKAIKEI': '会計伝票システム',
+        'HMAUD': '内部監査システム',
+        'HMDPS': 'DPS 伝票システム',
+        'HMHRMS': '人力資源管理',
+        'HMTVE': 'データ集計システム',
+        'JKSYS': '人事給与システム',
+        'R4': '管理会計システム',
+        'APPM': '広域應用システム',
+        'PPRM': '紙なし化システム',
+        'CkChkzaiko': '在庫確認システム'
+    };
+
+    // 加载数据模型
+    async function loadModels() {
+        try {
+            const response = await fetch('/api/hmss/systems');
+            const result = await response.json();
+
+            if (result.success) {
+                const models = getModelsWithSystem(systemCode);
+                renderModels(models);
+                updateInfo(models.length);
+            }
+        } catch (error) {
+            console.error('Load models error:', error);
+        }
+    }
+
+    function getModelsWithSystem(systemCode) {
+        // 这里简化实现，返回示例数据
+        return [
+            { name: `${systemCode}_DATA`, desc: '主要数据表', icon: 'bi-table' },
+            { name: `${systemCode}_CONFIG`, desc: '系统配置表', icon: 'bi-gear' },
+            { name: `${systemCode}_LOG`, desc: '日志记录表', icon: 'bi-journal-text' }
+        ];
+    }
+
+    function renderModels(models) {
+        const grid = document.getElementById('modelsGrid');
+
+        if (!models || models.length === 0) {
+            grid.innerHTML = '<div class="alert alert-info">暂无数据模型</div>';
+            return;
+        }
+
+        grid.innerHTML = models.map(model => `
+            <a href="/ui/hmss/${model.name}?project=hmss" class="model-card">
+                <div class="model-icon">
+                    <i class="bi ${model.icon || 'bi-table'}"></i>
+                </div>
+                <div class="model-name">${model.name}</div>
+                <div class="model-desc">${model.desc}</div>
+            </a>
+        `).join('');
+    }
+
+    function updateInfo(modelCount) {
+        document.getElementById('infoTables').textContent = modelCount;
+    }
+
+    // Tab 切换
+    function setupTabs() {
+        const tabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.content-section');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                const targetTab = tab.dataset.tab;
+
+                // 更新 Tab 状态
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+
+                // 更新内容区域
+                sections.forEach(section => {
+                    section.classList.remove('active');
+                    if (section.id === targetTab) {
+                        section.classList.add('active');
+                    }
+                });
+            });
+        });
+    }
+
+    // 初始化系统信息
+    function initSystemInfo() {
+        const iconClass = systemIcons[systemCode] || 'bi-box';
+        document.getElementById('systemIcon').innerHTML = `<i class="bi ${iconClass}"></i>`;
+        document.getElementById('systemTitle').textContent = systemCode;
+        document.getElementById('systemSubtitle').textContent = systemNames[systemCode] || '子系统';
+    }
+
+    // 页面加载
+    document.addEventListener('DOMContentLoaded', () => {
+        initSystemInfo();
+        setupTabs();
+        loadModels();
+    });
+</script>
+}

@@ -88,14 +88,36 @@ public class HmssPageController : Controller
     }
 
     /// <summary>
-    /// HMSS 子系统页面（通用处理，重定向到表列表）
+    /// HMSS 子系统页面（通用处理）
     /// 支持 /hmss/{system} 路由，如 /hmss/jksys, /hmss/r4 等
     /// </summary>
     [HttpGet("/hmss/{system}")]
     [Authorize]
     public IActionResult Subsystem(string system)
     {
-        // 重定向到表列表页面
+        // 定义子系统到视图名称的映射
+        var systemViews = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+        {
+            { "hdkaikei", "Subsystem" },
+            { "hmaud", "Subsystem" },
+            { "hmdps", "Subsystem" },
+            { "hmhrms", "Subsystem" },
+            { "hmtve", "Subsystem" },
+            { "jksys", "Subsystem" },
+            { "r4", "Subsystem" },
+            { "appm", "Subsystem" },
+            { "pprm", "Subsystem" },
+            { "ckchkzaiko", "Subsystem" }
+        };
+
+        // 如果有专用视图则返回，否则返回通用子系统视图
+        if (systemViews.TryGetValue(system, out var viewName))
+        {
+            ViewData["SystemCode"] = system.ToUpper();
+            return View(viewName);
+        }
+
+        // 默认重定向到表列表
         return RedirectToAction("TableList");
     }
 

@@ -302,19 +302,19 @@ CREATE INDEX IF NOT EXISTS idx_sdh_nyuko_csrno ON sdh_nyuko(csrno);
 
 -- 系统管理初始数据
 INSERT OR IGNORE INTO hmss_system_m (sys_cd, sys_nm, sys_url, sys_order, sys_use_flg, sys_icon) VALUES
-('Master', '主数据管理', '/ui/hmss/master', 1, '1', 'bi:house-gear'),
-('Login', '登录认证', '/ui/hmss/login', 2, '1', 'bi:box-arrow-in-right'),
-('HDKAIKEI', '会计传票', '/ui/hmss/hdkaikei', 3, '1', 'bi:calculator'),
-('HMAUD', '内部审计', '/ui/hmss/hmaud', 4, '1', 'bi:shield-check'),
-('HMDPS', 'DPS 传票', '/ui/hmss/hmdps', 5, '1', 'bi:file-earmark-text'),
-('HMHRMS', '人力资源', '/ui/hmss/hmhrms', 6, '1', 'bi:people'),
-('HMTVE', '数据汇总', '/ui/hmss/hmtve', 7, '1', 'bi:graph-up'),
-('JKSYS', '人事給与', '/ui/hmss/jksys', 8, '1', 'bi:currency-yen'),
-('R4', '管理会计', '/ui/hmss/r4', 9, '1', 'bi:pie-chart'),
-('SDH', '车检替代', '/ui/hmss/sdh', 10, '1', 'bi:car-front'),
-('APPM', '广域应用', '/ui/hmss/appm', 11, '1', 'bi:app-indicator'),
-('PPRM', '无纸化', '/ui/hmss/pprm', 12, '1', 'bi:file-earmark-check'),
-('CkChkzaiko', '库存确认', '/ui/hmss/ckchkuzaiko', 13, '1', 'bi:boxes');
+('Master', '主数据管理', '/hmss/master', 1, '1', 'bi:house-gear'),
+('Login', '登录認証', '/hmss/login', 2, '1', 'bi:box-arrow-in-right'),
+('HDKAIKEI', '会計伝票', '/hmss/hdkaikei', 3, '1', 'bi:calculator'),
+('HMAUD', '内部監査', '/hmss/hmaud', 4, '1', 'bi:shield-check'),
+('HMDPS', 'DPS 伝票', '/hmss/hmdps', 5, '1', 'bi:file-earmark-text'),
+('HMHRMS', '人力資源', '/hmss/hmhrms', 6, '1', 'bi:people'),
+('HMTVE', 'データ集計', '/hmss/hmtve', 7, '1', 'bi:graph-up'),
+('JKSYS', '人事給与', '/hmss/jksys', 8, '1', 'bi:currency-yen'),
+('R4', '管理会計', '/hmss/r4', 9, '1', 'bi:pie-chart'),
+('SDH', '車検代替', '/hmss/sdh', 10, '1', 'bi:car-front'),
+('APPM', '広域應用', '/hmss/appm', 11, '1', 'bi:app-indicator'),
+('PPRM', '紙なし化', '/hmss/pprm', 12, '1', 'bi:file-earmark-check'),
+('CkChkzaiko', '在庫確認', '/hmss/ckchkzaiko', 13, '1', 'bi:boxes');
 
 -- 默认管理员用户 (密码：admin123)
 INSERT OR IGNORE INTO hmss_users (usr_id, usr_name, pass, email, sys1_flg, sys2_flg, sys3_flg, sys4_flg, sys5_flg, sys6_flg, sys7_flg, sys8_flg, sys9_flg, sys10_flg, sys11_flg, sys12_flg, sys13_flg, sys14_flg) VALUES
