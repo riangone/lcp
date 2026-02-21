@@ -6,7 +6,7 @@
     var isEdit = row != null;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "crm";
-    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Customer?project={currentProject}";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/Customer?project={currentProject}";
 
     var contactPerson = isEdit && row != null && row.ContainsKey("ContactPerson") ? row["ContactPerson"]?.ToString() ?? "" : "";
     var company = isEdit && row != null && row.ContainsKey("CompanyName") ? row["CompanyName"]?.ToString() ?? "" : "";

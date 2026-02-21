@@ -1,6 +1,6 @@
 /**
  * HMSS Application JavaScript
- * Hiroshima Mazda Sales System
+ * GD ZM Sales System
  */
 
 (function() {

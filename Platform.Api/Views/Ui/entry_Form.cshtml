@@ -6,7 +6,7 @@
     var isEdit = row != null;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
-    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Entry?project={currentProject}";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/Entry?project={currentProject}";
 
     var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;
     var title = localizedLabels != null && localizedLabels.ContainsKey("title") ? localizedLabels["title"] : modelName;

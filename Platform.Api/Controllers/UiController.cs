@@ -6,7 +6,7 @@ using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
-[Route("ui/{model}")]
+[Route("{model}")]
 public class UiController : Controller
 {
     private readonly DynamicRepository _repo;

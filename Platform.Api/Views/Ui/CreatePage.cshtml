@@ -5,7 +5,7 @@
     var returnUrl = ViewData["ReturnUrl"] as string;
     var createError = ViewData["CreateError"] as string;
     var project = Context.Request.Query["project"].FirstOrDefault() ?? "app";
-    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}?project={project}";
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/{modelName}?project={project}";
 
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var uiLabels = def.Ui?.Labels;
@@ -44,7 +44,7 @@
       </div>
     }
 
-    <form method="post" action="/ui/@modelName/create-page" class="form-content">
+    <form method="post" action="/@modelName/create-page" class="form-content">
       @Html.AntiForgeryToken()
       <input type="hidden" name="returnUrl" value="@backUrl" />
 

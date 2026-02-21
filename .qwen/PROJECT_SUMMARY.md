@@ -125,9 +125,9 @@ dotnet run --project Platform.Api --urls "http://localhost:5267"
 | 页面 | URL | UI 类型 |
 |------|-----|---------|
 | Journal 首页 | `/Home?project=journal` | - |
-| Journal Entry (自定义) | `/ui/Entry?project=journal&ui=custom` | 时间线 |
-| Journal Entry (通用) | `/ui/Entry?project=journal` | 表格 |
-| Artist (通用) | `/ui/Artist?project=chinook` | 表格 |
+| Journal Entry (自定义) | `/Entry?project=journal&ui=custom` | 时间线 |
+| Journal Entry (通用) | `/Entry?project=journal` | 表格 |
+| Artist (通用) | `/Artist?project=chinook` | 表格 |
 
 ### YAML 配置示例
 ```yaml

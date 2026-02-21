@@ -6,7 +6,7 @@
     var isEdit = row != null;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
-    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Entry?project={currentProject}&lang={currentLang}";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/Entry?project={currentProject}&lang={currentLang}";
 
     // 获取本地化标签
     var localizedLabels = currentLang == "zh" ? def.Ui?.Labels?.Zh : def.Ui?.Labels?.En;

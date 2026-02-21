@@ -63,7 +63,7 @@ dotnet run --project Platform.Api
 
 - **首页**: http://localhost:5267
 - **API 文档**: http://localhost:5267/docs
-- **UI 界面**: http://localhost:5267/ui/{model}
+- **UI 界面**: http://localhost:5267/{model}
 
 ### 切换项目
 
@@ -290,10 +290,10 @@ lcp/
 
 | 方法 | 端点 | 说明 |
 |------|------|------|
-| `GET` | `/ui/{model}` | 列表页面 |
-| `GET` | `/ui/{model}/create` | 创建表单 |
-| `GET` | `/ui/{model}/edit/{id}` | 编辑表单 |
-| `GET` | `/ui/{model}/details/{id}` | 详情页面 |
+| `GET` | `/{model}` | 列表页面 |
+| `GET` | `/{model}/create` | 创建表单 |
+| `GET` | `/{model}/edit/{id}` | 编辑表单 |
+| `GET` | `/{model}/details/{id}` | 详情页面 |
 
 ### 多表 API
 

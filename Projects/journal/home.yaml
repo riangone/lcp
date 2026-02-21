@@ -47,7 +47,7 @@ layout:
           ko: 写日记
           ja: エントリー作成
           ko: 일기 작성
-        href: "/ui/Entry?project=journal&ui=custom"
+        href: "/Entry?project=journal&ui=custom"
         color: "purple"
         description:
           zh: 记录今天的故事
@@ -64,7 +64,7 @@ layout:
           ko: 카테고리 관리
           ja: カテゴリ
           ko: 카테고리
-        href: "/ui/Category?project=journal"
+        href: "/Category?project=journal"
         color: "violet"
         description:
           zh: 管理日记分类
@@ -81,7 +81,7 @@ layout:
           ko: 标签管理
           ja: タグ
           ko: 태그
-        href: "/ui/Tag?project=journal"
+        href: "/Tag?project=journal"
         color: "fuchsia"
         description:
           zh: 管理标签
@@ -98,7 +98,7 @@ layout:
           ko: 기분 추적
           ja: 気分トラッカー
           ko: 기분 추적기
-        href: "/ui/EntryWithCategory?project=journal"
+        href: "/EntryWithCategory?project=journal"
         color: "pink"
         description:
           zh: 查看心情记录

@@ -47,7 +47,7 @@ layout:
           ko: 创建任务
           ja: 新規タスク
           ko: 새 작업
-        href: "/ui/Task?project=todo"
+        href: "/Task?project=todo"
         color: "blue"
         description:
           zh: 快速添加新任务
@@ -64,7 +64,7 @@ layout:
           ko: 프로젝트
           ja: プロジェクト
           ko: 프로젝트
-        href: "/ui/Project?project=todo"
+        href: "/Project?project=todo"
         color: "indigo"
         description:
           zh: 管理项目信息
@@ -81,7 +81,7 @@ layout:
           ko: 任务统计
           ja: タスク統計
           ko: 작업 통계
-        href: "/ui/TaskWithProject?project=todo"
+        href: "/TaskWithProject?project=todo"
         color: "cyan"
         description:
           zh: 查看任务详情

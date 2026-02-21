@@ -332,27 +332,27 @@
     <script>
         const projects = {
             todo: { name: 'TODO Project', icon: '✅', actions: [
-                { label: 'Tasks', href: '/ui/Task?project=todo', icon: '📝' },
-                { label: 'Projects', href: '/ui/Project?project=todo', icon: '📁' }
+                { label: 'Tasks', href: '/Task?project=todo', icon: '📝' },
+                { label: 'Projects', href: '/Project?project=todo', icon: '📁' }
             ]},
             journal: { name: 'My Journal', icon: '📔', actions: [
-                { label: 'Entries', href: '/ui/Entry?project=journal', icon: '✍️' },
-                { label: 'Categories', href: '/ui/Category?project=journal', icon: '🏷️' }
+                { label: 'Entries', href: '/Entry?project=journal', icon: '✍️' },
+                { label: 'Categories', href: '/Category?project=journal', icon: '🏷️' }
             ]},
             chinook: { name: 'Chinook Music', icon: '🎵', actions: [
-                { label: 'Artists', href: '/ui/Artist?project=chinook', icon: '🎤' },
-                { label: 'Albums', href: '/ui/Album?project=chinook', icon: '💿' }
+                { label: 'Artists', href: '/Artist?project=chinook', icon: '🎤' },
+                { label: 'Albums', href: '/Album?project=chinook', icon: '💿' }
             ]},
             ecommerce: { name: 'E-commerce', icon: '🛒', actions: [
-                { label: 'Products', href: '/ui/Product?project=ecommerce', icon: '📦' },
-                { label: 'Orders', href: '/ui/Order?project=ecommerce', icon: '📋' }
+                { label: 'Products', href: '/Product?project=ecommerce', icon: '📦' },
+                { label: 'Orders', href: '/Order?project=ecommerce', icon: '📋' }
             ]},
             crm: { name: 'CRM', icon: '💼', actions: [
-                { label: 'Customers', href: '/ui/Customer?project=crm', icon: '👥' },
-                { label: 'Opportunities', href: '/ui/Opportunity?project=crm', icon: '💰' }
+                { label: 'Customers', href: '/Customer?project=crm', icon: '👥' },
+                { label: 'Opportunities', href: '/Opportunity?project=crm', icon: '💰' }
             ]},
             weather: { name: 'Weather', icon: '🌤️', actions: [
-                { label: 'Weather', href: '/ui/weather?project=weather', icon: '🌡️' }
+                { label: 'Weather', href: '/weather?project=weather', icon: '🌡️' }
             ]}
         };
 
@@ -404,7 +404,7 @@
                     const linksContainer = document.getElementById('model-links');
                     if (models && models.length > 0) {
                         linksContainer.innerHTML = models.slice(0, 12).map(m => `
-                            <a href="/ui/${m}?project=${project}" class="model-link">${m}</a>
+                            <a href="/${m}?project=${project}" class="model-link">${m}</a>
                         `).join('');
                     }
                 })

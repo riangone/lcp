@@ -7,11 +7,11 @@
 	// XMLの取得
 	$Ora = (array)$xml;
 
-	$Host = "mailgw.mazda.co.jp";
+	$Host = "mailgw.ZM.co.jp";
 	//$Username = "df13507";
 	//$Password = "Cd102905";
 	$SMTPSecure = "";
-	$From = "oe.h@mazda-dealer.jp";
+	$From = "oe.h@ZM-dealer.jp";
 	$FromName = "デジタル推進Gr";
 	$WordWrap = "50";
 	$CharSet = "UTF-8";

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Platform.Infrastructure.Definitions;
 using Microsoft.Data.Sqlite;
 using Dapper;
+using Platform.Api.Services;
 
 namespace Platform.Api.Controllers;
 
@@ -17,14 +18,62 @@ public class HmssController : ControllerBase
 {
     private readonly string _hmssConnectionString;
     private readonly ILogger<HmssController> _logger;
+    private readonly ProjectManager _projectManager;
 
     public HmssController(
         IConfiguration config,
-        ILogger<HmssController> logger)
+        ILogger<HmssController> logger,
+        ProjectManager projectManager)
     {
         var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
         _hmssConnectionString = $"Data Source={Path.Combine(projectsDir, "hmss", "hmss.db")}";
         _logger = logger;
+        _projectManager = projectManager;
+    }
+
+    /// <summary>
+    /// 获取 HMSS 项目的所有模型定义
+    /// </summary>
+    [HttpGet("models")]
+    public IActionResult GetModels()
+    {
+        try
+        {
+            // 尝试获取 HMSS 项目
+            if (!_projectManager.TryGetProject("hmss", out var project))
+            {
+                return NotFound(new
+                {
+                    success = false,
+                    message = "HMSS 项目未找到"
+                });
+            }
+
+            var models = project.AppDefinitions.Models;
+            var modelList = models.Select(kvp => new
+            {
+                key = kvp.Key,
+                name = kvp.Key,
+                table = kvp.Value.Table,
+                primaryKey = kvp.Value.PrimaryKey,
+                isReadOnly = kvp.Value.IsReadOnly,
+                // 获取 UI 标签（优先中文，其次英文）
+                displayName = kvp.Value.Ui?.Labels?.Zh?.FirstOrDefault().Value 
+                    ?? kvp.Value.Ui?.Labels?.En?.FirstOrDefault().Value 
+                    ?? kvp.Value.Table
+            }).ToList();
+
+            return Ok(modelList);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "获取 HMSS 模型列表失败");
+            return StatusCode(500, new
+            {
+                success = false,
+                message = "获取模型列表失败：" + ex.Message
+            });
+        }
     }
 
     /// <summary>

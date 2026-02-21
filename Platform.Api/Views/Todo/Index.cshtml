@@ -366,16 +366,16 @@
                         <a href="/?project=todo" class="todo-nav-link active">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Task?project=todo" class="todo-nav-link">
+                        <a href="/Task?project=todo" class="todo-nav-link">
                             <i class="fas fa-check-square mr-1"></i> 任务
                         </a>
-                        <a href="/ui/Project?project=todo" class="todo-nav-link">
+                        <a href="/Project?project=todo" class="todo-nav-link">
                             <i class="fas fa-folder mr-1"></i> 项目
                         </a>
-                        <a href="/ui/TaskWithProject?project=todo" class="todo-nav-link">
+                        <a href="/TaskWithProject?project=todo" class="todo-nav-link">
                             <i class="fas fa-chart-pie mr-1"></i> 项目任务
                         </a>
-                        <a href="/ui/ProjectStats?project=todo" class="todo-nav-link">
+                        <a href="/ProjectStats?project=todo" class="todo-nav-link">
                             <i class="fas fa-chart-bar mr-1"></i> 统计
                         </a>
                     </div>
@@ -455,7 +455,7 @@
 
         <!-- 快捷操作 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <a href="/ui/Task/create?project=todo" class="stat-card group animate-fade-in">
+            <a href="/Task/create?project=todo" class="stat-card group animate-fade-in">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         📝
@@ -467,7 +467,7 @@
                 </div>
             </a>
 
-            <a href="/ui/Project/create?project=todo" class="stat-card group animate-fade-in animate-delay-1">
+            <a href="/Project/create?project=todo" class="stat-card group animate-fade-in animate-delay-1">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         📁
@@ -479,7 +479,7 @@
                 </div>
             </a>
 
-            <a href="/ui/TaskWithProject?project=todo" class="stat-card group animate-fade-in animate-delay-2">
+            <a href="/TaskWithProject?project=todo" class="stat-card group animate-fade-in animate-delay-2">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         📊
@@ -528,7 +528,7 @@
                     <i class="fas fa-clock text-blue-400 mr-2"></i>
                     最近任务
                 </h3>
-                <a href="/ui/Task?project=todo" class="todo-btn todo-btn-secondary text-sm">
+                <a href="/Task?project=todo" class="todo-btn todo-btn-secondary text-sm">
                     查看全部 <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -544,7 +544,7 @@
                     <i class="fas fa-folder text-violet-400 mr-2"></i>
                     项目列表
                 </h3>
-                <a href="/ui/Project?project=todo" class="todo-btn todo-btn-secondary text-sm">
+                <a href="/Project?project=todo" class="todo-btn todo-btn-secondary text-sm">
                     管理项目 <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -685,7 +685,7 @@
                     const status = statusConfig[t.Status] || statusConfig.pending;
                     const priority = priorityConfig[t.Priority] || priorityConfig.medium;
                     return `
-                        <div class="task-card p-4 cursor-pointer hover:bg-slate-800/50 transition" onclick="window.location.href='/ui/Task/edit/${t.Id}?project=todo'">
+                        <div class="task-card p-4 cursor-pointer hover:bg-slate-800/50 transition" onclick="window.location.href='/Task/edit/${t.Id}?project=todo'">
                             <div class="flex items-center justify-between">
                                 <div class="flex-1">
                                     <div class="flex items-center gap-3 mb-2">
@@ -733,7 +733,7 @@
                 container.innerHTML = recentProjects.map(p => {
                     const status = statusConfig[p.Status] || statusConfig.planning;
                     return `
-                        <div class="bg-slate-800/50 rounded-xl p-5 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Project/edit/${p.Id}?project=todo'">
+                        <div class="bg-slate-800/50 rounded-xl p-5 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/Project/edit/${p.Id}?project=todo'">
                             <div class="flex items-start justify-between mb-3">
                                 <h4 class="font-semibold text-slate-200">${p.Name || '无名称'}</h4>
                                 <span class="text-xs ${status.color}">${status.label}</span>

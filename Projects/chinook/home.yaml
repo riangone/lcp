@@ -47,7 +47,7 @@ layout:
           ko: 아티스트
           ja: アーティスト
           ko: 아티스트
-        href: "/ui/Artist?project=chinook"
+        href: "/Artist?project=chinook"
         color: "green"
         description:
           zh: 管理艺术家信息
@@ -64,7 +64,7 @@ layout:
           ko: 앨범
           ja: アルバム
           ko: 앨범
-        href: "/ui/Album?project=chinook"
+        href: "/Album?project=chinook"
         color: "emerald"
         description:
           zh: 浏览专辑收藏
@@ -81,7 +81,7 @@ layout:
           ko: 트랙
           ja: トラック
           ko: 트랙
-        href: "/ui/Track?project=chinook"
+        href: "/Track?project=chinook"
         color: "teal"
         description:
           zh: 管理音乐音轨
@@ -98,7 +98,7 @@ layout:
           ko: 미디어 유형
           ja: メディアタイプ
           ko: 미디어 유형
-        href: "/ui/MediaType?project=chinook"
+        href: "/MediaType?project=chinook"
         color: "cyan"
         description:
           zh: 查看媒体格式

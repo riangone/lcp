@@ -230,16 +230,16 @@
                         <a href="/?project=crm" class="biz-nav-link active">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Customer?project=crm" class="biz-nav-link">
+                        <a href="/Customer?project=crm" class="biz-nav-link">
                             <i class="fas fa-users mr-1"></i> 客户
                         </a>
-                        <a href="/ui/Opportunity?project=crm" class="biz-nav-link">
+                        <a href="/Opportunity?project=crm" class="biz-nav-link">
                             <i class="fas fa-briefcase mr-1"></i> 商机
                         </a>
-                        <a href="/ui/Quote?project=crm" class="biz-nav-link">
+                        <a href="/Quote?project=crm" class="biz-nav-link">
                             <i class="fas fa-file-invoice mr-1"></i> 报价
                         </a>
-                        <a href="/ui/Order?project=crm" class="biz-nav-link">
+                        <a href="/Order?project=crm" class="biz-nav-link">
                             <i class="fas fa-shopping-cart mr-1"></i> 订单
                         </a>
                     </div>
@@ -326,22 +326,22 @@
             </div>
             <div class="p-6">
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <a href="/ui/Customer?project=crm" class="biz-card p-4 text-center group">
+                    <a href="/Customer?project=crm" class="biz-card p-4 text-center group">
                         <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">👥</div>
                         <div class="font-medium">客户管理</div>
                         <div class="text-sm text-slate-400 mt-1">管理客户信息</div>
                     </a>
-                    <a href="/ui/Opportunity?project=crm" class="biz-card p-4 text-center group">
+                    <a href="/Opportunity?project=crm" class="biz-card p-4 text-center group">
                         <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">💰</div>
                         <div class="font-medium">销售机会</div>
                         <div class="text-sm text-slate-400 mt-1">跟踪销售漏斗</div>
                     </a>
-                    <a href="/ui/Quote?project=crm" class="biz-card p-4 text-center group">
+                    <a href="/Quote?project=crm" class="biz-card p-4 text-center group">
                         <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">📄</div>
                         <div class="font-medium">创建报价</div>
                         <div class="text-sm text-slate-400 mt-1">快速报价流程</div>
                     </a>
-                    <a href="/ui/Order?project=crm" class="biz-card p-4 text-center group">
+                    <a href="/Order?project=crm" class="biz-card p-4 text-center group">
                         <div class="text-4xl mb-3 group-hover:scale-110 transition-transform">🛒</div>
                         <div class="font-medium">订单管理</div>
                         <div class="text-sm text-slate-400 mt-1">处理销售订单</div>
@@ -416,7 +416,7 @@
                     <i class="fas fa-users text-blue-400 mr-2"></i>
                     最近客户
                 </h2>
-                <a href="/ui/Customer?project=crm" class="biz-btn biz-btn-secondary text-sm">
+                <a href="/Customer?project=crm" class="biz-btn biz-btn-secondary text-sm">
                     查看全部 <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -446,7 +446,7 @@
                     <i class="fas fa-clock text-yellow-400 mr-2"></i>
                     待跟进事项
                 </h2>
-                <a href="/ui/Contact?project=crm" class="biz-btn biz-btn-secondary text-sm">
+                <a href="/Contact?project=crm" class="biz-btn biz-btn-secondary text-sm">
                     查看全部 <i class="fas fa-arrow-right ml-1"></i>
                 </a>
             </div>
@@ -499,7 +499,7 @@
                                       c.Status === 'Inactive' ? '不活跃' : '丢失';
                     
                     return `
-                        <tr class="hover:bg-slate-800/50 cursor-pointer" onclick="window.location.href='/ui/Customer/edit/${c.CustomerId}?project=crm'">
+                        <tr class="hover:bg-slate-800/50 cursor-pointer" onclick="window.location.href='/Customer/edit/${c.CustomerId}?project=crm'">
                             <td class="font-mono text-sm">${c.CustomerNo || '-'}</td>
                             <td class="font-medium">${c.CompanyName || '-'}</td>
                             <td>${c.ContactPerson || '-'}</td>

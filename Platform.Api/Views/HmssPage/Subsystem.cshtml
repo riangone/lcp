@@ -81,7 +81,7 @@
             <h2 class="section-title">快捷操作</h2>
         </div>
         <div class="actions-grid">
-            <a href="/hmss/models/@(systemCode)?project=hmss" class="action-card">
+            <a href="/hmss/@(systemCode)?project=hmss" class="action-card">
                 <i class="bi bi-file-earmark-plus"></i>
                 <span>新建记录</span>
             </a>
@@ -734,7 +734,7 @@
         }
 
         grid.innerHTML = models.map(model => `
-            <a href="/hmss/models/${model.name}?project=hmss" class="model-card">
+            <a href="/hmss/${model.name}?project=hmss" class="model-card">
                 <div class="model-icon">
                     <i class="bi ${model.icon || 'bi-table'}"></i>
                 </div>

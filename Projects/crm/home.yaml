@@ -185,7 +185,7 @@ layout:
             ko: 내 고객
             ja: 私の顧客
             ko: 내 고객
-          href: "/ui/Customer?project=crm"
+          href: "/Customer?project=crm"
           color: "blue"
         - icon: "💰"
           label:
@@ -195,7 +195,7 @@ layout:
             ko: 내 기회
             ja: 私の商談
             ko: 내 기회
-          href: "/ui/Opportunity?project=crm"
+          href: "/Opportunity?project=crm"
           color: "green"
           badge: "5"
         - icon: "📄"
@@ -206,7 +206,7 @@ layout:
             ko: 견적 생성
             ja: 見積もり作成
             ko: 견적 생성
-          href: "/ui/Quote?project=crm"
+          href: "/Quote?project=crm"
           color: "purple"
         - icon: "📞"
           label:
@@ -216,7 +216,7 @@ layout:
             ko: 팔로우업 대기
             ja: フォローアップ待ち
             ko: 팔로우업 대기
-          href: "/ui/Contact?project=crm"
+          href: "/Contact?project=crm"
           color: "orange"
           badge: "12"
       manager:
@@ -228,7 +228,7 @@ layout:
             ko: 판매 보고서
             ja: 販売レポート
             ko: 판매 보고서
-          href: "/ui/Opportunity?project=crm&view=report"
+          href: "/Opportunity?project=crm&view=report"
           color: "blue"
         - icon: "👥"
           label:
@@ -238,7 +238,7 @@ layout:
             ko: 팀 관리
             ja: チーム管理
             ko: 팀 관리
-          href: "/ui/Employee?project=crm"
+          href: "/Employee?project=crm"
           color: "green"
         - icon: "🎯"
           label:
@@ -248,7 +248,7 @@ layout:
             ko: 목표 설정
             ja: 目標設定
             ko: 목표 설정
-          href: "/ui/Opportunity?project=crm&view=targets"
+          href: "/Opportunity?project=crm&view=targets"
           color: "purple"
         - icon: "📈"
           label:
@@ -258,7 +258,7 @@ layout:
             ko: 실적 분석
             ja: 業績分析
             ko: 실적 분석
-          href: "/ui/Order?project=crm&view=analytics"
+          href: "/Order?project=crm&view=analytics"
           color: "orange"
 
   # ==================== 核心业务模块导航 ====================
@@ -303,7 +303,7 @@ layout:
           ko: 360° 고객 뷰, 완전한 고객 정보
           ja: 360°顧客ビュー、完全な顧客情報
           ko: 360° 고객 뷰, 완전한 고객 정보
-        href: "/ui/Customer?project=crm"
+        href: "/Customer?project=crm"
         gradient: "from-blue-500 to-cyan-500"
         stats:
           - label: "总客户数"
@@ -325,7 +325,7 @@ layout:
           ko: 고객 연락처, 의사 결정 체인 관리
           ja: 顧客連絡先、意思決定チェーン管理
           ko: 고객 연락처, 의사 결정 체인 관리
-        href: "/ui/Contact?project=crm"
+        href: "/Contact?project=crm"
         gradient: "from-indigo-500 to-purple-500"
         stats:
           - label: "联系人总数"
@@ -347,7 +347,7 @@ layout:
           ko: 판매 퍼널, 기회 단계 추적
           ja: 販売ファネル、商談段階追跡
           ko: 판매 퍼널, 기회 단계 추적
-        href: "/ui/Opportunity?project=crm"
+        href: "/Opportunity?project=crm"
         gradient: "from-amber-500 to-orange-500"
         stats:
           - label: "进行中"
@@ -369,7 +369,7 @@ layout:
           ko: 빠른 견적, 가격 승인 프로세스
           ja: クイック見積もり、価格承認フロー
           ko: 빠른 견적, 가격 승인 프로세스
-        href: "/ui/Quote?project=crm"
+        href: "/Quote?project=crm"
         gradient: "from-green-500 to-emerald-500"
         stats:
           - label: "待审批"
@@ -391,7 +391,7 @@ layout:
           ko: 판매 주문, 계약 이행 추적
           ja: 販売注文、契約履行追跡
           ko: 판매 주문, 계약 이행 추적
-        href: "/ui/Order?project=crm"
+        href: "/Order?project=crm"
         gradient: "from-pink-500 to-rose-500"
         stats:
           - label: "进行中订单"
@@ -413,7 +413,7 @@ layout:
           ko: 제품 카탈로그, 가격 재고 관리
           ja: 製品カタログ、価格在庫管理
           ko: 제품 카탈로그, 가격 재고 관리
-        href: "/ui/Product?project=crm"
+        href: "/Product?project=crm"
         gradient: "from-teal-500 to-cyan-500"
         stats:
           - label: "产品总数"

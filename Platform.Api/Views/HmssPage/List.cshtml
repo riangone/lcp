@@ -175,7 +175,7 @@
                             <li class="page-item @(page <= 1 ? "disabled" : "")">
                                 <a class="page-link" href="/hmss/models/@modelName?page=@(page - 1)&size=@size&project=hmss">上一页</a>
                             </li>
-                            
+
                             for (int i = 1; i <= totalPages; i++)
                             {
                                 <li class="page-item @(i == page ? "active" : "")">
@@ -208,7 +208,7 @@
             // 获取 CSRF token
             const csrfToken = document.querySelector('#csrf-token')?.value || getCookie('XSRF-TOKEN');
 
-            const response = await fetch(`/hmss/${modelName}/delete/${id}?project=hmss`, {
+            const response = await fetch(`/hmss/models/${modelName}/delete/${id}?project=hmss`, {
                 method: 'POST',
                 headers: {
                     'RequestVerificationToken': csrfToken

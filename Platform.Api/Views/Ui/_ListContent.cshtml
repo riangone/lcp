@@ -48,7 +48,7 @@
         var queryString = string.Join("&", query.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
 
-        return $"/ui/{modelName}?{queryString}";
+        return $"/{modelName}?{queryString}";
     }
 
     string RenderValue(ModelDefinition def, string col, object val)
@@ -108,7 +108,7 @@
       @if (def.CustomView != null && def.CustomView.Enabled && !string.IsNullOrEmpty(def.CustomView.ListTemplate))
       {
         var customUiText = currentLang == "zh" ? "专用视图" : "Custom View";
-        <a href="/ui/@modelName?project=@currentProject&lang=@currentLang&ui=custom"
+        <a href="/@modelName?project=@currentProject&lang=@currentLang&ui=custom"
            class="btn btn-outline"
            title="@(currentLang == "zh" ? "切换到专用 UI" : "Switch to Custom UI")">
           <i class="fas fa-stream"></i> @customUiText
@@ -120,7 +120,7 @@
   @if (def.List?.Filters != null && def.List.Filters.Any())
   {
     <div class="card mb-6">
-      <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" hx-push-url="true" class="space-y-4">
+      <form hx-get="/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" hx-push-url="true" class="space-y-4">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           @foreach (var f in def.List.Filters)
           {
@@ -176,7 +176,7 @@
   <div class="flex flex-wrap justify-between items-center mb-6">
     @if (!isReadOnly && currentEditMode == "page")
     {
-      var createPageUrl = $"/ui/{modelName}/create?editMode=page&returnUrl={Uri.EscapeDataString(BuildListUrl())}";
+      var createPageUrl = $"/{modelName}/create?editMode=page&returnUrl={Uri.EscapeDataString(BuildListUrl())}";
       <a href="@createPageUrl" class="btn btn-success flex items-center">
         <i class="fas fa-plus mr-2"></i>
         @if (localizedLabels != null && localizedLabels.ContainsKey("new_button"))
@@ -191,7 +191,7 @@
     }
     else if (!isReadOnly)
     {
-      <button hx-get="/ui/@modelName/create?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML"
+      <button hx-get="/@modelName/create?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML"
               class="btn btn-success flex items-center">
         <i class="fas fa-plus mr-2"></i>
         @if (localizedLabels != null && localizedLabels.ContainsKey("new_button"))
@@ -213,7 +213,7 @@
   <div class="flex flex-wrap items-center justify-end gap-4 mb-4">
     @if (!isReadOnly)
     {
-    <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
+    <form hx-get="/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="edit-mode-select">Edit mode:</label>
       <select id="edit-mode-select" name="editMode" class="border border-gray-300 rounded-lg px-2 py-1 text-sm"
               onchange="this.form.requestSubmit()">
@@ -235,7 +235,7 @@
     </form>
     }
 
-    <form hx-get="/ui/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
+    <form hx-get="/@modelName?project=@currentProject" hx-target="#list" hx-swap="innerHTML" class="flex items-center gap-2">
       <label class="text-sm text-gray-600" for="page-size-select">Rows per page:</label>
       <select id="page-size-select" name="size" class="border border-gray-300 rounded-lg px-2 py-1 text-sm"
               onchange="this.form.requestSubmit()">
@@ -316,7 +316,7 @@
               {
                 var detailsLabel = localizedLabels.ContainsKey("details_button") ? localizedLabels["details_button"] : "Details";
                 var detailsId = row[def.PrimaryKey]?.ToString() ?? "";
-                var detailsUrl = $"/ui/{modelName}/details/{Uri.EscapeDataString(detailsId)}?lang={Uri.EscapeDataString(currentLang)}&returnUrl={Uri.EscapeDataString(BuildListUrl())}";
+                var detailsUrl = $"/{modelName}/details/{Uri.EscapeDataString(detailsId)}?lang={Uri.EscapeDataString(currentLang)}&returnUrl={Uri.EscapeDataString(BuildListUrl())}";
                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   <a class="text-blue-600 hover:text-blue-900 transition-colors" href="@detailsUrl">
                     <i class="fas fa-circle-info mr-1"></i>@detailsLabel
@@ -330,7 +330,7 @@
                 {
                   var editId = row[def.PrimaryKey]?.ToString() ?? "";
                   var returnUrl = BuildListUrl();
-                  var editPageUrl = $"/ui/{modelName}/edit/{Uri.EscapeDataString(editId)}?editMode=page&returnUrl={Uri.EscapeDataString(returnUrl)}";
+                  var editPageUrl = $"/{modelName}/edit/{Uri.EscapeDataString(editId)}?editMode=page&returnUrl={Uri.EscapeDataString(returnUrl)}";
                   <a class="text-blue-600 hover:text-blue-900 mr-3 transition-colors" href="@editPageUrl">
                     <i class="fas fa-edit mr-1"></i>
                     @if (localizedLabels != null && localizedLabels.ContainsKey("edit_button"))
@@ -346,7 +346,7 @@
                 else
                 {
                   <button class="text-blue-600 hover:text-blue-900 mr-3 transition-colors"
-                          hx-get="/ui/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML">
+                          hx-get="/@modelName/edit/@row[def.PrimaryKey]?lang=@currentLang&editMode=modal&project=@currentProject" hx-target="#modal" hx-swap="innerHTML">
                     <i class="fas fa-edit mr-1"></i>
                     @if (localizedLabels != null && localizedLabels.ContainsKey("edit_button"))
                     {

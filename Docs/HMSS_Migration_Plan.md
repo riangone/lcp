@@ -3,7 +3,7 @@
 ## 📋 项目概述
 
 ### 迁移目标
-将 HMSS (Hiroshima Mazda Sales System) 的所有功能从 CakePHP 5.1 迁移到 .NET 10 低代码平台 (LCP)。
+将 HMSS (GD ZM Sales System) 的所有功能从 CakePHP 5.1 迁移到 .NET 10 低代码平台 (LCP)。
 
 ### 技术选型决策
 
@@ -584,12 +584,12 @@ CREATE TABLE AspNetRoleClaims (
 - 响应式设计，支持 PC/平板/手机
 - 清晰的视觉层次
 - 高效的导航体验
-- 符合马自达品牌风格
+- 符合GDZD品牌风格
 
 **颜色方案**:
 ```css
 :root {
-  /* 主色调 - 马自达红 */
+  /* 主色调 - GDZD红 */
   --hmss-primary: #B00838;
   --hmss-primary-dark: #8B062C;
   --hmss-primary-light: #D41A4F;

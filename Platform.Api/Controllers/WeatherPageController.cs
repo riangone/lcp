@@ -13,7 +13,7 @@ public class WeatherPageController : Controller
         _projectScope = projectScope;
     }
 
-    [HttpGet("/ui/weather")]
+    [HttpGet("/weather")]
     public IActionResult Index()
     {
         ViewData["Title"] = "Weather App";

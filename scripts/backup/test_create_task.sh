@@ -10,7 +10,7 @@ echo ""
 
 # 先获取 CSRF token
 echo "1. 获取 CSRF Token..."
-curl -s http://localhost:5267/ui/Task -o /tmp/lcp_task_page.html 2>/dev/null
+curl -s http://localhost:5267/Task -o /tmp/lcp_task_page.html 2>/dev/null
 TOKEN=$(grep -o 'name="__RequestVerificationToken" value="[^"]*"' /tmp/lcp_task_page.html | head -1 | sed 's/name="__RequestVerificationToken" value="//' | sed 's/"$//')
 
 if [ -z "$TOKEN" ]; then

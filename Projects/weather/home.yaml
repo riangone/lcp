@@ -43,7 +43,7 @@ layout:
           en: Cities
           ja: 都市管理
           ko: 도시 관리
-        href: "/ui/City?project=weather"
+        href: "/City?project=weather"
         color: "blue"
         description:
           zh: 管理城市信息
@@ -56,7 +56,7 @@ layout:
           en: Records
           ja: 天気記録
           ko: 날씨 기록
-        href: "/ui/WeatherRecord?project=weather"
+        href: "/WeatherRecord?project=weather"
         color: "cyan"
         description:
           zh: 查看天气记录
@@ -69,7 +69,7 @@ layout:
           en: Forecast
           ja: 天気予報
           ko: 날씨 예보
-        href: "/ui/WeatherForecast?project=weather"
+        href: "/WeatherForecast?project=weather"
         color: "indigo"
         description:
           zh: 查看天气预报
@@ -82,7 +82,7 @@ layout:
           en: Conditions
           ja: 天気コード
           ko: 날씨 코드
-        href: "/ui/WeatherCondition?project=weather"
+        href: "/WeatherCondition?project=weather"
         color: "purple"
         description:
           zh: 管理天气代码

@@ -135,10 +135,10 @@ dotnet run --project Platform.Api
 ### 访问 TODO 项目
 
 - 首页：http://localhost:5267
-- 任务列表：http://localhost:5267/ui/Task
-- 项目列表：http://localhost:5267/ui/Project
-- 项目任务视图：http://localhost:5267/ui/TaskWithProject
-- 项目统计：http://localhost:5267/ui/ProjectStats
+- 任务列表：http://localhost:5267/Task
+- 项目列表：http://localhost:5267/Project
+- 项目任务视图：http://localhost:5267/TaskWithProject
+- 项目统计：http://localhost:5267/ProjectStats
 
 ## 📐 YAML 配置详解
 
@@ -257,10 +257,10 @@ dotnet run --project Platform.Api
 
 | 端点 | 说明 |
 |------|------|
-| `/ui/{model}` | 列表页面（分页、过滤、排序） |
-| `/ui/{model}/create` | 创建表单 |
-| `/ui/{model}/edit/{id}` | 编辑表单 |
-| `/ui/{model}/details/{id}` | 详情页面 |
+| `/{model}` | 列表页面（分页、过滤、排序） |
+| `/{model}/create` | 创建表单 |
+| `/{model}/edit/{id}` | 编辑表单 |
+| `/{model}/details/{id}` | 详情页面 |
 
 ### 功能特性
 

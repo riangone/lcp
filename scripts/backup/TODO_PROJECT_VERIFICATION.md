@@ -39,10 +39,10 @@ dotnet run --project Platform.Api
 | 页面 | URL | 说明 |
 |------|-----|------|
 | 首页 | http://localhost:5267/Home | 显示所有模型列表 |
-| Task 列表 | http://localhost:5267/ui/Task | 任务管理页面 |
-| Project 列表 | http://localhost:5267/ui/Project | 项目管理页面 |
-| TaskWithProject | http://localhost:5267/ui/TaskWithProject | 任务项目关联视图 |
-| ProjectStats | http://localhost:5267/ui/ProjectStats | 项目统计视图 |
+| Task 列表 | http://localhost:5267/Task | 任务管理页面 |
+| Project 列表 | http://localhost:5267/Project | 项目管理页面 |
+| TaskWithProject | http://localhost:5267/TaskWithProject | 任务项目关联视图 |
+| ProjectStats | http://localhost:5267/ProjectStats | 项目统计视图 |
 
 ## 🔌 API 端点
 
@@ -104,7 +104,7 @@ env LCP_PROJECT=todo LCP_DB_PATH=$(pwd)/todo.db dotnet run --project Platform.Ap
 - 标题："📋 TODO 项目管理"
 - 4 个模型卡片：Task, Project, TaskWithProject, ProjectStats
 
-访问 `/ui/Task` 应显示：
+访问 `/Task` 应显示：
 - 任务列表（15 条数据）
 - 分页功能
 - 过滤功能（按标题、状态、优先级）

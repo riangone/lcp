@@ -30,8 +30,8 @@
                 var hasCustomView = model.Value.CustomView != null && model.Value.CustomView.Enabled && !string.IsNullOrEmpty(model.Value.CustomView.ListTemplate);
                 var defaultUiMode = model.Value.CustomView?.DefaultUiMode ?? "custom";
                 var href = hasCustomView && defaultUiMode == "custom" 
-                    ? $"/ui/{modelKey}?project={projectName}&ui=custom" 
-                    : $"/ui/{modelKey}?project={projectName}";
+                    ? $"/{modelKey}?project={projectName}&ui=custom" 
+                    : $"/{modelKey}?project={projectName}";
 
                 <a href="@href" class="@Model.CardStyle.BaseClass @Model.CardStyle.HoverClass transition cursor-pointer">
                     <div class="text-center">

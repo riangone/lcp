@@ -57,7 +57,7 @@
     <!-- 工具栏 -->
     <div class="journal-toolbar">
         <div class="toolbar-left">
-            <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
+            <a href="/Entry/create?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
                class="btn btn-primary btn-write">
                 <i class="fas fa-pen-fancy"></i>
                 @(currentLang == "zh" ? "写日记" : "Write")
@@ -65,21 +65,21 @@
         </div>
         <div class="toolbar-right">
             <!-- UI 切换按钮 -->
-            <a href="/ui/Entry?project=@currentProject&lang=@currentLang&ui=generic"
+            <a href="/Entry?project=@currentProject&lang=@currentLang&ui=generic"
                class="btn btn-outline btn-sm"
                title="@(currentLang == "zh" ? "切换到通用 UI" : "Switch to Generic UI")">
                 <i class="fas fa-th-large"></i>
                 @(currentLang == "zh" ? "通用视图" : "Generic View")
             </a>
-            <a href="/ui/Entry?project=@currentProject&lang=@currentLang&ui=custom"
+            <a href="/Entry?project=@currentProject&lang=@currentLang&ui=custom"
                class="btn btn-outline btn-sm"
                title="@(currentLang == "zh" ? "切换到专用 UI" : "Switch to Custom UI")"
                style="display: none;" id="show-custom-ui-btn">
                 <i class="fas fa-stream"></i>
                 @(currentLang == "zh" ? "专用视图" : "Custom View")
             </a>
-            
-            <form class="search-form" hx-get="/ui/Entry?project=@currentProject" hx-target="#journal-list" hx-swap="innerHTML" hx-push-url="true">
+
+            <form class="search-form" hx-get="/Entry?project=@currentProject" hx-target="#journal-list" hx-swap="innerHTML" hx-push-url="true">
                 <input type="text" name="Title" placeholder="@(currentLang == "zh" ? "搜索日记..." : "Search entries...")" 
                        value="@(Context.Request.Query["Title"].FirstOrDefault() ?? "")"
                        class="search-input" />
@@ -137,9 +137,9 @@
                             </span>
                         </div>
                         <div class="entry-actions">
-                            <a href="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode" 
+                            <a href="/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
                                class="btn-icon btn-edit"
-                               hx-get="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
+                               hx-get="/Entry/edit/@id?project=@currentProject&lang=@currentLang&editMode=@currentEditMode"
                                hx-target="#modal"
                                hx-swap="innerHTML">
                                 <i class="fas fa-edit"></i>
@@ -154,7 +154,7 @@
                         @(content.Length > 200 ? content.Substring(0, 200) + "..." : content)
                     </div>
                     <footer class="entry-footer">
-                        <a href="/ui/Entry/details/@id?project=@currentProject&lang=@currentLang" class="read-more">
+                        <a href="/Entry/details/@id?project=@currentProject&lang=@currentLang" class="read-more">
                             @(currentLang == "zh" ? "阅读全文" : "Read more") <i class="fas fa-arrow-right"></i>
                         </a>
                     </footer>
@@ -168,7 +168,7 @@
                 <i class="fas fa-book-open empty-icon"></i>
                 <h3>@(currentLang == "zh" ? "还没有日记" : "No entries yet")</h3>
                 <p>@(currentLang == "zh" ? "开始写下你的第一篇日记吧！" : "Start writing your first entry!")</p>
-                <a href="/ui/Entry/create?project=@currentProject&lang=@currentLang" class="btn btn-primary">
+                <a href="/Entry/create?project=@currentProject&lang=@currentLang" class="btn btn-primary">
                     <i class="fas fa-pen-fancy"></i> @(currentLang == "zh" ? "写日记" : "Write now")
                 </a>
             </div>
@@ -181,10 +181,10 @@
         <nav class="journal-pagination">
             @if (pageNum > 1)
             {
-                <a href="/ui/Entry?project=@currentProject&page=1&lang=@currentLang" class="pagination-btn">
+                <a href="/Entry?project=@currentProject&page=1&lang=@currentLang" class="pagination-btn">
                     <i class="fas fa-angle-double-left"></i>
                 </a>
-                <a href="/ui/Entry?project=@currentProject&page=@(pageNum-1)&lang=@currentLang" class="pagination-btn">
+                <a href="/Entry?project=@currentProject&page=@(pageNum-1)&lang=@currentLang" class="pagination-btn">
                     <i class="fas fa-angle-left"></i>
                 </a>
             }
@@ -195,10 +195,10 @@
 
             @if (pageNum < totalPages)
             {
-                <a href="/ui/Entry?project=@currentProject&page=@(pageNum+1)&lang=@currentLang" class="pagination-btn">
+                <a href="/Entry?project=@currentProject&page=@(pageNum+1)&lang=@currentLang" class="pagination-btn">
                     <i class="fas fa-angle-right"></i>
                 </a>
-                <a href="/ui/Entry?project=@currentProject&page=@totalPages&lang=@currentLang" class="pagination-btn">
+                <a href="/Entry?project=@currentProject&page=@totalPages&lang=@currentLang" class="pagination-btn">
                     <i class="fas fa-angle-double-right"></i>
                 </a>
             }

@@ -5,7 +5,7 @@
     var row = ViewData["Row"] as Dictionary<string, object>;
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var currentProject = Context.Request.Query["project"].FirstOrDefault() ?? "journal";
-    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/ui/Entry?project={currentProject}&lang={currentLang}";
+    var returnUrl = ViewData["ReturnUrl"] as string ?? $"/Entry?project={currentProject}&lang={currentLang}";
 
     if (row == null)
     {
@@ -113,9 +113,9 @@
                         <i class="fas fa-arrow-left"></i>
                         @(currentLang == "zh" ? "返回列表" : "Back to list")
                     </a>
-                    <a href="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang" 
+                    <a href="/Entry/edit/@id?project=@currentProject&lang=@currentLang"
                        class="btn btn-primary"
-                       hx-get="/ui/Entry/edit/@id?project=@currentProject&lang=@currentLang"
+                       hx-get="/Entry/edit/@id?project=@currentProject&lang=@currentLang"
                        hx-target="#modal"
                        hx-swap="innerHTML">
                         <i class="fas fa-edit"></i>

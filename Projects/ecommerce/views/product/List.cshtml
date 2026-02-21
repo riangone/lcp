@@ -285,16 +285,16 @@
                         <a href="/?project=ecommerce" class="nav-link">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Product?project=ecommerce" class="nav-link active">
+                        <a href="/Product?project=ecommerce" class="nav-link active">
                             <i class="fas fa-box mr-1"></i> 产品
                         </a>
-                        <a href="/ui/Order?project=ecommerce" class="nav-link">
+                        <a href="/Order?project=ecommerce" class="nav-link">
                             <i class="fas fa-shopping-cart mr-1"></i> 订单
                         </a>
-                        <a href="/ui/Customer?project=ecommerce" class="nav-link">
+                        <a href="/Customer?project=ecommerce" class="nav-link">
                             <i class="fas fa-users mr-1"></i> 客户
                         </a>
-                        <a href="/ui/Category?project=ecommerce" class="nav-link">
+                        <a href="/Category?project=ecommerce" class="nav-link">
                             <i class="fas fa-tags mr-1"></i> 分类
                         </a>
                     </div>
@@ -335,11 +335,11 @@
 
         <!-- 工具栏 -->
         <div class="toolbar">
-            <a href="/ui/Product/create?project=@currentProject" class="btn-add-product">
+            <a href="/Product/create?project=@currentProject" class="btn-add-product">
                 <i class="fas fa-plus"></i>
                 @(currentLang == "zh" ? "添加产品" : "Add Product")
             </a>
-            <form class="search-form" method="get" action="/ui/Product?project=@currentProject">
+            <form class="search-form" method="get" action="/Product?project=@currentProject">
                 <input type="text" name="ProductName" placeholder="@(currentLang == "zh" ? "搜索产品..." : "Search products...")"
                        value="@(Context.Request.Query["ProductName"].FirstOrDefault() ?? "")"
                        class="search-input" />
@@ -398,10 +398,10 @@
             <nav class="pagination">
                 @if (pageNum > 1)
                 {
-                    <a href="/ui/Product?project=@currentProject&page=1" class="pagination-btn">
+                    <a href="/Product?project=@currentProject&page=1" class="pagination-btn">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
-                    <a href="/ui/Product?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
+                    <a href="/Product?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
                         <i class="fas fa-angle-left"></i>
                     </a>
                 }
@@ -412,10 +412,10 @@
 
                 @if (pageNum < totalPages)
                 {
-                    <a href="/ui/Product?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
+                    <a href="/Product?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
                         <i class="fas fa-angle-right"></i>
                     </a>
-                    <a href="/ui/Product?project=@currentProject&page=@totalPages" class="pagination-btn">
+                    <a href="/Product?project=@currentProject&page=@totalPages" class="pagination-btn">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 }
@@ -430,7 +430,7 @@
 
         // 编辑产品
         function editProduct(id) {
-            window.location.href = `/ui/Product/edit/${id}?project=${currentProject}`;
+            window.location.href = `/Product/edit/${id}?project=${currentProject}`;
         }
 
         // 打开删除对话框

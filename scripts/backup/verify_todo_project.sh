@@ -76,23 +76,23 @@ CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/Home)
 [ "$CODE" = "200" ] && echo "   ✅ HTTP $CODE" || echo "   ❌ HTTP $CODE"
 
 echo ""
-echo "   Task 列表 (/ui/Task):"
-CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/Task)
+echo "   Task 列表 (/Task):"
+CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/Task)
 [ "$CODE" = "200" ] && echo "   ✅ HTTP $CODE" || echo "   ❌ HTTP $CODE"
 
 echo ""
-echo "   Project 列表 (/ui/Project):"
-CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/Project)
+echo "   Project 列表 (/Project):"
+CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/Project)
 [ "$CODE" = "200" ] && echo "   ✅ HTTP $CODE" || echo "   ❌ HTTP $CODE"
 
 echo ""
-echo "   TaskWithProject 视图 (/ui/TaskWithProject):"
-CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/TaskWithProject)
+echo "   TaskWithProject 视图 (/TaskWithProject):"
+CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/TaskWithProject)
 [ "$CODE" = "200" ] && echo "   ✅ HTTP $CODE" || echo "   ❌ HTTP $CODE"
 
 echo ""
-echo "   ProjectStats 视图 (/ui/ProjectStats):"
-CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/ProjectStats)
+echo "   ProjectStats 视图 (/ProjectStats):"
+CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ProjectStats)
 [ "$CODE" = "200" ] && echo "   ✅ HTTP $CODE" || echo "   ❌ HTTP $CODE"
 
 # 6. 测试 API
@@ -144,8 +144,8 @@ echo "╠═══════════════════════�
 echo "║  访问地址：                                            ║"
 echo "║  http://localhost:5267                                 ║"
 echo "║  http://localhost:5267/Home                            ║"
-echo "║  http://localhost:5267/ui/Task                         ║"
-echo "║  http://localhost:5267/ui/Project                      ║"
-echo "║  http://localhost:5267/ui/TaskWithProject              ║"
-echo "║  http://localhost:5267/ui/ProjectStats                 ║"
+echo "║  http://localhost:5267/Task                         ║"
+echo "║  http://localhost:5267/Project                      ║"
+echo "║  http://localhost:5267/TaskWithProject              ║"
+echo "║  http://localhost:5267/ProjectStats                 ║"
 echo "╚════════════════════════════════════════════════════════╝"

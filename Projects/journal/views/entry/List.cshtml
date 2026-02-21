@@ -304,13 +304,13 @@
                         <a href="/?project=journal" class="nav-link">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Entry?project=journal" class="nav-link active">
+                        <a href="/Entry?project=journal" class="nav-link active">
                             <i class="fas fa-book-open mr-1"></i> 日记
                         </a>
-                        <a href="/ui/Category?project=journal" class="nav-link">
+                        <a href="/Category?project=journal" class="nav-link">
                             <i class="fas fa-folder mr-1"></i> 分类
                         </a>
-                        <a href="/ui/Tag?project=journal" class="nav-link">
+                        <a href="/Tag?project=journal" class="nav-link">
                             <i class="fas fa-tags mr-1"></i> 标签
                         </a>
                     </div>
@@ -359,12 +359,12 @@
 
         <!-- 工具栏 -->
         <div class="toolbar">
-            <a href="/ui/Entry/create?project=@currentProject" class="btn-write">
+            <a href="/Entry/create?project=@currentProject" class="btn-write">
                 <i class="fas fa-pen-fancy"></i>
                 @(currentLang == "zh" ? "写日记" : "Write")
             </a>
             <div class="toolbar-right" style="display: flex; gap: 1rem; align-items: center;">
-                <form class="search-form" method="get" action="/ui/Entry?project=@currentProject">
+                <form class="search-form" method="get" action="/Entry?project=@currentProject">
                     <input type="text" name="Title" placeholder="@(currentLang == "zh" ? "搜索日记..." : "Search...")"
                            value="@(Context.Request.Query["Title"].FirstOrDefault() ?? "")"
                            class="search-input" />
@@ -372,7 +372,7 @@
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
-                <select name="Mood" class="mood-filter" onchange="location.href='/ui/Entry?project=@currentProject&Mood=' + this.value">
+                <select name="Mood" class="mood-filter" onchange="location.href='/Entry?project=@currentProject&Mood=' + this.value">
                     <option value="">@(currentLang == "zh" ? "所有心情" : "All Moods")</option>
                     @foreach (var mood in moodConfig)
                     {
@@ -440,7 +440,7 @@
                     <div class="empty-icon">📖</div>
                     <h3>@(currentLang == "zh" ? "还没有日记" : "No entries yet")</h3>
                     <p>@(currentLang == "zh" ? "开始写下你的第一篇日记吧！" : "Start writing your first entry!")</p>
-                    <a href="/ui/Entry/create?project=@currentProject" class="btn-write" style="margin-top: 1rem;">
+                    <a href="/Entry/create?project=@currentProject" class="btn-write" style="margin-top: 1rem;">
                         <i class="fas fa-pen-fancy"></i> @(currentLang == "zh" ? "写日记" : "Write now")
                     </a>
                 </div>
@@ -456,10 +456,10 @@
             <nav class="pagination">
                 @if (pageNum > 1)
                 {
-                    <a href="/ui/Entry?project=@currentProject&page=1" class="pagination-btn">
+                    <a href="/Entry?project=@currentProject&page=1" class="pagination-btn">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
-                    <a href="/ui/Entry?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
+                    <a href="/Entry?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
                         <i class="fas fa-angle-left"></i>
                     </a>
                 }
@@ -470,10 +470,10 @@
 
                 @if (pageNum < totalPages)
                 {
-                    <a href="/ui/Entry?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
+                    <a href="/Entry?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
                         <i class="fas fa-angle-right"></i>
                     </a>
-                    <a href="/ui/Entry?project=@currentProject&page=@totalPages" class="pagination-btn">
+                    <a href="/Entry?project=@currentProject&page=@totalPages" class="pagination-btn">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 }
@@ -488,7 +488,7 @@
 
         // 编辑日记
         function editEntry(id) {
-            window.location.href = `/ui/Entry/edit/${id}?project=${currentProject}`;
+            window.location.href = `/Entry/edit/${id}?project=${currentProject}`;
         }
 
         // 打开删除对话框

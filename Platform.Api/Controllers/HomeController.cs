@@ -21,7 +21,7 @@ public class HomeController : Controller
         // 天气应用使用专用 UI
         if (project?.Name == "weather")
         {
-            return RedirectToAction("Index", "WeatherPage");
+            return Redirect("/weather");
         }
 
         ViewData["Title"] = project?.HomeConfig?.Title ?? "LowCode Platform";

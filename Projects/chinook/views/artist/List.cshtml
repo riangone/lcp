@@ -243,16 +243,16 @@
                         <a href="/?project=chinook" class="nav-link">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Artist?project=chinook" class="nav-link active">
+                        <a href="/Artist?project=chinook" class="nav-link active">
                             <i class="fas fa-microphone mr-1"></i> 艺术家
                         </a>
-                        <a href="/ui/Album?project=chinook" class="nav-link">
+                        <a href="/Album?project=chinook" class="nav-link">
                             <i class="fas fa-compact-disc mr-1"></i> 专辑
                         </a>
-                        <a href="/ui/Track?project=chinook" class="nav-link">
+                        <a href="/Track?project=chinook" class="nav-link">
                             <i class="fas fa-music mr-1"></i> 音轨
                         </a>
-                        <a href="/ui/Genre?project=chinook" class="nav-link">
+                        <a href="/Genre?project=chinook" class="nav-link">
                             <i class="fas fa-tags mr-1"></i> 流派
                         </a>
                     </div>
@@ -287,11 +287,11 @@
 
         <!-- 工具栏 -->
         <div class="toolbar">
-            <a href="/ui/Artist/create?project=@currentProject" class="btn-add-artist">
+            <a href="/Artist/create?project=@currentProject" class="btn-add-artist">
                 <i class="fas fa-plus"></i>
                 @(currentLang == "zh" ? "添加艺术家" : "Add Artist")
             </a>
-            <form class="search-form" method="get" action="/ui/Artist?project=@currentProject">
+            <form class="search-form" method="get" action="/Artist?project=@currentProject">
                 <input type="text" name="Name" placeholder="@(currentLang == "zh" ? "搜索艺术家..." : "Search artists...")"
                        value="@(Context.Request.Query["Name"].FirstOrDefault() ?? "")"
                        class="search-input" />
@@ -340,10 +340,10 @@
             <nav class="pagination">
                 @if (pageNum > 1)
                 {
-                    <a href="/ui/Artist?project=@currentProject&page=1" class="pagination-btn">
+                    <a href="/Artist?project=@currentProject&page=1" class="pagination-btn">
                         <i class="fas fa-angle-double-left"></i>
                     </a>
-                    <a href="/ui/Artist?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
+                    <a href="/Artist?project=@currentProject&page=@(pageNum-1)" class="pagination-btn">
                         <i class="fas fa-angle-left"></i>
                     </a>
                 }
@@ -354,10 +354,10 @@
 
                 @if (pageNum < totalPages)
                 {
-                    <a href="/ui/Artist?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
+                    <a href="/Artist?project=@currentProject&page=@(pageNum+1)" class="pagination-btn">
                         <i class="fas fa-angle-right"></i>
                     </a>
-                    <a href="/ui/Artist?project=@currentProject&page=@totalPages" class="pagination-btn">
+                    <a href="/Artist?project=@currentProject&page=@totalPages" class="pagination-btn">
                         <i class="fas fa-angle-double-right"></i>
                     </a>
                 }
@@ -372,7 +372,7 @@
 
         // 编辑艺术家
         function editArtist(id) {
-            window.location.href = `/ui/Artist/edit/${id}?project=${currentProject}`;
+            window.location.href = `/Artist/edit/${id}?project=${currentProject}`;
         }
 
         // 打开删除对话框

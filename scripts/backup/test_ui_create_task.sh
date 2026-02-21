@@ -10,7 +10,7 @@ echo ""
 
 # 1. 获取页面和 CSRF token
 echo "1. 获取 Task 页面和 CSRF Token..."
-curl -s http://localhost:5267/ui/Task -o /tmp/lcp_task_page.html 2>/dev/null
+curl -s http://localhost:5267/Task -o /tmp/lcp_task_page.html 2>/dev/null
 
 # 提取 CSRF token (从 id="csrf-token" 的 input 中提取)
 TOKEN=$(grep -o 'id="csrf-token" value="[^"]*"' /tmp/lcp_task_page.html | head -1 | sed 's/id="csrf-token" value="//' | sed 's/"$//')
@@ -24,7 +24,7 @@ echo ""
 
 # 2. 获取创建表单
 echo "2. 获取创建表单..."
-curl -s "http://localhost:5267/ui/Task/create" -o /tmp/lcp_create_form.html 2>/dev/null
+curl -s "http://localhost:5267/Task/create" -o /tmp/lcp_create_form.html 2>/dev/null
 if grep -q "__RequestVerificationToken" /tmp/lcp_create_form.html; then
     echo "   ✅ 表单包含 CSRF token"
 else

@@ -47,7 +47,7 @@ layout:
           ko: 제품 관리
           ja: 製品管理
           ko: 제품 관리
-        href: "/ui/Product?project=ecommerce"
+        href: "/Product?project=ecommerce"
         color: "orange"
         description:
           zh: 管理产品目录
@@ -64,7 +64,7 @@ layout:
           ko: 주문 처리
           ja: 注文処理
           ko: 주문 처리
-        href: "/ui/Order?project=ecommerce"
+        href: "/Order?project=ecommerce"
         color: "red"
         description:
           zh: 处理客户订单
@@ -81,7 +81,7 @@ layout:
           ko: 고객 관리
           ja: 顧客管理
           ko: 고객 관리
-        href: "/ui/Customer?project=ecommerce"
+        href: "/Customer?project=ecommerce"
         color: "amber"
         description:
           zh: 管理客户信息
@@ -98,7 +98,7 @@ layout:
           ko: 销售分析
           ja: 販売分析
           ko: 판매 분석
-        href: "/ui/ProductSales?project=ecommerce"
+        href: "/ProductSales?project=ecommerce"
         color: "yellow"
         description:
           zh: 查看销售数据

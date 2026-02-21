@@ -449,8 +449,9 @@ INSERT OR IGNORE INTO hmss_system_m (sys_cd, sys_nm, sys_url, sys_order, sys_use
 ('CkChkzaiko', '库存确认', '/hmss/ckchkuzaiko', 13, '1', 'bi:boxes');
 
 -- 默认管理员用户 (密码：admin123)
+-- BCrypt hash: $2b$12$lhiFpjbmv23yO0YeHuC1IueREBBuV05blGA3.ioUd6FM0ZywanTQm
 INSERT OR IGNORE INTO hmss_users (usr_id, usr_name, pass, email, sys1_flg, sys2_flg, sys3_flg, sys4_flg, sys5_flg, sys6_flg, sys7_flg, sys8_flg, sys9_flg, sys10_flg, sys11_flg, sys12_flg, sys13_flg, sys14_flg) VALUES
-('admin', '管理员', '$2a$11$rW3XLqKQeQk6zN.X1oWpGOqvqO8LqQJ7Lx9L5L5L5L5L5L5L5L5L5', 'admin@hmss.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
+('admin', '管理员', '$2b$12$lhiFpjbmv23yO0YeHuC1IueREBBuV05blGA3.ioUd6FM0ZywanTQm', 'admin@hmss.com', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1', '1');
 
 -- 判定车种初始数据
 INSERT OR IGNORE INTO sdh_syasyu_mst (syasyu_cd, syasyu_nm, display_order) VALUES

@@ -12,6 +12,7 @@
     <PackageReference Include="Scalar.AspNetCore" Version="1.2.46" />
     <PackageReference Include="Dapper" Version="2.1.66" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
   <ItemGroup>

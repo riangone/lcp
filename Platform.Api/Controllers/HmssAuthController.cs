@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using Microsoft.Data.Sqlite;
+using Dapper;
 
 namespace Platform.Api.Controllers;
 
@@ -17,6 +19,7 @@ public class HmssAuthController : ControllerBase
 {
     private readonly ILogger<HmssAuthController> _logger;
     private readonly IConfiguration _config;
+    private readonly string _hmssConnectionString;
 
     public HmssAuthController(
         ILogger<HmssAuthController> logger,
@@ -24,6 +27,9 @@ public class HmssAuthController : ControllerBase
     {
         _logger = logger;
         _config = config;
+        
+        var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
+        _hmssConnectionString = $"Data Source={Path.Combine(projectsDir, "hmss", "hmss.db")}";
     }
 
     /// <summary>
@@ -34,8 +40,6 @@ public class HmssAuthController : ControllerBase
     {
         try
         {
-            // TODO: 从数据库验证用户
-            // 这里使用简化实现
             if (string.IsNullOrEmpty(request.UserId) || string.IsNullOrEmpty(request.Password))
             {
                 return BadRequest(new
@@ -45,48 +49,111 @@ public class HmssAuthController : ControllerBase
                 });
             }
 
-            // 简化验证：admin/admin123
-            if (request.UserId == "admin" && request.Password == "admin123")
+            // 从数据库验证用户
+            await using var conn = new SqliteConnection(_hmssConnectionString);
+            await conn.OpenAsync();
+
+            var userSql = @"
+                SELECT usr_id, usr_name, pass, email, 
+                       sys1_flg, sys2_flg, sys3_flg, sys4_flg, sys5_flg, 
+                       sys6_flg, sys7_flg, sys8_flg, sys9_flg, sys10_flg, 
+                       sys11_flg, sys12_flg, sys13_flg, sys14_flg
+                FROM hmss_users
+                WHERE usr_id = @UserId";
+
+            var user = await conn.QueryFirstOrDefaultAsync(userSql, new { UserId = request.UserId });
+
+            if (user == null)
             {
-                var claims = new List<Claim>
+                _logger.LogWarning("用户不存在：{UserId}", request.UserId);
+                return Unauthorized(new
                 {
-                    new Claim(ClaimTypes.Name, request.UserId),
-                    new Claim(ClaimTypes.Role, "Admin"),
-                    new Claim("usr_id", request.UserId)
-                };
-
-                var claimsIdentity = new ClaimsIdentity(
-                    claims,
-                    CookieAuthenticationDefaults.AuthenticationScheme);
-
-                var authProperties = new AuthenticationProperties
-                {
-                    IsPersistent = request.RememberMe,
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
-                };
-
-                await HttpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity),
-                    authProperties);
-
-                return Ok(new
-                {
-                    success = true,
-                    message = "登录成功",
-                    data = new
-                    {
-                        userId = request.UserId,
-                        userName = "管理员",
-                        redirectUrl = "/hmss/master"
-                    }
+                    success = false,
+                    message = "用户 ID 或密码错误"
                 });
             }
 
-            return Unauthorized(new
+            // 验证密码（BCrypt 或明文）
+            bool passwordValid = false;
+            
+            // 检查是否是 BCrypt 哈希（以 $2a$ 开头）
+            if (user.pass.StartsWith("$2a$") || user.pass.StartsWith("$2b$"))
             {
-                success = false,
-                message = "用户 ID 或密码错误"
+                // 使用 BCrypt 验证
+                passwordValid = BCrypt.Net.BCrypt.Verify(request.Password, user.pass);
+            }
+            else
+            {
+                // 明文密码比较（仅用于开发环境）
+                passwordValid = request.Password == user.pass;
+            }
+
+            if (!passwordValid)
+            {
+                _logger.LogWarning("用户密码错误：{UserId}", request.UserId);
+                return Unauthorized(new
+                {
+                    success = false,
+                    message = "用户 ID 或密码错误"
+                });
+            }
+
+            // 构建用户权限列表
+            var sysFlags = new Dictionary<string, string>
+            {
+                { "Master", user.sys1_flg ?? "0" },
+                { "Login", user.sys2_flg ?? "0" },
+                { "HDKAIKEI", user.sys3_flg ?? "0" },
+                { "HMAUD", user.sys4_flg ?? "0" },
+                { "HMDPS", user.sys5_flg ?? "0" },
+                { "HMHRMS", user.sys6_flg ?? "0" },
+                { "HMTVE", user.sys7_flg ?? "0" },
+                { "JKSYS", user.sys8_flg ?? "0" },
+                { "R4", user.sys9_flg ?? "0" },
+                { "SDH", user.sys10_flg ?? "0" },
+                { "APPM", user.sys11_flg ?? "0" },
+                { "PPRM", user.sys12_flg ?? "0" },
+                { "CkChkzaiko", user.sys13_flg ?? "0" }
+            };
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.usr_id),
+                new Claim(ClaimTypes.Role, "User"),
+                new Claim("usr_id", user.usr_id),
+                new Claim("usr_name", user.usr_name ?? user.usr_id),
+                new Claim("email", user.email ?? ""),
+                new Claim("sys_flags", System.Text.Json.JsonSerializer.Serialize(sysFlags))
+            };
+
+            var claimsIdentity = new ClaimsIdentity(
+                claims,
+                CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = request.RememberMe,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7)
+            };
+
+            await HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(claimsIdentity),
+                authProperties);
+
+            _logger.LogInformation("用户登录成功：{UserId}", request.UserId);
+
+            return Ok(new
+            {
+                success = true,
+                message = "登录成功",
+                data = new
+                {
+                    userId = user.usr_id,
+                    userName = user.usr_name ?? user.usr_id,
+                    email = user.email,
+                    redirectUrl = "/hmss/master"
+                }
             });
         }
         catch (Exception ex)

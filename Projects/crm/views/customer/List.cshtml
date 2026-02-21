@@ -16,7 +16,7 @@
             <h1><span>💼</span> @title</h1>
             <span class="customer-count">@total @(currentLang == "zh" ? "位客户" : "Customers")</span>
         </div>
-        <a href="/ui/Customer/create?project=@currentProject" class="btn-add-customer">
+        <a href="/Customer/create?project=@currentProject" class="btn-add-customer">
             <span>➕</span> @(currentLang == "zh" ? "添加客户" : "Add Customer")
         </a>
     </div>
@@ -59,7 +59,7 @@
                         <td>@phone</td>
                         <td>
                             <div class="action-buttons">
-                                <a href="/ui/Customer/edit/@id?project=@currentProject" class="btn-action btn-edit" title="@(currentLang == "zh" ? "编辑" : "Edit")">✏️</a>
+                                <a href="/Customer/edit/@id?project=@currentProject" class="btn-action btn-edit" title="@(currentLang == "zh" ? "编辑" : "Edit")">✏️</a>
                                 <button class="btn-action btn-delete" onclick="openDeleteDialog('@modelName', '@id')" title="@(currentLang == "zh" ? "删除" : "Delete")">🗑️</button>
                             </div>
                         </td>

@@ -7,7 +7,7 @@
     var returnUrl = ViewData["ReturnUrl"] as string;
     var editError = ViewData["EditError"] as string;
     var project = Context.Request.Query["project"].FirstOrDefault() ?? "app";
-    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}?project={project}";
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/{modelName}?project={project}";
 
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var uiLabels = def.Ui?.Labels;
@@ -46,7 +46,7 @@
       </div>
     }
 
-    <form method="post" action="/ui/@modelName/edit-page/@row[def.PrimaryKey]" class="form-content">
+    <form method="post" action="/@modelName/edit-page/@row[def.PrimaryKey]" class="form-content">
       @Html.AntiForgeryToken()
       <input type="hidden" name="returnUrl" value="@backUrl" />
 

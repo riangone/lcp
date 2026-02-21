@@ -34,7 +34,7 @@ public class HmssPageController : Controller
     [AllowAnonymous]
     public IActionResult Login()
     {
-        return View();
+        return View("/Views/Hmss/Login.cshtml");
     }
 
     /// <summary>
@@ -44,7 +44,7 @@ public class HmssPageController : Controller
     [Authorize]
     public IActionResult Master()
     {
-        return View();
+        return View("/Views/Hmss/Master.cshtml");
     }
 
     /// <summary>
@@ -54,7 +54,8 @@ public class HmssPageController : Controller
     [Authorize]
     public IActionResult Sdh()
     {
-        return View();
+        ViewData["SystemCode"] = "SDH";
+        return View("/Views/HmssPage/Subsystem.cshtml");
     }
 
     /// <summary>
@@ -64,7 +65,9 @@ public class HmssPageController : Controller
     [Authorize]
     public IActionResult SdhHantei()
     {
-        return View();
+        ViewData["SystemCode"] = "SDH";
+        ViewData["SubsystemPage"] = "hantei";
+        return View("/Views/HmssPage/Subsystem.cshtml");
     }
 
     /// <summary>
@@ -74,7 +77,9 @@ public class HmssPageController : Controller
     [Authorize]
     public IActionResult SdhKatsudo()
     {
-        return View();
+        ViewData["SystemCode"] = "SDH";
+        ViewData["SubsystemPage"] = "katsudo";
+        return View("/Views/HmssPage/Subsystem.cshtml");
     }
 
     /// <summary>
@@ -84,14 +89,14 @@ public class HmssPageController : Controller
     [Authorize]
     public IActionResult TableList()
     {
-        return View();
+        return View("/Views/Hmss/TableList.cshtml");
     }
 
     /// <summary>
     /// HMSS 子系统页面（通用处理）
     /// 支持 /hmss/{system} 路由，如 /hmss/jksys, /hmss/r4 等
     /// </summary>
-    [HttpGet("/hmss/{system}")]
+    [HttpGet("/hmss/{system:regex(hdkaikei|hmaud|hmdps|hmhrms|hmtve|jksys|r4|appm|pprm|ckchkzaiko)}")]
     [Authorize]
     public IActionResult Subsystem(string system)
     {
@@ -114,7 +119,8 @@ public class HmssPageController : Controller
         if (systemViews.TryGetValue(system, out var viewName))
         {
             ViewData["SystemCode"] = system.ToUpper();
-            return View(viewName);
+            // 使用绝对路径返回 HmssPage 目录中的视图
+            return View($"/Views/HmssPage/{viewName}.cshtml");
         }
 
         // 默认重定向到表列表
@@ -122,10 +128,20 @@ public class HmssPageController : Controller
     }
 
     /// <summary>
-    /// HMSS 通用 UI 列表页面（支持 /ui/hmss/{model} 路由）
+    /// HMSS 旧路由兼容性重定向
+    /// 将 /hmss/{model} 重定向到 /hmss/models/{model}
+    /// </summary>
+    [HttpGet("/hmss/{model}")]
+    public IActionResult RedirectLegacy(string model)
+    {
+        return Redirect($"/hmss/models/{model}?project=hmss");
+    }
+
+    /// <summary>
+    /// HMSS 通用 UI 列表页面（支持 /hmss/models/{model} 路由）
     /// 使用框架的 DynamicRepository 获取数据
     /// </summary>
-    [HttpGet("/ui/hmss/{model}")]
+    [HttpGet("/hmss/models/{model}")]
     public async Task<IActionResult> UiList(
         string model,
         int page = 1,
@@ -159,16 +175,16 @@ public class HmssPageController : Controller
         // 检测是否为 htmx 请求
         if (Request.Headers["HX-Request"] == "true")
         {
-            return View("_ListContent", rows);
+            return View("/Views/HmssPage/_ListContent.cshtml", rows);
         }
 
-        return View("List", rows);
+        return View("/Views/HmssPage/List.cshtml", rows);
     }
 
     /// <summary>
     /// HMSS 创建页面
     /// </summary>
-    [HttpGet("/ui/hmss/{model}/create")]
+    [HttpGet("/hmss/models/{model}/create")]
     public IActionResult Create(string model)
     {
         var def = GetModel(model);
@@ -178,13 +194,13 @@ public class HmssPageController : Controller
         ViewData["ModelName"] = model;
         ViewData["ModelDef"] = def;
         ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
-        return View("../Ui/CreatePage");
+        return View("/Views/Ui/CreatePage.cshtml");
     }
 
     /// <summary>
     /// HMSS 编辑页面
     /// </summary>
-    [HttpGet("/ui/hmss/{model}/edit/{id}")]
+    [HttpGet("/hmss/models/{model}/edit/{id}")]
     public async Task<IActionResult> Edit(string model, string id)
     {
         var def = GetModel(model);
@@ -198,13 +214,13 @@ public class HmssPageController : Controller
         ViewData["ModelName"] = model;
         ViewData["ModelDef"] = def;
         ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
-        return View("../Ui/EditPage", row);
+        return View("/Views/Ui/EditPage.cshtml", row);
     }
 
     /// <summary>
     /// HMSS 详情页面
     /// </summary>
-    [HttpGet("/ui/hmss/{model}/details/{id}")]
+    [HttpGet("/hmss/models/{model}/details/{id}")]
     public async Task<IActionResult> Details(string model, string id)
     {
         var def = GetModel(model);
@@ -215,13 +231,13 @@ public class HmssPageController : Controller
         ViewData["ModelName"] = model;
         ViewData["ModelDef"] = def;
         ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
-        return View("../Ui/DetailsPage", row);
+        return View("/Views/Ui/DetailsPage.cshtml", row);
     }
 
     /// <summary>
     /// HMSS 创建数据（POST）
     /// </summary>
-    [HttpPost("/ui/hmss/{model}/create")]
+    [HttpPost("/hmss/models/{model}/create")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> CreatePost(
         string model,
@@ -246,14 +262,14 @@ public class HmssPageController : Controller
             ViewData["ModelDef"] = def;
             ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
             ViewData["CreateError"] = ex.Message;
-            return View("CreatePage");
+            return View("/Views/Ui/CreatePage.cshtml");
         }
     }
 
     /// <summary>
     /// HMSS 更新数据（POST）
     /// </summary>
-    [HttpPost("/ui/hmss/{model}/edit/{id}")]
+    [HttpPost("/hmss/models/{model}/edit/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> EditPost(
         string model,
@@ -283,14 +299,14 @@ public class HmssPageController : Controller
             ViewData["ModelDef"] = def;
             ViewData["Project"] = Request.Query["project"].FirstOrDefault() ?? "hmss";
             ViewData["EditError"] = ex.Message;
-            return View("EditPage", row);
+            return View("/Views/Ui/EditPage.cshtml", row);
         }
     }
 
     /// <summary>
     /// HMSS 删除数据
     /// </summary>
-    [HttpPost("/ui/hmss/{model}/delete/{id}")]
+    [HttpPost("/hmss/models/{model}/delete/{id}")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(string model, string id)
     {

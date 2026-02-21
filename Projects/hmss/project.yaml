@@ -2,7 +2,7 @@
 name: hmss
 displayName: HMSS 车检代替销售系统
 version: 1.0.0
-description: Hiroshima Mazda Sales System - 马自达汽车销售系统
+description: GD ZM Sales System - GDZD汽车销售系统
 
 database:
   type: sqlite

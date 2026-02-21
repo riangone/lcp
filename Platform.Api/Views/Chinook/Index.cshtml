@@ -238,19 +238,19 @@
                         <a href="/?project=chinook" class="chinook-nav-link active">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Artist?project=chinook" class="chinook-nav-link">
+                        <a href="/Artist?project=chinook" class="chinook-nav-link">
                             <i class="fas fa-microphone mr-1"></i> 艺术家
                         </a>
-                        <a href="/ui/Album?project=chinook" class="chinook-nav-link">
+                        <a href="/Album?project=chinook" class="chinook-nav-link">
                             <i class="fas fa-compact-disc mr-1"></i> 专辑
                         </a>
-                        <a href="/ui/Track?project=chinook" class="chinook-nav-link">
+                        <a href="/Track?project=chinook" class="chinook-nav-link">
                             <i class="fas fa-music mr-1"></i> 音轨
                         </a>
-                        <a href="/ui/Genre?project=chinook" class="chinook-nav-link">
+                        <a href="/Genre?project=chinook" class="chinook-nav-link">
                             <i class="fas fa-tags mr-1"></i> 流派
                         </a>
-                        <a href="/ui/MediaType?project=chinook" class="chinook-nav-link">
+                        <a href="/MediaType?project=chinook" class="chinook-nav-link">
                             <i class="fas fa-file-audio mr-1"></i> 媒体类型
                         </a>
                     </div>
@@ -321,7 +321,7 @@
 
         <!-- 快捷操作 -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <a href="/ui/Artist/create?project=chinook" class="music-card animate-fade-in">
+            <a href="/Artist/create?project=chinook" class="music-card animate-fade-in">
                 <div class="icon-wrapper icon-artist">
                     🎤
                 </div>
@@ -329,7 +329,7 @@
                 <p class="text-sm text-slate-400">注册新艺术家</p>
             </a>
 
-            <a href="/ui/Album/create?project=chinook" class="music-card animate-fade-in animate-delay-1">
+            <a href="/Album/create?project=chinook" class="music-card animate-fade-in animate-delay-1">
                 <div class="icon-wrapper icon-album">
                     💿
                 </div>
@@ -337,7 +337,7 @@
                 <p class="text-sm text-slate-400">发行新专辑</p>
             </a>
 
-            <a href="/ui/Track/create?project=chinook" class="music-card animate-fade-in animate-delay-2">
+            <a href="/Track/create?project=chinook" class="music-card animate-fade-in animate-delay-2">
                 <div class="icon-wrapper icon-track">
                     🎶
                 </div>
@@ -345,7 +345,7 @@
                 <p class="text-sm text-slate-400">上传新音乐</p>
             </a>
 
-            <a href="/ui/Genre?project=chinook" class="music-card animate-fade-in animate-delay-3">
+            <a href="/Genre?project=chinook" class="music-card animate-fade-in animate-delay-3">
                 <div class="icon-wrapper icon-genre">
                     🎧
                 </div>
@@ -362,7 +362,7 @@
                         <i class="fas fa-star text-emerald-400 mr-2"></i>
                         热门艺术家
                     </h3>
-                    <a href="/ui/Artist?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                    <a href="/Artist?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
                         查看全部 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -380,7 +380,7 @@
                         <i class="fas fa-compact-disc text-violet-400 mr-2"></i>
                         最近专辑
                     </h3>
-                    <a href="/ui/Album?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                    <a href="/Album?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
                         查看全部 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -398,7 +398,7 @@
                         <i class="fas fa-tags text-amber-400 mr-2"></i>
                         音乐流派
                     </h3>
-                    <a href="/ui/Genre?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
+                    <a href="/Genre?project=chinook" class="chinook-btn chinook-btn-secondary text-sm">
                         管理流派 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -472,7 +472,7 @@
                 const topArtists = artists.slice(0, 6);
 
                 container.innerHTML = topArtists.map(artist => `
-                    <div class="text-center cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/ui/Artist/edit/${artist.ArtistId}?project=${currentProject}'">
+                    <div class="text-center cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/Artist/edit/${artist.ArtistId}?project=${currentProject}'">
                         <div class="artist-avatar">
                             🎤
                         </div>
@@ -494,7 +494,7 @@
                 const recentAlbums = albums.slice(0, 6);
 
                 container.innerHTML = recentAlbums.map(album => `
-                    <div class="cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/ui/Album/edit/${album.AlbumId}?project=${currentProject}'">
+                    <div class="cursor-pointer hover:transform hover:scale-105 transition" onclick="window.location.href='/Album/edit/${album.AlbumId}?project=${currentProject}'">
                         <div class="album-cover">
                             💿
                         </div>
@@ -516,7 +516,7 @@
                 const container = document.getElementById('genre-list');
 
                 container.innerHTML = genres.map(genre => `
-                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Genre?project=${currentProject}'">
+                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/Genre?project=${currentProject}'">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 flex items-center justify-center text-xl">
                                 🎧

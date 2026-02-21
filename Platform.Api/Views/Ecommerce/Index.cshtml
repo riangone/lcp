@@ -240,16 +240,16 @@
                         <a href="/?project=ecommerce" class="ecommerce-nav-link active">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Product?project=ecommerce" class="ecommerce-nav-link">
+                        <a href="/Product?project=ecommerce" class="ecommerce-nav-link">
                             <i class="fas fa-box mr-1"></i> 产品
                         </a>
-                        <a href="/ui/Order?project=ecommerce" class="ecommerce-nav-link">
+                        <a href="/Order?project=ecommerce" class="ecommerce-nav-link">
                             <i class="fas fa-shopping-cart mr-1"></i> 订单
                         </a>
-                        <a href="/ui/Customer?project=ecommerce" class="ecommerce-nav-link">
+                        <a href="/Customer?project=ecommerce" class="ecommerce-nav-link">
                             <i class="fas fa-users mr-1"></i> 客户
                         </a>
-                        <a href="/ui/Category?project=ecommerce" class="ecommerce-nav-link">
+                        <a href="/Category?project=ecommerce" class="ecommerce-nav-link">
                             <i class="fas fa-tags mr-1"></i> 分类
                         </a>
                     </div>
@@ -320,7 +320,7 @@
 
         <!-- 快捷操作 -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <a href="/ui/Product/create?project=ecommerce" class="action-card animate-fade-in">
+            <a href="/Product/create?project=ecommerce" class="action-card animate-fade-in">
                 <div class="icon-wrapper icon-orange">
                     📦
                 </div>
@@ -328,7 +328,7 @@
                 <p class="text-sm text-slate-400">上架新产品</p>
             </a>
 
-            <a href="/ui/Order/create?project=ecommerce" class="action-card animate-fade-in animate-delay-1">
+            <a href="/Order/create?project=ecommerce" class="action-card animate-fade-in animate-delay-1">
                 <div class="icon-wrapper icon-red">
                     🛍️
                 </div>
@@ -336,7 +336,7 @@
                 <p class="text-sm text-slate-400">处理客户订单</p>
             </a>
 
-            <a href="/ui/Customer/create?project=ecommerce" class="action-card animate-fade-in animate-delay-2">
+            <a href="/Customer/create?project=ecommerce" class="action-card animate-fade-in animate-delay-2">
                 <div class="icon-wrapper icon-amber">
                     👥
                 </div>
@@ -344,7 +344,7 @@
                 <p class="text-sm text-slate-400">管理客户信息</p>
             </a>
 
-            <a href="/ui/Category?project=ecommerce" class="action-card animate-fade-in animate-delay-3">
+            <a href="/Category?project=ecommerce" class="action-card animate-fade-in animate-delay-3">
                 <div class="icon-wrapper icon-blue">
                     🏷️
                 </div>
@@ -388,7 +388,7 @@
                         <i class="fas fa-clock text-orange-400 mr-2"></i>
                         最近订单
                     </h3>
-                    <a href="/ui/Order?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                    <a href="/Order?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
                         查看全部 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -420,7 +420,7 @@
                         <i class="fas fa-tags text-amber-400 mr-2"></i>
                         产品分类
                     </h3>
-                    <a href="/ui/Category?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
+                    <a href="/Category?project=ecommerce" class="ecommerce-btn ecommerce-btn-secondary text-sm">
                         管理分类 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -593,7 +593,7 @@
                             <td class="py-3"><span class="status-badge ${statusConfig.color}">${statusConfig.label}</span></td>
                             <td class="py-3 text-orange-400 font-semibold">$${order.TotalAmount || '0.00'}</td>
                             <td class="py-3">
-                                <a href="/ui/Order/edit/${order.OrderId}?project=${currentProject}" class="text-orange-400 hover:text-orange-300">
+                                <a href="/Order/edit/${order.OrderId}?project=${currentProject}" class="text-orange-400 hover:text-orange-300">
                                     <i class="fas fa-edit"></i>
                                 </a>
                             </td>
@@ -614,7 +614,7 @@
                 const container = document.getElementById('category-list');
 
                 container.innerHTML = categories.map(cat => `
-                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/ui/Category?project=${currentProject}'">
+                    <div class="bg-slate-800/50 rounded-lg p-4 hover:bg-slate-800 transition cursor-pointer" onclick="window.location.href='/Category?project=${currentProject}'">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-xl">
                                 🏷️

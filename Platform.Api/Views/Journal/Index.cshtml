@@ -277,16 +277,16 @@
                         <a href="/?project=journal" class="journal-nav-link active">
                             <i class="fas fa-home mr-1"></i> 首页
                         </a>
-                        <a href="/ui/Entry?project=journal" class="journal-nav-link">
+                        <a href="/Entry?project=journal" class="journal-nav-link">
                             <i class="fas fa-book-open mr-1"></i> 日记
                         </a>
-                        <a href="/ui/Category?project=journal" class="journal-nav-link">
+                        <a href="/Category?project=journal" class="journal-nav-link">
                             <i class="fas fa-folder mr-1"></i> 分类
                         </a>
-                        <a href="/ui/Tag?project=journal" class="journal-nav-link">
+                        <a href="/Tag?project=journal" class="journal-nav-link">
                             <i class="fas fa-tags mr-1"></i> 标签
                         </a>
-                        <a href="/ui/EntryWithCategory?project=journal" class="journal-nav-link">
+                        <a href="/EntryWithCategory?project=journal" class="journal-nav-link">
                             <i class="fas fa-chart-pie mr-1"></i> 视图
                         </a>
                     </div>
@@ -357,7 +357,7 @@
 
         <!-- 快捷操作 -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <a href="/ui/Entry/create?project=journal" class="stat-card group animate-fade-in">
+            <a href="/Entry/create?project=journal" class="stat-card group animate-fade-in">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         ✍️
@@ -369,7 +369,7 @@
                 </div>
             </a>
 
-            <a href="/ui/Category?project=journal" class="stat-card group animate-fade-in animate-delay-1">
+            <a href="/Category?project=journal" class="stat-card group animate-fade-in animate-delay-1">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         📁
@@ -381,7 +381,7 @@
                 </div>
             </a>
 
-            <a href="/ui/EntryWithCategory?project=journal" class="stat-card group animate-fade-in animate-delay-2">
+            <a href="/EntryWithCategory?project=journal" class="stat-card group animate-fade-in animate-delay-2">
                 <div class="flex items-center space-x-4">
                     <div class="w-14 h-14 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
                         😊
@@ -429,7 +429,7 @@
                         <i class="fas fa-clock text-violet-400 mr-2"></i>
                         最近日记
                     </h3>
-                    <a href="/ui/Entry?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                    <a href="/Entry?project=journal" class="journal-btn journal-btn-secondary text-sm">
                         查看全部 <i class="fas fa-arrow-right ml-1"></i>
                     </a>
                 </div>
@@ -448,10 +448,10 @@
                         分类与标签
                     </h3>
                     <div class="flex gap-2">
-                        <a href="/ui/Category?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                        <a href="/Category?project=journal" class="journal-btn journal-btn-secondary text-sm">
                             管理分类 <i class="fas fa-arrow-right ml-1"></i>
                         </a>
-                        <a href="/ui/Tag?project=journal" class="journal-btn journal-btn-secondary text-sm">
+                        <a href="/Tag?project=journal" class="journal-btn journal-btn-secondary text-sm">
                             管理标签 <i class="fas fa-arrow-right ml-1"></i>
                         </a>
                     </div>
@@ -655,7 +655,7 @@
                             <p class="text-sm text-slate-400 mb-2">${excerpt}</p>
                             <div class="flex items-center justify-between text-xs text-slate-500">
                                 <span><i class="far fa-calendar mr-1"></i>${date}</span>
-                                <a href="/ui/Entry/edit/${entry.Id}?project=${currentProject}" class="text-violet-400 hover:text-violet-300">
+                                <a href="/Entry/edit/${entry.Id}?project=${currentProject}" class="text-violet-400 hover:text-violet-300">
                                     <i class="fas fa-arrow-right"></i>
                                 </a>
                             </div>

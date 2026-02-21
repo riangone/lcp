@@ -72,8 +72,8 @@ else
 fi
 
 # 测试 Task 列表页
-echo -n "  Task 列表 (/ui/Task): "
-RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/Task 2>/dev/null)
+echo -n "  Task 列表 (/Task): "
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/Task 2>/dev/null)
 if [ "$RESPONSE" = "200" ]; then
     echo "✅ OK ($RESPONSE)"
 else
@@ -81,8 +81,8 @@ else
 fi
 
 # 测试 Project 列表页
-echo -n "  Project 列表 (/ui/Project): "
-RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/Project 2>/dev/null)
+echo -n "  Project 列表 (/Project): "
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/Project 2>/dev/null)
 if [ "$RESPONSE" = "200" ]; then
     echo "✅ OK ($RESPONSE)"
 else
@@ -90,8 +90,8 @@ else
 fi
 
 # 测试 TaskWithProject 视图
-echo -n "  TaskWithProject 视图 (/ui/TaskWithProject): "
-RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/TaskWithProject 2>/dev/null)
+echo -n "  TaskWithProject 视图 (/TaskWithProject): "
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/TaskWithProject 2>/dev/null)
 if [ "$RESPONSE" = "200" ]; then
     echo "✅ OK ($RESPONSE)"
 else
@@ -99,8 +99,8 @@ else
 fi
 
 # 测试 ProjectStats 视图
-echo -n "  ProjectStats 视图 (/ui/ProjectStats): "
-RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ui/ProjectStats 2>/dev/null)
+echo -n "  ProjectStats 视图 (/ProjectStats): "
+RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:5267/ProjectStats 2>/dev/null)
 if [ "$RESPONSE" = "200" ]; then
     echo "✅ OK ($RESPONSE)"
 else
@@ -141,8 +141,8 @@ echo "║                  验证完成！                            ║"
 echo "╠════════════════════════════════════════════════════════╣"
 echo "║  访问地址：http://localhost:5267                       ║"
 echo "║  - 首页：http://localhost:5267/                        ║"
-echo "║  - Task 列表：http://localhost:5267/ui/Task            ║"
-echo "║  - Project 列表：http://localhost:5267/ui/Project      ║"
-echo "║  - 任务项目视图：http://localhost:5267/ui/TaskWithProject  ║"
-echo "║  - 项目统计：http://localhost:5267/ui/ProjectStats     ║"
+echo "║  - Task 列表：http://localhost:5267/Task            ║"
+echo "║  - Project 列表：http://localhost:5267/Project      ║"
+echo "║  - 任务项目视图：http://localhost:5267/TaskWithProject  ║"
+echo "║  - 项目统计：http://localhost:5267/ProjectStats     ║"
 echo "╚════════════════════════════════════════════════════════╝"

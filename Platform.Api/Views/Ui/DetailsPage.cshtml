@@ -6,7 +6,7 @@
     var row = (Dictionary<string, object>)ViewData["Row"]!;
     var returnUrl = ViewData["ReturnUrl"] as string;
     var project = Context.Request.Query["project"].FirstOrDefault() ?? "app";
-    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/ui/{modelName}?project={project}";
+    var backUrl = !string.IsNullOrWhiteSpace(returnUrl) ? returnUrl! : $"/{modelName}?project={project}";
 
     var currentLang = Context.Request.Query["lang"].FirstOrDefault() ?? ViewData["Lang"] as string ?? "en";
     var uiLabels = def.Ui?.Labels;

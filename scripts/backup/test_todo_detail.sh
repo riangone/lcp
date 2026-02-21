@@ -37,8 +37,8 @@ curl -s -L http://localhost:5267/ 2>/dev/null | grep -o '<title>.*</title>' | he
 
 # 测试 Task 列表页
 echo ""
-echo "2. Task 列表 (/ui/Task):"
-RESPONSE=$(curl -s http://localhost:5267/ui/Task 2>/dev/null)
+echo "2. Task 列表 (/Task):"
+RESPONSE=$(curl -s http://localhost:5267/Task 2>/dev/null)
 if echo "$RESPONSE" | grep -q "500"; then
     echo "   ❌ 返回 500 错误"
 else
@@ -48,8 +48,8 @@ fi
 
 # 测试 Project 列表页
 echo ""
-echo "3. Project 列表 (/ui/Project):"
-RESPONSE=$(curl -s http://localhost:5267/ui/Project 2>/dev/null)
+echo "3. Project 列表 (/Project):"
+RESPONSE=$(curl -s http://localhost:5267/Project 2>/dev/null)
 if echo "$RESPONSE" | grep -q "500"; then
     echo "   ❌ 返回 500 错误"
 else

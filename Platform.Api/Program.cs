@@ -40,6 +40,10 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Hmss/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Hmss/Shared/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Hmss/Sdh/{0}.cshtml");
+        
+        // 添加 HmssPage 控制器的专用视图路径（支持 Subsystem 等视图）
+        options.ViewLocationFormats.Add("/Views/HmssPage/{0}.cshtml");
+        options.ViewLocationFormats.Add("/Views/HmssPage/Shared/{0}.cshtml");
 
         // 添加项目视图目录
         var projectsDir = Environment.GetEnvironmentVariable("LCP_PROJECTS_DIR") ?? "/home/ubuntu/ws/lcp/Projects";
@@ -198,9 +202,8 @@ app.Use(async (context, next) =>
         ?? context.Request.Headers["X-Project"].FirstOrDefault();
 
     // 自动为 HMSS 路由切换到 HMSS 项目
-    if (string.IsNullOrEmpty(projectName) && 
-        (context.Request.Path.StartsWithSegments("/hmss") || 
-         context.Request.Path.StartsWithSegments("/ui/hmss")))
+    if (string.IsNullOrEmpty(projectName) &&
+        (context.Request.Path.StartsWithSegments("/hmss")))
     {
         projectName = "hmss";
     }
