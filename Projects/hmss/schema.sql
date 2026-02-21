@@ -361,3 +361,104 @@ INSERT OR IGNORE INTO sdh_tenpo (tenpo_cd, tenpo_nm, tel) VALUES
 -- rel="17": リース
 -- rel="18": リース指定工場
 -- rel="19": 納入依頼
+
+-- ============================================
+-- PPRM 无纸化系统表
+-- ============================================
+
+-- 承认管理表
+CREATE TABLE IF NOT EXISTS pprom_approve (
+    approve_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    approve_title VARCHAR(200) NOT NULL,
+    requester VARCHAR(50),
+    approver VARCHAR(50),
+    status CHAR(1) DEFAULT '1',
+    request_dt DATETIME,
+    approve_dt DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- DC 画像管理表
+CREATE TABLE IF NOT EXISTS pprom_dc_image (
+    image_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    image_name VARCHAR(200) NOT NULL,
+    file_path VARCHAR(500),
+    file_size DECIMAL(12,2),
+    upload_dt DATETIME,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 登录管理表
+CREATE TABLE IF NOT EXISTS pprom_login (
+    login_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    login_nm VARCHAR(100) NOT NULL,
+    login_type CHAR(1) DEFAULT '1',
+    status CHAR(1) DEFAULT '1',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 菜单权限表
+CREATE TABLE IF NOT EXISTS pprom_menu_auth (
+    auth_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    auth_nm VARCHAR(100) NOT NULL,
+    menu_id VARCHAR(20),
+    auth_level CHAR(1) DEFAULT '1',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- PPRM 索引
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_pprom_approve_status ON pprom_approve(status);
+CREATE INDEX IF NOT EXISTS idx_pprom_approve_requester ON pprom_approve(requester);
+CREATE INDEX IF NOT EXISTS idx_pprom_dc_image_upload_dt ON pprom_dc_image(upload_dt);
+CREATE INDEX IF NOT EXISTS idx_pprom_login_status ON pprom_login(status);
+
+-- ============================================
+-- R4 管理会计系统表
+-- ============================================
+
+-- 売上表
+CREATE TABLE IF NOT EXISTS r4k_uriage (
+    uriage_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    uriage_dt DATE NOT NULL,
+    bumon_cd VARCHAR(10) NOT NULL,
+    kamoku_cd VARCHAR(10),
+    uriage_gaku DECIMAL(12,2) NOT NULL,
+    remark VARCHAR(500),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 経理処理表
+CREATE TABLE IF NOT EXISTS r4k_kaikei (
+    kaikei_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    kaikei_dt DATE NOT NULL,
+    kamoku_cd VARCHAR(10) NOT NULL,
+    karitae CHAR(1) NOT NULL,
+    kingaku DECIMAL(12,2) NOT NULL,
+    remark VARCHAR(500),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- 請求表
+CREATE TABLE IF NOT EXISTS r4k_seikyu (
+    seikyu_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    seikyu_dt DATE NOT NULL,
+    gyousya_cd VARCHAR(10) NOT NULL,
+    seikyu_gaku DECIMAL(12,2) NOT NULL,
+    shiharai_dt DATE,
+    remark VARCHAR(500),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================
+-- R4 索引
+-- ============================================
+
+CREATE INDEX IF NOT EXISTS idx_r4k_uriage_bumon_cd ON r4k_uriage(bumon_cd);
+CREATE INDEX IF NOT EXISTS idx_r4k_uriage_uriage_dt ON r4k_uriage(uriage_dt);
+CREATE INDEX IF NOT EXISTS idx_r4k_kaikei_kamoku_cd ON r4k_kaikei(kamoku_cd);
+CREATE INDEX IF NOT EXISTS idx_r4k_kaikei_kaikei_dt ON r4k_kaikei(kaikei_dt);
+CREATE INDEX IF NOT EXISTS idx_r4k_seikyu_gyousya_cd ON r4k_seikyu(gyousya_cd);
+CREATE INDEX IF NOT EXISTS idx_r4k_seikyu_seikyu_dt ON r4k_seikyu(seikyu_dt);
