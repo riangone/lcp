@@ -58,6 +58,11 @@ public class PageDefinition
     public List<ActionDefinition> Actions { get; set; } = new();
 
     /// <summary>
+    /// HMSS 页面操作定义（新版）
+    /// </summary>
+    public List<PageAction> HmssActions { get; set; } = new();
+
+    /// <summary>
     /// UI 定义
     /// </summary>
     public PageUiDefinition? Ui { get; set; }
@@ -621,9 +626,9 @@ public class PageUiDefinition
     public string? Theme { get; set; }
 
     /// <summary>
-    /// 标签定义
+    /// 标签定义（支持多语言）
     /// </summary>
-    public Dictionary<string, string>? Labels { get; set; }
+    public UiLabels? Labels { get; set; }
 
     /// <summary>
     /// 样式定义
@@ -631,9 +636,188 @@ public class PageUiDefinition
     public Dictionary<string, string>? Styles { get; set; }
 
     /// <summary>
-    /// 区域布局配置
+    /// 布局类型：tabs（标签页）或 sections（区域）
+    /// </summary>
+    public string? LayoutType { get; set; } = "sections";
+
+    /// <summary>
+    /// Tab 布局配置（当 LayoutType = "tabs" 时使用）
+    /// </summary>
+    public List<TabDefinition>? Tabs { get; set; }
+
+    /// <summary>
+    /// 区域布局配置（当 LayoutType = "sections" 时使用）
     /// </summary>
     public List<SectionLayoutDefinition> Layout { get; set; } = new();
+
+    /// <summary>
+    /// 页面配置（HMSS 专用）
+    /// </summary>
+    public HmssPageUiConfig? HmssConfig { get; set; }
+}
+
+/// <summary>
+/// UI 标签（支持多语言）
+/// </summary>
+public class UiLabels
+{
+    public Dictionary<string, string>? Ja { get; set; }
+    public Dictionary<string, string>? Zh { get; set; }
+    public Dictionary<string, string>? En { get; set; }
+}
+
+/// <summary>
+/// Tab 定义
+/// </summary>
+public class TabDefinition
+{
+    /// <summary>
+    /// Tab 唯一标识
+    /// </summary>
+    public string Id { get; set; } = "";
+
+    /// <summary>
+    /// Tab 标题（日语）
+    /// </summary>
+    public string? TitleJa { get; set; }
+
+    /// <summary>
+    /// Tab 标题（中文）
+    /// </summary>
+    public string? TitleZh { get; set; }
+
+    /// <summary>
+    /// Tab 标题（英语，备用）
+    /// </summary>
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// Tab 图标（Font Awesome 类名，不含 fa-前缀）
+    /// </summary>
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// Tab 内的区域配置（使用 HMSS 专用的 SectionDefinition）
+    /// </summary>
+    public List<HmssSectionDefinition> Sections { get; set; } = new();
+}
+
+/// <summary>
+/// HMSS 区域定义（用于 Tabs 布局）
+/// </summary>
+public class HmssSectionDefinition
+{
+    /// <summary>
+    /// 区域唯一标识
+    /// </summary>
+    public string Id { get; set; } = "";
+
+    /// <summary>
+    /// 区域标题（日语）
+    /// </summary>
+    public string? TitleJa { get; set; }
+
+    /// <summary>
+    /// 区域标题（中文）
+    /// </summary>
+    public string? TitleZh { get; set; }
+
+    /// <summary>
+    /// 区域标题（英语，备用）
+    /// </summary>
+    public string? Title { get; set; }
+
+    /// <summary>
+    /// 区域图标
+    /// </summary>
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// 区域类型：form（表单）、grid（表格）、textarea（文本域）
+    /// </summary>
+    public string? Type { get; set; } = "form";
+
+    /// <summary>
+    /// 字段列表
+    /// </summary>
+    public List<string> Fields { get; set; } = new();
+
+    /// <summary>
+    /// 每行显示的字段数
+    /// </summary>
+    public int Columns { get; set; } = 2;
+}
+
+/// <summary>
+/// HMSS 页面 UI 配置
+/// </summary>
+public class HmssPageUiConfig
+{
+    /// <summary>
+    /// 页面主题
+    /// </summary>
+    public string? Theme { get; set; } = "hmss";
+
+    /// <summary>
+    /// 是否显示工具栏
+    /// </summary>
+    public bool ShowToolbar { get; set; } = true;
+
+    /// <summary>
+    /// 是否显示搜索面板
+    /// </summary>
+    public bool ShowSearchPanel { get; set; } = true;
+}
+
+/// <summary>
+/// HMSS 页面操作定义
+/// </summary>
+public class PageAction
+{
+    /// <summary>
+    /// 操作唯一标识
+    /// </summary>
+    public string Id { get; set; } = "";
+
+    /// <summary>
+    /// 操作标签（日语）
+    /// </summary>
+    public string? LabelJa { get; set; }
+
+    /// <summary>
+    /// 操作标签（中文）
+    /// </summary>
+    public string? LabelZh { get; set; }
+
+    /// <summary>
+    /// 操作标签（英语，备用）
+    /// </summary>
+    public string? Label { get; set; }
+
+    /// <summary>
+    /// 操作图标
+    /// </summary>
+    public string? Icon { get; set; }
+
+    /// <summary>
+    /// 操作类型：query, save, update, delete, back, custom
+    /// </summary>
+    public string? Action { get; set; }
+
+    /// <summary>
+    /// 是否为危险操作（删除等）
+    /// </summary>
+    public bool Danger { get; set; } = false;
+
+    /// <summary>
+    /// 是否需要确认
+    /// </summary>
+    public bool Confirm { get; set; } = false;
+
+    /// <summary>
+    /// 确认消息
+    /// </summary>
+    public string? ConfirmMessage { get; set; }
 }
 
 /// <summary>
